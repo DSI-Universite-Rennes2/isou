@@ -13,12 +13,19 @@ RECOMMANDE
 -----------
 - serveur CAS
 
+
 INSTALLATION
 -------------
 Sous unix :
 cd /tmp && mkdir isou
 svn checkout https://subversion.cru.fr/isounagios/tags/stable /tmp/isou
 php /tmp/isou/install.php
+
+Sous windows :
+récupérer le dépôt svn
+copier le répertoire ./sources sur votre serveur web
+copier les fichiers du dossier ./database contenant isou.sqlite3 et isou-visits.sqlite3 sur votre serveur web dans ./database
+éditer, puis renommer le fichier config.example.php en config.php
 
 
 MISE A JOUR
@@ -28,13 +35,16 @@ cd /tmp && mkdir isou
 svn checkout https://subversion.cru.fr/isounagios/tags/stable /tmp/isou
 php /tmp/isou/update.php
 
-Sous windows :
-copier le dossier source et éditer, puis renommer le fichier config.example.php en config.php
-
-Si vous avez conservé les fichiers d'installation :
+note : si vous avez conservé les fichiers d'installation,
 cd /tmp/isou
 svn update
 php /tmp/isou/update.php
+
+Sous windows :
+récupérer le dépôt svn
+copier le dossier ./sources
+
+
 
 
 MODIFICATION DE FICHIERS
