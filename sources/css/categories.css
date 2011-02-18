@@ -1,0 +1,33 @@
+#update{
+	background-color: orange;
+	border: .3em red solid;
+	margin: .8em 0em;
+	padding: .5em;
+	text-align: center;
+	font-weight: bold;
+}
+
+.form li{
+	list-style: none;
+	padding-left: .5em;
+}
+
+.label{
+	width: 450px;
+	padding-left: .3em;
+}
+
+.hidden{
+	border: none;
+	display: none;
+	line-height: 0em;
+	margin-left: 0em;
+}
+
+.upndown{
+	display: -moz-inline-stack;
+	display: inline-block;
+	text-align: right;
+	width: 2.5em;
+	margin-right: .3em;
+}

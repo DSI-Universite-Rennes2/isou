@@ -1,0 +1,69 @@
+#content{
+	padding-right: 1em;
+}
+
+#table{
+	text-align: center;
+	font-size: 0.75em;
+	width: 100%;
+}
+
+#table li{
+	margin: 0em;
+	list-style-type: none;
+}
+
+th{
+	font-weight: bold;
+	border:1px solid #a2c2e1;
+	padding: 0em .5em;
+	text-align: left;
+	background-color: #d6e1ec;
+}
+
+/* seulement les entêtes en haut du tableau */
+.header th{
+	text-align: center;
+}
+
+.th-date{
+	width: 10%;
+}
+
+.th-extand{
+	width: 20%;
+}
+
+.tr-category{
+	background-color:#d6e1Fe;
+	text-align: left;
+}
+
+.tr-status-warning{
+	background-color: #FFA500;
+}
+
+.tr-status-critical{
+	background-color: #CD5C5C;
+}
+
+.tr-status-unknown{
+	background-color: #87CEEB;
+}
+
+.tr-status-closed{
+	background-color: #FFFFE0;
+}
+
+/*.regular{
+	margin: 0em;
+}
+
+.regular li{
+	margin: 0em;
+	list-style-type: none;
+}
+
+.managermail, .technicalmail{
+	color: blue;
+}*/

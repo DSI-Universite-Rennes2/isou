@@ -1,0 +1,171 @@
+h3{
+	margin-top: 1em;
+}
+
+.submenu{
+	background-color: lightblue;
+	margin: .7em 0em;
+	padding: .5em 1em;
+	font-size: .7em;
+	font-weight: bold;
+}
+
+.submenu li{
+	display: inline;
+	margin: 0em .3em;
+	line-height: 1em;
+}
+
+.submenu a:visited, .submenu a:hover, .submenu a:link, .submenu a:active, .submenu a:focus{
+	color: blue;
+}
+
+.anchorlist, .anchorlist li{
+	margin: 0em .2em;
+	padding: 0em;
+	display: inline;
+}
+
+#update{
+	background-color: orange;
+	border: .3em red solid;
+	margin: .8em 0em;
+	padding: .5em;
+	text-align: center;
+	font-weight: bold;
+}
+
+.legend{
+	border: .1em black solid;
+	margin: .8em 0em;
+	padding: .5em;
+	text-align: center;
+}
+
+.legend li{
+	display: inline-block;
+}
+
+span.legend{
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin: 0em;
+	padding: 0em;
+}
+
+.unassign{
+	background-color: #DCDCDC;
+	color: grey;
+}
+
+.hide{
+	background-color: #48D1CC;
+	color: #000000;
+}
+
+.display, .nagios{
+	background-color: #00BFFF;
+	color: #000000;
+}
+
+/* * * * * * * * * *
+	Formulaire
+* * * * * * * * * * */
+.form li{
+	list-style: none;
+	padding-left: .5em;
+}
+
+.longlabel{
+	/*width: 450px;*/
+	width: 28em;
+	padding-left: .3em;
+}
+
+.shortlabel{
+	width: 200px;
+	/*width: 25em;*/
+	padding-left: .3em;
+}
+
+span.longlabel, span.shortlabel{
+	display: inline-block;
+	margin-right: .5em;	
+	vertical-align: top;
+}
+
+#statelegend{
+	margin: 0em;
+}
+
+#statelegend lh, #statelegend li{
+	display: inline;
+	margin: 0em;
+	margin-right: .3em;
+}
+
+.remarque span{
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+}
+
+.list{
+	margin: 1em;
+}
+
+.listing{
+	width: 100%;
+	background-color: #AFEEEE;
+}
+
+.listing caption{
+	background-color: #FFFFFF;
+	text-align: left;
+	color: #000000;
+	margin: 1em 0em .5em 0em;
+}
+
+.listing th{
+	padding-left: 0.3em;
+	text-align: left;
+	border-style: solid;
+	background-color: #87CEEB;
+	border-width: .5em .3em;
+	border-color: #FFFFFF;
+}
+
+.listing td{
+	padding-left: 0.3em;
+	border-width: .5em .3em;
+	border-color: #FFFFFF;
+}
+
+.listing .noborder{
+	border-width: .5em 0em;
+}
+
+.listing .nomorein{
+	background-color: orange;
+	/*border: .1em solid orange;*/
+}
+
+.forced{
+	background-color: #FFD700;
+}
+
+.listing img{
+	height: 0.9em;
+}
+
+.parentsList{
+	background-color: #FFFFFF;
+}
+
+.listParent{
+	padding-left: .5em;
+}
+
+.listParent li{
+	list-style-type: square;
+}

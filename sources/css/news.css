@@ -1,0 +1,89 @@
+#legend{
+	border: 0.1em #AF3A6E dotted;
+	padding: 1em;
+	margin: 2em 5em;
+	background-color: #FFFFFF;
+}
+
+#legend h2{
+	margin: 0.5em 0em;
+}
+
+.legend-container{
+	clear: both;
+}
+
+dl{
+	margin: 1em;
+}
+
+dt, dd{
+	float: left;
+}
+
+dt{
+	margin-right: 0.2em;
+}
+
+#summary{
+	background-color: #E5ECF9;
+	text-align: center;
+	padding: .4em;
+}
+
+#content{
+	min-height: 550px;
+}
+
+.service{
+	margin: .3em 0em;
+}
+
+.service li, .alert li.jsroll{
+	list-style-type: none;
+}
+
+.jsroll span{
+	color: #9A9A9A;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.jsLinks, .jsLinks:visited, .jsLinks:hover, .jsLinks:link, .jsLinks:active, .jsLinks:focus{
+	cursor: pointer;
+	color: black;
+}
+
+.alert li{
+	list-style-type: disc;
+}
+
+.reason{
+	text-indent: -4.1em;
+	padding-left: 4em;
+}
+
+.state-0, .state-0:visited, .state-0:hover, .state-0:link, .state-0:active, .state-0:focus{
+	color: #006400;
+	font-weight: bold;
+}
+
+.state-1, .state-1:visited, .state-1:hover, .state-1:link, .state-1:active, .state-1:focus{
+	color: #FF8C00;
+	font-weight: bold;
+}
+
+.state-2, .state-2:visited, .state-2:hover, .state-2:link, .state-2:active, .state-2:focus{
+	color: #B22222;
+	font-weight: bold;
+}
+
+.state-3, .state-3:visited, .state-3:hover, .state-3:link, .state-3:active, .state-3:focus{
+	color: #191970;
+	font-weight: bold;
+}
+
+.previous-event{
+	color: #696969;
+	text-decoration: line-through;
+}

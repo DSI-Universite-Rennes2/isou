@@ -1,0 +1,30 @@
+/* NOTE _ background-image: url NE FONCTIONNE PAS, utiliser list-style-image: url */
+
+#fisou-status-label{
+	color: red;
+	text-decoration: blink;
+	margin:0;
+	padding:0;
+}
+
+#fisou-status-icon{
+	display: none;
+}
+
+.fisou-status-icon-on{
+	margin:0;
+	padding:0;
+	list-style-image: url(chrome://fisou/content/images/favicon-green.png);
+}
+
+.fisou-status-icon-off{
+	margin:0;
+	padding:0;
+	list-style-image: url(chrome://fisou/content/images/favicon-red.png);
+}
+
+.fisou-status-icon-unavailable{
+	margin:0;
+	padding:0;
+	list-style-image: url(chrome://fisou/content/images/favicon-black.png);
+}

@@ -1,0 +1,173 @@
+h2{
+	background-color: #E5ECF9;
+	padding: 0.4em;
+	text-align: center;
+	font-weight: normal;
+	font-size: 1em;
+}
+
+h3{
+	text-decoration: underline;
+}
+
+p{
+	padding: .5em 0em .5em .3em;
+}
+
+.top{
+	vertical-align: top;
+}
+
+.short-texts{
+	display: inline-block;
+	max-width: 50em;
+	overflow: hidden;
+	margin: 0em 1em;
+	padding: 0.5em;
+	/*border: dotted black 0.1em;*/
+}
+
+.help{
+	vertical-align: super;
+	font-size: 0.8em;
+}
+
+.required{
+	font-size: 0.8em;
+	color: #FF0000;
+}
+
+.info-date-format{
+	background-color: lightgray;
+	margin: 0.5em;
+	padding: 1em;
+}
+
+.calendar{
+	left: 0em;
+	top: 0em;
+}
+
+#info{
+	font-size: .8em;
+	font-weight: normal;
+}
+
+.hidden{
+	border: none;
+	display: none;
+	line-height: 0em;
+	margin-left: 0em;
+}
+
+.form li{
+	list-style: none;
+	padding: 0em .5em;
+}
+
+.label{
+	width: 450px;
+	padding-left: .3em;
+}
+
+span.label{
+	display:inline-block;
+	font-weight:bold;
+}
+
+.short-label{
+	width: 15em;
+}
+
+#selected{
+	background-color: pink;
+}
+
+.even{
+	background-color: mistyrose;
+	margin-top: .2em;
+}
+
+.uneven{
+	background-color: papayawhip;
+	margin-top: .2em;
+}
+
+.form > li{
+	background-color: #E5E5E5;
+	margin-top: .2em;
+}
+
+
+/*
+ * CSS POUR JQUERY
+ */
+#form-filter{
+	border: solid 0.1em black;
+	margin: 1em;
+	padding: 0.5em 2em;
+}
+
+#form-filter p label{
+	display: block;
+}
+
+#select-services{
+	margin: 0.5em 0em;
+}
+
+#form-filter fieldset{
+	font-weight: bold;
+}
+
+#form-filter fieldset label{
+	font-weight: normal;
+}
+
+#add-menu{
+	margin: 3em 0em;
+}
+
+#button-add-event, #button-add-info{
+	background-color: #66CDAA;
+	color: #101010;
+	padding: 1em;
+	margin: 0em 1em;
+	text-align: center;
+	border: 0.2em ridge #6B8E23;
+}
+
+#button-add-event:hover, #button-add-info:hover{
+	border: 0.2em groove #6B8E23;
+}
+
+#form-fg-layout, #form-bg-layout{
+	left: 0;
+	top: 0;
+}
+
+#form-fg-layout{
+	z-index: 2;
+	position: absolute;
+	/* header : 3+2x0.5em / h1 : 1em / menubar : 3+2x0.7em == 9.4em */
+	margin: 13.4em 5% 0em 5%;
+	padding: .5em 1em;
+	width: 0%;
+	left: 50%;
+
+	opacity: 0;
+
+	background-color: #FFFFFF;
+}
+
+#form-bg-layout{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	z-index: 1;
+	background-color: black;
+	opacity: 0;
+}
+
+
+

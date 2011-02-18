@@ -1,0 +1,52 @@
+ISOU
+
+
+CONFIGURATION NECESSAIRE
+-------------------------
+- serveur apache (testé en version 2.2)
+- php 5 avec support de pdo-sqlite (testé en version 5.3)
+- php-cli
+- crontab ou équivalent
+- nagios 3 (testé en version 3)
+
+RECOMMANDE
+-----------
+- serveur CAS
+
+INSTALLATION
+-------------
+Sous unix :
+cd /tmp && mkdir isou
+svn checkout https://subversion.cru.fr/isounagios/tags/stable /tmp/isou
+php /tmp/isou/install.php
+
+
+MISE A JOUR
+------------
+Sous unix :
+cd /tmp && mkdir isou
+svn checkout https://subversion.cru.fr/isounagios/tags/stable /tmp/isou
+php /tmp/isou/update.php
+
+Sous windows :
+copier le dossier source et éditer, puis renommer le fichier config.example.php en config.php
+
+Si vous avez conservé les fichiers d'installation :
+cd /tmp/isou
+svn update
+php /tmp/isou/update.php
+
+
+MODIFICATION DE FICHIERS
+-------------------------
+- toutes les css sont présentes dans sources/css
+- toutes les images sont présentes dans sources/images
+- la modification des menus se fait via le fichier sources/config.menu.php
+- la modification du bas de page se fait via le fichier sources/html/html_body_footer.tpl
+
+
+FISOU
+------
+Fisou est une extention Firefox compatible 3.6 et suivant
+
+Installation : cd fisou && make

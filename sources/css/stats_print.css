@@ -1,0 +1,62 @@
+h1, #header, #menubar, .submenu, form{
+	display: none;
+}
+
+body, #content{
+	padding: 0em;
+	margin: 0em;
+	background: none;
+}
+
+h2{
+	background-color: #87CEEB;
+	text-align: center;
+	margin-top: 0em;
+}
+
+h3{
+	background-color: #D0F9F9;
+	margin-top: .5em;
+	padding-left: 2em;
+}
+
+h4{
+	background-color: #E0FEFE;
+	margin-top: .5em;
+}
+
+h4, p{
+	padding-left: 1em;
+}
+
+.graph{
+	text-align: center;
+}
+
+.graph img{
+	margin: .5em;
+}
+
+.nameService{
+	display: -moz-inline-stack;
+	display: inline-block;	
+	width: 60%;
+}
+
+.statService{
+	display: -moz-inline-stack;
+	display: inline-block;
+	width: 40%;
+	text-align: right;
+}
+
+#footer{
+	margin-bottom: 0em;
+	padding-bottom: 0em;
+}
+
+.total{
+	font-weight: bold;
+	padding-left: 0em;
+	margin-top: .3em;
+}

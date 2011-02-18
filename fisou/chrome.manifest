@@ -1,0 +1,4 @@
+content fisou chrome/content/
+
+# Firefox
+overlay	chrome://browser/content/browser.xul chrome://fisou/content/fisou.xul
