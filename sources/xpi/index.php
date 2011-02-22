@@ -10,7 +10,7 @@
 	<header>
 		<p>Fisou est une extension pour Firefox 3 et versions supérieures.<br />
 		Description : Fisou interroge Isou et renseigne l'état des services dans la barre de statut de Firefox<br />
-		Télécharger : <a href="fisou.xpi" onclick="return install(event);">Fisou.xpi</a></p>
+		Télécharger : <a href="fisou.xpi" hash="sha1:<?php echo sha1_file("fisou.xpi");?>" onclick="return install(event);">Fisou.xpi</a></p>
 	</header>
 	<nav>
 		<ul>
@@ -24,7 +24,7 @@
 		<a name="fisou04"></a>
 		<h1>Fisou 0.4</h1>
 		<p>Date de sortie : 17 février 2011</p>
-		<p>Télécharger : <a href="fisou0.4.xpi" onclick="return install(event);">Fisou0.4.xpi</a></p>
+		<p>Télécharger : <a href="fisou0.4.xpi" hash="sha1:<?php echo sha1_file("fisou0.4.xpi");?>" onclick="return install(event);">Fisou0.4.xpi</a></p>
 		<p>Modifications :</p>
 		<ul>
 		<li>compatibilité avec Firefox 4</li>
@@ -39,7 +39,7 @@
 		<a name="fisou03"></a>
 		<h1>Fisou 0.3</h1>
 		<p>Date de sortie : 26 février 2010</p>
-		<p>Télécharger : <a href="fisou0.3.xpi" onclick="return install(event);">Fisou0.3.xpi</a></p>
+		<p>Télécharger : <a href="fisou0.3.xpi" hash="sha1:<?php echo sha1_file("fisou0.3.xpi");?>" onclick="return install(event);">Fisou0.3.xpi</a></p>
 		<p>Modifications :</p>
 		<ul>
 		<li>réintégration du bouton "mise à jour"</li>
@@ -52,7 +52,7 @@
 		<a name="fisou02"></a>
 		<h1>Fisou 0.2</h1>
 		<p>Date de sortie : 17 février 2010</p>
-		<p>Télécharger : <a href="fisou0.2.xpi" onclick="return install(event);">Fisou0.2.xpi</a></p>
+		<p>Télécharger : <a href="fisou0.2.xpi" hash="sha1:<?php echo sha1_file("fisou0.2.xpi");?>" onclick="return install(event);">Fisou0.2.xpi</a></p>
 		<p>Modifications :</p>
 		<ul>
 		<li>ajout d'un logo R2 dans la barre de statut, à la place de la chaine "Aucun service perturbé"</li>
@@ -67,7 +67,7 @@
 		<a name="fisou01"></a>
 		<h1>Fisou 0.1 beta</h1>
 		<p>Date de sortie : 15 février 2010</p>
-		<p>Télécharger : <a href="fisou0.1b.xpi" onclick="return install(event);">Fisou0.1b.xpi</a></p>
+		<p>Télécharger : <a href="fisou0.1b.xpi" hash="sha1:<?php echo sha1_file("fisou0.1b.xpi");?>" onclick="return install(event);">Fisou0.1b.xpi</a></p>
 		<p>Fonctionalités :</p>
 		<ul>
 		<li>scan toutes les 5 minutes Isou</li>
@@ -80,8 +80,8 @@
 	function install (aEvent)
 	{
 		var params = {
-		"Foo": { URL: aEvent.target.href,
-			IconURL: aEvent.target.getAttribute("iconURL"),
+		"Fisou": { URL: aEvent.target.href,
+			// IconURL: "https://services.univ-rennes2.fr/isou/xpi/icon.png",
 			Hash: aEvent.target.getAttribute("hash"),
 			toString: function () { return this.URL; }
 			}
