@@ -63,6 +63,7 @@ if($db2->exec($sql) === FALSE){
 	}
 }
 
+
 /*
  * 2. TABLE annonce
  */
@@ -77,6 +78,7 @@ if($db2->exec($sql) === FALSE){
 	$display = "Création de la table 'annonce'";
 	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 }
+
 
 /*
  * 3. TABLE categories
@@ -93,6 +95,7 @@ if($db2->exec($sql) === FALSE){
 	$display = "Création de la table 'categories'";
 	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 }
+
 
 /*
  * 4. TABLE dependencies
@@ -113,6 +116,40 @@ if($db2->exec($sql) === FALSE){
 	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 }
 
+// INDEX dependencies_foreignkey
+$sql = "CREATE INDEX dependencies_foreignkey ON dependencies(idService, idServiceParent)";
+if($db2->exec($sql) === FALSE){
+	echo "La création de l'index 'dependencies_foreignkey' sur la table 'dependencies' a échoué.\n";
+	echo "\033[0;31mÉchec de l'installation\033[0m\n";
+	exit(1);
+}else{
+	$display = "   Création de l'index 'dependencies_foreignkey' sur la table 'dependencies'";
+	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+}
+
+// INDEX dependencies_idService
+$sql = "CREATE INDEX dependencies_idService ON dependencies(idService)";
+if($db2->exec($sql) === FALSE){
+	echo "La création de l'index 'dependencies_idService' sur la table 'dependencies' a échoué.\n";
+	echo "\033[0;31mÉchec de l'installation\033[0m\n";
+	exit(1);
+}else{
+	$display = "   Création de l'index 'dependencies_idService' sur la table 'dependencies'";
+	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+}
+
+// INDEX dependencies_idServiceParent
+$sql = "CREATE INDEX dependencies_idServiceParent ON dependencies(idServiceParent)";
+if($db2->exec($sql) === FALSE){
+	echo "La création de l'index 'dependencies_idServiceParent' sur la table 'dependencies' a échoué.\n";
+	echo "\033[0;31mÉchec de l'installation\033[0m\n";
+	exit(1);
+}else{
+	$display = "   Création de l'index 'dependencies_idServiceParent' sur la table 'dependencies'";
+	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+}
+
+
 /*
  * 5. TABLE events
  */
@@ -129,6 +166,7 @@ if($db2->exec($sql) === FALSE){
 	$display = "Création de la table 'events'";
 	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 }
+
 
 /*
  * 6. TABLE events_isou
@@ -149,6 +187,51 @@ if($db2->exec($sql) === FALSE){
 	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 }
 
+// INDEX events_isou_foreignkey
+$sql = "CREATE INDEX events_isou_foreignkey ON events_isou(idService, idEventDescription, idEvent)";
+if($db2->exec($sql) === FALSE){
+	echo "La création de l'index 'events_isou_foreignkey' sur la table 'events_isou' a échoué.\n";
+	echo "\033[0;31mÉchec de l'installation\033[0m\n";
+	exit(1);
+}else{
+	$display = "   Création de l'index 'events_isou_foreignkey' sur la table 'events_isou'";
+	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+}
+
+// INDEX events_isou_idService
+$sql = "CREATE INDEX events_isou_idService ON events_isou(idService)";
+if($db2->exec($sql) === FALSE){
+	echo "La création de l'index 'events_isou_idService' sur la table 'events_isou' a échoué.\n";
+	echo "\033[0;31mÉchec de l'installation\033[0m\n";
+	exit(1);
+}else{
+	$display = "   Création de l'index 'events_isou_idService' sur la table 'events_isou'";
+	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+}
+
+// INDEX events_isou_idEventDescription
+$sql = "CREATE INDEX events_isou_idEventDescription ON events_isou(idEventDescription)";
+if($db2->exec($sql) === FALSE){
+	echo "La création de l'index 'events_isou_idEventDescription' sur la table 'events_isou' a échoué.\n";
+	echo "\033[0;31mÉchec de l'installation\033[0m\n";
+	exit(1);
+}else{
+	$display = "   Création de l'index 'events_isou_idEventDescription' sur la table 'events_isou'";
+	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+}
+
+// INDEX events_isou_idEvent
+$sql = "CREATE INDEX events_isou_idEvent ON events_isou(idEvent)";
+if($db2->exec($sql) === FALSE){
+	echo "La création de l'index 'events_isou_idEvent' sur la table 'events_isou' a échoué.\n";
+	echo "\033[0;31mÉchec de l'installation\033[0m\n";
+	exit(1);
+}else{
+	$display = "   Création de l'index 'events_isou_idEvent' sur la table 'events_isou'";
+	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+}
+
+
 /*
  * 7. TABLE events_nagios
  */
@@ -163,6 +246,39 @@ if($db2->exec($sql) === FALSE){
 	exit(1);
 }else{
 	$display = "Création de la table 'events_nagios'";
+	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+}
+
+// INDEX events_nagios_foreignkey
+$sql = "CREATE INDEX events_nagios_foreignkey ON events_nagios (idService, idEvent)";
+if($db2->exec($sql) === FALSE){
+	echo "La création de l'index 'events_nagios_foreignkey' sur la table 'events_nagios' a échoué.\n";
+	echo "\033[0;31mÉchec de l'installation\033[0m\n";
+	exit(1);
+}else{
+	$display = "   Création de l'index 'events_nagios_foreignkey' sur la table 'events_nagios'";
+	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+}
+
+// INDEX events_nagios_idService
+$sql = "CREATE INDEX events_nagios_idService ON events_nagios (idService)";
+if($db2->exec($sql) === FALSE){
+	echo "La création de l'index 'events_nagios_idService' sur la table 'events_nagios' a échoué.\n";
+	echo "\033[0;31mÉchec de l'installation\033[0m\n";
+	exit(1);
+}else{
+	$display = "   Création de l'index 'events_nagios_idService' sur la table 'events_nagios'";
+	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+}
+
+// INDEX events_nagios_idEvent
+$sql = "CREATE INDEX events_nagios_idEvent ON events_nagios (idEvent)";
+if($db2->exec($sql) === FALSE){
+	echo "La création de l'index 'events_nagios_idEvent' sur la table 'events_nagios' a échoué.\n";
+	echo "\033[0;31mÉchec de l'installation\033[0m\n";
+	exit(1);
+}else{
+	$display = "   Création de l'index 'events_nagios_idEvent' sur la table 'events_nagios'";
 	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 }
 
@@ -182,6 +298,18 @@ if($db2->exec($sql) === FALSE){
 	$display = "Création de la table 'events_info'";
 	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 }
+
+// INDEX events_info_foreignkey
+$sql = "CREATE INDEX events_info_foreignkey ON events_info (idEvent)";
+if($db2->exec($sql) === FALSE){
+	echo "La création de l'index 'events_info_foreignkey' sur la table 'events_info' a échoué.\n";
+	echo "\033[0;31mÉchec de l'installation\033[0m\n";
+	exit(1);
+}else{
+	$display = "   Création de l'index 'events_info_foreignkey' sur la table 'events_info'";
+	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+}
+
 
 /*
  * 9. TABLE events_description
@@ -212,6 +340,7 @@ if($db2->exec($sql) === FALSE){
 
 }
 
+
 /*
  * 10. TABLE statistics
  */
@@ -224,6 +353,7 @@ if($db2->exec($sql) === FALSE){
 	$display = "Création de la table 'statistics'";
 	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 }
+
 
 /*
  * 11. TABLE services
@@ -238,14 +368,38 @@ if($db2->exec($sql) === FALSE){
 	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 }
 
-$sql = "CREATE UNIQUE INDEX services_rssKey ON services(rssKey)";
+// INDEX services_foreignkey
+$sql = "CREATE INDEX services_foreignkey ON services (rssKey, idCategory)";
 if($db2->exec($sql) === FALSE){
-	echo "La création de la contrainte de la table 'services' a échoué.\n";
+	echo "La création de l'index 'services_foreignkey' sur la table 'services' a échoué.\n";
 	echo "\033[0;31mÉchec de l'installation\033[0m\n";
 	exit(1);
 }else{
-	$display = "Création de la contrainte de la table 'services'";
+	$display = "   Création de l'index 'services_foreignkey' sur la table 'services'";
 	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 }
+
+// INDEX services_rssKey
+$sql = "CREATE UNIQUE INDEX services_rssKey ON services(rssKey)";
+if($db2->exec($sql) === FALSE){
+	echo "La création de l'index 'services_rssKey' sur la table 'services' a échoué.\n";
+	echo "\033[0;31mÉchec de l'installation\033[0m\n";
+	exit(1);
+}else{
+	$display = "   Création de l'index 'services_rssKey' sur la table 'services'";
+	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+}
+
+// INDEX services_idCategory
+$sql = "CREATE INDEX services_idCategory ON services (idCategory)";
+if($db2->exec($sql) === FALSE){
+	echo "La création de l'index 'services_idCategory' sur la table 'services' a échoué.\n";
+	echo "\033[0;31mÉchec de l'installation\033[0m\n";
+	exit(1);
+}else{
+	$display = "   Création de l'index 'services_idCategory' sur la table 'services'";
+	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+}
+
 
 ?>
