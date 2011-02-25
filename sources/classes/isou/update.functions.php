@@ -64,6 +64,7 @@ function update_nagios_to_db(){
 				$d = 0;
 				while(isset($dependence[$d][0])){
 					$array = make_dependencies($dependence[$d][0],$dependence[$d][1], $array, $db);
+					$array = array_unique($array);
 					$d++;
 				}
 			}else{
