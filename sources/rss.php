@@ -1,5 +1,7 @@
 <?php
 
+header("content-type: application/xml");
+
 // chemin d'accès du site
 $pwd = dirname(__FILE__);
 
@@ -175,10 +177,7 @@ $smarty->assign('lastBuildDate', gmdate("D, d M Y H:i:s",TIME));
 $smarty->assign('RSS_URL', RSS_URL);
 $smarty->assign('items', $items);
 
-if(isset($_GET['view'])){
-	$smarty->display('public_rss_xsl.tpl');
-}else{
-	$smarty->display('public_rss.tpl');
-}
+$smarty->display('public_rss.tpl');
+
 
 ?>
