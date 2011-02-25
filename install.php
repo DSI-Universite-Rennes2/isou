@@ -67,9 +67,6 @@ if(empty($private_path)){
 	}
 	if(!is_dir($private_path)){
 		if(!mkdir($private_path)){
-			/*echo "La création du répertoire '.$private_path.' a échoué.\n";
-			echo "\033[0;31mÉchec de l'installation\033[0m\n";
-			exit(1);*/
 			$private_path = $public_path;
 		}else{
 			echo "\n";
@@ -200,7 +197,7 @@ if(empty($IP_INTERNE)){
 		$ips = explode(',', $range);
 		$IP_INTERNE .= 'array(';
 		foreach($ips as $ip){
-			$IP_INTERNE .= '\''.$ip[0].'\',';
+			$IP_INTERNE .= '\''.$ip.'\',';
 		}
 		$IP_INTERNE = substr($IP_INTERNE, 0, -1).'),';
 	}
@@ -221,7 +218,7 @@ if(empty($IP_CRI)){
 		$ips = explode(',', $range);
 		$IP_CRI .= 'array(';
 		foreach($ips as $ip){
-			$IP_CRI .= '\''.$ip[0].'\',';
+			$IP_CRI .= '\''.$ip.'\',';
 		}
 		$IP_CRI = substr($IP_CRI, 0, -1).'),';
 	}
