@@ -93,6 +93,20 @@ $(document).ready(function(){
 		return false;
 	});
 
+	$("#state").change(function(){
+		if($("#state option:selected").val() === "0"){
+			if($("#readonly option:selected").val() === "1"){
+				$("#readonly option:selected").removeAttr("selected");
+				$("#readonly option:eq(0)").attr("selected", "selected");
+			}
+		}else{
+			if($("#readonly option:selected").val() === "0"){
+				$("#readonly option:selected").removeAttr("selected");
+				$("#readonly option:eq(1)").attr("selected", "selected");
+			}
+		}
+	});
+
 	/* RECUPERATION DE L'INDEX FOURNIT DANS L'URL */
 	var anchor = '';
 	if(window.location.search != ""){
