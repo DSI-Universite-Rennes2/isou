@@ -33,6 +33,8 @@ function showForm(click, type){
 		case "delete" : $("#form-fg-layout").append($("#update"));break;
 	}
 
+	$("#form-fg-layout > form").css("display","block");
+
 	if(click){
 		$("#form-bg-layout").animate({"vibility":"visible","opacity":"0.5"}, {queue:false, duration: 500});
 		$("#form-fg-layout").animate({"vibility":"visible","opacity":"1","width":"90%","left":"0%"}, {queue:false, duration: 1000});
@@ -85,12 +87,10 @@ $(document).ready(function(){
 		showForm(true, "add");
 	});
 
-	// supprimer les boutons "cancel", sauf sur #form-edit
-	$("#form-add-service").submit(function(){return false;});
-
-	// modifier l'action des boutons "cancel"
+	// modifier l'action des boutons "cancel", sauf sur #form-edit
 	$("#form-add-service input[name=cancel]").click(function(){
 		closeForm();
+		return false;
 	});
 
 	/* RECUPERATION DE L'INDEX FOURNIT DANS L'URL */

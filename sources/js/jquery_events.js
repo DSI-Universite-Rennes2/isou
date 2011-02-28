@@ -178,12 +178,10 @@ $(document).ready(function(){
 	// supprimer les ancres de remonter vers le formulaire
 	$(".quickaccess-form").remove();
 
-	// supprimer les boutons "cancel", sauf sur #form-edit
-	$("#form-add-event input[name=cancel], #form-add-info input[name=cancel]").submit(function(){return false;});
-
-	// modifier l'action des boutons "cancel"
+	// modifier l'action des boutons "cancel", sauf sur #form-edit
 	$("#form-add-event input[name=cancel], #form-add-info input[name=cancel]").click(function(){
 		closeForm();
+		return false;
 	});
 
 
