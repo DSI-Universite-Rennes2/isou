@@ -9,7 +9,7 @@ if(DEBUG === TRUE){
 	require BASE.'/classes/phpCAS/CAS.php';
 
 	// initialize phpCAS
-	phpCAS::client(CAS_VERSION_2_0, CAS_URL, 443, '');
+	phpCAS::client(CAS_VERSION_2_0, CAS_URL, CAS_PORT, CAS_URI);
 
 	// no SSL validation for the CAS server
 	phpCAS::setNoCasServerValidation();

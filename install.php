@@ -169,6 +169,27 @@ $CAS_URL = trim(fgets(STDIN));
 $CAS_URL = str_replace('http://', '', $CAS_URL);
 $CAS_URL = str_replace('https://', '', $CAS_URL);
 
+$CAS_URI = strstr($CAS_URL, '/');
+if(substr($CAS_URI, 0, 1) === '/'){
+	$CAS_URI = substr($CAS_URI, 1);
+}
+
+if(substr($CAS_URI, -1) === '/'){
+	$CAS_URI = substr($CAS_URI, 0, -1);
+}
+
+$slash = strpos($CAS_URL, '/');
+if($slash !== FALSE){
+	$CAS_URL = substr($CAS_URL, 0, strpos($CAS_URL, '/'));
+}
+
+echo "\nQuelle est le port de votre service CAS ?\n";
+echo "Défaut: \033[1;34m443\033[0m\n";
+$CAS_PORT = intval(fgets(STDIN));
+if(empty($CAS_PORT)){
+	$CAS_PORT = 443;
+}
+
 echo "\nQuelles sont les comptes CAS autorisés à administrer l'application (séparés par des virgules) ?\n";
 echo "Défaut: \033[1;34mvide\033[0m\n";
 echo "exemple : \033[1;30mdurand_m, dupont_t\033[0m\n";
@@ -274,8 +295,15 @@ define('BASE', '".$private_path."');
 // chemin ou url du fichier status.dat de Nagios
 define('STATUSDAT_URL', '".addslashes($STATUSDAT_URL)."');
 
-// URL de CAS sans protocole http://
+// hôte de CAS sans protocole http://
 define('CAS_URL', '".$CAS_URL."');
+
+// URI de CAS
+// ex: si votre hôte CAS est de type auth.example.com/CAS, saisir 'CAS'
+define('CAS_URI', '".$CAS_URI."');
+
+// port de CAS
+define('CAS_PORT', ".$CAS_PORT.");
 
 // version de CAS (hardcoded)
 // define('CAS_VERSION', '2.0');
