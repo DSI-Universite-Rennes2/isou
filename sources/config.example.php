@@ -38,8 +38,15 @@ define('BASE', '/var/www');
 // chemin ou url du fichier status.dat de Nagios
 define('STATUSDAT_URL', '/var/nagios/status.dat');
 
-// URL de CAS sans protocole http://
+// hôte de CAS sans protocole http://
 define('CAS_URL', '');
+
+// URI de CAS
+// ex: si votre hôte CAS est de type auth.example.com/CAS, saisir 'CAS'
+define('CAS_URI', '');
+
+// port de CAS
+define('CAS_PORT', 443);
 
 // version de CAS (hardcoded)
 // define('CAS_VERSION', '2.0');
