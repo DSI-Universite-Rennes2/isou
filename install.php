@@ -118,7 +118,7 @@ try{
 	echo "\033[0;31mÉchec de l'installation\033[0m\n";
 	exit(1);
 }
-$display = "Création de la base de données 'isou-visits.sqlite3'";
+$display = "\nCréation de la base de données 'isou-visits.sqlite3'";
 echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 
 /*

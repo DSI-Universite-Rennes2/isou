@@ -79,6 +79,18 @@ if($db2->exec($sql) === FALSE){
 	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 }
 
+$sql = "INSERT INTO annonce(message, afficher)".
+		" VALUES('', 0)";
+$insert = $db2->prepare($sql);
+if($insert->execute(array()) === FALSE){
+	echo "   L'insertion des écritures dans la table 'annonce' a échoué.\n";
+	echo "\033[0;31mÉchec de l'installation\033[0m\n";
+	exit(1);
+}else{
+	$display = "   Insertion des écritures dans 'annonce'";
+	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+}
+
 
 /*
  * 3. TABLE categories
