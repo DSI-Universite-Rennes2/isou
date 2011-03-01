@@ -9,11 +9,17 @@ define('BASE', dirname(__FILE__));
 
 require BASE.'/install/functions.php';
 
+$owner = readline("\033[0;31mIMPORTANT : installez l'application avec votre utilisateur web (apache, www-data ou autre)\033[0m\nVoulez-vous continuer ? (y/n)\n");
+if(strtolower($owner) === 'n'){
+	echo "\033[0;31mMerci de relancer l'installation avec le bon utilisateur.\033[0m\n";
+	exit(0);
+}
+
 /*
  * COPIE DES FICHIERS ET REPERTOIRES 'PUBLICS'
  */
 echo "\033[0;34mCOPIE DES FICHIERS\033[0m\n";
-$public_path = readline("Indiquer le répertoire d'installation de votre application\n".
+$public_path = readline("Indiquez le répertoire d'installation de votre application\n".
 						"exemple : \033[1;30m/var/www/\033[0m\n");
 
 if(substr($public_path, -1) === '/'){
@@ -53,7 +59,7 @@ foreach($files as $file){
 /*
  * COPIE DES FICHIERS ET REPERTOIRES 'PRIVÉS'
  */
-$private_path = readline("\nIndiquer un répertoire non accessible via votre serveur Web (\033[1;35moptionnel\033[0m)\n".
+$private_path = readline("\nIndiquez un répertoire non accessible via votre serveur Web (\033[1;35moptionnel\033[0m)\n".
 						"exemple : \033[1;30m/var/www-private/\033[0m\n".
 						"Défaut: \033[1;34m".$public_path."\033[0m\n");
 if(empty($private_path)){
