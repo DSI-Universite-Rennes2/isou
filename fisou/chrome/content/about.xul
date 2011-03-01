@@ -11,7 +11,7 @@
 <groupbox align="center" orient="horizontal" style="background-color:#FFFFFF;">
 <vbox>
 	<text value="Fisou" style="font-weight: bold; font-size: x-large;"/>
-	<text value="Ver. 0.4"/>
+	<text value="Version 0.4.1"/>
 	<separator class="thin"/>
 	<text value="Développé par:" style="font-weight: bold;"/>
 	<text value="CRI Rennes 2" class="url"

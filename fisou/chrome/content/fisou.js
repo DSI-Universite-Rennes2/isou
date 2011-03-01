@@ -228,9 +228,18 @@ function init_fisou(){
 
 	// version 0.4
 	if(!preferencesService.prefHasUserValue("fisou.version")){
-		preferencesService.setIntPref("fisou.version", "0.4");
+		preferencesService.setCharPref("fisou.version", "0.4");
 		preferencesService.setIntPref("fisou.shownotification", 1);
 		preferencesService.setIntPref("fisou.delaysync", 1);
+	}
+
+	// version 0.4.1
+	// bug issue de la v0.4
+	if(preferencesService.prefHasUserValue("fisou.version")){
+		if(preferencesService.getPrefType("fisou.version") == preferencesService.PREF_INT){
+			preferencesService.deleteBranch("fisou.version");
+			preferencesService.setCharPref("fisou.version","0.4.1");
+		}
 	}
 
 	// bug issue de la v0.2
