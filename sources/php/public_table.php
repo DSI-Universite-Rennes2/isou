@@ -72,15 +72,16 @@
 					" AND E.typeEvent = 0".
 					" AND EI.idService = :0".
 					" AND ((EI.isScheduled < 2".
-					" AND (E.endDate BETWEEN :1 AND :2 OR E.endDate IS NULL)".
+					" AND (E.beginDate BETWEEN :1 AND :2".
+					" OR (E.endDate BETWEEN :3 AND :4 OR E.endDate IS NULL))".
 					" AND (E.endDate - E.beginDate > ".TOLERANCE." OR E.endDate IS NULL))".
 					" OR (EI.isScheduled = 3".
-					" AND E.beginDate < :3".
-					" AND (E.endDate > :4".
+					" AND E.beginDate < :5".
+					" AND (E.endDate > :6".
 					" OR E.endDate IS NULL)))".
 					" ORDER BY E.beginDate DESC";
 				$event_records = $db->prepare($sql);
-				if($event_records->execute(array($service_records[$i][0], $BEFORE, TIME, TIME, TIME))){
+				if($event_records->execute(array($service_records[$i][0], $BEFORE, TIME, $BEFORE, TIME, TIME, TIME))){
 					$event = $event_records->fetch();
 					if(isset($event[0])){
 						$services[$i]->setEvent(new IsouEvent($event[0],$event[1],$event[2],NULL,$event[3], NULL, NULL, NULL,'LastInterruption'));
