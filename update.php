@@ -4,9 +4,6 @@
 // PHP CLI Colors – PHP Class Command Line Colors (bash)
 // http://www.if-not-true-then-false.com/2010/php-class-for-coloring-php-command-line-cli-scripts-output-php-output-colorizing-using-bash-shell-colors/
 
-// \033['.color.'m'.string.'\033[0m
-// red = 0;31;
-
 error_reporting(0);
 define('SOURCE', dirname(__FILE__));
 
@@ -30,17 +27,91 @@ if(is_file($config)){
 	exit(1);
 }
 
-/* * * *
-Voulez-vous que l'installateur merge votre version avec la version officielle ?
-cp isou SOURCE.'/sources'
-shell_exec("svn update");
-*/
+$update_svn = FALSE;
+if(is_file(SOURCE.'/UPDATE_SVN_FLAG')){
+	$update_svn = TRUE;
+}else{
+	if(is_dir(SOURCE.'/.svn')){
+		$update_svn = readline("\nVoulez-vous que l'installateur fusionne votre version avec la version officielle ? (y/n)\n");
+		if(strtolower($update_svn) === 'y'){
+			$update_svn = TRUE;
+		}
+	}
+}
+
+if($update_svn === TRUE){
+	$display = "\nÉcriture du témoin de mise à jour par subversion";
+	if(touch(SOURCE.'/UPDATE_SVN_FLAG')){
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+		echo "\033[0;31mÉchec de la mise à jour. Merci vérifier les droits d'écriture sur ".SOURCE.", puis de relancer la procédure de mise à jour.\033[0m\n";
+		exit(1);
+	}
+
+	$files = array();
+	$files[] = 'css';
+	$files[] = 'images';
+	$files[] = 'js';
+	$files[] = 'config.menu.php';
+	$files[] = 'functions.php';
+	$files[] = 'index.php';
+	$files[] = 'rss.php';
+	$files[] = 'rss.xsl';
+
+	foreach($files as $file){
+		$display = "Copie de ".$public_path."/".$file." vers ".SOURCE."/sources/".$file;
+		if(cp($public_path.'/'.$file, SOURCE.'/sources/'.$file)){
+			echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+		}else{
+			echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+			echo "\033[0;31mÉchec de la mise à jour. Merci de relancer une installation complète.\033[0m\n";
+			exit(1);
+		}
+	}
+
+	$files = array();
+	$files[] = 'classes';
+	$files[] = 'cron';
+	$files[] = 'html';
+	$files[] = 'php';
+
+	foreach($files as $file){
+		$display = "Copie de ".$private_path."/".$file." vers ".SOURCE."/sources/".$file;
+		if(cp($private_path.'/'.$file, SOURCE.'/sources/'.$file)){
+			echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+		}else{
+			echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+			echo "\033[0;31mÉchec de la mise à jour. Merci de relancer une installation complète.\033[0m\n";
+			exit(1);
+		}
+	}
+
+	$shell = shell_exec("cd '".SOURCE."' && svn update");
+	$conflicts = explode("\n", $shell);
+	$conflicts = preg_grep('#^C#', $conflicts);
+	echo "Sortie shell:\n\033[0;35m\n".$shell."\033[0m\n";
+	if(count($conflicts) > 0){
+		echo "\033[0;31mÉchec de la mise à jour. Merci de corriger les conflits, puis de relancer la mise à jour.\033[0m\n";
+		exit(1);
+	}else{
+		$update_svn = readline("La fusion entre les deux versions semblent s'être passée correctement. Voulez-vous continuer ? (y/n)\n");
+		if(strtolower($update_svn) !== 'y'){
+			echo "\033[0;31mMerci de corriger les conflits, puis de relancer la mise à jour.\033[0m\n";
+			exit(0);
+		}
+	}
+}
 
 $files = array();
-// $files[0] = 'css';
-// $files[1] = 'images';
+if($update_svn === TRUE){
+	$files[0] = 'css';
+	$files[1] = 'images';
+}
 $files[2] = 'js';
-// $files[3] = 'config.menu.php';
+if($update_svn === TRUE){
+	$files[3] = 'config.menu.php';
+}
 $files[4] = 'functions.php';
 $files[5] = 'index.php';
 $files[6] = 'rss.php';
