@@ -2,8 +2,6 @@
 
 // add_log(BASE.'/log/fisou.log', 'FISOU', 'JSON', getIpAddr());
 
-$json = '';
-
 // find filter on rss url
 if(isset($_GET['key'])){
 	$maxKey = pow(2,100);
@@ -50,6 +48,9 @@ $json = array("fisou" => $services);
 if($events = $db->query($sql)){
 	while($service = $events->fetch(PDO::FETCH_ASSOC)){
 		$service['description'] = explode("\n", trim($service['description']));
+		if(count($service['description']) === 1 && empty($service['description'][0])){
+			$service['description'] = array();
+		}
 		$services[] = $service;
 	}
 	$json['fisou']['services'] = $services;

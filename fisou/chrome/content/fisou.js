@@ -147,10 +147,19 @@ var Fisou = {
 						// affiche une notification si l'utilisateur l'a demandé
 						if(preferencesService.prefHasUserValue("fisou.shownotification")){
 							if(preferencesService.getIntPref("fisou.shownotification") == 1 && servicesNotificationCount > 0){
+								servicesNotification = servicesNotification.substr(0, servicesNotification.length-2);
+								// tronque la notification pour qu'elle ne soit pas trop longue
+								if(servicesNotification.length > 75){
+									servicesNotification = servicesNotification.substr(0,75);
+									if(servicesNotification.substr(servicesNotification.length-1) === ","){
+										servicesNotification = servicesNotification.substr(0, servicesNotification.length-1);
+									}
+									servicesNotification = servicesNotification+"...";
+								}
 								if(servicesNotificationCount == 1){
-									showNotification("Nouveau service perturbé", servicesNotification.substr(0, servicesNotification.length-2));
+									showNotification("Nouveau service perturbé", servicesNotification);
 								}else{
-									showNotification("Nouveaux services perturbés", servicesNotification.substr(0, servicesNotification.length-2));
+									showNotification("Nouveaux services perturbés", servicesNotification);
 								}
 							}
 						}
