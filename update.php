@@ -110,18 +110,18 @@ if($update_svn === TRUE){
 }
 
 $files = array();
+
 if($update_svn === TRUE){
-	$files[0] = 'css';
-	$files[1] = 'images';
+	$files[] = 'css';
+	$files[] = 'images';
+	$files[] = 'config.menu.php';
 }
-$files[2] = 'js';
-if($update_svn === TRUE){
-	$files[3] = 'config.menu.php';
-}
-$files[4] = 'functions.php';
-$files[5] = 'index.php';
-$files[6] = 'rss.php';
-$files[7] = 'rss.xsl';
+
+$files[] = 'js';
+$files[] = 'functions.php';
+$files[] = 'index.php';
+$files[] = 'rss.php';
+$files[] = 'rss.xsl';
 
 echo "\n";
 foreach($files as $file){
@@ -136,11 +136,11 @@ foreach($files as $file){
 }
 
 $files = array();
-$files[0] = 'classes';
-$files[1] = 'cron';
-// $files[2] = 'database';
-$files[3] = 'html';
-$files[4] = 'php';
+$files[] = 'classes';
+$files[] = 'cron';
+// $files[] = 'database';
+$files[] = 'html';
+$files[] = 'php';
 
 foreach($files as $file){
 	$display = "Copie de ".SOURCE."/sources/".$file." vers ".$private_path."/".$file;
@@ -151,6 +151,10 @@ foreach($files as $file){
 		echo "\033[0;31mÉchec de la mise à jour. Merci de relancer une installation complète.\033[0m\n";
 		exit(1);
 	}
+}
+
+if(is_file(SOURCE.'/UPDATE_SVN_FLAG')){
+	unlink(SOURCE.'/UPDATE_SVN_FLAG');
 }
 
 echo "\n\033[0;32mLa mise à jour est terminée.\033[0m\n\n";
