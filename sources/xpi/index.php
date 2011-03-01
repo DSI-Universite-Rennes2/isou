@@ -14,12 +14,25 @@
 	</header>
 	<nav>
 		<ul>
-		<li><a href="#fisou01">Fisou 0.1beta</a></li>
-		<li><a href="#fisou02">Fisou 0.2</a></li>
-		<li><a href="#fisou03">Fisou 0.3</a></li>
+		<li><a href="#fisou041">Fisou 0.4.1</a></li>
 		<li><a href="#fisou04">Fisou 0.4</a></li>
+		<li><a href="#fisou03">Fisou 0.3</a></li>
+		<li><a href="#fisou02">Fisou 0.2</a></li>
+		<li><a href="#fisou01">Fisou 0.1beta</a></li>
 		</ul>
 	</nav>
+	<section>
+		<a name="fisou041"></a>
+		<h1>Fisou 0.4</h1>
+		<p>Date de sortie : 1 mars 2011</p>
+		<p>Télécharger : <a href="fisou0.4.1.xpi" hash="sha1:<?php echo sha1_file("fisou0.4.1.xpi");?>" onclick="return install(event);">Fisou0.4.1.xpi</a></p>
+		<p>Modifications :</p>
+		<ul>
+		<li>limitation à 75 caractères lors de l'affichage du popup listant les services perturbés</li>
+		<li>correction d'un bug sur la définition du numéro de version de fisou</li>
+		</ul>
+		<p>Todo : prise en compte des évènements planifiés.</p>
+	</section>
 	<section>
 		<a name="fisou04"></a>
 		<h1>Fisou 0.4</h1>
