@@ -1,7 +1,7 @@
 <div id="content">
 <a name="content"></a>
 {if count($categoryItems) > 0}
-<p>Sélectionner les services qui vous intéressent afin de ne recevoir, par flux RSS, que les informations à propos de ces services.</p>
+<p>Sélectionnez les services qui vous intéressent afin de ne recevoir, par flux RSS, que les informations à propos de ces services ou cliquez directement sur le bouton "Générer le flux RSS" en bas de page pour surveiller tous les services.</p>
 
 <form id="configForm" method="post" action="{$smarty.const.URL}/index.php/rss/config">
 	<ul>
