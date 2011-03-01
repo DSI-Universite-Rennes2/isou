@@ -22,7 +22,10 @@ $config = readline("Indiquez le chemin du fichier config.php\n".
 						"exemple : \033[1;30m/var/www/config.php\033[0m\n");
 
 if(is_file($config)){
-	$public_path = strstr($config, '/config.php', TRUE);
+	// $public_path = strstr($config, '/config.php', TRUE);
+	// contourne l'option TRUE ajoutée en php 5.3
+	$public_path = explode('/config.php', $config);
+	$public_path = $public_path[0];
 	$pwd = $public_path;
 	require $pwd.'/functions.php';
 	require $config;
