@@ -97,8 +97,8 @@ if($update_svn === TRUE){
 	}
 
 	$shell = shell_exec("cd '".SOURCE."' && svn update");
-	$conflicts = explode("\n", $shell);
-	$conflicts = preg_grep('#^C#', $conflicts);
+	$exp_shell = explode("\n", $shell);
+	$conflicts = preg_grep('#^C#', $exp_shell);
 	echo "\nSortie shell:\033[0;35m\n".$shell."\033[0m\n";
 	if(count($conflicts) > 0){
 		echo "\033[0;31mÉchec de la mise à jour. Merci de corriger les conflits, puis de relancer la mise à jour.\033[0m\n";
@@ -161,5 +161,30 @@ if(is_file(SOURCE.'/UPDATE_SVN_FLAG')){
 }
 
 echo "\n\033[0;32mLa mise à jour est terminée.\033[0m\n\n";
+
+if($update_svn === TRUE){
+	$xpi = preg_grep('#/xpi/#', $exp_shell);
+	if(count($xpi) > 0){
+		$xpi_fisou = preg_grep('#sources/xpi/fisou[\d\.]+\.xpi#', $exp_shell);
+		if(count($xpi_fisou) > 0){
+			preg_match('#fisou[\d\.]+\.xpi#', current($xpi_fisou), $xpi_fisou);
+			if(count($xpi_fisou) > 0){
+				$xpi_fisou = $xpi_fisou[0];
+			}else{
+				unset($xpi_fisou);
+			}
+		}else{
+			unset($xpi_fisou);
+		}
+
+		echo "Une nouvelle version de \033[1;34mFisou\033[0m est disponible. Veuillez lancer les commandes suivantes : \n\n".
+			"\033[1;30mcd ".SOURCE."/fisou && make && mkdir -p ".$public_path."/xpi \ \n";
+		if(isset($xpi_fisou)){
+			echo "cp build/fisou.xpi ".$public_path."/xpi/".$xpi_fisou." && \ \n";
+		}
+		echo "cp build/update.rdf build/fisou.xpi ".SOURCE."/sources/xpi/index.php ".$public_path."/xpi/ && cd ..\033[0m\n\n".
+			"nb: si ce n'est fait, pensez à changer l'URL dans le fichier ".SOURCE."/fisou/clean.sh avant de lancer ces commandes.\n\n";
+	}
+}
 
 ?>
