@@ -5,19 +5,19 @@ function genKey(){
 			sum += Math.pow(2,parseInt($(this).attr("value")));
 		}
 	});
-	
+
 	var urlRE = new RegExp("(.*)/index.php","i");
 	url = urlRE.exec(window.location.href);
 	url = url[0];
 	url = url.substring(0,(url.length-('index.php').length));
 	url.toLowerCase();
-	
+
 	if(sum == 0){
 		url = url+"rss.php";
 	}else{
 		url = url+"rss.php?key="+(sum.toString(16)).toUpperCase();
 	}
-	
+
 	$("#content > p:last").html("Vous pouvez consulter les actualités des services sélectionnés précédemment en utilisant ce lien RSS : "+
 	"<a href=\""+url+"\" title=\"lien vers le flux RSS\">"+url+"</a>");
 }
@@ -25,15 +25,18 @@ function genKey(){
 
 //au chargement de la page
 $(document).ready(function(){
-	
-	$("#configForm").attr("action","javascript:genKey();");
-	
+
+	$("#configForm").submit(function(){
+		genKey();
+		return false;
+	});
+
 	$("#configForm > ul > li span").each(function(i){
 		$(this).replaceWith("<input type=\"checkbox\" name=\"cat_"+i+"\" id=\"cat_"+i+"\" />"+
 			"<label for=\"cat_"+i+"\">"+$(this).text()+"</label>");
 	});
-	
-	
+
+
 	$("#configForm > ul li > input:checkbox").click(function(){
 		var index = $("#configForm > ul li > input:checkbox").index(this);
 
@@ -44,4 +47,4 @@ $(document).ready(function(){
 		}
 	});
 
-}); 
+});
