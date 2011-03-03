@@ -34,9 +34,8 @@ $sql = "SELECT S.nameForUsers as name, S.state as state, E.beginDate as date, ED
 	" AND E.idEvent = EI.idEvent".
 	" AND ED.idEventDescription = EI.idEventDescription".
 	" AND (E.endDate IS NULL".
-	" OR E.beginDate > ".TIME.")".
-	" AND EI.isScheduled = 0".
-	" AND S.state BETWEEN 1 AND 3".
+	" OR E.beginDate < ".TIME." AND E.endDate > ".TIME.")".
+ 	" AND EI.isScheduled < 2".
 	" AND S.enable = 1".
 	" AND S.visible = 1".
 	$rssKey.
