@@ -55,6 +55,14 @@ if($events = $db->query($sql)){
 	$json['fisou']['services'] = $services;
 }
 
-file_put_contents($pwd.'/isou.json', json_encode($json));
+$json = json_encode($json);
+
+$fjson = file_get_contents($pwd.'/isou.json');
+
+// ne pas écraser systématiquement le fichier isou.json
+// permet d'utiliser le mod_expires d'apache pour retourner des codes 304 Not Modified
+if(trim($fjson) !== trim($json)){
+	file_put_contents($pwd.'/isou.json', $json);
+}
 
 ?>
