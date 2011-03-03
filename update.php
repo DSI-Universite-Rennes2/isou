@@ -187,7 +187,7 @@ if($update_svn === TRUE){
 		if(isset($xpi_fisou)){
 			$build_fisou .= "cp build/fisou.xpi ".$public_path."/xpi/".$xpi_fisou." && \\\n";
 		}
-		$build_fisou = "cp build/update.rdf build/fisou.xpi ".SOURCE."/sources/xpi/index.php ".$public_path."/xpi/ && \\\n".
+		$build_fisou .= "cp build/update.rdf build/fisou.xpi ".SOURCE."/sources/xpi/index.php ".$public_path."/xpi/ && \\\n".
 						"rm -r build/ && \\\n".
 						"cd ..";
 
