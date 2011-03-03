@@ -29,7 +29,7 @@
 		<p>Télécharger : <a href="fisou0.4.2.xpi" hash="sha1:<?php echo sha1_file("fisou0.4.2.xpi");?>" onclick="return install(event);">Fisou0.4.2.xpi</a></p>
 		<p>Modifications :</p>
 		<ul>
-		<li>correction d'un bug lors l'interruption est à un état "vert" (exemple : mode maintenance sur certains services web)</li>
+		<li>correction d'un bug lorsque le service interrompu était dans un état "vert" (exemple : mode maintenance sur certains services web)</li>
 		<li>prise en compte des évènements planifiés</li>
 		</ul>
 	</section>
