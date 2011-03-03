@@ -1,5 +1,5 @@
 all:
 	mkdir -p build
 	bash clean.sh
-	zip -r --exclude=*.svn* build/fisou.xpi chrome/ chrome.manifest install.rdf
+	zip -r build/fisou.xpi chrome/ chrome.manifest install.rdf -x *\.svn*
 	cp ./update.rdf ./build

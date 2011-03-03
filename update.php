@@ -179,13 +179,27 @@ if($update_svn === TRUE){
 			unset($xpi_fisou);
 		}
 
-		echo "Une nouvelle version de \033[1;34mFisou\033[0m est disponible. Veuillez lancer les commandes suivantes : \n\n".
-			"\033[1;30mcd ".SOURCE."/fisou && make && mkdir -p ".$public_path."/xpi \ \n";
+		// création d'un script bash pour automatiser la distribution de fisou
+		$build_fisou = "#!/bin/bash\n\n".
+						"cd ".SOURCE."/fisou && \\\n".
+						"make && \\\n".
+						"mkdir -p ".$public_path."/xpi && \\\n";
 		if(isset($xpi_fisou)){
-			echo "cp build/fisou.xpi ".$public_path."/xpi/".$xpi_fisou." && \ \n";
+			$build_fisou .= "cp build/fisou.xpi ".$public_path."/xpi/".$xpi_fisou." && \\\n";
 		}
-		echo "cp build/update.rdf build/fisou.xpi ".SOURCE."/sources/xpi/index.php ".$public_path."/xpi/ && cd ..\033[0m\n\n".
-			"nb: si ce n'est fait, pensez à changer l'URL dans le fichier ".SOURCE."/fisou/clean.sh avant de lancer ces commandes.\n\n";
+		$build_fisou = "cp build/update.rdf build/fisou.xpi ".SOURCE."/sources/xpi/index.php ".$public_path."/xpi/ && \\\n".
+						"rm -r build/ && \\\n".
+						"cd ..";
+
+		echo "Une nouvelle version de \033[1;34mFisou\033[0m est disponible.";
+		if(file_put_contents(SOURCE."/build_fisou.sh", $build_fisou) === FALSE){
+			echo "\nLe script bash build_fisou.sh n'a pas pu être généré.\n".
+				"Veuillez vous placer dans le répertoire ".SOURCE."/fisou et lancer le make, ".
+				"puis copier les fichiers générés dans ".SOURCE."/fisou/build dans le répertoire ".$public_path."/xpi/, ainsi que le fichier ".SOURCE."/sources/xpi/index.php\n\n";
+		}else{
+			echo " Veuillez lancer le script build_fisou.sh\n";
+		}
+		echo "nb: si ce n'est fait, pensez à changer l'URL dans le fichier ".SOURCE."/fisou/clean.sh avant de lancer le script build_fisou.sh.\n\n";
 	}
 }
 
