@@ -108,6 +108,8 @@ if($update_svn === TRUE){
 		if(strtolower($update_svn) !== 'y'){
 			echo "\033[0;31mMerci de corriger les conflits, puis de relancer la mise à jour.\033[0m\n";
 			exit(0);
+		}else{
+			$update_svn = TRUE;
 		}
 	}
 }
