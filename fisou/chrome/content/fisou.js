@@ -5,6 +5,7 @@ function getColorFlag(state){
 		case 2: color = "red";break;
 		case 3: color = "blue";break;
 		case 4: color = "white";break;
+		default 1: color = "orange";break;
 	}
 	return color;
 }
@@ -175,6 +176,9 @@ var Fisou = {
 						description.setAttribute("style","font-size:0.8em;color: gray;text-decoration:underline;");
 						tooltip.appendChild(description);
 					}
+				}else if (httpRequest.status == 304){
+					// 304 Not Modified
+					// ooh yeah !
 				}else{
  					// cas où isou ne peut être contacté
 					// vide la tooltip
@@ -233,14 +237,14 @@ function init_fisou(){
 		preferencesService.setIntPref("fisou.delaysync", 1);
 	}
 
-	// version 0.4.1
 	// bug issue de la v0.4
-	if(preferencesService.prefHasUserValue("fisou.version")){
-		if(preferencesService.getPrefType("fisou.version") == preferencesService.PREF_INT){
-			preferencesService.deleteBranch("fisou.version");
-			preferencesService.setCharPref("fisou.version","0.4.1");
-		}
+	if(preferencesService.getPrefType("fisou.version") == preferencesService.PREF_INT){
+		preferencesService.deleteBranch("fisou.version");
 	}
+
+	// version courante
+	preferencesService.setCharPref("fisou.version","0.4.2");
+
 
 	// bug issue de la v0.2
 	if(preferencesService.prefHasUserValue("fisou.key")){

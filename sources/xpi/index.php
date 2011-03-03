@@ -14,6 +14,7 @@
 	</header>
 	<nav>
 		<ul>
+		<li><a href="#fisou042">Fisou 0.4.2</a></li>
 		<li><a href="#fisou041">Fisou 0.4.1</a></li>
 		<li><a href="#fisou04">Fisou 0.4</a></li>
 		<li><a href="#fisou03">Fisou 0.3</a></li>
@@ -22,8 +23,19 @@
 		</ul>
 	</nav>
 	<section>
+		<a name="fisou042"></a>
+		<h1>Fisou 0.4.2</h1>
+		<p>Date de sortie : 3 mars 2011</p>
+		<p>Télécharger : <a href="fisou0.4.2.xpi" hash="sha1:<?php echo sha1_file("fisou0.4.2.xpi");?>" onclick="return install(event);">Fisou0.4.2.xpi</a></p>
+		<p>Modifications :</p>
+		<ul>
+		<li>correction d'un bug lors l'interruption est à un état "vert" (exemple : mode maintenance sur certains services web)</li>
+		<li>prise en compte des évènements planifiés</li>
+		</ul>
+	</section>
+	<section>
 		<a name="fisou041"></a>
-		<h1>Fisou 0.4</h1>
+		<h1>Fisou 0.4.1</h1>
 		<p>Date de sortie : 1 mars 2011</p>
 		<p>Télécharger : <a href="fisou0.4.1.xpi" hash="sha1:<?php echo sha1_file("fisou0.4.1.xpi");?>" onclick="return install(event);">Fisou0.4.1.xpi</a></p>
 		<p>Modifications :</p>
