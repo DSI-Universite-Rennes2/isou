@@ -31,6 +31,8 @@
 		<ul>
 		<li>correction d'un bug lorsque le service interrompu était dans un état "vert" (exemple : mode maintenance sur certains services web)</li>
 		<li>prise en compte des évènements planifiés</li>
+		<li>correction d'une erreur de syntaxe dans le fichier fisou.js</li>
+		<li>correction d'un bug pouvant masquer fisou lorsqu'on l'arrête alors qu'un ou plusieurs services étaient signalés perturbés</li>
 		</ul>
 	</section>
 	<section>

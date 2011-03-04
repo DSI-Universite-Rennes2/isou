@@ -5,7 +5,7 @@ function getColorFlag(state){
 		case 2: color = "red";break;
 		case 3: color = "blue";break;
 		case 4: color = "white";break;
-		default 1: color = "orange";break;
+		default: color = "orange";break;
 	}
 	return color;
 }
@@ -52,6 +52,7 @@ var Fisou = {
 			menu4.setAttribute('label','Démarrer');
 			statusicon = document.getElementById('fisou-status-icon');
 			statusicon.setAttribute('class','fisou-status-icon-off');
+			statusicon.style.display = "block";
 			var statusLabel = document.getElementById("fisou-status-label");
 			statusLabel.setAttribute("value","");
 		}
