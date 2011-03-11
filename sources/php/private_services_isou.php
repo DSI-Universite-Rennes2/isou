@@ -1,10 +1,5 @@
 <?php
 
-$countStates = count($flags);
-for($i=0;$i<$countStates;$i++){
-	$servicesStrState[$i] = $flags[$i]->alt;
-}
-
 function get_parents($idChild){
 	$parents = array();
 
@@ -65,18 +60,11 @@ $i = 0;
 while($service = $services->fetchObject()){
 	if((isset($_GET['modify']) && $_GET['modify'] == $service->idService) ||
 		(isset($_POST['idService']) && $_POST['idService'] == $service->idService)){
-
-		$smarty->assign('checkboxForced', array(0 => 'Non', 1 => 'Oui'));
-		$smarty->assign('optionState', $servicesStrState);
-
 		$currentEdit = $service;
 	}
 
 	$parents = get_parents($service->idService);
-	if($service->name != 'Service final'){
-		$service->css = 'nagios';
-		$service->parents = array();
-	}else if($parents == ''){
+	if($parents == ''){
 		$service->css = 'unassign';
 		$service->parents = array();
 	}else{

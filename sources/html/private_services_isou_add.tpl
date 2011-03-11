@@ -10,7 +10,7 @@
 			</p>
 			<p>
 				<label class="label-form" for="nameForUsers">Nom du service pour les usagers</label>
-				<input type="text" name="nameForUsers" id="nameForUsers" maxlength="64" value="{$smarty.post.nameForUsers|default:''}" />
+				<input type="text" name="nameForUsers" id="nameForUsers" size="64" maxlength="64" value="{$smarty.post.nameForUsers|default:''}" />
 			</p>
 			<p>
 				<label class="label-form" for="url">URL du service</label>

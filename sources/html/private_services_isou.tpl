@@ -44,9 +44,6 @@
 			<th id="head-state-{$smarty.foreach.cat.index}" class="head-state">
 				<label>Etat du service</label>
 			</th>
-			<th id="head-forced-{$smarty.foreach.cat.index}" class="head-forced">
-				<label>Etat forcé</label>
-			</th>
 			<th id="head-action-{$smarty.foreach.cat.index}" class="head-action">
 				<label>Actions</label>
 			</th>
@@ -71,7 +68,6 @@
 				{/if}
 			</td>
 			<td headers="head-state-{$smarty.foreach.cat.index}">{$flags.{$service->state}->alt}</td>
-			<td headers="head-forced-{$smarty.foreach.cat.index}">{$service->forced}</td>
 			<td headers="head-action-{$smarty.foreach.cat.index}">
 				<a href="{$smarty.const.URL}/index.php/services?service=isou&amp;modify={$service->idService}#edit" title="modifier">
 					<img src="{$smarty.const.URL}/images/edit.png" alt="modifier" />

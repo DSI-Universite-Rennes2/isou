@@ -167,23 +167,12 @@ if(isset($_POST['cancel'])){
 			$comment = '';
 
 			if(!empty($_POST['nameForUsers'])){
-				if(isset($_POST['readonly']) && $_POST['readonly'] === '1'){
-					$_POST['readonly'] = 1;
-				}else{
-					$_POST['readonly'] = 0;
-				}
-
-				if(isset($_POST['state'])){
-					$state = intval($_POST['state']);
-				}else{
-					$state = 'state';
-				}
 				// service ISOU
 				$sql = "UPDATE services".
-					" SET nameForUsers = ?, url = ?, state = ".$state.", comment = ?, enable = 1, visible = 1, readonly = ?, idCategory = ?".
+					" SET nameForUsers = ?, url = ?, comment = ?, enable = 1, visible = 1, idCategory = ?".
 					" WHERE idService = ?";
 				$query = $db->prepare($sql);
-				if($query->execute(array($_POST['nameForUsers'],$_POST['url'],$comment,$_POST['readonly'],$_POST['category'],$_POST['idService']))){
+				if($query->execute(array($_POST['nameForUsers'],$_POST['url'],$comment,$_POST['category'],$_POST['idService']))){
 					unset($_POST['idService']);
 					$error = 'Le service '.stripslashes($_POST['nameForUsers']).' a été modifié dans la base';
 					add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Service #'.$_POST['idService'].' : SET nameForUsers = '.$_POST['nameForUsers'].', state = '.$state.', comment = '.$comment.', enable = 1, visible = 1, readonly = '.$_POST['readonly'].', idCategory = '.$_POST['category']);

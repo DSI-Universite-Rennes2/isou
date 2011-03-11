@@ -3,28 +3,13 @@
 		<fieldset>
 			<legend>Edition d'un service</legend>
 			<p>
-				<label class="label-form" for="category">Catégorie : </label>
+				<label class="label-form" for="category">Nom de la catégorie du service</label>
 				{html_options id=category name=category options=$optionCategories selected=$smarty.post.idCategory|default:$currentEdit->idCategory}
 			</p>
 			<p>
-				<label class="label-form" for="nameForUsers">Nom du service : </label>
+				<label class="label-form" for="nameForUsers">Nom du service pour les usagers</label>
 				<input type="text" id="nameForUsers" name="nameForUsers" size="64" maxlength="64" value="{$smarty.post.nameForUsers|default:$currentEdit->nameForUsers}" />
 			</p>
-
-			{if $currentEdit->state != 4}
-			<p>
-				<label class="label-form" for="state">Etat : </label>
-				{html_options id=state name=state options=$optionState selected=$smarty.post.state|default:$currentEdit->state}
-			</p>
-			<p>
-				<label class="label-form" for="readonly">Forcer : </label>
-				{html_options id=readonly name=readonly options=$checkboxForced selected=$smarty.post.readonly|default:$currentEdit->readonly}
-			</p>
-			{else}
-			<p>
-				<span class="italic">Note : Le service est fermé. Merci de passer par le menu "<a href="{$smarty.const.URL}/index.php/evenements" title="aller sur la page des évènements">évènement</a>" pour le réouvrir.</span>
-			</p>
-			{/if}
 			<p>
 				<label class="label-form" for="url">URL du service</label>
 				<input type="text" name="url" id="url" size="64" maxlength="64" value="{$smarty.post.url|default:$currentEdit->url}" />
