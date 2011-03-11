@@ -303,3 +303,5 @@ function init_fisou(){
 
 // waiting 5s for dom loading
 setTimeout("init_fisou()", 5000);
+// appel la fonction init_fisou() une fois que le navigateur a chargé toute son interface
+// window.addEventListener('load', init_fisou(), false);

@@ -107,29 +107,19 @@ if($service_records = $db->query($sql)){
 				" OR E.endDate BETWEEN :5 AND :6)";
 				if($_SESSION['hide'] === 1 || $IS_ADMIN === FALSE){
 					$sql .= " AND (E.endDate-E.beginDate > ".TOLERANCE.")";
-					/*$toto = TOLERANCE;
-					$sql .= " AND (E.endDate-E.beginDate > :7)";
-					$param = array($record[0], TIME, TIME, $BEFORE, $AFTER, $BEFORE, $AFTER, $toto);*/
 					$param = array($record[0], TIME, TIME, $BEFORE, $AFTER, $BEFORE, $AFTER);
 				}else{
 					$param = array($record[0], TIME, TIME, $BEFORE, $AFTER, $BEFORE, $AFTER);
 				}
 				$sql .= " )))) ORDER BY E.beginDate DESC";
-/*if($record[0] == "107"){
-	var_dump($param);
-}*/
+
 		// ajoute les évènements
 		$event_records = $db->prepare($sql);
-		/*echo '<pre>';
-		var_dump($param);
-		echo $sql;
-		echo '</pre>';*/
+
 		if($event_records->execute($param)){
 			$e = 0;
 			$event_record = $event_records->fetchAll();
-/*if($record[0] == "107"){
-	var_dump($event_record);
-}*/
+
 			while(isset($event_record[$e][0]) && $e < 10){
 				$nagiosEvents = array();
 				if(!empty($event_record[$e][2])){
@@ -143,7 +133,7 @@ if($service_records = $db->query($sql)){
 							" AND d.idService = :0".
 							" AND e.beginDate >= :1".
 							" AND e.endDate <= :2";
-//echo "<p>".$sql."<br>".$record[0]." ".($event_record[$e][1]-TOLERANCE)." ".($event_record[$e][2]+TOLERANCE)."</p>";
+
 					$nagiosevent_records = $db->prepare($sql);
 					if($nagiosevent_records->execute(array($record[0], $event_record[$e][1]-TOLERANCE, $event_record[$e][2]+TOLERANCE))){
 						$j = 0;
