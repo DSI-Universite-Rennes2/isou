@@ -9,6 +9,14 @@
 		{html_options id=scheduled name=scheduled options=$optionScheduled selected=$smarty.post.scheduled|default:'1'}
 	</p>
 
+	<p id="p-forced">
+		<label for="forced" class="label">
+			Forcer à l'état du service
+			<span class="info">(seulement si c'est une opération non-prévue)</span>
+		</label>
+		{html_options id=forced name=forced options=$optionForced selected=$smarty.post.forced|default:'0'}
+	</p>
+
 	<p>
 		<label for="name" class="label">
 			Service mis en maintenance
@@ -34,9 +42,9 @@
 		<input type="text" id="endDate" name="endDate" value="{$smarty.post.endDate|default:''}" maxlength="16">
 	</p>
 
-	<p id="period">
-	<span class="label">Périodicité <span id="info">(seulement si c'est une opération régulière)</span></span>
-	{html_radios name='period' options=$period selected={$smarty.post.period|default:'daily'}}
+	<p id="p-period">
+	<span class="label">Périodicité <span class="info">(seulement si c'est une opération régulière)</span></span>
+	{html_radios  id='period' name='period' options=$period selected={$smarty.post.period|default:'daily'}}
 	</p>
 
 	<p>

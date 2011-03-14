@@ -31,18 +31,20 @@ if(isset($_POST['name'])){
 	$idService = 0;
 }
 
-if(isset($_POST['scheduled']) && $_POST['scheduled'] === '2'){
-	// regular
-	$isScheduled = 2;
-}elseif(isset($_POST['scheduled']) && $_POST['scheduled'] === '3'){
-	// closed
-	$isScheduled = 3;
-	if($endDate === FALSE){
-		$endDate = NULL;
+if(isset($_POST['scheduled'])){
+	if($_POST['scheduled'] === '2'){
+		// regular
+		$isScheduled = 2;
+	}elseif($_POST['scheduled'] === '3'){
+		// closed
+		$isScheduled = 3;
+		if($endDate === FALSE){
+			$endDate = NULL;
+		}
+	}else{
+		// scheduled
+		$isScheduled = intval($_POST['scheduled']);
 	}
-}elseif(isset($_POST['scheduled'])){
-	// scheduled
-	$isScheduled = intval($_POST['scheduled']);
 }else{
 	$isScheduled = 1;
 }
@@ -159,23 +161,38 @@ if(isset($_POST['insert'])){
 				}
 			}
 
-			$sql = "INSERT INTO events (idEvent, beginDate, endDate, typeEvent)".
-					" VALUES(NULL, ?, ?, 0)";
-			$query = $db->prepare($sql);
-			if($query->execute(array($beginDate, $endDate))){
-				$idEvent = $db->lastInsertId();
-				$sql = "INSERT INTO events_isou (idEventIsou, period, isScheduled, idService, idEvent, idEventDescription)".
-					" VALUES(NULL, ?, ?, ?, ?, ?)";
+			if($isScheduled === 0){
+				if(isset($_POST['forced'])){
+					$forced = intval($_POST['forced']);
+					if($forced > 0){
+						$sql = "UPDATE services SET state=?, readonly=1 WHERE idService = ?";
+						$query = $db->prepare($sql);
+						if($query->execute(array($forced, $idService))){
+							$error = 'L\'évènement n\'a pas pu être inséré.';
+						}
+					}
+				}
+			}
+
+			if(!isset($error)){
+				$sql = "INSERT INTO events (idEvent, beginDate, endDate, typeEvent)".
+						" VALUES(NULL, ?, ?, 0)";
 				$query = $db->prepare($sql);
-				if($query->execute(array($period, $isScheduled, $idService, $idEvent, $idEventDescription))){
-					$error = 'L\'évènement a été inséré avec succès.';
-					unset($_POST);
-					add_log(LOG_FILE, phpCAS::getUser(), 'INSERT', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
+				if($query->execute(array($beginDate, $endDate))){
+					$idEvent = $db->lastInsertId();
+					$sql = "INSERT INTO events_isou (idEventIsou, period, isScheduled, idService, idEvent, idEventDescription)".
+						" VALUES(NULL, ?, ?, ?, ?, ?)";
+					$query = $db->prepare($sql);
+					if($query->execute(array($period, $isScheduled, $idService, $idEvent, $idEventDescription))){
+						$error = 'L\'évènement a été inséré avec succès.';
+						unset($_POST);
+						add_log(LOG_FILE, phpCAS::getUser(), 'INSERT', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
+					}else{
+						$error = 'L\'évènement n\'a pas pu être inséré.';
+					}
 				}else{
 					$error = 'L\'évènement n\'a pas pu être inséré.';
 				}
-			}else{
-				$error = 'L\'évènement n\'a pas pu être inséré.';
 			}
 		}else{
 			if($beginDate >= $endDate){
@@ -311,6 +328,17 @@ if(isset($_POST['modify'])){
 			$sql = "UPDATE events SET beginDate=?, endDate=? WHERE idEvent=?";
 			$query = $db->prepare($sql);
 			$updateMessage = $query->execute(array($beginDate, $endDate, $idEvent));
+
+			if($isScheduled === 0){
+				if(isset($_POST['forced'])){
+					$forced = intval($_POST['forced']);
+					if($forced > 0){
+						$sql = "UPDATE services SET state=?, readonly=1 WHERE idService = ?";
+						$query = $db->prepare($sql);
+						$updateMessage = $query->execute(array($forced, $idService));
+					}
+				}
+			}
 
 			$sql = "UPDATE events_isou SET period=?, idEventDescription=?, isScheduled=?, idService=? WHERE idEvent=?";
 			$query = $db->prepare($sql);

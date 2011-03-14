@@ -60,7 +60,7 @@ if(count($_POST) > 0){
 	/* * * * * * * * * * * *
 	 * Affichage des interruptions non prévues
 	 * * * * * * * * * * * */
-	$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, EI.idEventDescription, D.description, EI.isScheduled, S.idService, S.name, S.nameForUsers".
+	$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, EI.idEventDescription, D.description, EI.isScheduled, S.idService, S.name, S.nameForUsers, S.state, S.readonly".
 			" FROM events E, events_isou EI, services S, events_description D".
 			" WHERE S.idService = EI.idService".
 			" AND EI.idEvent = E.idEvent".
@@ -109,7 +109,7 @@ if(count($_POST) > 0){
 	/* * * * * * * * * * * *
 	 * Affichage des interruptions prévues
 	 * * * * * * * * * * * */
-	$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, EI.idEventDescription, D.description, EI.isScheduled, S.idService, S.name, S.nameForUsers".
+	$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, EI.idEventDescription, D.description, EI.isScheduled, S.idService, S.name, S.nameForUsers, S.state, S.readonly".
 			" FROM events E, events_isou EI, services S, events_description D".
 			" WHERE S.idService = EI.idService".
 			" AND EI.idEventDescription = D.idEventDescription".
@@ -143,7 +143,7 @@ if(count($_POST) > 0){
 	 * Affichage des interruptions régulières
 	 * * * * * * * * * * * */
 
-	$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, EI.idEventDescription, D.description, EI.isScheduled, S.idService, S.name, S.nameForUsers".
+	$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, EI.idEventDescription, D.description, EI.isScheduled, S.idService, S.name, S.nameForUsers, S.state, S.readonly".
 			" FROM events E, events_isou EI, services S, events_description D".
 			" WHERE S.idService = EI.idService".
 			" AND EI.idEvent = E.idEvent".
@@ -169,7 +169,7 @@ if(count($_POST) > 0){
 	/* * * * * * * * * * * *
 	 * Affichage des services fermés
 	 * * * * * * * * * * * */
-	$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, EI.idEventDescription, D.description, EI.isScheduled, S.idService, S.name, S.nameForUsers".
+	$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, EI.idEventDescription, D.description, EI.isScheduled, S.idService, S.name, S.nameForUsers, S.state, S.readonly".
 			" FROM events E, events_isou EI, services S, events_description D".
 			" WHERE S.idService = EI.idService".
 			" AND EI.idEvent = E.idEvent".

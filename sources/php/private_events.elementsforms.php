@@ -1,16 +1,29 @@
 <?php
 
 	/* * * * * * * * * *
-	 *  Génération du radio form "period"
+	 *  Génération du select form "forced"
+	 * * * * * * * */
+	$optionForced = array();
+	foreach($flags as $flag){
+		$optionForced[$flag->idState] = $flag->title;
+	}
+	$optionForced[0] = 'État par défaut';
+	$smarty->assign('optionForced', $optionForced);
+
+	/* * * * * * * * * *
+	 *  Génération du select form "scheduled"
 	 * * * * * * * */
 	$optionScheduled = array('Opération non prévue (maintenance, panne, ...)', 'Opération prévue (maintenance, mise à jour, ...)','Opération régulière (arrêt quotidien, hebdomadaire, ...)','Fermeture de service');
 	$smarty->assign('optionScheduled', $optionScheduled);
 
+	/* * * * * * * * * *
+	 *  Génération du select form "period"
+	 * * * * * * * */
 	$period = array('daily' => 'Tous les jours', 'weekly' => 'Toutes les semaines');
 	$smarty->assign('period', $period);
 
 	/* * * * * * * * * *
-	 * Génération du select form
+	 * Génération du select form "services"
 	 * * * * * * * * * * */
 	$sql = "SELECT S.idService, S.nameForUsers".
 			" FROM services AS S".

@@ -13,22 +13,26 @@ function changeOperation(){
 
 	if(operationId == 2){
 		$("#period").css("display","block");
+		$("#p-forced").css("display","none");
 		$("#description").parent().css("display","block");
 		$("#beginDate").prev().text("Date de la prochaine opération régulière");
 		$("#endDate").prev().text("Date de fin de la prochaine opération régulière");
 	}else if(operationId == 3){
 		$("#period").css("display","none");
+		$("#p-forced").css("display","none");
 		$("#description").parent().css("display","block");
 		$("#beginDate").prev().text("Date de la prochaine fermeture");
 		$("#endDate").prev().text("Date de fin de la prochaine fermeture (optionnel)");
 	}else if(operationId == 0){
-		$("#period").css("display","none");
+		$("#p-period").css("display","none");
+		$("#p-forced").css("display","block");
 		$("#description").parent().css("display","block");
 		$("#beginDate").prev().text("Date de début");
 		$("#endDate").prev().text("Date de fin de l'interruption (optionnel)");
 	}else{
 		$("#scheduled option:eq(1)").attr("selected",true);
 		$("#period").css("display","none");
+		$("#p-forced").css("display","none");
 		$("#description").parent().css("display","block");
 		$("#beginDate").prev().text("Date de la prochaine maintenance");
 		$("#endDate").prev().text("Date de fin de la maintenance");

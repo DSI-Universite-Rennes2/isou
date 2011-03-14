@@ -3,8 +3,21 @@
 			<legend>Modifier un évènement</legend>
 				<p>
 					<label for="name" class="label">Service :</label>
-					{html_options id=name name=name options=$optionNameForUsers selected=$currentEdit->idService}
+					{html_options id=name name=name options=$optionNameForUsers selected=$smarty.post.name|default:$currentEdit->idService}
 				</p>
+				{if isset($smarty.get.f)}
+				<p id="pedit-forced">
+					<label for="forced" class="label">
+						Forcer à l'état du service
+						<span class="info">(seulement si c'est une opération non-prévue)</span>
+					</label>
+					{if $currentEdit->readonly == 1}
+					{html_options id=forced name=forced options=$optionForced selected=$smarty.post.forced|default:$currentEdit->state}
+					{else}
+					{html_options id=forced name=forced options=$optionForced selected=$smarty.post.forced|default:0}
+					{/if}
+				</p>
+				{/if}
 				<p>
 					<label for="beginDateUpd" class="label">
 						Date de début

@@ -196,6 +196,28 @@ function update_nagios_to_db(){
 		$event_record = $event_records->fetch();
 */
 
+	// supprime le "lock" si une interruption non prévue est terminée
+	$sql = "UPDATE services".
+			" SET state = 0, readonly = 0".
+			" WHERE readonly=1".
+			" AND idService NOT IN (SELECT idService".
+									" FROM events e, events_isou ei, services s".
+									" WHERE readonly = 1".
+									" AND ei.idService = s.idService".
+									" AND e.idEvent = ei.idEvent".
+									" AND ((e.beginDate < :0 AND e.endDate > :1) OR e.endDate is null)".
+									")";
+	$query = $db->prepare($sql);
+	if($query->execute(array(TIME, TIME))){
+		if($query->rowCount() > 0){
+			add_log(LOG_FILE, 'ISOU', 'update', 'Nombre de lignes modifiées (réactivation de services) : '.$query->rowCount());
+		}
+	}else{
+		add_log(LOG_FILE, 'ISOU', 'update', 'La réactivation des services revenus à l\'état de marche n\'a pas pu être effectuée');
+	}
+	$query->closeCursor();
+
+
 	// ajoute une date de réactivation d'un service interrompu involontairement si leur état est à 0
 	// ou si il y a un évènement prévu qui commence, alors qu'il y a un le meme service qui possede un evenement imprevu
 	$sql = "UPDATE events".
@@ -219,6 +241,7 @@ function update_nagios_to_db(){
 		add_log(LOG_FILE, 'ISOU', 'update', 'La réactivation des services revenus à l\'état de marche n\'a pas pu être effectuée');
 	}
 	$query->closeCursor();
+
 
 	// change le temps de la prochaine interruption régulière
 	$sql = "SELECT idEvent, period FROM events_isou WHERE isScheduled = 2";
