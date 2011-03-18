@@ -45,16 +45,17 @@
 	<ul class="service">
 	{section name=j loop=$categories[i]->services}
 		<li>
-			<img src="{$smarty.const.URL}/images/{$flags.{$categories[i]->services[j]->state}->src}" alt="{$flags.{$categories[i]->services[j]->state}->alt}" />&nbsp;
+			<img src="{$smarty.const.URL}/images/{$flags.{$categories[i]->services[j]->getState()}->src}" alt="{$flags.{$categories[i]->services[j]->getState()}->alt}" />&nbsp;
 			<a name="{$categories[i]->services[j]->stripName}"></a>
-			{if empty($categories[i]->services[j]->url)}
-			<span class="state-{$categories[i]->services[j]->state}">
-				{$categories[i]->services[j]->name}
+			{if $categories[i]->services[j]->getUrl() === NULL}
+			<span class="state-{$categories[i]->services[j]->getState()}">
+				{$categories[i]->services[j]->getNameForUsers()}
 			</span>
 			{else}
-			<a class="state-{$categories[i]->services[j]->state}" href="{$categories[i]->services[j]->url}" title="Accéder à la page du service {$categories[i]->services[j]->name}">{$categories[i]->services[j]->name}</a>
+			<a class="state-{$categories[i]->services[j]->getState()}" href="{$categories[i]->services[j]->getUrl()}" title="Accéder à la page du service {$categories[i]->services[j]->getNameForUsers()}">{$categories[i]->services[j]->getNameForUsers()}</a>
 			{/if}
 
+			{* <!-- affichage des services parents (dépendances) --> *}
 			{if $smarty.const.DEBUG === TRUE || $is_admin === TRUE}
 			{if count($categories[i]->services[j]->parents) > 0}
 			<div class="parentsList">
@@ -63,61 +64,62 @@
 			{/if}
 			{/if}
 
-			{if isset($categories[i]->services[j]->events)}
+			{* <!-- affichage des interruptions --> *}
+			{if $categories[i]->services[j]->hasEvents()}
 				<ul class="alert">
-				{section name=k loop=$categories[i]->services[j]->events}
-					{* <!-- message : le service a été arrêté... --> *}
+				{foreach from=$categories[i]->services[j]->getEvents() item=event}
+					{* <!-- affichage des messages du type "le service a été arrêté..." --> *}
 					<li>
-					{if $categories[i]->services[j]->events[k]->scheduled === 3}
-						{if $categories[i]->services[j]->events[k]->endDate === NULL}
-							Service fermé depuis le {$categories[i]->services[j]->events[k]->beginDate|date_format:"%A %d %B %Y"}.
+					{if $event->getScheduled() === 3}
+						{if $event->getEndDate() === NULL}
+							Service fermé depuis le {$event->getBeginDate()|date_format:"%A %d %B %Y"}.
 						{else}
-							Service fermé depuis le {$categories[i]->services[j]->events[k]->beginDate|date_format:"%A %d %B %Y"}. Réouverture le {$categories[i]->services[j]->events[k]->endDate|date_format:"%A %d %B %Y"}.
+							Service fermé depuis le {$event->getBeginDate()|date_format:"%A %d %B %Y"}. Réouverture le {$event->getEndDate()|date_format:"%A %d %B %Y"}.
 						{/if}
-					{else if $categories[i]->services[j]->events[k]->scheduled === 2}
-						{if $categories[i]->services[j]->events[k]->period === 86400}
-							Le service est en maintenance quotidienne de {$categories[i]->services[j]->events[k]->beginDate|date_format:"%H:%M"} à {$categories[i]->services[j]->events[k]->endDate|date_format:"%H:%M"}.
-						{else if $categories[i]->services[j]->events[k]->period === 604800}
-							Le service est en maintenance hebdomadaire de {$categories[i]->services[j]->events[k]->beginDate|date_format:"%H:%M"} à {$categories[i]->services[j]->events[k]->endDate|date_format:"%H:%M"}.
+					{else if $event->getScheduled() === 2}
+						{if $event->getPeriod() === 86400}
+							Le service est en maintenance quotidienne de {$event->getBeginDate()|date_format:"%H:%M"} à {$event->getEndDate()|date_format:"%H:%M"}.
+						{else if $event->getPeriod() === 604800}
+							Le service est en maintenance hebdomadaire de {$event->getBeginDate()|date_format:"%H:%M"} à {$event->getEndDate()|date_format:"%H:%M"}.
 						{else}
-							Le service est en maintenance de {$categories[i]->services[j]->events[k]->beginDate|date_format:"%H:%M"} à {$categories[i]->services[j]->events[k]->endDate|date_format:"%H:%M"}.
+							Le service est en maintenance de {$event->getBeginDate()|date_format:"%H:%M"} à {$event->getEndDate()|date_format:"%H:%M"}.
 						{/if}
 					{else}
-						{if $categories[i]->services[j]->events[k]->endDate === NULL}
-							<span class="current-event">Le service est actuellement perturbé depuis le {$categories[i]->services[j]->events[k]->beginDate|date_format:"%A %d %B %Y %H:%M"}.</span>
+						{if $event->getEndDate() === NULL}
+							<span class="current-event">Le service est actuellement perturbé depuis le {$event->getBeginDate()|date_format:"%A %d %B %Y %H:%M"}.</span>
 						{else}
-							{if $categories[i]->services[j]->events[k]->endDate !== NULL && $categories[i]->services[j]->events[k]->endDate < $smarty.const.TIME}
-								{if {$categories[i]->services[j]->events[k]->beginDate|date_format:"%A%d%B"} === {$categories[i]->services[j]->events[k]->endDate|date_format:"%A%d%B"}}
-									<span class="previous-event">Le service a été perturbé le {$categories[i]->services[j]->events[k]->beginDate|date_format:"%A %d %B %Y"} de {$categories[i]->services[j]->events[k]->beginDate|date_format:"%H:%M"} à {$categories[i]->services[j]->events[k]->endDate|date_format:"%H:%M"}.</span>
+							{if $event->getEndDate() !== NULL && $event->getEndDate() < $smarty.const.TIME}
+								{if {$event->getBeginDate()|date_format:"%A%d%B"} === {$event->getEndDate()|date_format:"%A%d%B"}}
+									<span class="previous-event">Le service a été perturbé le {$event->getBeginDate()|date_format:"%A %d %B %Y"} de {$event->getBeginDate()|date_format:"%H:%M"} à {$event->getEndDate()|date_format:"%H:%M"}.</span>
 								{else}
-									<span class="previous-event">Le service a été perturbé du {$categories[i]->services[j]->events[k]->beginDate|date_format:"%A %d %B %Y %H:%M"} au {$categories[i]->services[j]->events[k]->endDate|date_format:"%A %d %B %Y %H:%M"}.</span>
+									<span class="previous-event">Le service a été perturbé du {$event->getBeginDate()|date_format:"%A %d %B %Y %H:%M"} au {$event->getEndDate()|date_format:"%A %d %B %Y %H:%M"}.</span>
 								{/if}
 							{else}
-								<span class="next-event">Le service sera perturbé du {$categories[i]->services[j]->events[k]->beginDate|date_format:"%A %d %B %Y %H:%M"} au {$categories[i]->services[j]->events[k]->endDate|date_format:"%A %d %B %Y %H:%M"}.</span>
+								<span class="next-event">Le service sera perturbé du {$event->getBeginDate()|date_format:"%A %d %B %Y %H:%M"} au {$event->getEndDate()|date_format:"%A %d %B %Y %H:%M"}.</span>
 							{/if}
 						{/if}
 					{/if}
 
-
-
-					{if !empty($categories[i]->services[j]->events[k]->description)}
-						<p class="reason"><span class="bold">Raison :</span> {$categories[i]->services[j]->events[k]->description|nl2br}</p>
+					{* <!-- affichage d'une description de l'interruption ; ex: mise à jour en version 2.x" --> *}
+					{if $event->getDescription() !== NULL}
+						<p class="reason"><span class="bold">Raison :</span> {$event->getDescription()|nl2br}</p>
 					{/if}
 
-					{if isset($categories[i]->services[j]->events[k]->nagios)}
+					{* <!-- affichage des états des services parents (dépendances) lors de l'interruption --> *}
+					{if count($event->getNagiosEvents()) > 0}
 					<ul>
-					{section name=l loop=$categories[i]->services[j]->events[k]->nagios}
+					{foreach from=$event->getEventsNagios() item=nagios}
 						<li>
-							<img src="{$smarty.const.URL}/images/{$flags.{$categories[i]->services[j]->events[k]->nagios[l]->state}->src}" alt="{$flags.{$categories[i]->services[j]->events[k]->nagios[l]->state}->alt}" />
-							{$categories[i]->services[j]->events[k]->nagios[l]->name}
-							{$categories[i]->services[j]->events[k]->nagios[l]->beginDate|date_format:"%x %T"} -
-							{$categories[i]->services[j]->events[k]->nagios[l]->endDate|date_format:"%x %T"}
+							<img src="{$smarty.const.URL}/images/{$flags.{$nagios->getState()}->src}" alt="{$flags.{$nagios->getState()}->alt}" />
+							{$nagios->getNameForUsers()}
+							{$nagios->getBeginDate()|date_format:"%x %T"} -
+							{$nagios->getEndDate()|date_format:"%x %T"}
 						</li>
-					{/section}
+					{/foreach}
 					</ul>
 					{/if}
 					</li>
-				{/section}
+				{/foreach}
 				</ul>
 			{/if}
 		</li>

@@ -12,7 +12,7 @@
 			<title>{$items[itemIndex][0]}</title>
 			<link>{$items[itemIndex][1]}</link>
 			<pubDate>{$items[itemIndex][2]} GMT</pubDate>
-			<description>{$items[itemIndex][3]}</description>
+			<description><![CDATA[{$items[itemIndex][3]|nl2br}]]></description>
 			<guid>{$items[itemIndex][1]}</guid>
 		</item>
 		{/section}

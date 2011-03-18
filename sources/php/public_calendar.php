@@ -20,50 +20,23 @@ define('TIMESTAMP_OF_MONDAY_OF_LAST_WEEK',mktime(0,0,0)-(6+$date["wday"])*24*60*
 define('TIMESTAMP_OF_LAST_CALENDAR_DAY',((mktime(0,0,0)-((6+$date["wday"]-($page*7)))*24*60*60)+(35*24*60*60)));
 
 // recupere tous les services dans la bdd
-$sql = "SELECT S.idService, S.name, S.nameForUsers, S.url, S.state, C.name".
-		" FROM services AS S, categories AS C".
-		" WHERE C.idCategory = S.idCategory".
+$sql = "SELECT S.idService, S.name, S.nameForUsers, S.url, S.state, S.comment, C.name AS category".
+		" FROM services S, categories C".
+		" WHERE S.idCategory = C.idCategory".
 		" AND S.nameForUsers IS NOT NULL".
 		" AND S.enable = 1".
 		" AND S.visible = 1".
 		" ORDER BY C.position, UPPER(S.nameForUsers)";
-$i=0;
-if($service_records = $db->query($sql)){
-	$tab_record = $service_records->fetchAll();
-	$r = 0;
-	while(isset($tab_record[$r][0])){
-		$record = $tab_record[$r];
-		$r++;
-		$services[$i] = new IsouService($record[0], $record[1], $record[2], $record[3], $record[4], NULL, $record[5]);
 
-		// recupere tous les evenements par services dans la bdd
-		$sql = "SELECT E.idEvent, E.beginDate, E.endDate, D.description, EI.isScheduled".
-				" FROM events E, events_isou EI, events_description D".
-				" WHERE EI.idEvent = E.idEvent".
-				" AND EI.idEventDescription = D.idEventDescription".
-				" AND E.typeEvent = 0".
-				" AND EI.idService = :0".
-				" AND EI.isScheduled = 1".
-				" AND ((E.endDate >= ".TIMESTAMP_OF_FIRST_CALENDAR_DAY. // TIMESTAMP_OF_MONDAY_OF_LAST_WEEK. //time()+($p*24*60*60)
-				" AND E.beginDate <= ".TIMESTAMP_OF_LAST_CALENDAR_DAY;
-				if($_SESSION['hide'] === 1 || $IS_ADMIN === FALSE){
-					$sql .= " AND (E.endDate-E.beginDate > ".TOLERANCE.")";
-					$param = array($record[0]);
-				}else{
-					$param = array($record[0]);
-				}
-				$sql .= ")".
-				" OR (E.endDate IS NULL))".
-				" ORDER BY E.beginDate";
-		// ajoute les évènements
-		$event_records = $db->prepare($sql);
-		if($event_records->execute($param)){
-			while($event_record = $event_records->fetch()){
-				// construct($id,$beginDate,$endDate,$period,$description,$serviceName,$state = NULL, $isScheduled = NULL)
-				$services[$i]->setEvent(new IsouEvent($event_record[0],$event_record[1],$event_record[2],NULL,$event_record[3],$services[$i]->getNameForUsers(),$services[$i]->getState(),$event_record[4]));
-			}
+$i=0;
+$services = array();
+if($service_records = $db->query($sql)){
+	while($service = $service_records->fetchObject('IsouService')){
+		$service->setEvents($service->getScheduledEvents(TOLERANCE, -1, TIMESTAMP_OF_FIRST_CALENDAR_DAY, TIMESTAMP_OF_LAST_CALENDAR_DAY));
+		if($service->hasEvents() === TRUE){
+			$services[$i] = $service;
+			$i++;
 		}
-		$i++;
 	}
 }
 

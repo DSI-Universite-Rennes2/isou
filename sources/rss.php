@@ -68,7 +68,7 @@ $sql = 'SELECT E.idEvent, E.beginDate, E.endDate, ED.description, EI.isScheduled
 
 if($event_records = $db->query($sql)){
 	while($event = $event_records->fetch()){
-		$record[count($record)] = array('b',new IsouEvent($event[0],$event[1],$event[2],NULL,$event[3],$event[5],NULL,$event[4]),$event[6]);
+		$record[count($record)] = array('b', new IsouEvent($event[0],$event[1],$event[2],NULL,$event[5], 0, $event[4], NULL, NULL, $event[3]),$event[6]);
 	}
 }
 
@@ -90,7 +90,7 @@ $sql = 'SELECT E.idEvent, E.endDate, E.beginDate, ED.description, EI.isScheduled
 
 if($event_records = $db->query($sql)){
 	while($event = $event_records->fetch()){
-		$record[count($record)] = array('e',new IsouEvent($event[0],$event[1],$event[2],NULL,$event[3],$event[5],NULL,$event[4]),$event[6]);
+		$record[count($record)] = array('e',new IsouEvent($event[0],$event[1],$event[2],NULL,$event[5], 0, $event[4], NULL, NULL, $event[3]),$event[6]);
 	}
 }
 
@@ -129,17 +129,13 @@ for($i=count($record)-1;$i>=$maxFeed;$i--){
 	$title = '';
 	$link = '';
 	$pubDate = '';
-	$description = '';
 
 	if($record[$i][0] == 'b'){
-		$description = $record[$i][1]->Message(true, true, false);
-		$description = '';
+		//$description = $record[$i][1]->Message(true, true, false);
 		$pubDate =  gmdate("D, d M Y H:i:s", $beginDate);
+		$description = $record[$i][1]->getDescription();
 		if($record[$i][1]->getScheduled() == 1){
 			$title = 'Interruption : '.$record[$i][1]->getServiceName();
-			if(!is_null($record[$i][1]->getDescription())){
-				$description = $record[$i][1]->getDescription();
-			}
 		}else{
 			$title = 'Interruption non prévue : '.$record[$i][1]->getServiceName();
 			$endDate = '';
@@ -160,7 +156,7 @@ for($i=count($record)-1;$i>=$maxFeed;$i--){
 		$link = ISOU_URL.'?feed='.$record[$i][1]->getId().'&amp;type=R#'.rawurlencode($record[$i][1]->getServiceName());
 	}
 
-	if($description == ''){
+	if($description === NULL){
 		$description = 'n/a';
 	}
 
@@ -169,7 +165,7 @@ for($i=count($record)-1;$i>=$maxFeed;$i--){
 					'Date de début : '.strftime('%A %e %B %R',$beginDate).'<br/>'.
 					'Date de fin : '.$endDate.'<br/><br/>Description :<br/>'.$description;
 
-	$items[count($items)] = array($title,$link,$pubDate,'<![CDATA['.$description.']]>',$link);
+	$items[count($items)] = array($title, $link, $pubDate, $description, $link);
 
 }
 

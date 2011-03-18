@@ -2,6 +2,8 @@
 <a name="content"></a>
 
 <table id="calendar-table" border="1" summary="Calendrier répertoriant toutes les intervertions">
+
+	{* <!-- titre du calendrier --> *}
 	<caption>
 	{if isset($previousWeekLink)}
 		<a title="Semaine précédente" href="{$smarty.const.URL}/index.php/calendrier{$previousWeekLink}">
@@ -11,6 +13,8 @@
 		<a href="{$smarty.const.URL}/index.php/calendrier{$nextWeekLink}" title="Semaine suivante">
 			<img src="{$smarty.const.URL}/images/action_forward.gif" alt="suivant" width="16px" height="16px" /></a>
 	</caption>
+
+	{* <!-- entêtes du calendrier --> *}
 	<thead>
 	<tr id="weekday">
 		<th>Lundi</th>
@@ -22,6 +26,8 @@
 		<th>Dimanche</th>
 	</tr>
 	</thead>
+
+	{* <!-- corps du calendrier --> *}
 	<tbody>
 	{section name=i loop=$calendar}
 	<tr class="mday">

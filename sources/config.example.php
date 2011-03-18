@@ -56,7 +56,7 @@ define('CAS_PORT', 443);
  * * * * * * * * * * * * * * * * */
 
 // numero de version de l'application
-define('VERSION', '0.9.0');
+define('VERSION', '0.9.5');
 
 // locale utilisée par l'application
 setlocale(LC_TIME, 'fr_FR.UTF8');

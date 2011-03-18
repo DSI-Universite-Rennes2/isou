@@ -1,7 +1,7 @@
 <?php
 
 /**
-*	@desc	   isou event class
+*	@desc		isou event class
 *	@author 	CRI Rennes 2
 *	@var		int	$id
 *	@var		timestamp	$beginDate
@@ -13,8 +13,8 @@
 * 	@var		string	$type
 * 	@var		IsouEvent array	$nagiosEvents
 * 	@var		static array $array_events
-*	@copyright	http://sam.zoy.org/wtfpl/
-*	@version 	1.0
+*	@copyright	http://www.gnu.org/licenses/gpl-2.0.html
+*	@version 	2.0
 *	@since		1.0
 */
 
@@ -47,40 +47,94 @@ class IsouEvent {
 	*  	@param		IsouEvent array $nagiosEvents	// array of events from nagios event
 	*	@return		void
 	*/
-	// prendre en parametre un object, directement
-	public function __construct($id,$beginDate,$endDate,$period,$description,$serviceName,$state = NULL, $isScheduled = NULL, $type = NULL, $nagiosEvents = NULL) {
-		$this->id = $id;
-		$this->beginDate = $beginDate;
-		$this->endDate = $endDate;
-		$this->period = $period;
-		$this->serviceName = stripslashes($serviceName);
-		$this->state = $state;
-		$this->isScheduled = intval($isScheduled);
-		$this->type = $type;
-		$this->nagiosEvents = $nagiosEvents;
-		$this->description = $description;
 
-		if(!is_null($state) && $isScheduled<2){
+	public function __construct(){ // $id,$beginDate,$endDate,$period,$description,$serviceName,$state = NULL, $isScheduled = NULL, $type = NULL, $nagiosEvents = NULL) {
+		$countArgs = func_num_args();
+		$args = func_get_args();
+
+		if($countArgs === 0 && isset($this->idService)){
+			// instanciation depuis un appel implicite de pdo (fetchObject)
+			$this->id = intval($this->idEvent);
+			$this->beginDate = intval($this->beginDate);
+			$this->endDate = intval($this->endDate);
+			$this->period = intval($this->period);
+			$this->serviceName = $this->serviceName;
+			$this->state = $this->state;
+			$this->isScheduled = intval($this->isScheduled);
+			if(isset($args[0]->type)){
+				$this->type = $args[0]->type;
+			}else{
+				$this->type = NULL;
+			}
+			$this->nagiosEvents = array();
+			$this->description = $this->description;
+		}else if($countArgs === 1 && is_object($args[0])){
+			// instanciation depuis un appel explicite __construct(param) (stdClass ou pdo)
+			$this->id = intval($args[0]->idEvent);
+			$this->beginDate = intval($args[0]->beginDate);
+			$this->endDate = intval($args[0]->endDate);
+			$this->period = intval($args[0]->period);
+			$this->serviceName = $args[0]->serviceName;
+			$this->state = $args[0]->state;
+			$this->isScheduled = intval($args[0]->isScheduled);
+			if(isset($args[0]->type)){
+				$this->type = $args[0]->type;
+			}else{
+				$this->type = NULL;
+			}
+			$this->nagiosEvents = array();
+			$this->description = $args[0]->description;
+		}else if($countArgs === 10){
+			// instanciation "manuelle" depuis un appel explicite __construct(param1, param2, etc...)
+			$this->id = intval($args[0]);
+			$this->beginDate = intval($args[1]);
+			$this->endDate = intval($args[2]);
+			$this->period = intval($args[3]);
+			$this->serviceName = $args[4];
+			$this->state = intval($args[5]);
+			$this->isScheduled = $args[6];
+			$this->type = $args[7];
+			$this->nagiosEvents = array();
+			$this->description = $args[9];
+		}else{
+			$this->__destruct();
+			new Exception('Pas assez de paramètres');
+			$debug = debug_backtrace();
+			die('Class IsouEvent (__construct) : pas assez de paramètres, fichier '.$debug[0]['file'].' ligne '.$debug[0]['line']);
+		}
+
+		if(empty($this->description)){
+			$this->description = NULL;
+		}
+
+		if(empty($this->endDate)){
+			$this->endDate = NULL;
+		}
+
+		if(!is_null($this->state) && $this->isScheduled < 2){
 			/* fill static $array_events */
-			if(is_null($endDate)){
+			$beginDate = $this->beginDate;
+
+			if(is_null($this->endDate)){
 				$endDate = mktime(23,59,59);
 			}else{
-				$date = getdate($endDate);
+				$date = getdate($this->endDate);
 				$m = $date['mon'];
 				$d = $date['mday'];
 				$y = $date['year'];
 				$endDate = mktime(23,59,59,$m,$d,$y);
 			}
+
 			while($beginDate <= $endDate){
-				$formatBeginDate = strftime('%m/%d/%y',$beginDate);
+				$formatBeginDate = strftime('%m/%d/%y',$this->beginDate);
 				$i=0;
 				$noExist = true;
 				while(isset(self::$array_events[$formatBeginDate][$i]) && $noExist){
 					// evite qu'il y ait 2 évènements le même jour
-					if(substr(self::$array_events[$formatBeginDate][$i],0,-3) == $serviceName){
+					if(substr(self::$array_events[$formatBeginDate][$i],0,-3) == $this->serviceName){
 						$noExist = false;
-						if($state < substr(self::$array_events[$formatBeginDate][$i],-1)){
-							$state = substr(self::$array_events[$formatBeginDate][$i],-1);
+						if($this->state < substr(self::$array_events[$formatBeginDate][$i],-1)){
+							$this->state = substr(self::$array_events[$formatBeginDate][$i],-1);
 						}
 					}
 					$i++;
@@ -88,13 +142,13 @@ class IsouEvent {
 
 				if($noExist){
 					if(isset(self::$array_events[$formatBeginDate])){
-						self::$array_events[$formatBeginDate][count(self::$array_events[$formatBeginDate])] = $serviceName.'::'.$state;
+						self::$array_events[$formatBeginDate][count(self::$array_events[$formatBeginDate])] = $this->serviceName.'::'.$this->state;
 					}else{
-						self::$array_events[$formatBeginDate][0] = $serviceName.'::'.$state;
+						self::$array_events[$formatBeginDate][0] = $this->serviceName.'::'.$this->state;
 					}
 				}else{
 					$i--;
-					self::$array_events[$formatBeginDate][$i] = $serviceName.'::'.$state;
+					self::$array_events[$formatBeginDate][$i] = $this->serviceName.'::'.$this->state;
 				}
 				$beginDate+=24*60*60;
 			}
@@ -102,108 +156,23 @@ class IsouEvent {
 	}
 
 	// Accessors GET
-	public function getId()		 { return $this->id; }
-	public function getBeginDate()		 { return $this->beginDate; }
-	public function getEndDate()	   { return $this->endDate; }
-	public function getPeriod()	{ return $this->period; }
-	public function getDescription()	{ return $this->description; }
-	public function getServiceName()	{ return $this->serviceName; }
-	public function getState()	{ return $this->state; }
-	public function getScheduled()	{ return $this->isScheduled; }
-	public function getType()	{ return $this->type; }
-	public function getNagiosEvents()	{ return $this->nagiosEvents; }
-	public function getArrayEvents()	  { return $this->array_events; }
+	public function getId()						{ return $this->id; }
+	public function getBeginDate()				{ return $this->beginDate; }
+	public function getEndDate()				{ return $this->endDate; }
+	public function getPeriod()					{ return $this->period; }
+	public function getDescription()			{ return $this->description; }
+	public function getServiceName()			{ return $this->serviceName; }
+	public function getState()					{ return $this->state; }
+	public function getScheduled()				{ return $this->isScheduled; }
+	public function getType()					{ return $this->type; }
+	public function getArrayEvents()			{ return $this->array_events; }
 
 	// Accessors SET
-	public function setBeginDate($beginDate)		 { $this->beginDate = $beginDate; }
-	public function setEndDate($endDate)	   { $this->endDate = $endDate; }
+	public function setBeginDate($beginDate)	{ $this->beginDate = $beginDate; }
+	public function setEndDate($endDate)		{ $this->endDate = $endDate; }
 
 
 	/**
-	*   @desc		Return a formated string with description and date
-	*	@param		boolean		$rss : supprime les tags html si true
-	*	@param		boolean		$old_description : affiche la raison de la panne des évènements passés si true
-	*   @return		string
-	*/
-	public function Message($rss = false, $old_description = false) {
-
-		if(is_null($this->description) || empty($this->description)){// == 'NULL'){
-			$description = '';
-		}else{
-			$tab = explode('~',$this->description);
-			$i = 0;
-
-			if(isset($tab[$i]) && !empty($tab[$i])){
-				$description = '<ul class="reason">';
-				while(isset($tab[$i])){
-					$description .= '<li>'.$tab[$i].'</li>';
-					$i++;
-				}
-				$description .= '</ul>';
-			}
-		}
-
-		if($this->isScheduled == 3){
-			$beginDate = strftime('%A %d %B %Y',$this->beginDate);
-			$endDate = strftime('%A %d %B %Y',$this->endDate);
-
-			if(is_null($this->endDate)){
-				$message = '<li>Service fermé depuis le '.$beginDate.'.'.$description.'</li>';
-			}else{
-				$message = '<li>Service fermé depuis le '.$beginDate.'. Réouverture le '.$endDate.'.'.$description.'</li>';
-			}
-		}else if($this->isScheduled == 2){
-			$beginDate = strftime('%H:%M',$this->beginDate);
-   			$endDate = strftime('%H:%M',$this->endDate);
-
-			switch($this->period){
-				case 86400 : $message = '<li>Le service est en maintenance quotidienne de '.$beginDate.' à '.$endDate.'. '.$description.'</li>';
-							break;
-				case 604800 : $message = '<li>Le service est en maintenance hebdomadaire de '.$beginDate.' à '.$endDate.'. '.$description.'</li>';
-							break;
-				default : $message = '<li>Le service est en maintenance de '.$beginDate.' à '.$endDate.'. '.$description.'</li>';
-							break;
-			}
-
-		}else{
-			$beginDate = strftime('%A %d %B %Y %H:%M',$this->beginDate);
-   			$endDate = strftime('%A %d %B %Y %H:%M',$this->endDate);
-
-			if(is_null($this->endDate)){
-				$message = '<li><span class="currentEvent">Le service est actuellement perturbé depuis le '.$beginDate.'.'.$description.'</span></li>';
-			}else{
-				if(!is_null($this->endDate) && $this->endDate < TIME){
-					// class="strike"
-					if(strftime('%A%d%B',$this->beginDate) == strftime('%A%d%B',$this->endDate)){
-						$message = '<li><span class="previousEvent">Le service a été perturbé le '.strftime('%A %d %B %Y',$this->beginDate).' de '.strftime('%H:%M',$this->beginDate).' à '.strftime('%H:%M',$this->endDate).'.</span>';
-					}else{
-						$message = '<li><span class="previousEvent">Le service a été perturbé du '.$beginDate.' au '.$endDate.'.</span>';
-					}
-					if($old_description){
-						$message .= $description;
-					}
-					$message .= '</li>';
-				}else{
-					$message = '<li><span class="nextEvent">Le service sera perturbé du '.$beginDate.' au '.$endDate.'.'.$description.'</span></li>';
-				}
-			}
-		}
-
-		if($rss){
-			$message = str_replace('<ul class="reason">',"\n",$message);
-			$message = str_replace('</ul>','',$message);
-			$message = str_replace('<li class="strike">',"\n",$message);
-			$message = str_replace('<li>',"\n",$message);
-			$message = str_replace('<s>','',$message);
-			$message = str_replace('</s>','',$message);
-			$message = str_replace('</li>','',$message);
-			return $message;
-		}else{
-			return $message;
-		}
-	}
-
-   /**
 	*   @desc		Sort static $array_events
 	*   @return		string
 	*/
@@ -215,7 +184,8 @@ class IsouEvent {
 		}
 
 		// self::$array_events[$formatBeginDate][0] = $serviceName.'::'.$state;
-		for($i = 1;$i < count(self::$array_events);$i++){
+		$count = count(self::$array_events);
+		for($i = 1;$i < $count;$i++){
 			$j = 0;
 			$found = false;
 
@@ -240,6 +210,38 @@ class IsouEvent {
 				$j++;
 			}
 		}
+	}
+
+	/**
+	*   @desc		find all nagios events from current event
+	*   @return		array of IsouEvent()
+	*/
+	public function getNagiosEvents(){
+		global $db;
+
+		$nagiosEvents = array();
+		if(!empty($this->endDate)){
+			// si l'evenement n'est pas en cours, on recup tous les evenements nagios
+			// on met +/- 10 secondes de tolérence
+			$sql = "SELECT DISTINCT s.name, s.nameForUsers, e.beginDate, e.endDate, en.state".
+					" FROM events e, events_nagios en, services s, dependencies d".
+					" WHERE s.idService = en.idService".
+					" AND e.idEvent = en.idEvent".
+					" AND d.idServiceParent = s.idService".
+					" AND d.idService = :0".
+					" AND e.beginDate >= :1".
+					" AND e.endDate <= :2";
+
+			$nagios_records = $db->prepare($sql);
+			if($nagios_records->execute(array($this->id, $this->beginDate-TOLERANCE, $this->endDate+TOLERANCE))){
+				$j = 0;
+				while($nagios_record = $nagios_records->fetchObject('IsouEvent')){
+					$nagiosEvents[] = $nagios_record;
+				}
+			}
+		}
+
+		return $nagiosEvents;
 	}
 
 	/**

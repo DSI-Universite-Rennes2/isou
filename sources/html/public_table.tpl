@@ -23,42 +23,74 @@
 			<th colspan="10">{$categories[i]->name}</th>
 		</tr>
 		{section name=j loop=$categories[i]->services}
-		<tr class="tr-status-{$flags.{$categories[i]->services[j]->state}->name}">
-			{if empty($categories[i]->services[j]->url)}
-			<td headers="lth1" class="left">{$categories[i]->services[j]->name}</td>
+		<tr class="tr-status-{$flags.{$categories[i]->services[j]->getState()}->name}">
+			{if $categories[i]->services[j]->getUrl() === NULL}
+			<td headers="lth1" class="left">{$categories[i]->services[j]->getNameForUsers()}</td>
 			{else}
-			<td headers="lth1" class="left"><a href="{$categories[i]->services[j]->url}" title="Accéder à la page du service {$categories[i]->services[j]->name}">{$categories[i]->services[j]->name}</a></td>
+			<td headers="lth1" class="left"><a href="{$categories[i]->services[j]->getUrl()}" title="Accéder à la page du service {$categories[i]->services[j]->getNameForUsers()}">{$categories[i]->services[j]->getNameForUsers()}</a></td>
 			{/if}
-			<td headers="lth2"><img src="{$smarty.const.URL}/images/{$flags.{$categories[i]->services[j]->state}->src}" alt="{$flags.{$categories[i]->services[j]->state}->alt}" /></td>
-			{if $categories[i]->services[j]->closed === TRUE}
+			<td headers="lth2"><img src="{$smarty.const.URL}/images/{$flags.{$categories[i]->services[j]->getState()}->src}" alt="{$flags.{$categories[i]->services[j]->getState()}->alt}" /></td>
+			{if $categories[i]->services[j]->isClosed() === TRUE}
 			<td headers="lth4" colspan="5">
-				{if is_null($categories[i]->services[j]->endDate)}
-					Service fermé depuis le {$categories[i]->services[j]->beginDate|date_format:"%A %e %B %Y"}.
+				{if $categories[i]->services[j]->closedEvent->getEndDate() === NULL}
+					Service fermé depuis le {$categories[i]->services[j]->closedEvent->getBeginDate()|date_format:"%A %e %B %Y"}.
 				{else}
-					Service fermé depuis le {$categories[i]->services[j]->beginDate|date_format:"%A %e %B %Y"}.
-					Réouverture le {$categories[i]->services[j]->endDate|date_format:"%A %e %B %Y"}.
+					Service fermé depuis le {$categories[i]->services[j]->closedEvent->getBeginDate()|date_format:"%A %e %B %Y"}.
+					Réouverture le {$categories[i]->services[j]->closedEvent->getEndDate()|date_format:"%A %e %B %Y"}.
 				{/if}
-				{if !empty($categories[i]->services[j]->reason)}
-					({$categories[i]->services[j]->reason|nl2br})
+				{if $categories[i]->services[j]->closedEvent->getDescription() !== NULL}
+					({$categories[i]->services[j]->closedEvent->getDescription()|nl2br})
 				{/if}
 			</td>
 			{else}
-			{if $categories[i]->services[j]->beginDateLastEvent === NULL}
+			{if count($categories[i]->services[j]->lastEvent) === 0}
 			<td headers="lth4" class="bold">&nbsp;</td>
 			<td headers="lth4" class="bold">&nbsp;</td>
 			<td headers="lth4" class="center">&nbsp;</td>
 			{else}
-			<td headers="lth4" class="bold">{$categories[i]->services[j]->beginDateLastEvent|date_format:"%A %d %B %Y %H:%M"}</td>
-			{if $categories[i]->services[j]->endDateLastEvent === NULL}
+			<td headers="lth4" class="bold">{$categories[i]->services[j]->lastEvent[0]->getBeginDate()|date_format:"%A %d %B %Y %H:%M"}</td>
+			{if $categories[i]->services[j]->lastEvent[0]->getEndDate() === NULL}
 			<td headers="lth4" class="bold">NC</td>
 			{else}
-			<td headers="lth4" class="bold">{$categories[i]->services[j]->endDateLastEvent|date_format:"%A %d %B %Y %H:%M"}</td>
+			<td headers="lth4" class="bold">{$categories[i]->services[j]->lastEvent[0]->getEndDate()|date_format:"%A %d %B %Y %H:%M"}</td>
 			{/if}
-			<td headers="lth4" class="center">{$categories[i]->services[j]->reasonLastEvent|nl2br}</td>
+			<td headers="lth4" class="center">{$categories[i]->services[j]->lastEvent[0]->getDescription()|nl2br}</td>
 
 			{/if}
-			<td headers="lth5" class="bold justify">{$categories[i]->services[j]->nextEvent}</td>
-			<td headers="lth6" class="bold">{$categories[i]->services[j]->regularInterruption}</td>
+			<td headers="lth5" class="bold justify">
+				{if count($categories[i]->services[j]->nextEvent) === 1}
+					Interruption du {$categories[i]->services[j]->nextEvent[0]->getBeginDate()|date_format:"%A %d %B %Y %H:%M"} au {$categories[i]->services[j]->nextEvent[0]->getEndDate()|date_format:"%A %d %B %Y %H:%M"}
+					{if $categories[i]->services[j]->nextEvent[0]->getDescription() !== NULL}
+						<br />
+						( {$categories[i]->services[j]->nextEvent[0]->getDescription()|nl2br} )
+					{/if}
+				{/if}
+			</td>
+			<td headers="lth6" class="bold">
+			{if count($categories[i]->services[j]->regularInterruption) > 0}
+				<ul class="regular">
+				{foreach from=$categories[i]->services[j]->regularInterruption item=ri}
+					<li>
+					{if $ri->getPeriod() === 7*24*60*60}
+						{* Tous les mois *}
+						Tous les {$ri->getBeginDate()|date_format:"%d"} du mois de {$ri->getBeginDate()|date_format:"%H:%M"} à {$ri->getEndDate()|date_format:"%H:%M"}
+					{else if $ri->getPeriod() === 7*24*60*60}
+						{* Toutes les semaines *}
+						Tous les {$ri->getBeginDate()|date_format:"%A"} de {$ri->getBeginDate()|date_format:"%H:%M"} à {$ri->getEndDate()|date_format:"%H:%M"}
+					{else}
+						{* Tous les jours *}
+						Tous les jours de {$ri->getBeginDate()|date_format:"%H:%M"} à {$ri->getEndDate()|date_format:"%H:%M"}
+					{/if}
+
+					{if $ri->getDescription() !== NULL}
+						<br />
+						{$ri->getDescription()|nl2br}
+					{/if}
+					</li>
+				{/foreach}
+				</ul>
+			{/if}
+			</td>
 			{/if}
 		</tr>
 		{/section}
