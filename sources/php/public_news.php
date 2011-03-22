@@ -105,7 +105,6 @@ if($service_records = $db->query($sql)){
 
 			$service->stripName = strip_accents($service->getNameForUsers());
 			$service->parents = get_parents($service->getId());
-			$service->setEvents($service->getAllEvents());
 
 			$categories[count($categories)-1]->services[] = $service;
 			$i++;

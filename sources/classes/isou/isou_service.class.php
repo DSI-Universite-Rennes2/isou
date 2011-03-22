@@ -236,9 +236,26 @@ class IsouService {
 				" )))) ORDER BY E.beginDate DESC".
 				" LIMIT :8";
 
+		$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, D.description, EI.isScheduled".
+				" FROM events E, events_isou EI, events_description D".
+				" WHERE EI.idService = ".$this->id.
+				" AND EI.idEventDescription = D.idEventDescription".
+				" AND EI.idEvent = E.idEvent".
+				" AND E.typeEvent = 0".
+				// n'afficher que les interruptions régulières si elles ont lieu en ce moment
+				" AND ((EI.isScheduled = 2 AND E.beginDate <= ".TIME." AND E.endDate >= ".TIME.")".
+				" OR (EI.isScheduled < 2".
+				" AND (E.endDate IS NULL OR".
+				" ((E.beginDate BETWEEN ".$beginDate." AND ".$endDate.
+				" OR E.endDate BETWEEN ".$beginDate." AND ".$endDate.")".
+				" AND (E.endDate-E.beginDate > ".$tolerance.")".
+				" )))) ORDER BY E.beginDate DESC".
+				" LIMIT ".$limit;
+
 		$event_records = $db->prepare($sql);
 		$events = array();
-		if($event_records->execute(array($this->id, TIME, TIME, $beginDate, $endDate, $beginDate, $endDate, $tolerance, $limit))){
+		// if($event_records->execute(array($this->id, TIME, TIME, $beginDate, $endDate, $beginDate, $endDate, $tolerance, $limit))){
+		if($event_records->execute(array())){
 			while($event = $event_records->fetch(PDO::FETCH_OBJ)){
 				$event->serviceName = $this->nameForUsers;
 				$event->state = $this->state;
