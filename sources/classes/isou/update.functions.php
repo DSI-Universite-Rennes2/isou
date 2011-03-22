@@ -200,15 +200,15 @@ function update_nagios_to_db(){
 	$sql = "UPDATE services".
 			" SET state = 0, readonly = 0".
 			" WHERE readonly=1".
-			" AND idService NOT IN (SELECT idService".
+			" AND idService NOT IN (SELECT s.idService".
 									" FROM events e, events_isou ei, services s".
 									" WHERE readonly = 1".
 									" AND ei.idService = s.idService".
 									" AND e.idEvent = ei.idEvent".
-									" AND ((e.beginDate < :0 AND e.endDate > :1) OR e.endDate is null)".
+									" AND ((e.beginDate < ".TIME." AND e.endDate > ".TIME.") OR e.endDate is null)".
 									")";
 	$query = $db->prepare($sql);
-	if($query->execute(array(TIME, TIME))){
+	if($query->execute(array())){
 		if($query->rowCount() > 0){
 			add_log(LOG_FILE, 'ISOU', 'update', 'Nombre de lignes modifiées (réactivation de services) : '.$query->rowCount());
 		}
