@@ -32,7 +32,12 @@ $i=0;
 $services = array();
 if($service_records = $db->query($sql)){
 	while($service = $service_records->fetchObject('IsouService')){
-		$service->setEvents($service->getScheduledEvents(TOLERANCE, -1, TIMESTAMP_OF_FIRST_CALENDAR_DAY, TIMESTAMP_OF_LAST_CALENDAR_DAY));
+		if($_SESSION['hide'] === 1 || $IS_ADMIN === FALSE){
+			$tolerance = TOLERANCE;
+		}else{
+			$tolerance = 0;
+		}
+		$service->setEvents($service->getScheduledEvents($tolerance, -1, TIMESTAMP_OF_FIRST_CALENDAR_DAY, TIMESTAMP_OF_LAST_CALENDAR_DAY));
 		if($service->hasEvents() === TRUE){
 			$services[$i] = $service;
 			$i++;
