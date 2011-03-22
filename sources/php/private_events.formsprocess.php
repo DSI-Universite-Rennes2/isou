@@ -4,7 +4,23 @@
 	Converti une chaine "31/12/2010 14:30" en timestamp Unix ; sinon retourne NULL
 * * * * * * * * * * * * * * * * * */
 function strtotimestamp($date){
-	if(preg_match('#\d{2}/\d{2}/\d{4} \d{2}:\d{2}#',$date)){
+	if(preg_match('#^\d{1}/#', $date)){
+		$date = '0'.$date;
+	}
+
+	if(preg_match('#^\d{2}/\d{1}/#', $date)){
+		$date = substr($date,0,3).'0'.substr($date,3);
+	}
+
+	if(preg_match('#^\d{2}/\d{2}/\d{4} \d{1}:#', $date)){
+		$date = substr($date,0,11).'0'.substr($date,11);
+	}
+
+	if(preg_match('#^\d{2}/\d{2}/\d{4} \d{2}:\d{1}$#', $date)){
+		$date = substr($date,0,14).'0'.substr($date,14);
+	}
+
+	if(preg_match('#^\d{2}/\d{2}/\d{4} \d{2}:\d{2}$#',$date)){
 		return mktime(intval(substr($date,11,2)), intval(substr($date,14,2)), 0, intval(substr($date,3,2)), intval(substr($date,0,2)), intval(substr($date,6,4)));
 	}else{
 		return NULL;
