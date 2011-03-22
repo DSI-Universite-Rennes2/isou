@@ -71,8 +71,8 @@ p{
 }
 
 span.label{
-	display:inline-block;
-	font-weight:bold;
+	display: inline-block;
+	font-weight: bold;
 }
 
 .short-label{
@@ -150,7 +150,7 @@ span.label{
 	z-index: 2;
 	position: absolute;
 	/* header : 3+2x0.5em / h1 : 1em / menubar : 3+2x0.7em == 9.4em */
-	margin: 13.4em 5% 0em 5%;
+	margin: 6em 5% 0em 5%;
 	padding: .5em 1em;
 	width: 0%;
 	left: 50%;
