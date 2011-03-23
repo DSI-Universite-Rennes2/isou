@@ -16,7 +16,7 @@ function update_nagios_to_db(){
 	// parse le status.dat et mets à jour les états dans la base de données
 	$log = status_dat2db(STATUSDAT_URL);
 
-	if($log instanceof Exception)){
+	if($log instanceof Exception){
 		// close pdo connection
 		$db = null;
 		return $log;

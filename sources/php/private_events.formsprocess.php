@@ -183,7 +183,7 @@ if(isset($_POST['insert'])){
 					if($forced > 0){
 						$sql = "UPDATE services SET state=?, readonly=1 WHERE idService = ?";
 						$query = $db->prepare($sql);
-						if($query->execute(array($forced, $idService))){
+						if($query->execute(array($forced, $idService)) === FALSE){
 							$error = 'L\'évènement n\'a pas pu être inséré.';
 						}
 					}
