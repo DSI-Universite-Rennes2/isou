@@ -126,7 +126,7 @@ class IsouEvent {
 			}
 
 			while($beginDate <= $endDate){
-				$formatBeginDate = strftime('%m/%d/%y',$this->beginDate);
+				$formatBeginDate = strftime('%m/%d/%y', $beginDate);
 				$i=0;
 				$noExist = true;
 				while(isset(self::$array_events[$formatBeginDate][$i]) && $noExist){
