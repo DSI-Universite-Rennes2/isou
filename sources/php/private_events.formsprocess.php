@@ -352,6 +352,10 @@ if(isset($_POST['modify'])){
 						$sql = "UPDATE services SET state=?, readonly=1 WHERE idService = ?";
 						$query = $db->prepare($sql);
 						$updateMessage = $query->execute(array($forced, $idService));
+					}else{
+						$sql = "UPDATE services SET readonly=0 WHERE idService = ?";
+						$query = $db->prepare($sql);
+						$updateMessage = $query->execute(array($idService));
 					}
 				}
 			}
