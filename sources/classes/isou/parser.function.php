@@ -110,7 +110,6 @@ function status_dat2db($file){
 
 					if($current_state != '0' && $ins){
 						$ins = FALSE;
-						$query->closeCursor();
 						$db->beginTransaction();
 						$sql = "INSERT INTO events(beginDate, endDate, typeEvent)".
 								" VALUES(?, NULL, 1)";
