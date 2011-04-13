@@ -22,7 +22,7 @@
 			Service mis en maintenance
 			<span class="required" title="champs obligatoire">*</span>
 		</label>
-		{html_options id=name name=name options=$optionNameForUsers}
+		{html_options id=name name=name options=$optionNameForUsers selected=$smarty.post.name|default:'0'}
 	</p>
 
 	<p>
