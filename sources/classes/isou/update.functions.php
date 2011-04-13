@@ -130,9 +130,12 @@ function update_nagios_to_db(){
 					// ajout d'un evenement non prevu
 					$description = NULL;
 					if(isset($array_dependence[$dependence[$d][0]])){
-						$array_dependence[$dependence[$d][0]] = trim($array_dependence[$dependence[$d][0]]);
-						if(!empty($array_dependence[$dependence[$d][0]])){
-							$description = $array_dependence[$dependence[$d][0]];
+						if(count($array_dependence[$dependence[$d][0]]) > 0){
+							$description = "";
+							foreach($array_dependence[$dependence[$d][0]] as $descript){
+								$description .= $descript."\n";
+							}
+							$description = substr($description, 0, -1);
 						}
 					}
 
@@ -336,11 +339,11 @@ function make_dependencies($idParent,$stateParent,$array,$db){
 					" AND readonly = 0";
 			if($db->query($sql)){
 				if(!isset($array[$depend[$d][0]])){
-					$array[$depend[$d][0]] = '';
+					$array[$depend[$d][0]] = array();
 				}
 
-				if(!empty($depend[$d][2])){
-					$array[$depend[$d][0]] .= $depend[$d][2]."\n";
+				if(!empty($depend[$d][2]) && !in_array($depend[$d][2], $array[$depend[$d][0]])){
+					$array[$depend[$d][0]][] = $depend[$d][2];
 				}
 
 				$array = make_dependencies($depend[$d][0], $depend[$d][1], $array, $db);
