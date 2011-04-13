@@ -229,14 +229,19 @@ class IsouEvent {
 					" AND e.idEvent = en.idEvent".
 					" AND d.idServiceParent = s.idService".
 					" AND d.idService = :0".
-					" AND e.beginDate >= :1".
-					" AND e.endDate <= :2";
+					" AND e.beginDate >= ".($this->beginDate-TOLERANCE).
+					" AND e.endDate <= ".($this->endDate+TOLERANCE);
 
 			$nagios_records = $db->prepare($sql);
-			if($nagios_records->execute(array($this->id, $this->beginDate-TOLERANCE, $this->endDate+TOLERANCE))){
+			if($nagios_records->execute(array($this->id))){
 				$j = 0;
-				while($nagios_record = $nagios_records->fetchObject('IsouEvent')){
-					$nagiosEvents[] = $nagios_record;
+				while($nagios_record = $nagios_records->fetchObject()){
+					// TODO: à déplacer vers le constructeur...
+					$nagios_record->isScheduled = 0;
+					$nagios_record->description = '';
+					$nagios_record->idEvent = 0;
+					$nagios_record->period = 0;
+					$nagiosEvents[] = new IsouEvent($nagios_record);
 				}
 			}
 		}

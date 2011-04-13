@@ -106,17 +106,19 @@
 					{/if}
 
 					{* <!-- affichage des états des services parents (dépendances) lors de l'interruption --> *}
+					{if $smarty.const.DEBUG === TRUE || $is_admin === TRUE}
 					{if count($event->getNagiosEvents()) > 0}
 					<ul>
-					{foreach from=$event->getEventsNagios() item=nagios}
+					{foreach from=$event->getNagiosEvents() item=nagios}
 						<li>
 							<img src="{$smarty.const.URL}/images/{$flags.{$nagios->getState()}->src}" alt="{$flags.{$nagios->getState()}->alt}" />
-							{$nagios->getNameForUsers()}
+							{$nagios->getServiceName()}
 							{$nagios->getBeginDate()|date_format:"%x %T"} -
 							{$nagios->getEndDate()|date_format:"%x %T"}
 						</li>
 					{/foreach}
 					</ul>
+					{/if}
 					{/if}
 					</li>
 				{/foreach}
