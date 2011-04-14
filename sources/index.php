@@ -96,6 +96,11 @@ if(count($_GET)>0){
 	$connexion_url = get_base_url('full', HTTPS).'?';
 }
 
+if($_SESSION['hide'] === 1){
+	$TOLERANCE = TOLERANCE;
+}else{
+	$TOLERANCE = 0;
+}
 
 require $model;
 
