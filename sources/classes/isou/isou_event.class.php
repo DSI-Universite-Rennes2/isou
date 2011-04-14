@@ -213,42 +213,70 @@ class IsouEvent {
 	}
 
 	/**
+	*   @desc		find recursively all nagios events from current event
+	*   @return		array of IsouEvent()
+	*/
+	private function getNagiosEvents_recursive($idService){
+		global $db;
+
+		$nagiosEvents = array();
+
+		// si l'evenement n'est pas en cours, on recup tous les evenements nagios
+		// on met +/- 10 secondes de tolérence
+		$sql = "SELECT DISTINCT s.name, s.nameForUsers, e.beginDate, e.endDate, en.state".
+				" FROM events e, events_nagios en, services s, dependencies d".
+				" WHERE s.idService = en.idService".
+				" AND e.idEvent = en.idEvent".
+				" AND d.idServiceParent = s.idService".
+				" AND d.idService = ".$idService.
+				" AND e.beginDate >= ".($this->beginDate-TOLERANCE).
+				" AND e.endDate <= ".($this->endDate+TOLERANCE);
+		$nagios_records = $db->prepare($sql);
+		if($nagios_records->execute(array())){
+			$j = 0;
+			while($nagios_record = $nagios_records->fetchObject()){
+				// TODO: à déplacer vers le constructeur...
+				$nagios_record->isScheduled = 0;
+				$nagios_record->description = '';
+				$nagios_record->idEvent = 0;
+				$nagios_record->period = 0;
+				if(empty($nagios_record->nameForUsers)){
+					$nagios_record->serviceName = $nagios_record->name;
+				}else{
+					$nagios_record->serviceName = $nagios_record->nameForUsers;
+				}
+				$nagiosEvents[] = new IsouEvent($nagios_record);
+			}
+		}
+
+		// tous les services Isou qui sont parents d'un autre service Isou
+		$sql = "SELECT DISTINCT d.idServiceParent, s.nameForUsers".
+				" FROM dependencies d, services s".
+				" WHERE s.idService = d.idServiceParent".
+				" AND d.idService = ".$idService.
+				" AND s.nameForUsers IS NOT NULL";
+		// echo $sql;
+		$dep_records = $db->prepare($sql);
+		if($dep_records->execute(array())){
+			while($dep = $dep_records->fetchObject()){
+				$nagiosEvents[] = array($dep->nameForUsers, $this->getNagiosEvents_recursive($dep->idServiceParent));
+			}
+		}
+
+		return $nagiosEvents;
+	}
+
+
+	/**
 	*   @desc		find all nagios events from current event
 	*   @return		array of IsouEvent()
 	*/
 	public function getNagiosEvents($idService){
-		global $db;
 
 		$nagiosEvents = array();
-		if(!empty($this->endDate)){
-			// si l'evenement n'est pas en cours, on recup tous les evenements nagios
-			// on met +/- 10 secondes de tolérence
-			$sql = "SELECT DISTINCT s.name, s.nameForUsers, e.beginDate, e.endDate, en.state".
-					" FROM events e, events_nagios en, services s, dependencies d".
-					" WHERE s.idService = en.idService".
-					" AND e.idEvent = en.idEvent".
-					" AND d.idServiceParent = s.idService".
-					" AND d.idService = :0".
-					" AND e.beginDate >= ".($this->beginDate-TOLERANCE).
-					" AND e.endDate <= ".($this->endDate+TOLERANCE);
 
-			$nagios_records = $db->prepare($sql);
-			if($nagios_records->execute(array($idService))){
-				$j = 0;
-				while($nagios_record = $nagios_records->fetchObject()){
-					// TODO: à déplacer vers le constructeur...
-					$nagios_record->isScheduled = 0;
-					$nagios_record->description = '';
-					$nagios_record->idEvent = 0;
-					$nagios_record->period = 0;
-					if(empty($nagios_record->nameForUsers)){
-						$nagios_record->serviceName = $nagios_record->name;
-					}else{
-						$nagios_record->serviceName = $nagios_record->nameForUsers;
-					}
-					$nagiosEvents[] = new IsouEvent($nagios_record);
-				}
-			}
+		if(!empty($this->endDate)){
+			$nagiosEvents = $this->getNagiosEvents_recursive($idService);
 		}
 
 		return $nagiosEvents;

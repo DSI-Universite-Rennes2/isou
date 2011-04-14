@@ -2,7 +2,7 @@
 $(document).ready(function(){
 
 	$(".parentsList, .top").css("display","none");
-	$(".alert li ul:not(.reason)").css("display","none");
+	$(".alert > li > ul:not(.reason)").css("display","none");
 
 	$("#legend").css("position","fixed");
 	$("#legend").css("right","0em");

@@ -108,16 +108,7 @@
 					{* <!-- affichage des états des services parents (dépendances) lors de l'interruption --> *}
 					{if $smarty.const.DEBUG === TRUE || $is_admin === TRUE}
 					{if count($event->getNagiosEvents($categories[i]->services[j]->getId())) > 0}
-					<ul>
-					{foreach from=$event->getNagiosEvents($categories[i]->services[j]->getId()) item=nagios}
-						<li>
-							<img src="{$smarty.const.URL}/images/{$flags.{$nagios->getState()}->src}" alt="{$flags.{$nagios->getState()}->alt}" />
-							{$nagios->getServiceName()}
-							{$nagios->getBeginDate()|date_format:"%x %T"} -
-							{$nagios->getEndDate()|date_format:"%x %T"}
-						</li>
-					{/foreach}
-					</ul>
+						{include file="public_news_recursive_nagios.tpl" parents=$event->getNagiosEvents($categories[i]->services[j]->getId())}
 					{/if}
 					{/if}
 					</li>
