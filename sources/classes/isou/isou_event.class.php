@@ -216,7 +216,7 @@ class IsouEvent {
 	*   @desc		find all nagios events from current event
 	*   @return		array of IsouEvent()
 	*/
-	public function getNagiosEvents(){
+	public function getNagiosEvents($idService){
 		global $db;
 
 		$nagiosEvents = array();
@@ -233,7 +233,7 @@ class IsouEvent {
 					" AND e.endDate <= ".($this->endDate+TOLERANCE);
 
 			$nagios_records = $db->prepare($sql);
-			if($nagios_records->execute(array($this->id))){
+			if($nagios_records->execute(array($idService))){
 				$j = 0;
 				while($nagios_record = $nagios_records->fetchObject()){
 					// TODO: à déplacer vers le constructeur...
@@ -241,6 +241,11 @@ class IsouEvent {
 					$nagios_record->description = '';
 					$nagios_record->idEvent = 0;
 					$nagios_record->period = 0;
+					if(empty($nagios_record->nameForUsers)){
+						$nagios_record->serviceName = $nagios_record->name;
+					}else{
+						$nagios_record->serviceName = $nagios_record->nameForUsers;
+					}
 					$nagiosEvents[] = new IsouEvent($nagios_record);
 				}
 			}

@@ -107,9 +107,9 @@
 
 					{* <!-- affichage des états des services parents (dépendances) lors de l'interruption --> *}
 					{if $smarty.const.DEBUG === TRUE || $is_admin === TRUE}
-					{if count($event->getNagiosEvents()) > 0}
+					{if count($event->getNagiosEvents($categories[i]->services[j]->getId())) > 0}
 					<ul>
-					{foreach from=$event->getNagiosEvents() item=nagios}
+					{foreach from=$event->getNagiosEvents($categories[i]->services[j]->getId()) item=nagios}
 						<li>
 							<img src="{$smarty.const.URL}/images/{$flags.{$nagios->getState()}->src}" alt="{$flags.{$nagios->getState()}->alt}" />
 							{$nagios->getServiceName()}

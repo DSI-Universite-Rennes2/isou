@@ -83,16 +83,10 @@ $categories = array();
 if($service_records = $db->query($sql)){
 	while($service = $service_records->fetchObject('IsouService')){
 
-		if($_SESSION['hide'] === 1 || $IS_ADMIN === FALSE){
-			$tolerance = TOLERANCE;
-		}else{
-			$tolerance = 0;
-		}
-
 		if(isset($calendar)){
-			$service->setEvents($service->getScheduledEvents($tolerance, -1, TIMESTAMP_OF_FIRST_CALENDAR_DAY, TIMESTAMP_OF_LAST_CALENDAR_DAY));
+			$service->setEvents($service->getScheduledEvents($TOLERANCE, -1, TIMESTAMP_OF_FIRST_CALENDAR_DAY, TIMESTAMP_OF_LAST_CALENDAR_DAY));
 		}else{
-			$service->setEvents($service->getAllEvents($tolerance, 10, $BEFORE, $AFTER));
+			$service->setEvents($service->getAllEvents($TOLERANCE, 10, $BEFORE, $AFTER));
 		}
 
 		if($service->hasEvents() === TRUE){
