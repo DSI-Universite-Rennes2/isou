@@ -36,19 +36,19 @@ if(is_file($config)){
 	exit(1);
 }
 
-$update_svn = FALSE;
+$update_git = FALSE;
 if(is_file(SOURCE.'/UPDATE_SVN_FLAG')){
-	$update_svn = TRUE;
+	$update_git = TRUE;
 }else{
-	if(is_dir(SOURCE.'/.svn')){
-		$update_svn = trim(readline("\nVoulez-vous que l'installateur fusionne votre version avec la version officielle ? (y/n)\n"));
-		if(strtolower($update_svn) === 'y'){
-			$update_svn = TRUE;
+	if(is_dir(SOURCE.'/.git')){
+		$update_git = trim(readline("\nVoulez-vous que l'installateur fusionne votre version avec la version officielle ? (y/n)\n"));
+		if(strtolower($update_git) === 'y'){
+			$update_git = TRUE;
 		}
 	}
 }
 
-if($update_svn === TRUE){
+if($update_git === TRUE){
 	$display = "\nÉcriture du témoin de mise à jour par subversion";
 	if(touch(SOURCE.'/UPDATE_SVN_FLAG')){
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n\n";
@@ -96,7 +96,7 @@ if($update_svn === TRUE){
 		}
 	}
 
-	$shell = shell_exec("cd '".SOURCE."' && svn update");
+	$shell = shell_exec("cd '".SOURCE."' && git pull");
 	$exp_shell = explode("\n", $shell);
 	$conflicts = preg_grep('#^C#', $exp_shell);
 	echo "\nSortie shell:\033[0;35m\n".$shell."\033[0m\n";
@@ -104,19 +104,19 @@ if($update_svn === TRUE){
 		echo "\033[0;31mÉchec de la mise à jour. Merci de corriger les conflits, puis de relancer la mise à jour.\033[0m\n";
 		exit(1);
 	}else{
-		$update_svn = trim(readline("La fusion entre les deux versions semblent s'être passée correctement. Voulez-vous continuer ? (y/n)\n"));
-		if(strtolower($update_svn) !== 'y'){
+		$update_git = trim(readline("La fusion entre les deux versions semblent s'être passée correctement. Voulez-vous continuer ? (y/n)\n"));
+		if(strtolower($update_git) !== 'y'){
 			echo "\033[0;31mMerci de corriger les conflits, puis de relancer la mise à jour.\033[0m\n";
 			exit(0);
 		}else{
-			$update_svn = TRUE;
+			$update_git = TRUE;
 		}
 	}
 }
 
 $files = array();
 
-if($update_svn === TRUE){
+if($update_git === TRUE){
 	$files[] = 'css';
 	$files[] = 'images';
 	$files[] = 'config.menu.php';
@@ -164,7 +164,7 @@ if(is_file(SOURCE.'/UPDATE_SVN_FLAG')){
 
 echo "\n\033[0;32mLa mise à jour est terminée.\033[0m\n\n";
 
-if($update_svn === TRUE){
+if($update_git === TRUE){
 	$xpi = preg_grep('#/xpi/#', $exp_shell);
 	if(count($xpi) > 0){
 		$xpi_fisou = preg_grep('#sources/xpi/fisou[\d\.]+\.xpi#', $exp_shell);

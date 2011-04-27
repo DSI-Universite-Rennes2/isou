@@ -18,32 +18,27 @@ INSTALLATION
 -------------
 Sous unix :
 cd /tmp && mkdir isou
-svn checkout https://subversion.cru.fr/isounagios/tags/stable /tmp/isou
-php /tmp/isou/install.php
+git clone git://git.cru.fr/isounagios.git
+php /tmp/isou/isounagios/install.php
 
 Sous windows :
-récupérer le dépôt svn
+récupérer le dépôt git
 copier le répertoire ./sources sur votre serveur web
 copier les fichiers du dossier ./database contenant isou.sqlite3 et isou-visits.sqlite3 sur votre serveur web dans ./database
 éditer, puis renommer le fichier config.example.php en config.php
+
+note : il est recommandé de garder le répertoire servant au clone
 
 
 MISE A JOUR
 ------------
 Sous unix :
-cd /tmp && mkdir isou
-svn checkout https://subversion.cru.fr/isounagios/tags/stable /tmp/isou
-php /tmp/isou/update.php
-
-note : si vous avez conservé les fichiers d'installation,
-cd /tmp/isou
-svn update
-php /tmp/isou/update.php
+cd /tmp/isou/isounagios/
+php update.php
 
 Sous windows :
-récupérer le dépôt svn
+récupérer le dépôt git
 copier le dossier ./sources
-
 
 
 
