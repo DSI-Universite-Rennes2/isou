@@ -1,8 +1,8 @@
 ISOU - CRONTAB
 
 
-CONFIGURATION DES CRONTAB OU EQUIVALENT
-----------------------------------------
+A PROPOS DES CRONS OU EQUIVALENT
+---------------------------------
 Il existe 3 scripts pour les taches planifiées
 
 ./cron/cron.php (au moins toutes les 5 minutes, idéalement toutes les minutes) :
@@ -15,6 +15,17 @@ permet de générer les statistiques de visite du site ISOU
 
 ./cron/cron_yearly.php (obligatoirement le 1er janvier) :
 archive la base de données et réinitialise une nouvelle base (gain de performance)
+
+
+CONFIGURATION
+--------------
+En attendant une modification du code source, vous devez indiquer dans chaque script le chemin absolu vers le fichier ./config.php
+
+Pour cela, il suffit de modifier la variable $pwd. 
+
+Exemple : $pwd = "/var/www/isou";
+En supposant que votre fichier config.php se trouve dans /var/www/isou/config.php
+
 
 Exemples de crontab unix :
 ---------------------------
