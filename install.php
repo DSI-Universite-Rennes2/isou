@@ -166,7 +166,7 @@ if(empty($STATUSDAT_URL)){
 	echo "\n";
 }
 
-echo "\nQuelle est l'URL de votre service CAS ?\n";
+echo "\nQuel est l'hôte de votre service CAS ?\n";
 echo "exemple: \033[1;34mcas.example.com\033[0m\n";
 $CAS_URL = trim(fgets(STDIN));
 $CAS_URL = str_replace('http://', '', $CAS_URL);
