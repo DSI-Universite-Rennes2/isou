@@ -226,18 +226,6 @@ function update_nagios_to_db(){
 	$sql = "UPDATE events".
 			" SET endDate = :0".
 			" WHERE idEvent IN (SELECT E.idEvent".
-							" FROM events E, events_isou EI, services S".
-							" WHERE S.idService = EI.idService".
-							" AND E.idEvent = EI.idEvent".
-							" AND E.typeEvent = 0".
-							" AND ((E.beginDate < :0 AND S.state = 0)".
-							" OR (EI.isScheduled = 1 AND E.beginDate < :0))".
-							" AND E.endDate IS NULL".
-							" AND isScheduled < 2".
-							" )";
-	$sql = "UPDATE events".
-			" SET endDate = :0".
-			" WHERE idEvent IN (SELECT E.idEvent".
 								" FROM events E, events_isou EI, services S".
 								" WHERE S.idService = EI.idService".
 								" AND E.idEvent = EI.idEvent".
@@ -263,8 +251,7 @@ function update_nagios_to_db(){
 										")".
 									")".
 							")".
-			" AND endDate IS NULL".
-			" AND isScheduled < 2";
+			" AND endDate IS NULL";
 	$query = $db->prepare($sql);
 	if($query->execute(array(TIME))){
 		if($query->rowCount() > 0){
