@@ -32,14 +32,15 @@
 			<td headers="lth2"><img src="{$smarty.const.URL}/images/{$flags.{$categories[i]->services[j]->getState()}->src}" alt="{$flags.{$categories[i]->services[j]->getState()}->alt}" /></td>
 			{if $categories[i]->services[j]->isClosed() === TRUE}
 			<td headers="lth4" colspan="5">
-				{if $categories[i]->services[j]->closedEvent->getEndDate() === NULL}
-					Service fermé depuis le {$categories[i]->services[j]->closedEvent->getBeginDate()|date_format:"%A %e %B %Y"}.
-				{else}
-					Service fermé depuis le {$categories[i]->services[j]->closedEvent->getBeginDate()|date_format:"%A %e %B %Y"}.
-					Réouverture le {$categories[i]->services[j]->closedEvent->getEndDate()|date_format:"%A %e %B %Y"}.
-				{/if}
 				{if $categories[i]->services[j]->closedEvent->getDescription() !== NULL}
-					({$categories[i]->services[j]->closedEvent->getDescription()|nl2br})
+					{$categories[i]->services[j]->closedEvent->getDescription()|nl2br}
+				{else}
+					{if $categories[i]->services[j]->closedEvent->getEndDate() === NULL}
+						Service fermé depuis le {$categories[i]->services[j]->closedEvent->getBeginDate()|date_format:"%A %e %B %Y"}.
+					{else}
+						Service fermé depuis le {$categories[i]->services[j]->closedEvent->getBeginDate()|date_format:"%A %e %B %Y"}.
+						Réouverture le {$categories[i]->services[j]->closedEvent->getEndDate()|date_format:"%A %e %B %Y"}.
+					{/if}
 				{/if}
 			</td>
 			{else}
