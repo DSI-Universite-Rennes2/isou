@@ -187,6 +187,7 @@ if(count($_POST) > 0){
 		if((isset($_GET['modify']) && $_GET['modify'] == $event->idEvent) ||
 			(isset($_POST['idEvent']) && $_POST['idEvent'] == $event->idEvent)){
 			$event->edit = TRUE;
+			$currentEdit = $event;
 		}
 
 		$closed[] = $event;
