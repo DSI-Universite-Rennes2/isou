@@ -44,7 +44,7 @@
 
 	<p id="p-period">
 	<span class="label">Périodicité <span class="info">(seulement si c'est une opération régulière)</span></span>
-	{html_radios  id='period' name='period' options=$period selected={$smarty.post.period|default:'daily'}}
+	{html_radios name='period' options=$period selected={$smarty.post.period|default:'daily'}}
 	</p>
 
 	<p>
