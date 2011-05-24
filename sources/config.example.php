@@ -26,6 +26,9 @@ $IP_CRI = array();
 // tableau contenant le login des administrateurs d'ISOU
 $ADMIN_USERS = array();
 
+// tableau contenant les mails des administrateurs d'ISOU
+$ADMIN_MAILS = array();
+
 // nom du service, notamment utilisé dans l'onglet du navigateur
 define('NAME', 'Isou');
 

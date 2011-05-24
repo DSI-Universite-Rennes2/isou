@@ -208,6 +208,21 @@ if(empty($ADMIN_USERS)){
 	$ADMIN_USERS = 'array('.substr($ADMIN_USERS, 0, -1).')';
 }
 
+echo "\nQuelles sont les adresses mails devant recevoir des alertes mails (séparés par des virgules) ?\n";
+echo "Défaut: \033[1;34mvide\033[0m\n";
+echo "exemple : \033[1;30mexample1@example.com, example2@example.com\033[0m\n";
+$ADMIN_MAILS = trim(fgets(STDIN));
+if(empty($ADMIN_MAILS)){
+	$ADMIN_MAILS = 'array()';
+}else{
+	$mails = explode(',', $ADMIN_MAILS);
+	$ADMIN_MAILS = '';
+	foreach($mails as $mail){
+		$ADMIN_MAILS .= '\''.trim($mail).'\',';
+	}
+	$ADMIN_MAILS = 'array('.substr($ADMIN_MAILS, 0, -1).')';
+}
+
 echo "\nQuelles sont les plages IP de votre réseau universitaire (bornes d'IP séparée par une virgule, plages d'IP séparées par un point-virgule) ?\n";
 echo "Défaut: \033[1;34m127.0.0.0,255.255.255.255\033[0m\n";
 echo "exemple : \033[1;30m170.3.20.0,170.3.30.255;192.168.30.10,192.168.30.20\033[0m\n";
@@ -285,6 +300,9 @@ define('TOLERANCE', ".$TOLERANCE.");
 
 // tableau contenant le login des administrateurs d'ISOU
 \$ADMIN_USERS = ".$ADMIN_USERS.";
+
+// tableau contenant le login des administrateurs d'ISOU
+\$ADMIN_MAILS = ".$ADMIN_MAILS.";
 
 // nom du service, notamment utilisé dans l'onglet du navigateur
 define('NAME', '".addslashes($NAME)."');

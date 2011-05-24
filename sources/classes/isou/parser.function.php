@@ -22,6 +22,7 @@ function status_dat2db($file){
 	}
 
 	$cron_message = '';
+	$services_nagios = array();
 
 	while(!feof($handle)){
 		$tp =  trim(fgets($handle, 4096));
@@ -55,6 +56,8 @@ function status_dat2db($file){
 				if($tag == 'servicestatus'){
 					$host_name = $service_description.'@'.$host_name;
 				}
+
+				$services_nagios[] = $host_name;
 
 				if($current_state > 0){
 					$cron_message .= "Etat $current_state : $host_name \n";
@@ -140,6 +143,20 @@ function status_dat2db($file){
 		}
 	}
 	fclose($handle);
+
+	$removed_services_nagios = '';
+	foreach($services_nagios as $service_nagios){
+		$sql = "SELECT name, nameForUsers FROM services WHERE name = ?";
+		$query = $db->prepare($sql);
+		if($query->execute(array($service_nagios)) === FALSE){
+			$removed_services_nagios .= $service_nagios."\n";
+		}
+	}
+
+	if(!empty($service_nagios) && strftime('%M', TIME) % 10 === 0){
+		// mail
+		mail(implode(',', $ADMIN_MAILS), "Alerte ISOU: services Nagios obsolètes", "Au moins un service Nagios utilisé dans ISOU n'y est plus présent :\n\n".$removed_services_nagios);
+	}
 
 	// close pdo connection
 	$db = null;
