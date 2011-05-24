@@ -163,10 +163,10 @@ if(isset($_POST['cancel'])){
 			$_POST['url'] = '';
 		}
 
-		if(isset($_POST['nameForUsers']) && $_POST['category']>0 && $_POST['idService']>0){
+		if($_POST['idService']>0){
 			$comment = '';
 
-			if(!empty($_POST['nameForUsers'])){
+			if(!empty($_POST['nameForUsers']) && !empty($_POST['category'])){
 				// service ISOU
 				$sql = "UPDATE services".
 					" SET nameForUsers = ?, url = ?, comment = ?, enable = 1, visible = 1, idCategory = ?".
@@ -187,7 +187,7 @@ if(isset($_POST['cancel'])){
 				$query = $db->prepare($sql);
 				if($query->execute(array($_POST['name'], $comment, $_POST['idService']))){
 					unset($_POST['idService']);
-					$error = 'Le service '.stripslashes($_POST['name']).' est maintenant masqué dans ISOU';
+					$error = 'Le service '.stripslashes($_POST['name']).' remplace le service précédemment sélectionné';
 					add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Service #'.$_POST['idService'].' : SET nameForUsers = NULL, comment = '.$comment.', enable = 0, visible = 0, idCategory = '.$_POST['category']);
 				}else{
 					$error = 'Le service '.stripslashes($_POST['name']).' n\'a pas pu être mis à jour dans la base';
