@@ -1,7 +1,7 @@
 		<dd>
 			{if (isset($smarty.get.modify) && $smarty.get.modify == $dependency->idDependence) ||
 				(isset($smarty.post.idDependence) && $smarty.post.idDependence == $dependency->idDependence)}
-			<form method="post" action="{$smarty.const.URL}/index.php/dependances">
+			<form method="post" action="{$smarty.const.URL}/index.php/dependances#{$smarty.get.S}">
 			<p>
 				<img src="{$smarty.const.URL}/images/arrow_tree_up.png" alt="lorsque" />
 				<img src="{$smarty.const.URL}/images/{$flags.{$dependency->stateOfParent}->src}" alt="{$flags.{$dependency->stateOfParent}->alt}" />

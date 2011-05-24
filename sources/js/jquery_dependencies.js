@@ -195,7 +195,11 @@ $(document).ready(function(){
 			changeService(parseInt(anchor));
 		}
 	}else{
-		changeService(0);
+		if(window.location.hash != ''){
+			changeService(parseInt(window.location.hash.substr(1)));
+		}else{
+			changeService(0);
+		}
 	}
 
 });
