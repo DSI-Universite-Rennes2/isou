@@ -1,5 +1,12 @@
 <?php
 
+if(is_file("LOCK_CRON")){
+	// un cron est déjà en cours d'execution
+	exit;
+}else{
+	touch("LOCK_CRON");
+}
+
 $pwd = dirname(__FILE__).'/..';
 
 require $pwd.'/functions.php';
@@ -17,5 +24,9 @@ if($log instanceof Exception){
 
 error_reporting(0);
 require BASE.'/classes/isou/json.php';
+
+if(is_file("LOCK_CRON")){
+	unlink("LOCK_CRON");
+}
 
 ?>
