@@ -55,8 +55,8 @@
 		{/foreach}
 		<td>{round($service->count/60)}</td>
 	</tr>
-	</tbody>
 	{/foreach}
+	</tbody>
 </table>
 
 {else}
