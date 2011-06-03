@@ -7,7 +7,7 @@
 		<li id="selected">{include file="private_events_edit.tpl"}</li>
 	{else}
 		<li class="{$event->classCss}">
-			<p class="pform1">Service <span class="bold">{$event->nameForUsers}</span>
+			<p class="pform1{if $event->readonly == 1} locked{/if}">Service <span class="bold">{$event->nameForUsers}</span>
 				interrompu
 				{if $event->endDate === NULL}
 					depuis le {$event->beginDate|date_format:"%d %B %Y %H:%M"}

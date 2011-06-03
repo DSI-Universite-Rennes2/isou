@@ -37,6 +37,13 @@ p{
 	color: #FF0000;
 }
 
+.locked{
+	background-image: url('../images/icon_padlock.gif');
+	background-position: left center;
+	background-repeat: no-repeat;
+	padding-left: 1.5em;
+}
+
 .info-date-format{
 	background-color: lightgray;
 	margin: 0.5em;
