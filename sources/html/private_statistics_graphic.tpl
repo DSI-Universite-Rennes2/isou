@@ -14,7 +14,7 @@
 
 <p>
 	<label class="label" for="groupbySelect">Grouper</label>
-	{html_options id=groupbySelect name=groupbySelect options=$groupbySelect selected=$smarty.get.groupbySelect|default:''}
+	{html_options id=groupbySelect name=groupbySelect options=$groupbySelect selected=$smarty.get.groupbySelect|default:'m'}
 </p>
 
 <p>
