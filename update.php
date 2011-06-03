@@ -164,6 +164,13 @@ if(is_file(SOURCE.'/UPDATE_GIT_FLAG')){
 
 echo "\n\033[0;32mLa mise à jour est terminée.\033[0m\n\n";
 
+// mise à jour du numéro de version dans le fichier config.php
+if(VERSION !== '0.9.5'){ 
+	$cfg = file_get_contents($config);
+	$cfg = str_replace("define('VERSION', '".VERSION."');", "define('VERSION', '0.9.5');", $cfg);
+	file_put_contents($config, $cfg);
+}
+
 if($update_git === TRUE){
 	$xpi = preg_grep('#/xpi/#', $exp_shell);
 	if(count($xpi) > 0){
