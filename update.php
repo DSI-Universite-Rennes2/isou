@@ -37,7 +37,7 @@ if(is_file($config)){
 }
 
 $update_git = FALSE;
-if(is_file(SOURCE.'/UPDATE_SVN_FLAG')){
+if(is_file(SOURCE.'/UPDATE_GIT_FLAG')){
 	$update_git = TRUE;
 }else{
 	if(is_dir(SOURCE.'/.git')){
@@ -50,7 +50,7 @@ if(is_file(SOURCE.'/UPDATE_SVN_FLAG')){
 
 if($update_git === TRUE){
 	$display = "\nÉcriture du témoin de mise à jour par subversion";
-	if(touch(SOURCE.'/UPDATE_SVN_FLAG')){
+	if(touch(SOURCE.'/UPDATE_GIT_FLAG')){
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
@@ -158,8 +158,8 @@ foreach($files as $file){
 	}
 }
 
-if(is_file(SOURCE.'/UPDATE_SVN_FLAG')){
-	unlink(SOURCE.'/UPDATE_SVN_FLAG');
+if(is_file(SOURCE.'/UPDATE_GIT_FLAG')){
+	unlink(SOURCE.'/UPDATE_GIT_FLAG');
 }
 
 echo "\n\033[0;32mLa mise à jour est terminée.\033[0m\n\n";
