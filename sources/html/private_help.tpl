@@ -7,6 +7,9 @@
 			<h3><a href="{$smarty.const.URL}/index.php/aide#administration_generale_et_courante" title="aller directement au contenu">Administration générale et courante</a></h3>
 			<ul>
 				<li><a href="{$smarty.const.URL}/index.php/aide#signaler_une_operation_exceptionnelle" title="aller directement au contenu">Signaler une opération exceptionnelle (maintenance, mise à jour d'une application, etc...)</a></li>
+				<ul>
+					<li><a href="{$smarty.const.URL}/index.php/aide#forcer_un_service_isou" title="aller directement au contenu">Forcer un service ISOU</a></li>
+				</ul>
 				<li><a href="{$smarty.const.URL}/index.php/aide#signaler_une_interruption_reguliere" title="aller directement au contenu">Signaler une interruption régulière (arrêt journalier d'une base de données, verrouillage d'une application, etc...)</a></li>
 				<li><a href="{$smarty.const.URL}/index.php/aide#signaler_une_fermeture_de_service" title="aller directement au contenu">Signaler une fermeture de service</a></li>
 				<li><a href="{$smarty.const.URL}/index.php/aide#annoncer_un_evenement_extraordinaire" title="aller directement au contenu">Annoncer un évènement extra-ordinaire, hors ISOU (ex : interruption des serveurs)</a></li>
@@ -22,12 +25,6 @@
 						<li><a href="{$smarty.const.URL}/index.php/aide#ajouter_un_service_monitoré_par_nagios" title="aller directement au contenu">Ajouter un service monitoré par Nagios</a></li>
 						<li><a href="{$smarty.const.URL}/index.php/aide#affecter_des_dependances" title="aller directement au contenu">Affecter des dépendances</a></li>
 					</ul>
-				</li>
-				<li><a href="{$smarty.const.URL}/index.php/aide#forcer_un_service_isou" title="aller directement au contenu">Forcer un service ISOU</a></li>
-				<li>
-					<a href="{$smarty.const.URL}/index.php/aide#gerer_les_adresses_de_contact" title="aller directement au contenu">Gérer les adresses de contact</a>
-					<li><a href="{$smarty.const.URL}/index.php/aide#ajouter_une_nouvelle_adresse_de_contact" title="aller directement au contenu">Ajouter une nouvelle adresse de contact</a></li>
-					<li><a href="{$smarty.const.URL}/index.php/aide#attribuer_une_adresse_de_contact" title="aller directement au contenu">Attribuer une adresse de contact à un service</a></li>
 				</li>
 				<li><a href="{$smarty.const.URL}/index.php/aide#gerer_les_categories" title="aller directement au contenu">Gérer les catégories</a></li>
 			</ul>
@@ -51,6 +48,12 @@
 			<li>Raison de la maintenance : Ce champs est facultatif. Il permet de renseigner l'utilisateur sur les raisons de la maintenance. Ce message ne doit pas être technique et compréhensible, plus ou moins, de tous.</li>
 		</ul>
 		<p>Lorsque vous avez appuyez sur le bouton "enregistrer", vous pouvez vérifier que votre évènement a bien été pris en compte, en vous rendant sur <a href="{$smarty.const.URL}/index.php/actualite" title="aller sur la page des actualités">les actualités</a>, <a href="{$smarty.const.URL}/index.php/liste" title="aller sur la page de vue en liste">la liste</a> ou <a href="{$smarty.const.URL}/index.php/calendrier" title="aller sur la page du calendrier">le calendrier</a>.</p>
+		<h4><a href="{$smarty.const.URL}/index.php/aide#sommaire" title="revenir au sommaire" name="forcer_un_service_isou">Forcer un service ISOU</a></h4>
+			<p>
+				Cette fonction permet à ISOU, lorsqu'un service Nagios est mal monitoré (ex: détection de problème, alors qu'il n'y en a pas, et inversement), d'ignorer ces remontées.<br />
+				Pour activer cette fonction, il faut choisir un statut dans le menu déroulant "Forcer l'état du service" lors de l'enregistrement d'un évènement non prévu. Un cadena apparaîtra devant le nom du service dans la liste des évènements non prévus.<br />
+				<!-- todo cron: N'oubliez pas de "déverrouiller" le service lorsque l'évènement est terminé. -->
+			</p>
 
 		<h3><a href="{$smarty.const.URL}/index.php/aide#sommaire" title="revenir au sommaire" name="signaler_une_interruption_reguliere">Signaler une interruption régulière</a></h3>
 		<p>
@@ -113,34 +116,6 @@
 					Cliquez sur le bouton vert, "Ajouter une dépendance". Sélectionnez dans la première liste déroulante, votre service ISOU crée précedemment (exemple: ENT). Dans le second menu déroulant, sélectionner votre service Nagios (exemple: WWW@ent.uhb.fr).<br />
 					Si la case "Appliquer les états paire à paire" est cochée, ISOU affectera automatiquement la dépendance 1-1 et 2-2 à votre service. C'est à dire, lorsque Nagios détectera que WWW@ent.uhb.fr à l'état 1, ISOU passera le service ENT à l'état 1. Idem pour l'état 2.
 				</p>
-		<h3><a href="{$smarty.const.URL}/index.php/aide#sommaire" title="revenir au sommaire" name="forcer_un_service_isou">Forcer un service ISOU</a></h3>
-			<p>
-				Cette fonction permet à ISOU, lorsqu'un service Nagios est mal monitoré (ex: détection de problème, alors qu'il n'y en a pas, et inversement), d'ignorer ces remontées.<br />
-				Pour activer cette fonction, rendez-vous sur la <a href="{$smarty.const.URL}/index.php/services?service=isou" title="aller sur la page des services ISOU">page des "services" ISOU</a>. Choisissez un service, et cliquez sur le bouton de modification, symbolisé par cette icône <img src="{$smarty.const.URL}/images/edit.png" alt="icône de modification" />.<br />
-				Un formulaire s'active. Attribuez un code d'état, comme indiqué selon la légende, cochez la case "forcer", puis faites "enregistrer".
-			</p>
-		<h3><a href="{$smarty.const.URL}/index.php/aide#sommaire" title="revenir au sommaire" name="gerer_les_adresses_de_contact">Gérer les adresses de contact</a></h3>
-			<h4><a href="{$smarty.const.URL}/index.php/aide#sommaire" title="revenir au sommaire" name="ajouter_une_nouvelle_adresse_de_contact">Ajouter une nouvelle adresse de contact</a></h4>
-				<p>
-					Pour cela rendez-vous sur la <a href="{$smarty.const.URL}/index.php/contacts" title="aller sur la page des contacts">page des "contacts"</a>.<br />
-					Cliquez sur le bouton vert, "Ajouter une nouvelle adresse de contact".
-				</p>
-				<p>Il y a 2 champs à remplir.</p>
-				<ul>
-					<li>Adresse mail : Saisir l'adresse de contact. Exemple : tic-sos@uhb.fr</li>
-					<li>Type d'usagers concernés : Si cette adresse n'est destinée qu'à un certain type d'utilisateur, il est important de le signaler.</li>
-				</ul>
-			<h4><a href="{$smarty.const.URL}/index.php/aide#sommaire" title="revenir au sommaire" name="attribuer_une_adresse_de_contact">Attribuer une adresse de contact à un service</a></h4>
-				<p>
-					Pour cela rendez-vous sur la <a href="{$smarty.const.URL}/index.php/contacts" title="aller sur la page des contacts">page des "contacts"</a>.<br />
-					Cliquez sur le bouton vert, "Attribuer une adresse de contact à un service".
-				</p>
-				<p>Il y a 3 champs à remplir.</p>
-				<ul>
-					<li>Adresse mail à utiliser : Sélectionner une adresse de contact. Exemple: tic-sos@uhb.fr.</li>
-					<li>Service concerné : Choisir un service dans la liste. Exemple: ENT.</li>
-					<li>Gestionnaire à contacter : Sélectionner le gestionnaire derrière l'adresse de contact utilisée</li>
-				</ul>
 		<h3><a href="{$smarty.const.URL}/index.php/aide#sommaire" title="revenir au sommaire" name="gerer_les_categories">Gérer les catégories</a></h3>
 			<p>
 				Pour cela rendez-vous sur la <a href="{$smarty.const.URL}/index.php/categories" title="aller sur la page des catégories">page des "catégories"</a>.<br />
