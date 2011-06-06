@@ -41,7 +41,7 @@
 <h3>{$countNagiosServices} Services Nagios gérés dans Isou</h3>
 <p class="header">
 	<label class="longbox">Nom informatique du service</label>
-	<label class="actionbox">Actions</label>
+	<label class="action actionbox">Actions</label>
 </p>
 
 <ul class="listing">
@@ -49,7 +49,7 @@
 	<li>
 		<p>
 			<span class="longbox {$service->css}">{$service->name}</span>
-			<span class="actionbox">
+			<span class="action actionbox">
 				<a href="{$smarty.const.URL}/index.php/services?service=nagios&amp;modify={$service->idService}#edit" title="modifier">
 					<img src="{$smarty.const.URL}/images/edit.png" alt="modifier" />
 				</a>

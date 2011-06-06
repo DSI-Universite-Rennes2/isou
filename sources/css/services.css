@@ -143,7 +143,11 @@ span.legend{
 	vertical-align: top;
 }
 
-.actionbox a{
+.action{
+	text-align: center;
+}
+
+.action a{
 	margin: 0em .3em;
 }
 
@@ -215,7 +219,6 @@ span.legend{
 
 .actionbox{
 	display: inline-block;
-	text-align: center;
 	width: 10%;
 }
 
