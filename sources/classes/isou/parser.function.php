@@ -155,7 +155,7 @@ function status_dat2db($file){
 
 	if(!empty($service_nagios) && strftime('%M', TIME) % 10 === 0){
 		// mail
-		mail(implode(',', $ADMIN_MAILS), "Alerte ISOU: services Nagios obsolètes", "Au moins un service Nagios utilisé dans ISOU n'y est plus présent :\n\n".$removed_services_nagios);
+		// mail(implode(',', $ADMIN_MAILS), "Alerte ISOU: services Nagios obsolètes", "Au moins un service Nagios utilisé dans ISOU n'y est plus présent :\n\n".$removed_services_nagios);
 	}
 
 	// close pdo connection
