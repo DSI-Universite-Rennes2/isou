@@ -54,7 +54,7 @@
 		{foreach item=service from=$category->services name=serv}
 
 		<tr{if !empty($service->css)} class="{$service->css}"{/if}>
-			<td headers="head-name-{$smarty.foreach.cat.index}">
+			<td id="service-{$service->idService}" headers="head-name-{$smarty.foreach.cat.index}">
 				{if count($service->parents) > 0}
 				{$service->nameForUsers}
 				<div class="parentsList">
@@ -69,6 +69,15 @@
 			</td>
 			<td headers="head-state-{$smarty.foreach.cat.index}">{$flags.{$service->state}->alt}</td>
 			<td headers="head-action-{$smarty.foreach.cat.index}">
+				{if $service->visible === "1"}
+				<a href="{$smarty.const.URL}/index.php/services?service=isou&amp;mask={$service->idService}#service-{$service->idService}" title="masquer">
+					<img src="{$smarty.const.URL}/images/page_user_dark.gif" alt="visible" />
+				</a>
+				{else}
+				<a href="{$smarty.const.URL}/index.php/services?service=isou&amp;show={$service->idService}#service-{$service->idService}" title="afficher">
+					<img src="{$smarty.const.URL}/images/page_user_light.gif" alt="caché" />
+				</a>
+				{/if}
 				<a href="{$smarty.const.URL}/index.php/services?service=isou&amp;modify={$service->idService}#edit" title="modifier">
 					<img src="{$smarty.const.URL}/images/edit.png" alt="modifier" />
 				</a>

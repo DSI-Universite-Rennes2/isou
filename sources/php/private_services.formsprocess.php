@@ -1,5 +1,27 @@
 <?php
 
+if(isset($_GET['mask'])){
+	$sql = "UPDATE services".
+		" SET visible = 0".
+		" WHERE idService = ?".
+		" AND name = 'Service final'";
+	$query = $db->prepare($sql);
+	if($query->execute(array($_GET['mask']))){
+		add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Service #'.$_GET['mask'].' a été masqué');
+	}
+}
+
+if(isset($_GET['show'])){
+	$sql = "UPDATE services".
+		" SET visible = 1".
+		" WHERE idService = ?".
+		" AND name = 'Service final'";
+	$query = $db->prepare($sql);
+	if($query->execute(array($_GET['mask']))){
+		add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Service #'.$_GET['mask'].' a été masqué');
+	}
+}
+
 if(isset($_POST['cancel'])){
 	// nothing to do...
 	unset($_POST['idService']);
@@ -169,7 +191,7 @@ if(isset($_POST['cancel'])){
 			if(!empty($_POST['nameForUsers']) && !empty($_POST['category'])){
 				// service ISOU
 				$sql = "UPDATE services".
-					" SET nameForUsers = ?, url = ?, comment = ?, enable = 1, visible = 1, idCategory = ?".
+					" SET nameForUsers = ?, url = ?, comment = ?, enable = 1, idCategory = ?".
 					" WHERE idService = ?";
 				$query = $db->prepare($sql);
 				if($query->execute(array($_POST['nameForUsers'],$_POST['url'],$comment,$_POST['category'],$_POST['idService']))){
