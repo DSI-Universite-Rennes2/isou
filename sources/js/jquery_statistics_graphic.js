@@ -3,7 +3,7 @@ $(document).ready(function(){
 	//$('table').visualize().appendTo('content').trigger('visualizeRefresh');
 
 	// créer un menu déroulant proposant des types de graphique
-	$("form p:last").before('<p><label class="label" for="typeGraphic">Type de graphique</label><select id="typeGraphic" name="typeGraphic"><option value="line">Courbe</option><option value="histogram">Histogramme</option><option value="pie">Camembert</option><option value="table">Tableau</option></select></p>');
+	$("form p:last").before('<p><label class="label" for="typeGraphic">Type de graphique</label><select id="typeGraphic" name="typeGraphic"><option value="histogram">Histogramme</option><option value="line">Courbe</option><option value="pie">Camembert</option><option value="table">Tableau</option></select></p>');
 
 	$("#service-fieldset br").remove();
 	var countCheckboxes = $("#service-fieldset > label").length;
