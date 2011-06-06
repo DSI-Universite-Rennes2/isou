@@ -49,7 +49,7 @@ if(is_file(SOURCE.'/UPDATE_GIT_FLAG')){
 }
 
 if($update_git === TRUE){
-	$display = "\nÉcriture du témoin de mise à jour par subversion";
+	$display = "\nÉcriture du témoin de mise à jour par git";
 	if(touch(SOURCE.'/UPDATE_GIT_FLAG')){
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n\n";
 	}else{
