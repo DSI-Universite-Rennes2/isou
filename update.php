@@ -172,6 +172,14 @@ if(VERSION !== '0.9.5'){
 }
 
 if($update_git === TRUE){
+	$display = "Commit local des changements";
+	if(shell_exec("cd '".SOURCE."' && git commit -a -m 'update du ".strftime('%c')."'")){
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+		echo "\033[0;31mÉchec du commit local. Merci de commiter manuellement les changements.\033[0m\n";
+	}
+
 	$xpi = preg_grep('#/xpi/#', $exp_shell);
 	if(count($xpi) > 0){
 		$xpi_fisou = preg_grep('#sources/xpi/fisou[\d\.]+\.xpi#', $exp_shell);
