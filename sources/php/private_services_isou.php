@@ -47,8 +47,6 @@ while($category = $categories->fetch()){
 $sql = "SELECT S.idService, S.name, S.nameForUsers, S.url, S.state, S.comment, S.readonly, S.visible, S.idCategory, C.name AS category".
 		" FROM services S, categories C".
 		" WHERE C.idCategory = S.idCategory".
-		" AND S.enable = 1".
-		" AND S.visible = 1".
 		" ORDER BY C.position, UPPER(S.nameForUsers)";
 $services = $db->query($sql);
 

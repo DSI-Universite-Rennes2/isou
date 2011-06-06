@@ -17,8 +17,8 @@ if(isset($_GET['show'])){
 		" WHERE idService = ?".
 		" AND name = 'Service final'";
 	$query = $db->prepare($sql);
-	if($query->execute(array($_GET['mask']))){
-		add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Service #'.$_GET['mask'].' a été masqué');
+	if($query->execute(array($_GET['show']))){
+		add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Service #'.$_GET['mask'].' est visible');
 	}
 }
 
