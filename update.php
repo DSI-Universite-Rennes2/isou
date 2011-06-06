@@ -98,7 +98,7 @@ if($update_git === TRUE){
 
 	$shell = shell_exec("cd '".SOURCE."' && git pull");
 	$exp_shell = explode("\n", $shell);
-	$conflicts = preg_grep('#^error#', $exp_shell);
+	$conflicts = preg_grep('#^(Aborting|CONFLICT)#', $exp_shell);
 	echo "\nSortie shell:\033[0;35m\n".$shell."\033[0m\n";
 	if(count($conflicts) > 0){
 		echo "\033[0;31mÉchec de la mise à jour. Merci de corriger les conflits, puis de relancer la mise à jour.\033[0m\n";
