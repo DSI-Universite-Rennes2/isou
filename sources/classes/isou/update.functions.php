@@ -97,7 +97,6 @@ function update_nagios_to_db(){
 		" WHERE state BETWEEN 1 AND 3".
 		" AND nameForUsers IS NOT NULL".
 		" AND enable = 1".
-		" AND visible = 1".
 		" AND idService NOT IN(SELECT EI.idService FROM events E, events_isou EI WHERE E.endDate IS NULL AND E.idEvent = EI.idEvent)";
 
 	if($dependence_records = $db->query($sql)){
