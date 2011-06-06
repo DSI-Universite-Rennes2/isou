@@ -164,7 +164,7 @@ if(is_file(SOURCE.'/UPDATE_GIT_FLAG')){
 
 // commit git en local
 if($update_git === TRUE){
-	$display = "Commit local des changements";
+	$display = "\nCommit local des changements";
 	if(shell_exec("cd '".SOURCE."' && git commit -a -m 'update du ".strftime('%c')."'")){
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 	}else{
