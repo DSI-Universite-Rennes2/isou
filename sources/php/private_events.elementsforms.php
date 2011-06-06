@@ -7,7 +7,7 @@
 	foreach($flags as $flag){
 		$optionForced[$flag->idState] = $flag->title;
 	}
-	$optionForced[0] = 'État par défaut';
+	$optionForced[5] = 'État par défaut';
 	$smarty->assign('optionForced', $optionForced);
 
 	/* * * * * * * * * *
@@ -29,7 +29,6 @@
 			" FROM services AS S".
 			" WHERE S.name = 'Service final'".
 			" AND S.enable = 1".
-			" AND S.visible = 1".
 			" ORDER BY UPPER(S.nameForUsers)";
 	$services = $db->query($sql);
 	$optionNameForUsers = array();

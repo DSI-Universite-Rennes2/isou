@@ -180,7 +180,7 @@ if(isset($_POST['insert'])){
 			if($isScheduled === 0){
 				if(isset($_POST['forced'])){
 					$forced = intval($_POST['forced']);
-					if($forced > 0){
+					if($forced >= 0 && $forced < 5){
 						$sql = "UPDATE services SET state=?, readonly=1 WHERE idService = ?";
 						$query = $db->prepare($sql);
 						if($query->execute(array($forced, $idService)) === FALSE){
@@ -348,7 +348,7 @@ if(isset($_POST['modify'])){
 			if($isScheduled === 0){
 				if(isset($_POST['forced'])){
 					$forced = intval($_POST['forced']);
-					if($forced > 0){
+					if($forced >= 0 && $forced < 5){
 						$sql = "UPDATE services SET state=?, readonly=1 WHERE idService = ?";
 						$query = $db->prepare($sql);
 						$updateMessage = $query->execute(array($forced, $idService));
