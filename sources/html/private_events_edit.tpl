@@ -14,7 +14,7 @@
 					{if $currentEdit->readonly == 1}
 					{html_options id=forced name=forced options=$optionForced selected=$smarty.post.forced|default:$currentEdit->state}
 					{else}
-					{html_options id=forced name=forced options=$optionForced selected=$smarty.post.forced|default:0}
+					{html_options id=forced name=forced options=$optionForced selected=$smarty.post.forced|default:5}
 					{/if}
 				</p>
 				{/if}
