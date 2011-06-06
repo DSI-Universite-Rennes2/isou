@@ -144,7 +144,7 @@ span.legend{
 }
 
 .actionbox a{
-	margin: 0em .5em;
+	margin: 0em .3em;
 }
 
 #forcedfield{
@@ -215,6 +215,7 @@ span.legend{
 
 .actionbox{
 	display: inline-block;
+	text-align: center;
 	width: 10%;
 }
 
