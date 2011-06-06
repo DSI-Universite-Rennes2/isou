@@ -3,12 +3,6 @@
 	$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/css/events.css" media="screen">'.
 			'<link rel="stylesheet" type="text/css" media="all" href="'.URL.'/css/private_events_calendar.css"  />';
 
-	/*$script = '<script type="text/javascript" src="'.URL.'/js/jscalendar-1.0/calendar.js"></script>
-				<script type="text/javascript" src="'.URL.'/js/jscalendar-1.0/lang/calendar-fr.js"></script>
-				<script type="text/javascript" src="'.URL.'/js/jscalendar-1.0/calendar-setup.js"></script>
-				<script type="text/javascript" src="'.URL.'/js/jscalendar-1.0.js"></script>
-				<script type="text/javascript" src="'.URL.'/js/jquery-1.3.2.js"></script>
-				<script type="text/javascript" src="'.URL.'/js/jquery_events.js"></script>';*/
 	$script = '<script type="text/javascript" src="'.URL.'/js/jquery-1.3.2.js"></script>'.
 				'<script type="text/javascript" src="'.URL.'/js/jquery.dynDateTime.min.js"></script>'.
 				'<script type="text/javascript" src="'.URL.'/js/jquery.dynDateTime-fr.min.js"></script>'.
@@ -78,7 +72,6 @@ if(count($_POST) > 0){
 			$sql .= " OR E.endDate IS NULL)".
 			" AND S.name = 'Service final'".
 			" AND S.enable = 1".
-			" AND S.visible = 1".
 			" AND EI.isScheduled = 0".
 			" ORDER BY E.beginDate DESC";
 	$events = $db->prepare($sql);
@@ -120,7 +113,6 @@ if(count($_POST) > 0){
 			" OR E.endDate IS NULL)".
 			" AND S.name = 'Service final'".
 			" AND S.enable = 1".
-			" AND S.visible = 1".
 			" AND EI.isScheduled = 1".
 			" ORDER BY E.beginDate DESC";
 
