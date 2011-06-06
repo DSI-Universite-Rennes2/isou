@@ -106,9 +106,18 @@ function status_dat2db($file){
 								add_log(LOG_FILE, 'ISOU', 'UPDATE', 'L\'évènement Nagios #'.$event_nagios[0].' n\'a pas été cloturé (SET endDate = '.TIME.' WHERE idEventNagios = '.$event_nagios[0].')');
 								$ins = false;
 							}
+							$upd_nagios->closeCursor();
 						}else{
 							$ins = false;
 						}
+					}
+
+					// dirty hack pour le problème :
+					// Fatal error: Uncaught exception 'PDOException' with message 'There is already an active transaction'
+					try{
+						$db->commit();
+					}catch(PDOException $e){
+					
 					}
 
 					if($current_state != '0' && $ins){
@@ -125,6 +134,7 @@ function status_dat2db($file){
 							if($query->execute(array($current_state, $service[0], $idEvent))){
 								$ins = TRUE;
 							}
+							$query->closeCursor();
 						}
 
 						if($ins === TRUE){
