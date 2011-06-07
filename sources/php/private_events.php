@@ -69,7 +69,7 @@ if(count($_POST) > 0){
 				$sql .= ")";
 				$param = array(TIMESTAMP_OF_72H_BEFORE_TODAY, TIMESTAMP_OF_LAST_CALENDAR_DAY, TIMESTAMP_OF_72H_BEFORE_TODAY, TIMESTAMP_OF_LAST_CALENDAR_DAY);
 			}
-			$sql .= " OR E.endDate IS NULL)".
+			$sql .= " OR E.endDate IS NULL OR S.readonly = 1)".
 			" AND S.name = 'Service final'".
 			" AND S.enable = 1".
 			" AND EI.isScheduled = 0".
