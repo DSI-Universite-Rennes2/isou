@@ -160,13 +160,15 @@ function strip_accents($str, $utf8 = true) {
  * 
  * 
  */
-function add_log($file, $user = 'ISOU', $type, $message){
-	$log = strftime('[%y-%m-%d %H:%M:%S]',TIME).' ['.$user.'] ['.$type.'] '.$message;
-	if($handle = fopen($file, "ab")){
-		fwrite($handle, $log."\n");
-	}else{
-		if(defined('SUPPORT_ISOU')){
-			mail(SUPPORT_ISOU, 'Impossible d\'écrire dans les logs d\'ISOU', utf8_decode($log));
+function add_log($file, $user = 'ISOU', $type, $message, $level = 1){
+	if(LEVEL >= $level){
+		$log = strftime('[%y-%m-%d %H:%M:%S]',TIME).' ['.$user.'] ['.$type.'] '.$message;
+		if($handle = fopen($file, "ab")){
+			fwrite($handle, $log."\n");
+		}else{
+			if(defined('SUPPORT_ISOU')){
+				mail(SUPPORT_ISOU, 'Impossible d\'écrire dans les logs d\'ISOU', utf8_decode($log));
+			}
 		}
 	}
 }
