@@ -1,4 +1,4 @@
-			<form id="form-edit" action="{$smarty.const.URL}/index.php/evenements" method="post">
+			<form id="form-edit" action="{$smarty.const.URL}/index.php/evenements{if isset($smarty.get.f)}?f=1{elseif isset($smarty.get.p)}?p=1{/if}#form-edit" method="post">
 			<fieldset>
 			<legend>Modifier un évènement</legend>
 				<p>
@@ -18,6 +18,7 @@
 					{/if}
 				</p>
 				{/if}
+
 				<p>
 					<label for="beginDateUpd" class="label">
 						Date de début
@@ -26,6 +27,7 @@
 					</label>
 					<input type="text" name="beginDate" id="beginDateUpd" title="Format : Jour/Mois/Annee H:M" maxlength="16" value="{$currentEdit->beginDate|date_format:'%d/%m/%Y %H:%M'}" />
 				</p>
+
 				<p>
 					<label for="endDateUpd" class="label">
 						Date de fin
@@ -34,6 +36,14 @@
 					</label>
 					<input type="text" name="endDate" id="endDateUpd" title="Format : Jour Mois Annee H:M" maxlength="16" value="{$currentEdit->endDate|date_format:'%d/%m/%Y %H:%M'}" />
 				</p>
+
+				{if isset($smarty.get.p)}
+				<p>
+					<span class="label">Périodicité <span class="info">(seulement si c'est une opération régulière)</span></span>
+					{html_radios name='period' options=$period selected={$smarty.post.period|default:$currentEdit->strperiod}}
+				</p>
+				{/if}
+
 				<p>
 					<label for="descriptionUpd" class="label">Raison de l'interruption</label>
 					<textarea id="description" name="descriptionUpd" cols="40" rows="6">{$smarty.post.descriptionUpd|default:$currentEdit->description}</textarea>

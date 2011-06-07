@@ -151,6 +151,11 @@ if(count($_POST) > 0){
 		if((isset($_GET['modify']) && $_GET['modify'] == $event->idEvent) ||
 			(isset($_POST['idEvent']) && $_POST['idEvent'] == $event->idEvent)){
 			$event->edit = TRUE;
+			if($event->period == '604800'){
+				$event->strperiod = 'weekly';
+			}else{
+				$event->strperiod = 'daily';
+			}
 			$currentEdit = $event;
 		}
 
