@@ -19,7 +19,7 @@
 				{* <!-- tous les jours --> *}
 				tous les jours de {$event->beginDate|date_format:"%H:%M"} à {$event->endDate|date_format:"%H:%M"}
 			{/if}
-				<a href="{$smarty.const.URL}/index.php/evenements?modify={$event->idEvent}#R{$smarty.foreach.i.index}" name="R{$smarty.foreach.i.index+1}" title="modifier"><img src="{$smarty.const.URL}/images/edit.png" alt="modifier" width="16px" height="16px" /></a>
+				<a href="{$smarty.const.URL}/index.php/evenements?modify={$event->idEvent}&p=1#R{$smarty.foreach.i.index}" name="R{$smarty.foreach.i.index+1}" title="modifier"><img src="{$smarty.const.URL}/images/edit.png" alt="modifier" width="16px" height="16px" /></a>
 				<a href="{$smarty.const.URL}/index.php/evenements?delete={$event->idEvent}" title="supprimer"><img src="{$smarty.const.URL}/images/drop.png" alt="supprimer" width="16px" height="16px" /></a>
 			</p>
 			{* <!-- description --> *}
