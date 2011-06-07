@@ -7,7 +7,7 @@
 	foreach($flags as $flag){
 		$optionForced[$flag->idState] = $flag->title;
 	}
-	$optionForced[5] = 'État par défaut';
+	$optionForced[-1] = 'État par défaut';
 	$smarty->assign('optionForced', $optionForced);
 
 	/* * * * * * * * * *

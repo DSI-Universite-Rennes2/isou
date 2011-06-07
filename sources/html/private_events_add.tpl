@@ -14,7 +14,7 @@
 			Forcer à l'état du service
 			<span class="info">(seulement si c'est une opération non-prévue)</span>
 		</label>
-		{html_options id=forced name=forced options=$optionForced selected=$smarty.post.forced|default:'0'}
+		{html_options id=forced name=forced options=$optionForced selected=$smarty.post.forced|default:'-1'}
 	</p>
 
 	<p>
