@@ -8,6 +8,7 @@ error_reporting(0);
 define('BASE', dirname(__FILE__));
 
 require BASE.'/install/functions.php';
+require BASE.'/version.php';
 
 $owner = trim(readline("\033[0;31mIMPORTANT : installez l'application avec votre utilisateur web (apache, www-data ou autre)\033[0m\nVoulez-vous continuer ? (y/n)\n"));
 if(strtolower($owner) === 'n'){
@@ -301,7 +302,7 @@ define('TOLERANCE', ".$TOLERANCE.");
 // tableau contenant le login des administrateurs d'ISOU
 \$ADMIN_USERS = ".$ADMIN_USERS.";
 
-// tableau contenant le login des administrateurs d'ISOU
+// tableau contenant le mail des administrateurs d'ISOU
 \$ADMIN_MAILS = ".$ADMIN_MAILS.";
 
 // nom du service, notamment utilisé dans l'onglet du navigateur
@@ -334,7 +335,7 @@ define('CAS_PORT', ".$CAS_PORT.");
  * * * * * * * * * * * * * * * * */
 
 // numero de version de l'application
-define('VERSION', '0.9.5');
+define('VERSION', '".CURRENT_VERSION."');
 
 // locale utilisée par l'application
 setlocale(LC_TIME, 'fr_FR.UTF8');
