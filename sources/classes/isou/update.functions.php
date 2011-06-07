@@ -228,6 +228,7 @@ function update_nagios_to_db(){
 								" FROM events E, events_isou EI, services S".
 								" WHERE S.idService = EI.idService".
 								" AND E.idEvent = EI.idEvent".
+								" AND S.readonly = 0".
 								" AND E.typeEvent = 0".
 								" AND E.endDate IS NULL".
 								" AND (".
