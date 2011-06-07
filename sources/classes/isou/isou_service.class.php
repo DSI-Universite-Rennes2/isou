@@ -222,40 +222,38 @@ class IsouService {
 
 		$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, D.description, EI.isScheduled".
 				" FROM events E, events_isou EI, events_description D".
-				" WHERE EI.idService = :0".
+				" WHERE EI.idService = ?".
 				" AND EI.idEventDescription = D.idEventDescription".
 				" AND EI.idEvent = E.idEvent".
 				" AND E.typeEvent = 0".
+				" AND (".
+				" (".
 				// n'afficher que les interruptions régulières si elles ont lieu en ce moment
-				" AND ((EI.isScheduled = 2 AND E.beginDate <= :1 AND E.endDate >= :2)".
-				" OR (EI.isScheduled < 2".
-				" AND (E.endDate IS NULL OR".
-				" ((E.beginDate BETWEEN :3 AND :4".
-				" OR E.endDate BETWEEN :5 AND :6)".
-				" AND (E.endDate-E.beginDate > :7)".
-				" )))) ORDER BY E.beginDate DESC".
-				" LIMIT :8";
-
-		$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, D.description, EI.isScheduled".
-				" FROM events E, events_isou EI, events_description D".
-				" WHERE EI.idService = ".$this->id.
-				" AND EI.idEventDescription = D.idEventDescription".
+				// sauf si il y a un autre type évènement en cours
+				" EI.isScheduled = 2 AND E.beginDate <= ".TIME." AND E.endDate >= ".TIME.
+				" AND (SELECT count(*) FROM events E, events_isou EI".
+				" WHERE EI.idService = ?".
 				" AND EI.idEvent = E.idEvent".
-				" AND E.typeEvent = 0".
-				// n'afficher que les interruptions régulières si elles ont lieu en ce moment
-				" AND ((EI.isScheduled = 2 AND E.beginDate <= ".TIME." AND E.endDate >= ".TIME.")".
-				" OR (EI.isScheduled < 2".
+				" AND EI.isScheduled < 2".
 				" AND (E.endDate IS NULL OR".
-				" ((E.beginDate BETWEEN ".$beginDate." AND ".$endDate.
-				" OR E.endDate BETWEEN ".$beginDate." AND ".$endDate.")".
+				" (E.beginDate <= ".TIME." AND E.endDate >= ".TIME."))) = 0".
+				// fin_
+				" ) OR (".
+				// toutes les interruptions non régulières passées, en cours, à venir (dans la limite de $beginDate et $endDate)
+				" EI.isScheduled < 2".
+				" AND (E.endDate IS NULL OR".
+				" ((E.beginDate BETWEEN ? AND ?".
+				" OR E.endDate BETWEEN ? AND ?)".
 				" AND (E.endDate-E.beginDate > ".$tolerance.")".
-				" )))) ORDER BY E.beginDate DESC".
-				" LIMIT ".$limit;
-
+				" ))".
+				// fin_
+				" )".
+				" ) ORDER BY E.beginDate DESC".
+				" LIMIT ?";
 		$event_records = $db->prepare($sql);
 		$events = array();
 		// if($event_records->execute(array($this->id, TIME, TIME, $beginDate, $endDate, $beginDate, $endDate, $tolerance, $limit))){
-		if($event_records->execute(array())){
+		if($event_records->execute(array($this->id, $this->id, $beginDate, $endDate, $beginDate, $endDate, $limit))){
 			while($event = $event_records->fetch(PDO::FETCH_OBJ)){
 				$event->serviceName = $this->nameForUsers;
 				$event->state = $this->state;
