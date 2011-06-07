@@ -283,7 +283,7 @@ function update_nagios_to_db(){
 						$query = $db->prepare($sql);
 						$query->execute(array($event->period, TIME, $event->idEvent));
 					}
-					$cntUpd+;
+					$cntUpd++;
 				}
 			}else{
 				add_log(LOG_FILE, 'ISOU', 'update', 'La mise à jour des dates des interruptions régulières n\'a pas pu être effectuée pour l\évènement #'.$event->idEvent);
