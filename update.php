@@ -8,7 +8,7 @@ error_reporting(0);
 define('SOURCE', dirname(__FILE__));
 
 require SOURCE.'/install/functions.php';
-require BASE.'/version.php';
+require SOURCE.'/version.php';
 
 $owner = trim(readline("\033[0;31mIMPORTANT : mettez à jour l'application avec votre utilisateur web (apache, www-data ou autre)\033[0m\nVoulez-vous continuer ? (y/n)\n"));
 if(strtolower($owner) === 'n'){
