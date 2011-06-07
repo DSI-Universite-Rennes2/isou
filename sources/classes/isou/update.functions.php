@@ -265,6 +265,7 @@ function update_nagios_to_db(){
 	// change le temps de la prochaine interruption régulière
 	$sql = "SELECT idEvent, period FROM events_isou WHERE isScheduled = 2";
 	$events = $db->prepare($sql);
+	$cntUpd = 0;
 	if($events->execute()){
 		while($event = $events->fetch(PDO::FETCH_OBJ)){
 			$sql = "UPDATE events".
@@ -274,15 +275,23 @@ function update_nagios_to_db(){
 					" AND typeEvent = 0";
 			$query = $db->prepare($sql);
 
-			if($query->execute(array($event->period, TIME, $event->idEvent))){
+			if(!empty($event->period) && $query->execute(array($event->period, TIME, $event->idEvent))){
 				if($query->rowCount() > 0){
-					add_log(LOG_FILE, 'ISOU', 'update', 'Nombre de lignes modifiées (interruption régulière) : '.$query->rowCount());
+					while($query->rowCount() > 0){
+						$query->closeCursor();
+						$query = $db->prepare($sql);
+						$query->execute(array($event->period, TIME, $event->idEvent));
+					}
+					$cntUpd+;
 				}
 			}else{
-				add_log(LOG_FILE, 'ISOU', 'update', 'La mise à jour des dates des interruptions régulières n\'a pas pu être effectuée');
+				add_log(LOG_FILE, 'ISOU', 'update', 'La mise à jour des dates des interruptions régulières n\'a pas pu être effectuée pour l\évènement #'.$event->idEvent);
 			}
 		}
 		$query->closeCursor();
+		if($cntUpd > 0){
+			add_log(LOG_FILE, 'ISOU', 'update', 'Nombre de lignes modifiées (interruption régulière) : '.$cntUpd);
+		}
 	}
 
 	// change le statut des services dont une plannification de fermeture a été prévue
