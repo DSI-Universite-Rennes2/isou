@@ -3,6 +3,19 @@
 
 	<h2>Liste des interruptions qui ont eu lieu depuis lundi dernier et qui auront lieu au plus tard dans une trentaine de jours.</h2>
 
+	<div id="events-quick-access">
+	<p>Accès rapide :</p>
+	<ul>
+		<li><a href="#form-add-event">ajouter un évènement</a></li>
+		<li><a href="#form-add-info">ajouter un message informatif</a></li>
+		<li><a href="#U0">accéder aux interruptions non prévues</a></li>
+		<li><a href="#S0">accéder aux interruptions prévues</a></li>
+		<li><a href="#R0">accéder aux interruptions régulières</a></li>
+		<li><a href="#C0">accéder aux services fermés</a></li>
+		<li><a href="#M0">accéder aux messages informatifs</a></li>
+	</ul>
+	</div>
+
 	{if !isset($smarty.get.modify) || !isset($smarty.get.delete)}
 		{include file="private_events_add.tpl"}
 		{include file="private_events_add_messages.tpl"}

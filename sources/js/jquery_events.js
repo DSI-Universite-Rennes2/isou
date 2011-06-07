@@ -179,8 +179,8 @@ $(document).ready(function(){
 	// supprimer les ? d'aide
 	$(".help").remove();
 
-	// supprimer les ancres de remonter vers le formulaire
-	$(".quickaccess-form").remove();
+	// supprimer la liste des ancres
+	$("#events-quick-access").remove();
 
 	// modifier l'action des boutons "cancel", sauf sur #form-edit
 	$("#form-add-event input[name=cancel], #form-add-info input[name=cancel]").click(function(){
