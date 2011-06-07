@@ -4,10 +4,10 @@
 	 *  Génération du select form "forced"
 	 * * * * * * * */
 	$optionForced = array();
+	$optionForced[-1] = 'État par défaut';
 	foreach($flags as $flag){
 		$optionForced[$flag->idState] = $flag->title;
 	}
-	$optionForced[-1] = 'État par défaut';
 	$smarty->assign('optionForced', $optionForced);
 
 	/* * * * * * * * * *
