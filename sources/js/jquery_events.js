@@ -257,11 +257,16 @@ $(document).ready(function(){
 							"</p>"+
 							"<fieldset>"+
 							"<legend>Trier par type d'interruption</legend>"+
-							"<input type=\"checkbox\" name=\"Cb1\" id=\"U\" checked=\"checked\"><label for=\"U\">Interruptions non prévues</label>"+
-							"<input type=\"checkbox\" name=\"Cb2\" id=\"S\" checked=\"checked\"><label for=\"S\">Interruptions prévues</label>"+
-							"<input type=\"checkbox\" name=\"Cb3\" id=\"R\" checked=\"checked\"><label for=\"R\">Interruptions régulières</label>"+
-							"<input type=\"checkbox\" name=\"Cb4\" id=\"C\" checked=\"checked\"><label for=\"C\">Services fermés</label>"+
-							"<input type=\"checkbox\" name=\"Cb5\" id=\"M\" checked=\"checked\"><label for=\"M\">Messages informatifs</label>"+
+							"<input type=\"checkbox\" name=\"Cb1\" id=\"U\" checked=\"checked\"><label for=\"U\">"+
+								"<a href=\"#U0\" title=\"accéder à la liste des interruptions non prévues\">Interruptions non prévues</a></label>"+
+							"<input type=\"checkbox\" name=\"Cb2\" id=\"S\" checked=\"checked\"><label for=\"S\">"+
+								"<a href=\"#S0\" title=\"accéder à la liste des interruptions prévues\">Interruptions prévues</label>"+
+							"<input type=\"checkbox\" name=\"Cb3\" id=\"R\" checked=\"checked\"><label for=\"R\">"+
+								"<a href=\"#R0\" title=\"accéder à la liste des interruptions régulières\">Interruptions régulières</label>"+
+							"<input type=\"checkbox\" name=\"Cb4\" id=\"C\" checked=\"checked\"><label for=\"C\">"+
+								"<a href=\"#C0\" title=\"accéder à la liste des services fermés\">Services fermés</label>"+
+							"<input type=\"checkbox\" name=\"Cb5\" id=\"M\" checked=\"checked\"><label for=\"M\">"+
+								"<a href=\"#M0\" title=\"accéder à la liste des messages informatifs\">Messages informatifs</label>"+
 							"</fieldset>"+
 							"</form>"));
 
