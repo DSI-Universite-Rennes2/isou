@@ -19,7 +19,7 @@ function cp($source, $destination){
 
 	$cp = TRUE;
 	while(($file = readdir($dir)) !== FALSE){
-		if($file != '.' && $file != '..' && $file != '.svn'){
+		if($file != '.' && $file != '..' && $file != '.svn' && $file != '.git'){
 			if(is_dir($source.'/'.$file)){
 				$cp = cp($source.'/'.$file, $destination.'/'.$file);
 			}else{
