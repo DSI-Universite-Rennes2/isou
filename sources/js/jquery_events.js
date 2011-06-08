@@ -325,7 +325,7 @@ $(document).ready(function(){
 		showForm(false, 'delete');
 	}else{
 		if(window.location.search.indexOf("modify") != -1){
-			window.location.hash = "";
+			window.location.hash = "#form-edit";
 			showForm(false, "modify");
 		}
 	}
