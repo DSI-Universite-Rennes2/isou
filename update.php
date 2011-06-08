@@ -183,7 +183,7 @@ if(VERSION !== CURRENT_VERSION){
 	file_put_contents($config, $cfg);
 }
 
-if(is_file(SOURCE.'/version_updates.php'){
+if(is_file(SOURCE.'/version_updates.php')){
 	require SOURCE.'/version_updates.php';
 }
 
