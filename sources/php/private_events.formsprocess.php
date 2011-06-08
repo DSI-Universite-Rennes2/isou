@@ -241,7 +241,15 @@ if(isset($_POST['delete']) && isset($idDelEvent)){
 					" WHERE idEvent = ?";
 			$query = $db->prepare($sql);
 			if($query->execute(array($idDelEvent))){
-				$commit = TRUE;
+				if(isset($_POST['message']){
+					$commit = TRUE;
+				}else{
+					$sql = "UPDATE services SET readonly=0 WHERE idService=(SELECT idService FROM events_isou WHERE idEvent = ?)";
+					$query = $db->prepare($sql);
+					if($query->execute(array($idDelEvent))){
+						$commit = TRUE;
+					}
+				}
 			}
 		}
 
