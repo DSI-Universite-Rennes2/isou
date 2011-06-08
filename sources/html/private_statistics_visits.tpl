@@ -43,7 +43,7 @@
 {if count($traffic) > 0}
 <table id="table-weekly">
 	<tr>
-	<th></th>
+	<td></td>
 	{foreach from=$weeks item=week}
 		<th>{$week|date_format:'%W %Y'}</th>
 	{/foreach}
@@ -67,7 +67,7 @@
 {if count($browsersTraffic) > 0}
 <table id="table-browsers">
 	<tr>
-	<th></th>
+	<td></td>
 	{foreach from=$months item=month}
 		<th>{$month}</th>
 	{/foreach}
@@ -90,7 +90,7 @@
 {if count($osTraffic) > 0}
 <table id="table-os">
 	<tr>
-	<th></th>
+	<td></td>
 	{foreach from=$months item=month}
 		<th>{$month}</th>
 	{/foreach}
