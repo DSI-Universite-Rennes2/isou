@@ -8,7 +8,7 @@
 				{if isset($smarty.get.f)}
 				<p id="pedit-forced">
 					<label for="forced" class="label">
-						Forcer à l'état du service
+						Forcer l'état du service
 						<span class="info">(seulement si c'est une opération non-prévue)</span>
 					</label>
 					{if $currentEdit->readonly == 1}

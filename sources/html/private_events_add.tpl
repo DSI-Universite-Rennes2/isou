@@ -11,7 +11,7 @@
 
 	<p id="p-forced">
 		<label for="forced" class="label">
-			Forcer à l'état du service
+			Forcer l'état du service
 			<span class="info">(seulement si c'est une opération non-prévue)</span>
 		</label>
 		{html_options id=forced name=forced options=$optionForced selected=$smarty.post.forced|default:'-1'}
