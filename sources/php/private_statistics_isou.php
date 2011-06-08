@@ -3,6 +3,7 @@
 	// Stats Visits
 	$sql = "SELECT ip, count(*) AS total".
 		" FROM statistics".
+		" WHERE userAgent IS NULL".
 		" GROUP BY ip".
 		" ORDER BY ip";
 	$visits = new stdClass();
@@ -108,6 +109,7 @@ if(is_file(substr(DB_STAT_PATH, 7))){
 
 	$sql = "SELECT weeks, ip, SUM(numOf) as count".
 			" FROM visits".
+			" WHERE userAgent IS NULL".
 			" GROUP BY weeks, ip".
 			" ORDER BY weeks";
 	if($query = $dbVisits->query($sql)){

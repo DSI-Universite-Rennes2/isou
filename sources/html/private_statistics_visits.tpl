@@ -1,5 +1,5 @@
 <h1>statistiques des visites sur Isou</h1>
-<ul>
+<ul id="statistics-menu">
 	<li><a href="#daily">statistiques de la semaine courante</a></li>
 	<li><a href="#weekly">statistiques du traffic hebdomadaire</a></li>
 	<li><a href="#monthly">statistiques mensuelles</a></li>
@@ -9,7 +9,7 @@
 
 {if isset($visits)}
 
-<h3>Visites</h3>
+<h3>Visites (hors bots et autres)</h3>
 <ul>
 	<li>Visites externes : {$visits->externe}</li>
 	<li>Visites UHB : {$visits->interne}</li>
@@ -45,10 +45,10 @@
 <p>Aucune visite pour le moment.</p>
 {/if}
 
-<p><a title="Retourner au menu de la page" href="#menu"><img alt="remonter" src="{$smarty.const.URL}/images/page_up.gif"></a></p>
+<p><a title="Retourner au menu de la page" href="#menu"><img alt="remonter" src="{$smarty.const.URL}/images/page_up.gif">Haut de page</a></p>
 
 {* <!-- Traffic hebdomadaire --> *}
-<h2 id="weekly">Traffic hebdomadaire</h2>
+<h2 id="weekly">Traffic hebdomadaire (hors bots et autres)</h2>
 {if count($traffic) > 0}
 <table id="table-weekly">
 	<tr>
@@ -71,7 +71,7 @@
 <p>Aucune donnée disponible.</p>
 {/if}
 
-<p><a title="Retourner au menu de la page" href="#menu"><img alt="remonter" src="{$smarty.const.URL}/images/page_up.gif"></a></p>
+<p><a title="Retourner au menu de la page" href="#menu"><img alt="remonter" src="{$smarty.const.URL}/images/page_up.gif">Haut de page</a></p>
 
 <h2 id="monthly">Traffic mensuel</h2>
 {* <!-- Traffic mensuel par navigateurs --> *}
@@ -120,5 +120,5 @@
 <p>Aucune donnée disponible.</p>
 {/if}
 
-<p><a title="Retourner au menu de la page" href="#menu"><img alt="remonter" src="{$smarty.const.URL}/images/page_up.gif"></a></p>
+<p><a title="Retourner au menu de la page" href="#menu"><img alt="remonter" src="{$smarty.const.URL}/images/page_up.gif">Haut de page</a></p>
 
