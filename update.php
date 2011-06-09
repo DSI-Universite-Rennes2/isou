@@ -97,6 +97,11 @@ if($update_git === TRUE){
 		}
 	}
 
+	if(is_file(SOURCE.'/sources/cron/LOCK_CRON')){
+		// éventuellement, si le LOCK_CRON est définit, ne pas le recopier !
+		unlink(SOURCE.'/sources/cron/LOCK_CRON');
+	}
+
 	$shell = shell_exec("cd '".SOURCE."' && git pull");
 	$exp_shell = explode("\n", $shell);
 	$conflicts = preg_grep('#^(Aborting|CONFLICT)#', $exp_shell);
