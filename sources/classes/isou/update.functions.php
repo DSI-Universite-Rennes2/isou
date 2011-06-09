@@ -54,21 +54,19 @@ function update_nagios_to_db(){
 			$boucle++;
 			$cnt = $count[0][0];
 			// recherche des dépendances, et modifie les états fils en conséquence
-			$sql = "SELECT idService, state".
+			$sql = "SELECT idService, state, readonly".
 					" FROM services".
 					" WHERE state BETWEEN 1 AND 3";
 			$array = array();
 			if($dependence_records = $db->query($sql)){
-				$dependence = $dependence_records->fetchAll();
+				$dependences = $dependence_records->fetchAll(PDO::FETCH_OBJ);
 
-				$d = 0;
-				while(isset($dependence[$d][0])){
-					$array = make_dependencies($dependence[$d][0],$dependence[$d][1], $array, $db);
+				foreach($dependences as $parent){
+					$array = make_dependencies($parent, $array, $db);
 					$array = array_unique($array);
-					$d++;
 				}
 			}else{
-				add_log(LOG_FILE, 'ISOU', 'update', 'Les dépendances du service '.$dependence[$d][0].' n\'ont pas pu être mises à jour');
+				add_log(LOG_FILE, 'ISOU', 'update', 'Les dépendances n\'ont pas pu être mises à jour (1)');
 			}
 
 			if($queryCount = $db->query($sql_count)){
@@ -80,7 +78,7 @@ function update_nagios_to_db(){
 
 		}
 	}else{
-		add_log(LOG_FILE, 'ISOU', 'update', 'Les dépendances n\'ont pas pu être mises à jour');
+		add_log(LOG_FILE, 'ISOU', 'update', 'Les dépendances n\'ont pas pu être mises à jour (2)');
 	}
 
 	if(isset($array)){
@@ -346,37 +344,38 @@ function update_nagios_to_db(){
 
 // fonction recursive qui retourne les messages automatiques liés aux dépendances
 // met à jour l'état du service à l'instant T
-function make_dependencies($idParent,$stateParent,$array,$db){
+function make_dependencies($parent,$array,$db){
+	$sql = "SELECT S.idService, D.newStateForChild as state, D.message, S.readonly".
+			" FROM dependencies D, services S".
+			" WHERE D.idServiceParent = ?".
+			" AND D.stateOfParent = ?".
+			" AND S.idService = D.idService";
 
-	$sql = "SELECT idService, newStateForChild, message".
-	" FROM dependencies".
-	" WHERE idServiceParent = ".$idParent.
-	" AND stateOfParent = ".$stateParent;
+	$depend_records = $db->prepare($sql);
 
-	if($depend_records = $db->query($sql)){
-		//SQLITE_NUM
-		$depend = $depend_records->fetchAll();
-		$d = 0;
-		while(isset($depend[$d][0])){
+	if($depend_records->execute(array($parent->idService, $parent->state))){
+		$depends = $depend_records->fetchAll(PDO::FETCH_OBJ);
+		foreach($depends as $child){
 			$sql = "UPDATE services".
-					" SET state = ".$depend[$d][1].
-					" WHERE idService = ".$depend[$d][0].
-					" AND state < ".$depend[$d][1].
+					" SET state = ".$child->state.
+					" WHERE idService = ".$child->idService.
+					" AND state < ".$child->state.
 					" AND readonly = 0";
 			if($db->query($sql)){
-				if(!isset($array[$depend[$d][0]])){
-					$array[$depend[$d][0]] = array();
+				if(!isset($array[$child->idService])){
+					$array[$child->idService] = array();
 				}
 
-				if(!empty($depend[$d][2]) && !in_array($depend[$d][2], $array[$depend[$d][0]])){
-					$array[$depend[$d][0]][] = $depend[$d][2];
+				if(!empty($child->message) && !in_array($child->message, $array[$child->idService])){
+					$array[$child->idService][] = $child->message;
 				}
 
-				$array = make_dependencies($depend[$d][0], $depend[$d][1], $array, $db);
+				if($child->readonly == '0'){
+					$array = make_dependencies($child, $array, $db);
+				}
 			}else{
 				add_log(LOG_FILE, 'ISOU', 'error', 'L\'état du service #'.$depend[$d][0].' n\'a pas pu être mis à jour (boucle dépendance)');
 			}
-			$d++;
 		}
 	}else{
 		add_log(LOG_FILE, 'ISOU', 'error', 'Les dépendances du service #'.$idParent.' n\'ont pas pu être calculées');
