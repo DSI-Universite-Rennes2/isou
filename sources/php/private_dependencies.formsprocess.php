@@ -89,7 +89,7 @@ if(isset($_GET['delete'])){
 	if($_GET['delete']>0){
 		$update = '<div id="update">';
 		$update .= '<p>Voulez-vous vraiment effacer la dépendance #'.$_GET['delete'].' ?</p>';
-		$update .= '<form action="'.URL.'/index.php/dependances" method="post">';
+		$update .= '<form action="'.URL.'/index.php/dependances#'.$_GET['S'].'" method="post">';
 		$update .= '<p><input type="submit" name="delete" value="Oui"> <input type="submit" value="Non">';
 		$update .= '<input class="hidden" type="hidden" name="idDelDependence" value="'.$_GET['delete'].'"></p>';
 		$update .= '</form>';
