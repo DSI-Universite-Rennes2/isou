@@ -73,7 +73,8 @@ if(count($_POST) > 0){
 			" AND S.name = 'Service final'".
 			" AND S.enable = 1".
 			" AND EI.isScheduled = 0".
-			" ORDER BY E.beginDate DESC";
+			" ORDER BY E.beginDate DESC".
+			" LIMIT 0, 50";
 	$events = $db->prepare($sql);
 	$events->execute($param);
 	$unscheduled = array();
