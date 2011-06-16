@@ -355,7 +355,12 @@ if(isset($_POST['modify'])){
 
 			if($isScheduled === 0){
 				if(isset($_POST['forced'])){
-					$forced = intval($_POST['forced']);
+					if($endDate !== NULL && $endDate <= TIME){
+						// supprimer le lock, si la date de fin est inférieure à la date actuelle
+						$forced = -1;
+					}else{
+						$forced = intval($_POST['forced']);
+					}
 					if($forced >= 0 && $forced < 5){
 						$sql = "UPDATE services SET state=?, readonly=1 WHERE idService = ?";
 						$query = $db->prepare($sql);
