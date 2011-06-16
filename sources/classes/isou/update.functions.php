@@ -37,6 +37,28 @@ function update_nagios_to_db(){
 		add_log(LOG_FILE, 'ISOU', 'update', 'Les services finaux n\'ont pas pu être réinitialisés à l\'état 0');
 	}
 
+	// supprime le "lock" si une interruption non prévue est terminée
+	$sql = "UPDATE services".
+			" SET readonly = 0".
+			" WHERE readonly = 1".
+			" AND idService NOT IN (SELECT s.idService".
+									" FROM events e, events_isou ei, services s".
+									" WHERE readonly = 1".
+									" AND ei.idService = s.idService".
+									" AND e.idEvent = ei.idEvent".
+									" AND ((e.beginDate < ".TIME." AND e.endDate > ".TIME.") OR e.endDate is null)".
+									")";
+	$query = $db->prepare($sql);
+	if($query->execute(array())){
+		if($query->rowCount() > 0){
+			add_log(LOG_FILE, 'ISOU', 'update', 'Nombre de lignes modifiées (réactivation de services) : '.$query->rowCount());
+		}
+	}else{
+		add_log(LOG_FILE, 'ISOU', 'update', 'La réactivation des services revenus à l\'état de marche n\'a pas pu être effectuée');
+	}
+	$query->closeCursor();
+
+
 	/* * * * * * * * * * * * * * * * * * *
 	 * Fonction récursive pour gérer les dépendances
 	 * * * * * * * * * * * * * * * * * * */
@@ -195,27 +217,6 @@ function update_nagios_to_db(){
 	if($event_records = $db->query($sql)){
 		$event_record = $event_records->fetch();
 */
-
-	// supprime le "lock" si une interruption non prévue est terminée
-	$sql = "UPDATE services".
-			" SET state = 0, readonly = 0".
-			" WHERE readonly=1".
-			" AND idService NOT IN (SELECT s.idService".
-									" FROM events e, events_isou ei, services s".
-									" WHERE readonly = 1".
-									" AND ei.idService = s.idService".
-									" AND e.idEvent = ei.idEvent".
-									" AND ((e.beginDate < ".TIME." AND e.endDate > ".TIME.") OR e.endDate is null)".
-									")";
-	$query = $db->prepare($sql);
-	if($query->execute(array())){
-		if($query->rowCount() > 0){
-			add_log(LOG_FILE, 'ISOU', 'update', 'Nombre de lignes modifiées (réactivation de services) : '.$query->rowCount());
-		}
-	}else{
-		add_log(LOG_FILE, 'ISOU', 'update', 'La réactivation des services revenus à l\'état de marche n\'a pas pu être effectuée');
-	}
-	$query->closeCursor();
 
 
 	// ajoute une date de réactivation d'un service interrompu involontairement si leur état est à 0
