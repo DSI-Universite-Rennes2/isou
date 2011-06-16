@@ -183,7 +183,7 @@ $(document).ready(function(){
 	$("#events-quick-access").remove();
 
 	// ajoute un bouton 'fermer' sur les formulaires
-	$("#form-add-event, #form-add-info").prepend('<p style="text-align:right;"><a class="close">Fermer</a></p>');
+	$("#form-add-event, #form-add-info").prepend('<p style="text-align:right;"><a class="close" href="#">Fermer</a></p>');
 
 	// modifier l'action des boutons "cancel", sauf sur #form-edit
 	$("#form-add-event input[name=cancel], #form-add-info input[name=cancel], .close").click(function(){
