@@ -182,8 +182,11 @@ $(document).ready(function(){
 	// supprimer la liste des ancres
 	$("#events-quick-access").remove();
 
+	// ajoute un bouton 'fermer' sur les formulaires
+	$("#form-add-event, #form-add-info").prepend('<p style="text-align:right;"><a class="close">Fermer</a></p>');
+
 	// modifier l'action des boutons "cancel", sauf sur #form-edit
-	$("#form-add-event input[name=cancel], #form-add-info input[name=cancel]").click(function(){
+	$("#form-add-event input[name=cancel], #form-add-info input[name=cancel], .close").click(function(){
 		closeForm();
 		return false;
 	});
