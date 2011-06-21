@@ -14,6 +14,7 @@
 	</header>
 	<nav>
 		<ul>
+		<li><a href="#fisou050">Fisou 0.5.0</a></li>
 		<li><a href="#fisou042">Fisou 0.4.2</a></li>
 		<li><a href="#fisou041">Fisou 0.4.1</a></li>
 		<li><a href="#fisou04">Fisou 0.4</a></li>
@@ -22,6 +23,16 @@
 		<li><a href="#fisou01">Fisou 0.1beta</a></li>
 		</ul>
 	</nav>
+	<section>
+		<a name="fisou050"></a>
+		<h1>Fisou 0.5.0</h1>
+		<p>Date de sortie : 20 juin 2011</p>
+		<p>Télécharger : <a href="fisou0.5.0.xpi" hash="sha1:<?php echo sha1_file("fisou0.5.0.xpi");?>" onclick="return install(event);">Fisou0.5.0.xpi</a></p>
+		<p>Modifications :</p>
+		<ul>
+		<li>ajout du support pour Firefox 5</li>
+		</ul>
+	</section>
 	<section>
 		<a name="fisou042"></a>
 		<h1>Fisou 0.4.2</h1>
