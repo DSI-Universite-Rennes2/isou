@@ -9,6 +9,8 @@ $(document).ready(function(){
 	$("#legend").click(function(){
 		$(this).css("display","none");
 	});
+	$("#legend").prepend('<p style="text-align:right;font-size:0.7em;">'+
+					'<a href="#" style="background-image:url(\'../images/drop.png\');background-repeat:no-repeat;background-position: center right;padding-right: 2em;">Fermer</a></p>');
 
 	$(".alert li").each(function(){
 		if($(this).children("ul:not(.reason)").is("ul")){
