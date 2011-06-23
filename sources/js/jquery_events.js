@@ -22,7 +22,7 @@ function changeOperation(){
 		$("#p-forced").css("display","none");
 		$("#description").parent().css("display","block");
 		$("#beginDate").prev().text("Date de la prochaine fermeture");
-		$("#endDate").prev().text("Date de fin de la prochaine fermeture (optionnel)");
+		$("#endDate").prev().text("Date de réouverture (optionnel)");
 	}else if(operationId == 0){
 		$("#p-period").css("display","none");
 		$("#p-forced").css("display","block");

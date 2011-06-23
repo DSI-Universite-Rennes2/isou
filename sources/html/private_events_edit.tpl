@@ -30,7 +30,7 @@
 
 				<p>
 					<label for="endDateUpd" class="label">
-						Date de fin
+						Date de fin ou de réouverture
 						<span class="required" title="champs obligatoire">*</span>
 						<a href="#formatDate3" class="help" title="lire l'aide pour le champs date de début">?</a>
 					</label>
