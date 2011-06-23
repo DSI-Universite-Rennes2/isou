@@ -26,14 +26,6 @@ th{
 	text-align: center;
 }
 
-.th-date{
-	width: 10%;
-}
-
-.th-extand{
-	width: 20%;
-}
-
 .tr-category{
 	background-color:#d6e1Fe;
 	text-align: left;
@@ -55,15 +47,62 @@ th{
 	background-color: #FFFFE0;
 }
 
-/*.regular{
-	margin: 0em;
+/* Service */
+#lth1{
+	width: 24%;
 }
 
-.regular li{
-	margin: 0em;
-	list-style-type: none;
+/* État */
+#lth2{
+	width: 1%;
 }
 
-.managermail, .technicalmail{
-	color: blue;
-}*/
+/* Dernière perturbation ou interruption depuis 48h */
+#lth4{
+	width: 25%;
+}
+
+/* début */
+#lth41{
+	width: 8%;
+}
+
+/* fin */
+#lth42{
+	width: 8%;
+}
+
+/* raison */
+#lth43{
+	width: 9%;
+}
+
+/* Prochaine interruption exceptionnelle programmée */
+#lth5{
+	width: 25%;
+}
+
+/* Interruptions régulières */
+#lth6{
+	width: 25%;
+}
+
+/* css utilisée par le jquery uniquement si il y a plus de 50 services à lister */
+.tr-ok-category{
+	background-image: url('../images/flag_green.gif');
+}
+
+.tr-warning-category{
+	background-image: url('../images/flag_orange.gif');
+}
+
+.tr-critical-category{
+	background-image: url('../images/flag_red.gif');
+}
+
+.tr-ok-category, .tr-warning-category, .tr-critical-category{
+	background-position: center left;
+	background-repeat: no-repeat;
+	padding-left: 2em;
+}
+

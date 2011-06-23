@@ -12,9 +12,9 @@
 			<th id="lth6" rowspan="2">Interruptions r&eacute;guli&egrave;res</th>
 		</tr>
 		<tr class="header">
-			<th class="th-date">D&eacute;but</th>
-			<th class="th-date">Fin</th>
-			<th class="th-extand">Raison</th>
+			<th id="lth41">D&eacute;but</th>
+			<th id="lth42">Fin</th>
+			<th id="lth43">Raison</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -45,17 +45,17 @@
 			</td>
 			{else}
 			{if count($categories[i]->services[j]->lastEvent) === 0}
-			<td headers="lth4" class="bold">&nbsp;</td>
-			<td headers="lth4" class="bold">&nbsp;</td>
-			<td headers="lth4" class="center">&nbsp;</td>
+			<td headers="lth4 lth41" class="bold">&nbsp;</td>
+			<td headers="lth4 lth42" class="bold">&nbsp;</td>
+			<td headers="lth4 lth43" class="center">&nbsp;</td>
 			{else}
-			<td headers="lth4" class="bold">{$categories[i]->services[j]->lastEvent[0]->getBeginDate()|date_format:"%A %d %B %Y %H:%M"}</td>
+			<td headers="lth4 lth41" class="bold">{$categories[i]->services[j]->lastEvent[0]->getBeginDate()|date_format:"%A %d %B %Y %H:%M"}</td>
 			{if $categories[i]->services[j]->lastEvent[0]->getEndDate() === NULL}
-			<td headers="lth4" class="bold">NC</td>
+			<td headers="lth4 lth42" class="bold">NC</td>
 			{else}
-			<td headers="lth4" class="bold">{$categories[i]->services[j]->lastEvent[0]->getEndDate()|date_format:"%A %d %B %Y %H:%M"}</td>
+			<td headers="lth4 lth42" class="bold">{$categories[i]->services[j]->lastEvent[0]->getEndDate()|date_format:"%A %d %B %Y %H:%M"}</td>
 			{/if}
-			<td headers="lth4" class="center">{$categories[i]->services[j]->lastEvent[0]->getDescription()|nl2br}</td>
+			<td headers="lth4 lth43" class="center">{$categories[i]->services[j]->lastEvent[0]->getDescription()|nl2br}</td>
 
 			{/if}
 			<td headers="lth5" class="bold justify">
