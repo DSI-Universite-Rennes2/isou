@@ -1,0 +1,3 @@
+sources/classes/smarty/compile/*
+sources/config.php
+sources/database/*.sqlite3
