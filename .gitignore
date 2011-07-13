@@ -1,3 +1,21 @@
+#
+# See gitignore(5) man page for more details
+#
+*~
+*.swp
+/cscope.*
+/.patches/
+/.idea/
+/nbproject/
+CVS
+.DS_Store
+/.settings/
+/.project
+/.buildpath
+/.cache
+
+# fichiers ISOU
 sources/classes/smarty/compile/*
 sources/config.php
 sources/database/*.sqlite3
+
