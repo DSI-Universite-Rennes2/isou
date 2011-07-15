@@ -18,4 +18,5 @@ CVS
 sources/classes/smarty/compile/*
 sources/config.php
 sources/database/*.sqlite3
-
+sources/isou.json
+sources/status.dat
