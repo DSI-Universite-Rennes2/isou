@@ -36,7 +36,7 @@ if(class_exists('IsouService') === FALSE){
 	require BASE.'/classes/isou/isou_service.class.php';
 	require BASE.'/classes/isou/isou_event.class.php';
 
-	$script = '<script type="text/javascript" src="'.URL.'/js/jquery-1.3.2.js"></script>';
+	$script = '<script type="text/javascript" src="'.URL.'/js/jquery-min.js"></script>';
 	$script .= '<script type="text/javascript" src="'.URL.'/js/jquery_news.js"></script>';
 	$title = NAME.' - Actualité';
 	$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/css/news.css" media="screen" />';

@@ -2,7 +2,7 @@
 
 	$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/css/table.css" media="screen" />';
 	$css .= '<link rel="stylesheet" type="text/css" href="'.URL.'/css/contact.css" media="screen" />';
-	$script = '<script type="text/javascript" src="'.URL.'/js/jquery-1.3.2.js"></script>';
+	$script = '<script type="text/javascript" src="'.URL.'/js/jquery-min.js"></script>';
 	$script .= '<script type="text/javascript" src="'.URL.'/js/jquery_table.js"></script>';
 
 	$title = NAME.' - Liste';

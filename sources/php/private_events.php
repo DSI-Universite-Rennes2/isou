@@ -3,7 +3,7 @@
 	$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/css/events.css" media="screen">'.
 			'<link rel="stylesheet" type="text/css" media="all" href="'.URL.'/css/private_events_calendar.css"  />';
 
-	$script = '<script type="text/javascript" src="'.URL.'/js/jquery-1.3.2.js"></script>'.
+	$script = '<script type="text/javascript" src="'.URL.'/js/jquery-min.js"></script>'.
 				'<script type="text/javascript" src="'.URL.'/js/jquery.dynDateTime.min.js"></script>'.
 				'<script type="text/javascript" src="'.URL.'/js/jquery.dynDateTime-fr.min.js"></script>'.
 				'<script type="text/javascript" src="'.URL.'/js/jquery_events.js"></script>';

@@ -1,8 +1,6 @@
 <?php
 
 	$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/css/board.css" media="screen" />';
-	/*$script = '<script type="text/javascript" src="'.URL.'/js/jquery-1.3.2.js"></script>';
-	$script .= '<script type="text/javascript" src="'.URL.'/js/jquery_board.js"></script>';*/
 	$script = '';
 
 	$title = NAME.' - Tableau';

@@ -1,6 +1,6 @@
 <?php
 	$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/css/dependencies.css" media="screen">';
-	$script = '<script type="text/javascript" src="'.URL.'/js/jquery-1.3.2.js"></script>
+	$script = '<script type="text/javascript" src="'.URL.'/js/jquery-min.js"></script>
 			<script type="text/javascript" src="'.URL.'/js/jquery_dependencies.js"></script>';
 	$title = NAME.' - Administration des Dépendances';
 	$update = '';

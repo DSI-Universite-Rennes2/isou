@@ -1,6 +1,6 @@
 <?php
 
-	$script = '<script type="text/javascript" src="'.URL.'/js/jquery-1.3.2.js"></script>';
+	$script = '<script type="text/javascript" src="'.URL.'/js/jquery-min.js"></script>';
 	$script .= '<script type="text/javascript" src="'.URL.'/js/jquery_record.js"></script>';
 	$title = NAME.' - Journal';
 	$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/css/record.css" media="screen" />';

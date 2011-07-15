@@ -1,7 +1,7 @@
 <?php
 
 $title = NAME.' - Configuration Flux RSS';
-$script = '<script type="text/javascript" src="'.URL.'/js/jquery-1.3.2.js"></script>
+$script = '<script type="text/javascript" src="'.URL.'/js/jquery-min.js"></script>
 			<script type="text/javascript" src="'.URL.'/js/jquery_rss_config.js"></script>';
 $css = '<link rel="stylesheet" type="text/css" href="'.URL.'/css/rss_config.css" media="screen" />';
 
