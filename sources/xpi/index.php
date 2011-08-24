@@ -14,15 +14,37 @@
 	</header>
 	<nav>
 		<ul>
+		<?php if(is_file('fisou0.6.0.xpi')){ ?>
+		<li><a href="#fisou060">Fisou 0.6.0</a></li>
+		<?php } if(is_file('fisou0.5.0.xpi')){ ?>
 		<li><a href="#fisou050">Fisou 0.5.0</a></li>
+		<?php } if(is_file('fisou0.4.2.xpi')){ ?>
 		<li><a href="#fisou042">Fisou 0.4.2</a></li>
+		<?php } if(is_file('fisou0.4.1.xpi')){ ?>
 		<li><a href="#fisou041">Fisou 0.4.1</a></li>
+		<?php } if(is_file('fisou0.4.xpi')){ ?>
 		<li><a href="#fisou04">Fisou 0.4</a></li>
+		<?php } if(is_file('fisou0.3.xpi')){ ?>
 		<li><a href="#fisou03">Fisou 0.3</a></li>
+		<?php } if(is_file('fisou0.2.xpi')){ ?>
 		<li><a href="#fisou02">Fisou 0.2</a></li>
+		<?php } if(is_file('fisou0.1b.xpi')){ ?>
 		<li><a href="#fisou01">Fisou 0.1beta</a></li>
+		<?php } ?>
 		</ul>
 	</nav>
+	<?php if(is_file('fisou0.6.0.xpi')){ ?>
+	<section>
+		<a name="fisou060"></a>
+		<h1>Fisou 0.6.0</h1>
+		<p>Date de sortie : 22 août 2011</p>
+		<p>Télécharger : <a href="fisou0.6.0.xpi" hash="sha1:<?php echo sha1_file("fisou0.6.0.xpi");?>" onclick="return install(event);">Fisou0.6.0.xpi</a></p>
+		<p>Modifications :</p>
+		<ul>
+		<li>ajout du support jusqu'à Firefox 8</li>
+		</ul>
+	</section>
+	<?php } if(is_file('fisou0.5.0.xpi')){ ?>
 	<section>
 		<a name="fisou050"></a>
 		<h1>Fisou 0.5.0</h1>
@@ -33,6 +55,7 @@
 		<li>ajout du support pour Firefox 5</li>
 		</ul>
 	</section>
+	<?php } if(is_file('fisou0.4.2.xpi')){ ?>
 	<section>
 		<a name="fisou042"></a>
 		<h1>Fisou 0.4.2</h1>
@@ -46,6 +69,7 @@
 		<li>correction d'un bug pouvant masquer fisou lorsqu'on l'arrête alors qu'un ou plusieurs services étaient signalés perturbés</li>
 		</ul>
 	</section>
+	<?php } if(is_file('fisou0.4.1.xpi')){ ?>
 	<section>
 		<a name="fisou041"></a>
 		<h1>Fisou 0.4.1</h1>
@@ -58,6 +82,7 @@
 		</ul>
 		<p>Todo : prise en compte des évènements planifiés.</p>
 	</section>
+	<?php } if(is_file('fisou0.4.xpi')){ ?>
 	<section>
 		<a name="fisou04"></a>
 		<h1>Fisou 0.4</h1>
@@ -73,6 +98,7 @@
 		</ul>
 		<p>Todo : prise en compte des évènements planifiés.</p>
 	</section>
+	<?php } if(is_file('fisou0.3.xpi')){ ?>
 	<section>
 		<a name="fisou03"></a>
 		<h1>Fisou 0.3</h1>
@@ -86,6 +112,7 @@
 		<li>notification lorsqu'un service tombe en panne (option expérimentale)</li>
 		</ul>
 	</section>
+	<?php } if(is_file('fisou0.2.xpi')){ ?>
 	<section>
 		<a name="fisou02"></a>
 		<h1>Fisou 0.2</h1>
@@ -101,6 +128,7 @@
 		<li>ajout des options delay_sync et auto_sync</li>
 		</ul>
 	</section>
+	<?php } if(is_file('fisou0.1b.xpi')){ ?>
 	<section>
 		<a name="fisou01"></a>
 		<h1>Fisou 0.1 beta</h1>
@@ -112,6 +140,7 @@
 		<li>permet di'ouvrir un onglet sur le site https://services.uhb.fr/isou via le menu contextuel</li>
 		</ul>
 	</section>
+	<?php } ?>
 	<footer>CRI Rennes 2 - 2010</footer>
 	<script type="application/javascript">
 	<!--
