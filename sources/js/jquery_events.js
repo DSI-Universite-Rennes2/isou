@@ -110,6 +110,8 @@ $(document).ready(function(){
 	// ajustement des marges du bouton "ajouter un évènement"
 	$("#add-form, #add-info").css({"margin":"2em 0"});
 
+	$("#button-add-event, #button-add-info").attr("href", "#");
+
 	/* * * * * * *
 	 * ASSIGNER LE CALENDRIER AUX 2 INPUT
 	 * * * * * */
