@@ -54,7 +54,7 @@ $page = new stdClass();
 $page->model = '/php/public_rss_config.php';
 $page->template = 'public_rss_config';
 $page->public = TRUE;
-$MENU['rss/config'] = $page;
+$MENU['rss'] = $page;
 
 
 /*
