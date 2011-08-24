@@ -31,7 +31,7 @@ function strtotimestamp($date){
 	Annulation
 * * * * * * * * * * * * * * * * * */
 if(isset($_POST['cancel'])){
-	header('Location: '.URL.'/index.php/evenements');
+	header('Location: '.URL.'/index.php/evenements/'.$PAGE_NAME[1]);
 	exit();
 }
 
@@ -54,7 +54,7 @@ if(isset($_POST['scheduled'])){
 	}elseif($_POST['scheduled'] === '3'){
 		// closed
 		$isScheduled = 3;
-		if($endDate === FALSE){
+		if($_POST['endDate'] === FALSE){
 			$endDate = NULL;
 		}
 	}else{
@@ -66,11 +66,9 @@ if(isset($_POST['scheduled'])){
 }
 
 
-if(isset($_POST['beginDate'])){
+if(isset($_POST['beginDate']) && !empty($_POST['beginDate'])){
 	$beginDate = strtotimestamp($_POST['beginDate']);
-}
-
-if($beginDate === NULL){
+}else{
 	$beginDate = TIME;
 	$_POST['beginDate'] = strftime('%d/%m/%Y %H:%M', TIME);
 }
@@ -165,7 +163,7 @@ if(isset($_POST['insert'])){
 		}
 	}else{
 	// traitement de l'ajout d'un evenement isou
-		if($idService > 0 && !($endDate !== NULL && $beginDate >= $endDate)){
+		if($idService > 0 && ($endDate === NULL || $beginDate <= $endDate)){
 
 			$idEventDescription = 1;
 			if(!empty($description)){
@@ -190,6 +188,10 @@ if(isset($_POST['insert'])){
 				}
 			}
 
+			if($isScheduled === 2 && $endDate === NULL){
+				$error = 'Veuillez indiquer une date de fin.';
+			}
+
 			if(!isset($error)){
 				$sql = "INSERT INTO events (idEvent, beginDate, endDate, typeEvent)".
 						" VALUES(NULL, ?, ?, 0)";
@@ -212,7 +214,7 @@ if(isset($_POST['insert'])){
 			}
 		}else{
 			if($beginDate >= $endDate){
-				$error = 'La date de début doit être inférieur à la date de fin';
+				$error = 'La date de début doit être inférieure à la date de fin';
 			}else{
 				$error = 'Remplir tous les champs (sauf "Raison de la maintenance" qui est facultatif)';
 			}

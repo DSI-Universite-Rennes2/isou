@@ -15,8 +15,8 @@
 			{else}
 				du {$event->beginDate|date_format:"%A %e %B %Y"} au {$event->endDate|date_format:"%A %e %B %Y"}
 			{/if}
-				<a href="{$smarty.const.URL}/index.php/evenements?modify={$event->idEvent}#C{$smarty.foreach.i.index}" name="C{$smarty.foreach.i.index+1}" title="modifier"><img src="{$smarty.const.URL}/images/edit.png" alt="modifier" width="16px" height="16px" /></a>
-				<a href="{$smarty.const.URL}/index.php/evenements?delete={$event->idEvent}" title="supprimer"><img src="{$smarty.const.URL}/images/drop.png" alt="supprimer" width="16px" height="16px" /></a>
+				<a href="{$smarty.const.URL}/index.php/evenements/fermes?modify={$event->idEvent}#C{$smarty.foreach.i.index}" name="C{$smarty.foreach.i.index+1}" title="modifier"><img src="{$smarty.const.URL}/images/edit.png" alt="modifier" width="16px" height="16px" /></a>
+				<a href="{$smarty.const.URL}/index.php/evenements/fermes?delete={$event->idEvent}" title="supprimer"><img src="{$smarty.const.URL}/images/drop.png" alt="supprimer" width="16px" height="16px" /></a>
 			</p>
 			{* <!-- description --> *}
 			{if !empty($event->description)}

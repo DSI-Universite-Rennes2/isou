@@ -1,4 +1,4 @@
-			<form id="form-edit" action="{$smarty.const.URL}/index.php/evenements{if isset($smarty.get.f)}?f=1{elseif isset($smarty.get.p)}?p=1{/if}#form-edit" method="post">
+			<form id="form-edit" action="{$smarty.const.URL}/index.php/evenements/{if $smarty.get.type == 0}nonprevus{elseif $smarty.get.type == 2}reguliers{elseif $smarty.get.type == 3}fermes{else}prevus{/if}{if isset($smarty.get.f)}?f=1{elseif isset($smarty.get.p)}?p=1{/if}#form-edit" method="post">
 			<fieldset>
 			<legend>Modifier un évènement</legend>
 				<p>
@@ -21,7 +21,15 @@
 
 				<p>
 					<label for="beginDateUpd" class="label">
-						Date de début
+						{if $smarty.get.type == 0}
+							Date de début
+						{elseif $smarty.get.type == 2}
+							Date de la prochaine opération régulière
+						{elseif $smarty.get.type == 3}
+							Date de la prochaine fermeture
+						{else}
+							Date de la prochaine maintenance
+						{/if}
 						<span class="required" title="champs obligatoire">*</span>
 						<a href="#formatDate3" class="help" title="lire l'aide pour le champs date de début">?</a>
 					</label>
@@ -30,8 +38,16 @@
 
 				<p>
 					<label for="endDateUpd" class="label">
-						Date de fin ou de réouverture
-						<span class="required" title="champs obligatoire">*</span>
+						{if $smarty.get.type == 0}
+							Date de fin de l'interruption (optionnel)
+						{elseif $smarty.get.type == 2}
+							Date de fin de la prochaine opération régulière
+							<span class="required" title="champs obligatoire">*</span>
+						{elseif $smarty.get.type == 3}
+							Date de réouverture (optionnel)
+						{else}
+							Date de fin de la maintenance
+						{/if}
 						<a href="#formatDate3" class="help" title="lire l'aide pour le champs date de début">?</a>
 					</label>
 					<input type="text" name="endDate" id="endDateUpd" title="Format : Jour Mois Annee H:M" maxlength="16" value="{$currentEdit->endDate|date_format:'%d/%m/%Y %H:%M'}" />
@@ -52,7 +68,7 @@
 					<a name="formatDate3"></a>
 					Le format de date demandé est de type "DD/MM/YYYY hh:mm".<br />
 					Exemple :<br />
-					13/09/2010 14:30 pour le lundi 13 septembre 2010 à 14 heures et 30 minutes.<br /><br />
+					Pour le {$smarty.now|date_format:'%A %d %B %Y à %H heures et %M minutes'}, la valeur attendue est {$smarty.now|date_format:'%d/%m/%y %H:%M'}.<br /><br />
 					<a class="quickaccess-form" href="#form-edit" title="revenir au formulaire">Revenir au formulaire.</a>
 				</p>
 				<p>

@@ -14,8 +14,8 @@
 			{else}
 				du {$event->beginDate|date_format:"%d %B %Y %H:%M"} au {$event->endDate|date_format:"%d %B %Y %H:%M"}
 			{/if}
-				<a href="{$smarty.const.URL}/index.php/evenements?modify={$event->idEvent}#S{$smarty.foreach.i.index}" name="S{$smarty.foreach.i.index+1}" title="modifier"><img src="{$smarty.const.URL}/images/edit.png" alt="modifier" width="16px" height="16px" /></a>
-				<a href="{$smarty.const.URL}/index.php/evenements?delete={$event->idEvent}" title="supprimer"><img src="{$smarty.const.URL}/images/drop.png" alt="supprimer" width="16px" height="16px" /></a>
+				<a href="{$smarty.const.URL}/index.php/evenements/prevus?modify={$event->idEvent}#S{$smarty.foreach.i.index}" name="S{$smarty.foreach.i.index+1}" title="modifier"><img src="{$smarty.const.URL}/images/edit.png" alt="modifier" width="16px" height="16px" /></a>
+				<a href="{$smarty.const.URL}/index.php/evenements/prevus?delete={$event->idEvent}" title="supprimer"><img src="{$smarty.const.URL}/images/drop.png" alt="supprimer" width="16px" height="16px" /></a>
 			</p>
 			{* <!-- description --> *}
 			{if !empty($event->description)}
@@ -31,3 +31,4 @@
 		</a>
 	</p>
 	{/if}
+

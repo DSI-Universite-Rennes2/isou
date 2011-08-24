@@ -11,10 +11,10 @@
 				<span class="top">Message d'information : </span>
 				<span class="shortTexts">{$event->shortText|nl2br}</span>
 				<span class="top">
-				<a href="{$smarty.const.URL}/index.php/evenements?modify={$event->idEvent}#M{$smarty.foreach.i.index}" name="M{$smarty.foreach.i.index+1}" title="modifier">
+				<a href="{$smarty.const.URL}/index.php/evenements/messages?modify={$event->idEvent}#M{$smarty.foreach.i.index}" name="M{$smarty.foreach.i.index+1}" title="modifier">
 					<img src="{$smarty.const.URL}/images/edit.png" alt="modifier" width="16px" height="16px" />
 				</a>
-				<a href="{$smarty.const.URL}/index.php/evenements?delete={$event->idEvent}&amp;message" title="supprimer">
+				<a href="{$smarty.const.URL}/index.php/evenements/messages?delete={$event->idEvent}&amp;message" title="supprimer">
 					<img src="{$smarty.const.URL}/images/drop.png" alt="supprimer" width="16px" height="16px" />
 				</a>
 				</span>

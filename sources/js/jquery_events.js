@@ -1,11 +1,3 @@
-/* fonction appelée lors de l'utilisation du menu déroulant contenant tous les services */
-function changeService(index){
-	index--;
-	$(".service").css("display","none");
-	$(".service").eq(index).css("display","block");
-	$("#isoulist li:eq("+index+") a").css("background-color","#87CEFA");
-}
-
 /* function appelé lors de l'utilisation du menu déroulant contenant les différents types d'évènement */
 function changeOperation(){
 
@@ -44,10 +36,6 @@ function closeForm(){
 	$("#form-fg-layout, #form-bg-layout").css("display","none");
 	$("#update").remove();
 }
-
-/*function redirectForm(){
-	window.location.href = window.location.protocol+"//"+window.location.hostname+window.location.pathname;
-}*/
 
 /* function appelé lorsqu'on ajoute/modifie/supprime un évènement */
 /* mise en page du formulaire en transparence en plein écran */
@@ -88,81 +76,6 @@ function showForm(click, type){
 	}
 }
 
-/* * * * * * *
- * ENREGISTRE LES PREFERENCES DANS UN COOKIE
- */
-function set_pref(id,value){
-	var exdate = new Date();
-	exdate.setDate(exdate.getDate()+31);
-	document.cookie = id+ "=" +escape(value)+
-	((31==null) ? "" : ";expires="+exdate.toGMTString());
-}
-
-/* * * * * * *
- * LIT LES PREFERENCES DANS LE COOKIE
- */
-function get_pref(id){
-	if(document.cookie.length>0){
-		c_start=document.cookie.indexOf(id + "=");
-		if(c_start!=-1){
-			c_start=c_start + id.length+1;
-			c_end=document.cookie.indexOf(";",c_start);
-			if(c_end==-1) c_end=document.cookie.length;
-			return unescape(document.cookie.substring(c_start,c_end));
-		}
-	}
-	return "";
-}
-
-
-function sortByCheckboxValues(init){
-	if(init == true){
-		var idAttr = '';
-	 	$(":checkbox").each(function(){
-	 		if(get_pref($(this).attr("id")) == "false"){
-	 			$(this).removeAttr("checked");
-			}else{
-				$(this).attr("checked","checked");
-			}
-		});
-	}else{
-		var idAttr = init;
-	}
-
-	$("#content div h3 a").each(function(index){
-		if($("#"+$(this).attr("name").substr(0,1)).attr("checked") == true){
-			$("#content .events:eq("+index+")").css("display","block");
-			set_pref($(this).attr("name"),"true");
-		}else{
-			$("#content .events:eq("+index+")").css("display","none");
-			set_pref($(this).attr("name"),"false");
-		}
-	});
-}
-
-function sortBySelectValue(init){
-	if(init){
-		$("#select-services option").each(function(index){
-			if($(this).text() == get_pref(init)){
-				$(this).attr("selected","selected");
-			}
-		});
-	}
-
-	if($("#select-services option:selected").text() == 'Afficher tous les services'){
-		$("#content ul li").css("display","list-item");
-	}else{
-		$("#content ul li").each(function(index){
-			if($("#content ul li:eq("+index+") p span").text() == $("#select-services option:selected").text() || $("#content ul li:eq("+index+") form").attr("id") == "form-edit"){
-				$("#content ul li:eq("+index+")").css("display","list-item");
-			}else{
-				$("#content ul li:eq("+index+")").css("display","none");
-			}
-		});
-	}
-	set_pref("select-services",$("#select-services option:selected").text());
-}
-
 //au chargement de la page
 $(document).ready(function(){
 	// masque le formulaire pour ajouter un évènement
@@ -182,6 +95,9 @@ $(document).ready(function(){
 	// supprimer la liste des ancres
 	$("#events-quick-access").remove();
 
+	// supprimer le lien "Retour au formulaire"
+	$(".quickaccess-form").remove();
+
 	// ajoute un bouton 'fermer' sur les formulaires
 	$("#form-add-event, #form-add-info").prepend('<p style="text-align:right;"><a class="close" href="#">Fermer</a></p>');
 
@@ -191,6 +107,8 @@ $(document).ready(function(){
 		return false;
 	});
 
+	// ajustement des marges du bouton "ajouter un évènement"
+	$("#add-form, #add-info").css({"margin":"2em 0"});
 
 	/* * * * * * *
 	 * ASSIGNER LE CALENDRIER AUX 2 INPUT
@@ -227,86 +145,12 @@ $(document).ready(function(){
 		}
 	}
 
-	/* * * * * *
-	 * CREER DYNAMIQUEMENT LA LISTE DES SERVICES APPARAISSANT SUR LA PAGE
-	 * */
-	var list = new Array();
-	$("#content h3:lt(4) ~ ul p span").each(function(index){
-		i = 0;
-		find = false;
-
-		while(i<list.length && !find){
-			if(list[i] == '<option>'+$(this).text()+'</option>'){
-				find = true;
-			}
-			i++;
-		}
-
-		if(!find){
-			list[list.length] = "<option>"+$(this).text()+"</option>";
-		}
-	});
-
-	list.sort();
-
-
-	/* * * * *
-	 * CREE UN FORMULAIRE POUR FILTRER LES EVENEMENTS
-	 * */
-	$("#form-add-event").after($("<form id=\"form-filter\" action="+window.location.href+">"+
-							"<p>"+
-							"<label for=\"select-services\">Trier par services</label>"+
-							"<select id=\"select-services\" name=\"select-services\"><option>Afficher tous les services</option>"+list+"</select>"+
-							"</p>"+
-							"<fieldset>"+
-							"<legend>Trier par type d'interruption</legend>"+
-							"<input type=\"checkbox\" name=\"Cb1\" id=\"U\" checked=\"checked\"><label for=\"U\">"+
-								"<a href=\"#U0\" title=\"accéder à la liste des interruptions non prévues\">Interruptions non prévues</a></label>"+
-							"<input type=\"checkbox\" name=\"Cb2\" id=\"S\" checked=\"checked\"><label for=\"S\">"+
-								"<a href=\"#S0\" title=\"accéder à la liste des interruptions prévues\">Interruptions prévues</a></label>"+
-							"<input type=\"checkbox\" name=\"Cb3\" id=\"R\" checked=\"checked\"><label for=\"R\">"+
-								"<a href=\"#R0\" title=\"accéder à la liste des interruptions régulières\">Interruptions régulières</a></label>"+
-							"<input type=\"checkbox\" name=\"Cb4\" id=\"C\" checked=\"checked\"><label for=\"C\">"+
-								"<a href=\"#C0\" title=\"accéder à la liste des services fermés\">Services fermés</a></label>"+
-							"<input type=\"checkbox\" name=\"Cb5\" id=\"M\" checked=\"checked\"><label for=\"M\">"+
-								"<a href=\"#M0\" title=\"accéder à la liste des messages informatifs\">Messages informatifs</a></label>"+
-							"</fieldset>"+
-							"</form>"));
-
-	/* * * * * * * * *
-	 * GERE LE CLICK DANS LES CHECKBOX 'TRIER PAR TYPE D'INTERRUPTION'
-	 * */
-	sortByCheckboxValues(true);
-	$(":checkbox").click(function(){
-		sortByCheckboxValues($(this).attr("id"));
-	});
-
-
-	/* * * * * * * * *
-	 * GERE LE CHANGEMENT DANS LA LISTE 'TRIER PAR SERVICES'
-	 * */
-	sortBySelectValue("select-services");
-	$("#select-services").change(function(){
-		sortBySelectValue();
-	});
-
-
-	/* * * * *
-	 * AJOUTE LE BOUTON POUR ACCEDER AU FORMULAIRE D'AJOUT D'EVENEMENTS ET DE MESSAGES INFORMATIFS
-	 * * * * */
-	$("#form-filter").after($("<p id=\"add-menu\">"+
-								"<a href=\"#\" id=\"button-add-event\">Ajouter un évènement</a>"+
-								"<a href=\"#\" id=\"button-add-info\">Ajouter un message informatif</a>"+
-							"</p>"));
-
 	$("#button-add-event").click(function(){
 		showForm(true, 'event');
-		$(this).css("border","0.2em ridge #6B8E23");
 	});
 
 	$("#button-add-info").click(function(){
 		showForm(true, 'info');
-		$(this).css("border","0.2em ridge #6B8E23");
 	});
 
 	$("#scheduled").change(function(){
@@ -333,5 +177,5 @@ $(document).ready(function(){
 		}
 	}
 
-	changeOperation();
+	// changeOperation();
 });

@@ -1,4 +1,4 @@
-			<form id="form-edit" action="{$smarty.const.URL}/index.php/evenements" method="post">
+			<form id="form-edit" action="{$smarty.const.URL}/index.php/evenements/messages" method="post">
 			<fieldset>
 			<legend>Modifier un message informatif</legend>
 			<p>
@@ -26,7 +26,7 @@
 				<a name="formatDate4"></a>
 				Le format de date demandé est de type "DD/MM/YYYY hh:mm".<br />
 				Exemple :<br />
-				13/09/2010 14:30 pour le lundi 13 septembre 2010 à 14 heures et 30 minutes.<br /><br />
+				Pour le {$smarty.now|date_format:'%A %d %B %Y à %H heures et %M minutes'}, la valeur attendue est {$smarty.now|date_format:'%d/%m/%y %H:%M'}.<br /><br />
 				<a class="quickaccess-form" href="#form-edit" title="revenir au formulaire">Revenir au formulaire.</a>
 			</p>
 			<p>

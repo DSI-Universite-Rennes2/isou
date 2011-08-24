@@ -39,21 +39,26 @@ if(isset($_GET['hide'])){
 }
 
 if(isset($PAGE_NAME)){
-	if(isset($MENU[$PAGE_NAME])){
-		if($MENU[$PAGE_NAME]->public === TRUE || $IS_ADMIN){
-			$model = BASE.$MENU[$PAGE_NAME]->model;
-			$template = $MENU[$PAGE_NAME]->template;
+	$PAGE_NAME = explode('/', $PAGE_NAME);
+	$MAIN_PAGE_NAME = 0;
+	if(isset($PAGE_NAME[0])){
+		$MAIN_PAGE_NAME = $PAGE_NAME[0];
+	}
+	if(isset($MENU[$MAIN_PAGE_NAME])){
+		if($MENU[$MAIN_PAGE_NAME]->public === TRUE || $IS_ADMIN){
+			$model = BASE.$MENU[$MAIN_PAGE_NAME]->model;
+			$template = $MENU[$MAIN_PAGE_NAME]->template;
 		}
 	}
 }
 
 if(!isset($model)){
-	$PAGE_NAME = $DEFAULTMENU;
+	$MAIN_PAGE_NAME = $DEFAULTMENU;
 	$model = BASE.$MENU[$DEFAULTMENU]->model;
 	$template = $MENU[$DEFAULTMENU]->template;
 }
 
-if($MENU[$PAGE_NAME]->public === TRUE){
+if($MENU[$MAIN_PAGE_NAME]->public === TRUE){
 	$sql = "SELECT message FROM annonce WHERE afficher = 1 AND message != ''";
 	$annonce = '';
 	if($annonce = $db->query($sql)){
@@ -108,7 +113,7 @@ $smarty->assign('FULLURL', get_base_url('full', HTTPS));
 $smarty->assign('title', $title);
 $smarty->assign('script', $script);
 $smarty->assign('css', $css);
-$smarty->assign('page', $PAGE_NAME);
+$smarty->assign('page', $MAIN_PAGE_NAME);
 $smarty->assign('is_admin', $IS_ADMIN);
 $smarty->assign('flags', $flags);
 $smarty->assign('menu', $MENU);

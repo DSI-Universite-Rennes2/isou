@@ -7,6 +7,7 @@ h2{
 }
 
 h3{
+	margin: 1em 0;
 	text-decoration: underline;
 }
 
@@ -16,6 +17,31 @@ p{
 
 .top{
 	vertical-align: top;
+}
+
+#events-menu{
+	display: block;
+	list-style: none;
+	margin: 1em 0;
+	padding: 0;
+	text-align: center;
+}
+
+#events-menu li{
+	background-color: #E5ECF9;
+	border: #000 0.1em dotted;
+	display: inline-block;
+	margin: 0;
+	padding: 0.5em;
+	width: 17%;
+}
+
+#events-menu #events-menu-selected{
+	border: #000 0.15em groove;
+}
+
+#add-form{
+	margin: 1em 0;
 }
 
 .short-texts{
@@ -133,19 +159,6 @@ span.label{
 
 #add-menu{
 	margin: 3em 0em;
-}
-
-#button-add-event, #button-add-info{
-	background-color: #66CDAA;
-	color: #101010;
-	padding: 1em;
-	margin: 0em 1em;
-	text-align: center;
-	border: 0.2em ridge #6B8E23;
-}
-
-#button-add-event:hover, #button-add-info:hover{
-	border: 0.2em groove #6B8E23;
 }
 
 #form-fg-layout, #form-bg-layout{
