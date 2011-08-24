@@ -36,7 +36,7 @@
 		{if isset($menu['journal'])}<li{if $page === 'journal'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/journal" title="Afficher le journal d'évènements" >journal</a></li>{/if}
 		{if isset($menu['calendrier'])}<li{if $page === 'calendrier'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/calendrier" title="Afficher en calendrier" >calendrier</a></li>{/if}
 		{if isset($menu['contact'])}<li{if $page === 'contact'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/contact" title="Nous contacter" >contact</a></li>{/if}
-		<li{if $page === 'rss/config'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/rss/config" title="S'abonner au flux RSS" >flux RSS <img width="31px" height="11px" alt="" src="{$smarty.const.URL}/images/rss_logo.gif" /></a></li>
+		<li{if $page === 'rss'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/rss/config" title="S'abonner au flux RSS" >flux RSS <img width="31px" height="11px" alt="" src="{$smarty.const.URL}/images/rss_logo.gif" /></a></li>
 	</ul>
 </div>
 
