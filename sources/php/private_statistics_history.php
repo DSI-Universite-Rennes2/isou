@@ -63,16 +63,16 @@
 		$_GET['endSort'] = 1;
 	}
 
-	if(isset($_GET['yearSort'])){
-		$_GET['yearSort'] = intval($_GET['yearSort']);
+	if(isset($_GET['yearSelect'])){
+		$_GET['yearSelect'] = intval($_GET['yearSelect']);
 	}else{
-		$_GET['yearSort'] = 0;
+		$_GET['yearSelect'] = 0;
 	}
 
-	if(isset($_GET['monthSort'])){
-		$_GET['monthSort'] = intval($_GET['monthSort']);
+	if(isset($_GET['monthSelect'])){
+		$_GET['monthSelect'] = intval($_GET['monthSelect']);
 	}else{
-		$_GET['monthSort'] = 0;
+		$_GET['monthSelect'] = 0;
 	}
 
 	if(isset($_GET['typeSelect'])){
@@ -117,13 +117,13 @@ if(isset($_GET['serviceSelect'])){
 		$filter .= " AND EI.idService = ".intval($_GET['serviceSelect']);
 	}
 
-	if($_GET['yearSort'] !== 0){
-		if($_GET['monthSort'] !== 0){
-			$begin = mktime(0,0,0,$_GET['monthSort'],1,$_GET['yearSort']);
-			$end = mktime(0,0,0,$_GET['monthSort']+1,1,$_GET['yearSort']);
+	if($_GET['yearSelect'] !== 0){
+		if($_GET['monthSelect'] !== 0){
+			$begin = mktime(0,0,0,$_GET['monthSelect'],1,$_GET['yearSelect']);
+			$end = mktime(0,0,0,$_GET['monthSelect']+1,1,$_GET['yearSelect']);
 		}else{
-			$begin = mktime(0,0,0,1,1,$_GET['yearSort']);
-			$end = mktime(23,59,59,12,31,$_GET['yearSort']);
+			$begin = mktime(0,0,0,1,1,$_GET['yearSelect']);
+			$end = mktime(23,59,59,12,31,$_GET['yearSelect']);
 		}
 		$filter .= " AND E.beginDate BETWEEN ".$begin." AND ".$end;
 	}

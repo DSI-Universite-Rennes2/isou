@@ -18,7 +18,7 @@
 {html_options id=yearSelect name="yearSelect" values=$yearSelect output=$yearSelect selected=$smarty.get.yearSelect|default:''}
 
 <label for="monthSelect">Mois</label>
-{html_options id=monthSelect name=monthSelect options=$monthSelect selected=$smarty.get.typeSelect|default:''}
+{html_options id=monthSelect name=monthSelect options=$monthSelect selected=$smarty.get.monthSelect|default:''}
 </p>
 
 <p>
