@@ -38,29 +38,62 @@ $(document).ready(function(){
 		}
 	});
 
-	// décoche tous les checkboxes 'tous les services' lorsqu'on coche une autre case
-	$("#service-fieldset input[name=serviceSelect[]]:gt(0)").click(function(){
+	// récupère tous les services dans l'url
+	var services = new Array();
+	var regexp = new RegExp("[\\?&]serviceSelect%5B%5D=([^&#]*)","g");
+	while((serviceSelect = regexp.exec(window.location.href)) != null){
+		// alert(serviceSelect[1]);
+		// $("input[value="+serviceSelect[1]+"]").attr("checked", "checked");
+		services[services.length] = serviceSelect[1];
+		$("input[value="+serviceSelect[1]+"]").attr("checked", "checked");
+	}
+
+	if(services.length > 0){
+		$("#service-fieldset input[value=all]").removeAttr("checked");
+	}else{
+		$("#service-fieldset input[value=all]").attr("checked", "checked");
+	}
+
+	// décoche la checkbox 'tous les services' lorsqu'on coche une autre case
+	$("#service-fieldset input[name='serviceSelect[]']:gt(0)").click(function(){
+		if($(this).attr("checked") == "checked"){
+			// ajout du service dans services
+			if($("#service-fieldset input[value=all]").attr("checked") == "checked"){
+				var servlen = services.length;
+				for(i=0;i<servlen;i++){
+					$("input[value="+services[i]+"]").attr("checked", "checked");
+				}
+			}
+			services[services.length] = $("#service-fieldset input:eq("+$(this).index("#service-fieldset input")+")").attr("value");
+		}else{
+			// suppression du service dans services
+			var servlen = services.length;
+			for(var i=0;i<servlen;i++){
+				if(services[i] == $("#service-fieldset input:eq("+$(this).index("#service-fieldset input")+")").attr("value")){
+					services.splice(i);
+				}
+			}
+		}
 		$("#service-fieldset input[value=all]").removeAttr("checked");
 	});
 
 	// lorsqu'on décoche "tous les services", il remet les services présents dans l'url
 	$("#service-fieldset input[value=all]").click(function(){
-		if($(this).attr("checked") === true){
+		if($(this).attr("checked") == "checked"){
 			$("#service-fieldset input:gt(0)").each(function(){
 				$(this).removeAttr("checked");
 			});
 		}else{
-			var regexp = new RegExp("[\\?&]serviceSelect\\[\\]=([^&#]*)","g");
-			while((serviceSelect = regexp.exec(window.location.href)) != null){
-				$("input[value="+serviceSelect[1]+"]").attr("checked", "checked");
+			var servlen = services.length;
+			for(i=0;i<servlen;i++){
+				$("input[value="+services[i]+"]").attr("checked", "checked");
 			}
 			$("#service-fieldset input[value=all]").removeAttr("checked");
 		}
 	});
 
 
-
-	/* typeGraphic */
+	// typeGraphic //
 	var regexp = new RegExp("[\\?&]typeGraphic=([^&#]*)");
 	var typeGraphic = regexp.exec(window.location.href);
 	if(typeGraphic !== null){
@@ -90,7 +123,5 @@ $(document).ready(function(){
 
 		$('table').css("display","none");
 	}
-
-
 
 });
