@@ -17,7 +17,7 @@ $(document).ready(function(){
 	$(".regular").css("display", "none");
 
 	$("#U").click(function(){
-		if($(this).attr("checked") == true){
+		if($(this).attr("checked") == "checked"){
 			$(".unscheduled").css("display", "table-row");
 		}else{
 			$(".unscheduled").css("display", "none");
@@ -25,7 +25,7 @@ $(document).ready(function(){
 	});
 
 	$("#S").click(function(){
-		if($(this).attr("checked") == true){
+		if($(this).attr("checked") == "checked"){
 			$(".scheduled").css("display", "table-row");
 		}else{
 			$(".scheduled").css("display", "none");
@@ -33,7 +33,7 @@ $(document).ready(function(){
 	});
 
 	$("#R").click(function(){
-		if($(this).attr("checked") == true){
+		if($(this).attr("checked") == "checked"){
 			$(".regular").css("display", "table-row");
 		}else{
 			$(".regular").css("display", "none");
@@ -41,7 +41,7 @@ $(document).ready(function(){
 	});
 
 	$("#C").click(function(){
-		if($(this).attr("checked") == true){
+		if($(this).attr("checked") == "checked"){
 			$(".closed").css("display", "table-row");
 		}else{
 			$(".closed").css("display", "none");
@@ -49,7 +49,7 @@ $(document).ready(function(){
 	});
 
 	$("#M").click(function(){
-		if($(this).attr("checked") == true){
+		if($(this).attr("checked") == "checked"){
 			$(".messages").css("display", "table-row");
 		}else{
 			$(".messages").css("display", "none");
