@@ -42,12 +42,12 @@ $(document).ready(function(){
 	var services = new Array();
 	var regexp = new RegExp("[\\?&]serviceSelect%5B%5D=([^&#]*)","g");
 	while((serviceSelect = regexp.exec(window.location.href)) != null){
-		// alert(serviceSelect[1]);
-		// $("input[value="+serviceSelect[1]+"]").attr("checked", "checked");
-		services[services.length] = serviceSelect[1];
-		$("input[value="+serviceSelect[1]+"]").attr("checked", "checked");
+		if(serviceSelect[1] != 'all'){
+			services[services.length] = serviceSelect[1];
+			$("input[value="+serviceSelect[1]+"]").attr("checked", "checked");
+		}
 	}
-
+	
 	if(services.length > 0){
 		$("#service-fieldset input[value=all]").removeAttr("checked");
 	}else{
