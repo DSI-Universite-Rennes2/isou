@@ -110,7 +110,7 @@ if($update_git === TRUE){
 		echo "\033[0;31mÉchec de la mise à jour. Merci de corriger les conflits, puis de relancer la mise à jour.\033[0m\n";
 		exit(1);
 	}else{
-		$update_git = trim(readline("La fusion entre les deux versions semblent s'être passée correctement. Voulez-vous continuer ? (y/n)\n"));
+		$update_git = trim(readline("La fusion entre les deux versions semble s'être passée correctement. Voulez-vous continuer ? (y/n)\n"));
 		if(strtolower($update_git) !== 'y'){
 			echo "\033[0;31mMerci de corriger les conflits, puis de relancer la mise à jour.\033[0m\n";
 			exit(0);
