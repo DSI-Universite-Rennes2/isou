@@ -42,7 +42,7 @@
 			if($service->isClosed() === TRUE){
 				$service->closedEvent = $service->getClosedInterruption();
 			}else{
-				$service->lastEvent = $service->getLastInterruptions($TOLERANCE, 1);
+				$service->lastEvent = $service->getAllEvents($TOLERANCE, 10, $BEFORE, TIME);// $service->getLastInterruptions($TOLERANCE, 1);
 				$service->nextEvent = $service->getNextEvents(1);
 				$service->regularInterruption = $service->getRegularInterruptions();
 			}
