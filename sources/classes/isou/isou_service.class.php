@@ -238,12 +238,20 @@ class IsouService {
 				" (E.beginDate <= ".TIME." AND E.endDate >= ".TIME."))) = 0".
 				// fin_
 				" ) OR (".
-				// toutes les interruptions non régulières passées, en cours, à venir (dans la limite de $beginDate et $endDate)
-				" EI.isScheduled < 2".
+				// toutes les interruptions non prévues passées, en cours, à venir (dans la limite de $beginDate et $endDate)
+				" EI.isScheduled = 0".
 				" AND (E.endDate IS NULL OR".
 				" ((E.beginDate BETWEEN ? AND ?".
 				" OR E.endDate BETWEEN ? AND ?)".
 				" AND (E.endDate-E.beginDate > ".$tolerance.")".
+				" ))".
+				// fin_
+				" ) OR (".
+				// toutes les interruptions prévues passées, en cours, à venir (dans la limite de $beginDate et $endDate)
+				" EI.isScheduled = 1".
+				" AND (E.endDate IS NULL OR".
+				" ((E.beginDate BETWEEN ? AND ?".
+				" OR E.endDate BETWEEN ? AND ?)".
 				" ))".
 				// fin_
 				" )".
@@ -252,7 +260,7 @@ class IsouService {
 		$event_records = $db->prepare($sql);
 		$events = array();
 		// if($event_records->execute(array($this->id, TIME, TIME, $beginDate, $endDate, $beginDate, $endDate, $tolerance, $limit))){
-		if($event_records->execute(array($this->id, $this->id, $beginDate, $endDate, $beginDate, $endDate, $limit))){
+		if($event_records->execute(array($this->id, $this->id, $beginDate, $endDate, $beginDate, $endDate, $beginDate, $endDate, $beginDate, $endDate, $limit))){
 			while($event = $event_records->fetch(PDO::FETCH_OBJ)){
 				$event->serviceName = $this->nameForUsers;
 				$event->state = $this->state;
