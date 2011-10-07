@@ -47,8 +47,8 @@ if(class_exists('IsouService') === FALSE){
 	$AFTER = mktime(0,0,0)+(48*60*60);
 }else{
 	// used by calendar page
-	$BEFORE = TIMESTAMP_OF_FIRST_CALENDAR_DAY;
-	$AFTER = TIMESTAMP_OF_LAST_CALENDAR_DAY;
+	$AFTER = $time;
+	$BEFORE = $time-35*24*60*60;
 	$calendar = TRUE;
 }
 
@@ -84,7 +84,7 @@ if($service_records = $db->query($sql)){
 	while($service = $service_records->fetchObject('IsouService')){
 
 		if(isset($calendar)){
-			$service->setEvents($service->getScheduledEvents($TOLERANCE, -1, TIMESTAMP_OF_FIRST_CALENDAR_DAY, TIMESTAMP_OF_LAST_CALENDAR_DAY));
+			$service->setEvents($service->getScheduledEvents($TOLERANCE, -1, $BEFORE, $AFTER));
 		}else{
 			$service->setEvents($service->getAllEvents($TOLERANCE, 10, $BEFORE, $AFTER));
 		}

@@ -32,8 +32,8 @@
 	{section name=i loop=$calendar}
 	<tr class="mday">
 		{section name=j loop=$calendar[i]}
-			<td {if isset($calendar[i][j]->cssClass)}class="{$calendar[i][j]->cssClass}"{/if}>
-				<span id="date-{$calendar[i][j]->dateId}">{$calendar[i][j]->date}</span>
+			<td{if $calendar[i][j]->time < $now} class="past"{else if $calendar[i][j]->time == $now} class="today"{/if}>
+				<span id="date-{$calendar[i][j]->time|date_format:'%d-%B-%Y'}">{$calendar[i][j]->time|date_format:$calendar[i][j]->strftime}</span>
 				{if isset($calendar[i][j]->events)}
 				<ul class="event">
 					{section name=k loop=$calendar[i][j]->events}
@@ -49,7 +49,7 @@
 					{/section}
 				</ul>
 				{else}
-					{if isset($calendar[i][j]->cssClass) && $calendar[i][j]->cssClass === 'today'}
+					{if $calendar[i][j]->time == $now}
 						<p id="no-event">Aucune intervention prévue</p>
 					{/if}
 				{/if}

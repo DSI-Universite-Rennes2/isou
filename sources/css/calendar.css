@@ -24,6 +24,10 @@
 	background-color: rgba(192,192,192,.4);
 }
 
+.other-month{
+	background-color: #FFE4B5;
+}
+
 .mday .past span{
 	background-color: rgba(192,192,192,.4);
 	 border-bottom: .1em solid black;

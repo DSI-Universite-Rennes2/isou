@@ -15,9 +15,15 @@ if(isset($_GET['p'])){
 	$page = 0;
 }
 
-define('TIMESTAMP_OF_FIRST_CALENDAR_DAY',mktime(0,0,0)-((6+$date["wday"]-($page*7)))*24*60*60);
-define('TIMESTAMP_OF_MONDAY_OF_LAST_WEEK',mktime(0,0,0)-(6+$date["wday"])*24*60*60);
-define('TIMESTAMP_OF_LAST_CALENDAR_DAY',((mktime(0,0,0)-((6+$date["wday"]-($page*7)))*24*60*60)+(35*24*60*60)));
+// $CALENDAR_STEP = 'WEEKLY';
+$CALENDAR_STEP = 'MONTHLY';
+
+if($CALENDAR_STEP === 'WEEKLY'){
+	$time = mktime(0,0,0)-((6+$date["wday"]-($page*7)))*24*60*60;
+}else{
+	$first_months_day = mktime(0,0,0,$date['mon']+$page,1);
+	$time = $first_months_day-((intval(strftime('%u', $first_months_day))-1)*24*60*60);
+}
 
 // recupere tous les services dans la bdd
 $sql = "SELECT S.idService, S.name, S.nameForUsers, S.url, S.state, S.comment, C.name AS category".
@@ -32,16 +38,12 @@ $i=0;
 $services = array();
 if($service_records = $db->query($sql)){
 	while($service = $service_records->fetchObject('IsouService')){
-		$service->setEvents($service->getScheduledEvents($TOLERANCE, -1, TIMESTAMP_OF_FIRST_CALENDAR_DAY, TIMESTAMP_OF_LAST_CALENDAR_DAY));
+		$service->setEvents($service->getScheduledEvents($TOLERANCE, -1, $time, $time+35*24*60*60));
 		if($service->hasEvents() === TRUE){
 			$services[$i] = $service;
 			$i++;
 		}
 	}
-}
-
-if($page>0){
-	$tabindex++;
 }
 
 if($page === 1){
@@ -55,7 +57,6 @@ if($page === 1){
 }
 $smarty->assign('nextWeekLink', '?p='.($page+1));
 
-$time = mktime(0,0,0)-(24*(6+$date["wday"]-($page*7)))*60*60;
 $array_events = IsouEvent::$array_events;
 
 $calendar = array();
@@ -65,90 +66,39 @@ for($row=0;$row<5;$row++){
 	$cols = array();
 	for($col=0;$col<7;$col++){
 		$day = new stdClass();
+		$day->time = $time;
 
-		$labelday = date('j', $time);
-		if($labelday == 1 || $row == 0){
-			if($labelday == 1 && date('n',$time) == 1){
-				$labelday = strftime("1er %B %Y",$time);
-			}else if($labelday == 1){
-				$labelday = strftime("1er %B",$time);
+		if($row === 0){
+			if(strftime('%d', $time) === '01'){
+				if(strftime('%m', $time) === '01'){
+					$day->strftime = '1er %B %Y';
+				}else{
+					$day->strftime = '1er %B';
+				}
 			}else{
-				$labelday = strftime("%d %B",$time);
+				$day->strftime = '%d %B';
 			}
-		}
-		$d = $row*7+$col;
-
-		if($d < (6+$date["wday"]-$page*7)){
-			$events = array();
-
-			if(isset($array_events[strftime('%m/%d/%y',$time)]) && is_array($array_events[strftime('%m/%d/%y',$time)])){
-				$i=0;
-				while(isset($array_events[strftime('%m/%d/%y',$time)][$i])){
-					$nameForUsers = $array_events[strftime('%m/%d/%y',$time)][$i];
-					$event = new stdClass();
-					$event->stripName = strip_accents(substr($nameForUsers,0,-3));
-					$event->name = substr($nameForUsers,0,-3);
-					$events[] = $event;
-					$i++;
-				}
-			}
-
-			if(count($events) > 0){
-				$day->events = $events;
-			}
-
-			$day->cssClass = 'past';
-			$day->dateId = strftime('%d-%B-%Y',$time);
-			$day->date = $labelday;
-
-		}else if($d === (6+$date["wday"]-$page*7)){
-			$events = array();
-
-			if(isset($array_events[strftime('%m/%d/%y',$time)])){
-				$i=0;
-				while(isset($array_events[strftime('%m/%d/%y',$time)][$i])){
-					$nameForUsers = $array_events[strftime('%m/%d/%y',$time)][$i];
-					$event = new stdClass();
-					if(substr($nameForUsers,-1)>0){
-						$event->stripName = strip_accents(substr($nameForUsers,0,-3));
-						$event->name = substr($nameForUsers,0,-3);
-					}else{
-						$event->stripName = strip_accents(substr($nameForUsers,0,-3));
-						$event->name = substr($nameForUsers,0,-3);
-					}
-					$events[] = $event;
-					$i++;
-				}
-			}
-
-			if(count($events) > 0){
-				$day->events = $events;
-			}
-
-			$day->cssClass = 'today';
-			$day->dateId = strftime('%d-%B-%Y',$time);
-			$day->date = $labelday;
 		}else{
-			$events = array();
-			if(isset($array_events[strftime('%m/%d/%y',$time)]) && is_array($array_events[strftime('%m/%d/%y',$time)])){
-				$i=0;
-				while(isset($array_events[strftime('%m/%d/%y',$time)][$i])){
-					$nameForUsers = $array_events[strftime('%m/%d/%y',$time)][$i];
-					$event = new stdClass();
-					$event->stripName = strip_accents(substr($nameForUsers,0,-3));
-					$event->name = substr($nameForUsers,0,-3);
-					$events[] = $event;
-					$i++;
-				}
-			}
-
-			if(count($events) > 0){
-				$day->events = $events;
-			}
-
-			$day->dateId = strftime('%d-%B-%Y',$time);
-			$day->date = $labelday;
+			$day->strftime = '%d';
 		}
+
+		$events = array();
+
+		if(isset($array_events[strftime('%m/%d/%y',$time)]) && is_array($array_events[strftime('%m/%d/%y',$time)])){
+			$i=0;
+			while(isset($array_events[strftime('%m/%d/%y',$time)][$i])){
+				$nameForUsers = $array_events[strftime('%m/%d/%y',$time)][$i];
+				$event = new stdClass();
+				$event->stripName = strip_accents(substr($nameForUsers,0,-3));
+				$event->name = substr($nameForUsers,0,-3);
+				$events[] = $event;
+				$i++;
+			}
+		}
+		if(count($events) > 0){
+			$day->events = $events;
+		}
+		
 		$cols[] = $day;
 		$time = $time+(24*60*60);
 	}
@@ -156,6 +106,7 @@ for($row=0;$row<5;$row++){
 }
 
 $smarty->assign('calendar', $rows);
+$smarty->assign('now', mktime(0,0,0));
 
 require BASE.'/php/public_news.php';
 
