@@ -49,16 +49,11 @@ $(document).ready(function(){
 
 	// gestion du clic sur un service
 	$("#configForm > ul li > ul li > input:checkbox").click(function(){
-		if($(this).attr('checked')){
-			$(this).attr('checked','true');
-		}else{
-			$(this).removeAttr('checked');
-		}
-		
-		if($(this).parent().parent().find("input:checkbox[checked=true]").length == 0){
+		if($(this).parent().parent().find("input:checkbox[checked=true]").length > 0){
 			$(this).parent().parent().parent().children("input").removeAttr('checked');
-		}else if($(this).parent().parent().find("input:checkbox[checked=true]").length == $(this).parent().parent().find("input:checkbox").length){
-			$(this).parent().parent().parent().children("input").attr('checked', 'true');
+			if($(this).parent().parent().find("input:checkbox[checked=true]").length == $(this).parent().parent().find("input:checkbox").length){
+				$(this).parent().parent().parent().children("input").attr('checked', 'true');
+			}
 		}
 	});
 
