@@ -36,7 +36,7 @@ $(document).ready(function(){
 			"<label for=\"cat_"+i+"\">"+$(this).text()+"</label>");
 	});
 
-
+	// gestion du clic sur une catégorie
 	$("#configForm > ul li > input:checkbox").click(function(){
 		var index = $("#configForm > ul li > input:checkbox").index(this);
 
@@ -44,6 +44,21 @@ $(document).ready(function(){
 			$("#configForm > ul > li:eq("+index+") input:checkbox").attr('checked','true');
 		}else{
 			$("#configForm > ul > li:eq("+index+") input:checkbox").removeAttr('checked');
+		}
+	});
+
+	// gestion du clic sur un service
+	$("#configForm > ul li > ul li > input:checkbox").click(function(){
+		if($(this).attr('checked')){
+			$(this).attr('checked','true');
+		}else{
+			$(this).removeAttr('checked');
+		}
+		
+		if($(this).parent().parent().find("input:checkbox[checked=true]").length == 0){
+			$(this).parent().parent().parent().children("input").removeAttr('checked');
+		}else if($(this).parent().parent().find("input:checkbox[checked=true]").length == $(this).parent().parent().find("input:checkbox").length){
+			$(this).parent().parent().parent().children("input").attr('checked', 'true');
 		}
 	});
 
