@@ -92,7 +92,7 @@ for($i=0;$i<$countInsertRecords;$i++){
 	}
 }
 
-$sql = "DELETE FROM statistics";
+$sql = "DELETE FROM statistics WHERE dateVisit <= ".$limit;
 $query = $db->exec($sql);
 
 $dbStat = null;
