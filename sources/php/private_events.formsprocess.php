@@ -202,6 +202,11 @@ if(isset($_POST['insert'])){
 						" VALUES(NULL, ?, ?, ?, ?, ?)";
 					$query = $db->prepare($sql);
 					if($query->execute(array($period, $isScheduled, $idService, $idEvent, $idEventDescription))){
+						if($isScheduled == 3){
+							$sql = "UPDATE services SET state=4 WHERE idService=?";
+							$query = $db->prepare($sql);
+							$query->execute(array($idService));
+						}
 						$error = 'L\'évènement a été inséré avec succès.';
 						unset($_POST);
 						add_log(LOG_FILE, phpCAS::getUser(), 'INSERT', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
@@ -373,6 +378,10 @@ if(isset($_POST['modify'])){
 						$updateMessage = $query->execute(array($idService));
 					}
 				}
+			}elseif($isScheduled == 3){
+				$sql = "UPDATE services SET state=4 WHERE idService=?";
+				$query = $db->prepare($sql);
+				$query->execute(array($idService));
 			}
 
 			$sql = "UPDATE events_isou SET period=?, idEventDescription=?, isScheduled=?, idService=? WHERE idEvent=?";
