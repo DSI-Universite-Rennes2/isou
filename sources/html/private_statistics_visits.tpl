@@ -1,4 +1,6 @@
 <h1>statistiques des visites sur Isou</h1>
+<p>Année : {foreach $years as $year}<a href="{$smarty.const.URL}/index.php/statistiques?visits=1&year={$year}">{$year}</a>, {/foreach}
+<a href="{$smarty.const.URL}/index.php/statistiques?visits=1">Toutes les années</a></p>
 <ul id="statistics-menu">
 	<li><a href="#daily">statistiques de la semaine courante</a></li>
 	<li><a href="#weekly">statistiques du traffic hebdomadaire</a></li>
@@ -45,7 +47,7 @@
 <p>Aucune visite pour le moment.</p>
 {/if}
 
-<p><a title="Retourner au menu de la page" href="#menu"><img alt="remonter" src="{$smarty.const.URL}/images/page_up.gif">Haut de page</a></p>
+<p class="quickaccess-menu"><a title="Retourner au menu de la page" href="#menu"><img alt="remonter" src="{$smarty.const.URL}/images/page_up.gif">Haut de page</a></p>
 
 {* <!-- Traffic hebdomadaire --> *}
 <h2 id="weekly">Traffic hebdomadaire (hors bots et autres)</h2>
@@ -71,7 +73,7 @@
 <p>Aucune donnée disponible.</p>
 {/if}
 
-<p><a title="Retourner au menu de la page" href="#menu"><img alt="remonter" src="{$smarty.const.URL}/images/page_up.gif">Haut de page</a></p>
+<p class="quickaccess-menu"><a title="Retourner au menu de la page" href="#menu"><img alt="remonter" src="{$smarty.const.URL}/images/page_up.gif">Haut de page</a></p>
 
 <h2 id="monthly">Traffic mensuel</h2>
 {* <!-- Traffic mensuel par navigateurs --> *}
@@ -120,5 +122,5 @@
 <p>Aucune donnée disponible.</p>
 {/if}
 
-<p><a title="Retourner au menu de la page" href="#menu"><img alt="remonter" src="{$smarty.const.URL}/images/page_up.gif">Haut de page</a></p>
+<p class="quickaccess-menu"><a title="Retourner au menu de la page" href="#menu"><img alt="remonter" src="{$smarty.const.URL}/images/page_up.gif">Haut de page</a></p>
 

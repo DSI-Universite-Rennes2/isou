@@ -88,9 +88,30 @@ if(is_file(substr(DB_STAT_PATH, 7))){
 		continue;
 	}
 
+	$sql = "SELECT MIN(weeks) AS week FROM visits";
+	$query = $dbVisits->prepare($sql);
+	$query->execute();
+	$firstYear = $query->fetchObject();
+	$firstYear = strftime('%Y', $firstYear->week);
+	if(isset($_GET['year'])){
+		$_GET['year'] = intval($_GET['year']);
+		if($firstYear <= $_GET['year'] && $_GET['year'] <= strftime('%Y')){
+			$beginDate = mktime(0,0,0,1,1,$_GET['year']);
+			$endDate = mktime(23,59,59,12,31,$_GET['year']);
+		}
+	}
+
+	if(!isset($beginDate)){
+		$beginDate = mktime(0,0,0,1,1,$firstYear);
+		$endDate = TIME;
+	}
+
+	$years = range($firstYear, strftime('%Y'));
+
 	// traffic hebdomadaire par IP
 	$sql = "SELECT DISTINCT weeks".
 			" FROM visits".
+			" WHERE weeks BETWEEN ".$beginDate." AND ".$endDate.
 			" ORDER BY weeks";
 	$typeVisit = array('Visites externes', 'Visites internes', 'Visites CRI');
 
@@ -110,6 +131,7 @@ if(is_file(substr(DB_STAT_PATH, 7))){
 	$sql = "SELECT weeks, ip, SUM(numOf) as count".
 			" FROM visits".
 			" WHERE userAgent IS NULL".
+			" AND weeks BETWEEN ".$beginDate." AND ".$endDate.
 			" GROUP BY weeks, ip".
 			" ORDER BY weeks";
 	if($query = $dbVisits->query($sql)){
@@ -123,6 +145,7 @@ if(is_file(substr(DB_STAT_PATH, 7))){
 	$sql = "SELECT DISTINCT browser".
 			" FROM visits".
 			" WHERE browser != 'other'".
+			" AND weeks BETWEEN ".$beginDate." AND ".$endDate.
 			" ORDER BY browser";
 	if($query = $dbVisits->query($sql)){
 		while($browserVisits = $query->fetch(PDO::FETCH_OBJ)){
@@ -135,6 +158,7 @@ if(is_file(substr(DB_STAT_PATH, 7))){
 	$sql = "SELECT strftime('%Y %m', weeks, 'unixepoch') as month, browser, SUM(numOf) as count".
 			" FROM visits".
 			" WHERE browser != 'other'".
+			" AND weeks BETWEEN ".$beginDate." AND ".$endDate.
 			" GROUP BY month, browser".
 			" ORDER BY month";
 	if($query = $dbVisits->query($sql)){
@@ -147,6 +171,7 @@ if(is_file(substr(DB_STAT_PATH, 7))){
 	$sql = "SELECT DISTINCT os".
 			" FROM visits".
 			" WHERE os != 'other'".
+			" AND weeks BETWEEN ".$beginDate." AND ".$endDate.
 			" ORDER BY os";
 	if($query = $dbVisits->query($sql)){
 		while($osVisits = $query->fetch(PDO::FETCH_OBJ)){
@@ -158,6 +183,7 @@ if(is_file(substr(DB_STAT_PATH, 7))){
 
 	$sql = "SELECT strftime('%Y %m', weeks, 'unixepoch') as month, os, SUM(numOf) as count".
 			" FROM visits".
+			" WHERE weeks BETWEEN ".$beginDate." AND ".$endDate.
 			" GROUP BY month, os".
 			" ORDER BY month";
 	if($query = $dbVisits->query($sql)){
@@ -165,7 +191,6 @@ if(is_file(substr(DB_STAT_PATH, 7))){
 			$osTraffic[$visit->os][$visit->month] = $visit->count;
 		}
 	}
-
 	$dbVisits = null;
 }
 
@@ -177,6 +202,7 @@ if(is_file(substr(DB_STAT_PATH, 7))){
 	$smarty->assign('googlebot', $googlebot);
 	$smarty->assign('weeks', $weeks);
 	$smarty->assign('months', $months);
+	$smarty->assign('years', $years);
 	$smarty->assign('traffic', $traffic);
 	$smarty->assign('browsersTraffic', $browsersTraffic);
 	$smarty->assign('osTraffic', $osTraffic);
