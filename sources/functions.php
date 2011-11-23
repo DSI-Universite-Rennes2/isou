@@ -132,8 +132,15 @@ function date_to_timestamp($date){
 	}
 }
 
-function plurial($num,$word,$lang, $whitespace = true){
-	return ($num>1)?$word .= 's':$word .= '&nbsp';
+function plurial($num, $word, $whitespace = TRUE, $lang = 'fr'){
+	if($lang === 'fr'){
+		if($whitespace === TRUE){
+			return ($num>1)?$word .= 's':$word .= '&nbsp';
+		}else{
+			return ($num>1)?$word .= 's':$word;
+		}
+	}
+	return $word;
 }
 
 /*
@@ -170,6 +177,28 @@ function add_log($file, $user = 'ISOU', $type, $message, $level = 1){
 				mail(SUPPORT_ISOU, 'Impossible d\'écrire dans les logs d\'ISOU', utf8_decode($log));
 			}
 		}
+	}
+}
+
+/*
+   Convert seconds to human readable
+*/
+function secondstohuman($seconds){
+	$minutes = floor($seconds/60);
+	if($minutes >= 1){
+		$hours = floor($seconds/3600);
+		if($hours >= 1){
+			$days = floor($seconds/86400);
+			if($days >= 1){
+				return $days.' '.plurial($days, 'jour', FALSE);
+			}else{
+				return $hours.' '.plurial($hours, 'heure', FALSE);
+			}
+		}else{
+			return $minutes.' '.plurial($minutes, 'minute', FALSE);
+		}
+	}else{
+		return $seconds.' '.plurial($seconds, 'seconde', FALSE);
 	}
 }
 
