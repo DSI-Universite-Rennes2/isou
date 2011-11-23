@@ -56,14 +56,10 @@ function getInternetBrowser($user_agent){
 	/*
 		FIREFOX
 	*/
-	if(preg_match('#Firefox/4#si',$user_agent)){
-		return 'Firefox 4';
-	}else if(preg_match('#Firefox/3#si',$user_agent)){
-		return 'Firefox 3';
-	}else if(preg_match('#Firefox/2#si',$user_agent)){
-		return 'Firefox 2';
-	}else if(preg_match('#Firefox/1#si',$user_agent)){
-		return 'Firefox 1';
+	if(preg_match('#Firefox/([\d\.]*)#si',$user_agent, $browser)){
+		return str_replace('/', '', $browser[0]);
+	}else if(preg_match('#Firefox#si',$user_agent)){
+		return 'Firefox';
 	/*
 		INTERNET EXPLORER
 	*/
