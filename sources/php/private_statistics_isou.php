@@ -3,7 +3,8 @@
 	// Stats Visits
 	$sql = "SELECT ip, count(*) AS total".
 		" FROM statistics".
-		" WHERE userAgent IS NULL".
+		" WHERE (browser IS NULL".
+		" AND os IS NULL) = 0".
 		" GROUP BY ip".
 		" ORDER BY ip";
 	$visits = new stdClass();
