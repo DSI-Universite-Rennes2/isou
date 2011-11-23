@@ -108,6 +108,27 @@ $(document).ready(function(){
 		$(this).css("border","0.2em ridge #6B8E23");
 	});
 
+	$("#addform1").prepend('<p style="padding-bottom:1.5em;"><label for="search">Rechercher</label><input type="text" id="search" name="search" /></p>');
+
+	$("#search").keypress(function(){
+		// if($(this).val().length > 2){
+			$("#servicename option").each(function(){
+				if($(this).text().indexOf($("#search").val()) == -1){
+					if(!$(this).hasClass("invisible")){
+						$(this).addClass("invisible");
+					}
+				}else{
+					if($(this).hasClass("invisible")){
+						$(this).removeClass("invisible");
+					}
+				}
+			});
+		// }
+        $("#servicename option").removeAttr("selected","selected");
+		$("#addform1 #servicename option[class!='invisible']").first().attr("selected","selected");
+		$("#addform2 #servicename option[class!='invisible']").first().attr("selected","selected");
+	});
+
 	/* RECUPERATION DE L'INDEX FOURNIT DANS L'URL */
 	var anchor = '';
 	if(window.location.search != ""){
