@@ -38,6 +38,7 @@ p{
 
 #events-menu #events-menu-selected{
 	border: #000 0.15em groove;
+	background-color: #FFEFD5;
 }
 
 #add-form{
@@ -84,6 +85,11 @@ p{
 .info{
 	font-size: .7em;
 	font-weight: normal;
+}
+
+#warning-forced{
+	font-size: .8em;
+	color: #B22222;
 }
 
 .hidden{
@@ -136,7 +142,7 @@ span.label{
  * CSS POUR JQUERY
  */
 #form-filter{
-	border: solid 0.1em black;
+	border: solid 0.1em #000;
 	margin: 1em;
 	padding: 0.5em 2em;
 }
@@ -159,6 +165,13 @@ span.label{
 
 #add-menu{
 	margin: 3em 0em;
+}
+
+#button-add-event{
+	background-color: #FFE4E1;
+	border: solid 0.1em #000;
+	border-radius: 1em;
+	padding: .5em 1em;
 }
 
 #form-fg-layout, #form-bg-layout{

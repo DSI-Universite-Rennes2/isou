@@ -85,6 +85,19 @@ $(document).ready(function(){
 	// masque le formulaire pour ajouter un message informatif
 	$("#form-add-info").css("display","none");
 	$("#form-add-info").attr("action",$("#form-add-info").attr("action")+"?info");
+	$(".info").css("display","none");
+	if($("#forced") && $("#forced").val() == "0"){
+		$("#warning-forced").css("display","inline");
+	}else{
+		$("#warning-forced").css("display","none");
+	}
+	$("#forced").change(function(){
+		if($(this).val() == "0"){
+			$("#warning-forced").css("display","inline");
+		}else{
+			$("#warning-forced").css("display","none");
+		}
+	});
 
 	// supprimer les ancres de remonter de page
 	$(".form").next().remove();

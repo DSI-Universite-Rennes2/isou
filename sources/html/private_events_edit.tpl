@@ -10,6 +10,7 @@
 					<label for="forced" class="label">
 						Forcer l'état du service
 						<span class="info">(seulement si c'est une opération non-prévue)</span>
+						<span id="warning-forced"><br />Attention ! Sélectionner l'option 'État par défaut' pour un retour au <span lang="en">monitoring</span> automatique</span>
 					</label>
 					{if $currentEdit->readonly == 1}
 					{html_options id=forced name=forced options=$optionForced selected=$smarty.post.forced|default:$currentEdit->state}
