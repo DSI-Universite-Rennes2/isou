@@ -57,6 +57,7 @@
 			<li{if $page === 'services'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/services" title="Ajouter un service" >services</a></li>
 			<li{if $page === 'dependances'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/dependances" title="Ajouter une dépendance" >dépendances</a></li>
 			<li{if $page === 'categories'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/categories" title="Ajouter une catégorie" >catégories</a></li>
+			<li{if $page === 'configuration'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/configuration" title="Configuration générale de l'application" >configuration</a></li>
 			<li{if $page === 'aide'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/aide" title="Consulter la documentation" >aide</a></li>
 		</ul>
 		</li>

@@ -98,6 +98,12 @@ $page->public = FALSE;
 $MENU['categories'] = $page;
 
 $page = new stdClass();
+$page->model = '/php/private_configuration.php';
+$page->template = 'private_configuration';
+$page->public = FALSE;
+$MENU['configuration'] = $page;
+
+$page = new stdClass();
 $page->model = '/php/private_help.php';
 $page->template = 'private_help';
 $page->public = FALSE;

@@ -1,0 +1,26 @@
+h2{
+	background-color: #DDA0DD;
+	margin-bottom: 1em;
+	padding: 0.3em 1em;
+}
+
+.label{
+	width: 30em;
+}
+
+.input{
+	display: inline-block;
+}
+
+.example{
+	font-weight: normal;
+}
+
+.key{
+	color: #808080;
+	font-size: 0.6em;
+}
+
+#content p{
+	margin-bottom: 2em;
+}
