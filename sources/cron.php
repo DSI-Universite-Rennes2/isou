@@ -37,14 +37,14 @@ if(is_file(BASE.'/cron/LOCK_CRON')){
 
 	// un cron est déjà en cours d'execution
 	$atime = fileatime(BASE.'/cron/LOCK_CRON');
-	if($atime !== FALSE && $atime+(10*60*60) < TIME){
+	if($atime !== FALSE && $atime+(10*60) < TIME){
 		// si le fichier existe depuis plus de 10 minutes, alerter les admins
 		$header = 'MIME-Version: 1.0' . "\r\n" . 'Content-type: text/plain; charset=UTF-8' . "\r\n";
-		$content = "Le fichier '".BASE."/cron/LOCK_CRON' a été créé depuis plus de 10 minutes\n".
-					"Merci de tuer le processus php associé à '".$pwd."/cron.php' puis de supprimer les fichiers '".BASE."/cron/LOCK_*'";
+		$content = "Le fichier '".BASE."/cron/LOCK_CRON' a été créé depuis plus de 10 minutes\n\n".
+					"Merci de tuer le processus php associé à '".$pwd."/cron.php',\npuis de supprimer les fichiers '".BASE."/cron/LOCK_*'";
 		touch(BASE.'/cron/LOCK_WARNING');
 		foreach($CFG['admin_mails'] as $mail){
-			if(filter_var($mail, FILTER_VALIDATE_EMAIL) === TRUE){
+			if(filter_var($mail, FILTER_VALIDATE_EMAIL) !== FALSE){
 				mail($mail, 'ISOU: erreur de fichier LOCK', $content, $header);
 			}
 		}
