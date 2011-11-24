@@ -1,21 +1,8 @@
 <?php
 
-// chemin d'accès du site
-$pwd = dirname(__FILE__).'/..';
-
-require $pwd.'/functions.php';
-require $pwd.'/config.php';
-require BASE.'/classes/smarty/Smarty.class.php';
-
 $smarty = new Smarty();
 $smarty->template_dir = BASE.'/html/';
 $smarty->compile_dir = BASE.'/classes/smarty/compile/';
-
-$title = NAME;
-$script = '';
-$css = '';
-
-require BASE.'/php/common_database.php';
 
 //
 // STATISTICS

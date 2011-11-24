@@ -11,6 +11,8 @@ $pwd = dirname(__FILE__);
 require $pwd.'/functions.php';
 require $pwd.'/config.php';
 
+error_reporting(-1);
+
 require BASE.'/php/common_database.php';
 
 // load CFG
@@ -53,7 +55,15 @@ if(is_file(BASE.'/cron/LOCK_CRON')){
 }
 
 // cron servant à la synchro avec Nagios
-require BASE.'/cron/cron.php';
+require BASE.'/classes/isou/update.functions.php';
+require BASE.'/classes/isou/parser.function.php';
+
+// creation/modification du fichier de log
+$log = update_nagios_to_db();
+
+if($log instanceof Exception){
+	add_log(LOG_FILE, 'ISOU', 'error', $log->getMessage());
+}
 
 if(mktime('%d', TIME) != mktime('%d', $CFG['last_daily_cron_update'])){
 	// si on n'est pas le même jour que $CFG['last_daily_cron_update']
@@ -79,6 +89,7 @@ if(mktime('%d', TIME) != mktime('%d', $CFG['last_daily_cron_update'])){
 	}
 }
 
+error_reporting(0);
 // génère le fichier isou.json
 require BASE.'/classes/isou/json.php';
 

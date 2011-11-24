@@ -1,11 +1,5 @@
 <?php
 
-$pwd = dirname(__FILE__).'/..';
-
-require $pwd.'/functions.php';
-require $pwd.'/config.php';
-require BASE.'/php/common_database.php';
-
 $year = getdate(TIME);
 $year = $year['year'];
 
