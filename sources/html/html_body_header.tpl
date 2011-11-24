@@ -69,7 +69,7 @@
 		{if $smarty.session.hide === 0}
 		<a href="{$FULLURL}?hide=1">masquer les interruptions de moins de {$CFG.tolerance/60} minutes</a>
 		{else}
-		<a href="{$FULLURL}?hide=0">afficher les interruptions de moins de {$smarty.tolerance/60} minutes</a>
+		<a href="{$FULLURL}?hide=0">afficher les interruptions de moins de {$CFG.tolerance/60} minutes</a>
 		{/if}
 		<a href="{$refresh_url}" title="Réactuliser les données">
 			rafraîchir les données

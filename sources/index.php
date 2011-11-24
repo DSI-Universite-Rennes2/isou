@@ -22,9 +22,7 @@ if($PAGE_NAME === 'rss'){
 	exit();
 }
 
-require BASE.'/php/common_authentification.php';
 require BASE.'/php/common_database.php';
-require BASE.'/php/common_statistics.php';
 
 $sql = "SELECT key, value FROM configuration";
 $CFG = array();
@@ -37,6 +35,9 @@ if($query = $db->query($sql)){
 		}
 	}
 }
+
+require BASE.'/php/common_authentification.php';
+require BASE.'/php/common_statistics.php';
 
 $sql = "SELECT idState, name, title, alt, src FROM states";
 $flags = array();
