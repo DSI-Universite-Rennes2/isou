@@ -39,7 +39,7 @@ if(!$stats[0]){
 		$params = array(session_id(), $operating_system, $internet_browser, $ip, NULL, TIME);
 	}
 
-	$sql = "INSERT INTO statistics(session_id, os, browser, ip, userAgent, dateVisit) VALUES(?,?,?,?,?)";
+	$sql = "INSERT INTO statistics(session_id, os, browser, ip, userAgent, dateVisit) VALUES(?,?,?,?,?,?)";
 	$query = $db->prepare($sql);
 	$query->execute($params);
 }
