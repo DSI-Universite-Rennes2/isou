@@ -229,7 +229,7 @@
 	<span class="key">last_cron_update</span><br />
 
 	<label class="label">Dernier lancement du cron quotidien.</label>
-	<span class="disabled">{if $CFG.last_cron_update == 0}Aucune valeur{else}{$CFG.last_daily_cron_update|date_format:'%c'}{/if}</span>
+	<span class="disabled">{if $CFG.last_daily_cron_update == 0}Aucune valeur{else}{$CFG.last_daily_cron_update|date_format:'%c'}{/if}</span>
 		<a href="{$smarty.const.URL}/index.php/configuration?action=reset&key=last_daily_cron_update#cron" title="réinitialiser la valeur de last_daily_cron_update">
 			<img alt="remettre à 0" src="{$smarty.const.URL}/images/action_reset.gif" />
 		</a><br />
