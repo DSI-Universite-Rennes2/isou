@@ -245,11 +245,11 @@ while($service = $services->fetchObject()){
 
 $smarty->assign('nagiosServices', $nagiosServices);
 
-$mail = $smarty->fetch('mail_cron_daily_text.tpl');
+$content = $smarty->fetch('mail_cron_daily_text.tpl');
 $header = 'MIME-Version: 1.0' . "\r\n" . 'Content-type: text/plain; charset=UTF-8' . "\r\n";
 foreach($ADMIN_MAILS as $mail){
 	if(filter_var($mail, FILTER_VALIDATE_EMAIL) === TRUE){
-		mail($mail, 'compte-rendu isou', $mail, $header);
+		mail($mail, 'compte-rendu isou', $content, $header);
 	}
 }
 
