@@ -229,8 +229,8 @@ class IsouEvent {
 				" AND e.idEvent = en.idEvent".
 				" AND d.idServiceParent = s.idService".
 				" AND d.idService = ".$idService.
-				" AND e.beginDate >= ".($this->beginDate-TOLERANCE).
-				" AND e.endDate <= ".($this->endDate+TOLERANCE);
+				" AND e.beginDate >= ".($this->beginDate-$CFG['tolerance']).
+				" AND e.endDate <= ".($this->endDate+$CFG['tolerance']);
 		$nagios_records = $db->prepare($sql);
 		if($nagios_records->execute(array())){
 			$j = 0;

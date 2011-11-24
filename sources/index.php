@@ -26,6 +26,18 @@ require BASE.'/php/common_authentification.php';
 require BASE.'/php/common_database.php';
 require BASE.'/php/common_statistics.php';
 
+$sql = "SELECT key, value FROM configuration";
+$CFG = array();
+if($query = $db->query($sql)){
+	while($config = $query->fetch(PDO::FETCH_OBJ)){
+		if(in_array($config->key, array('ip_local', 'ip_service', 'admin_users', 'admin_mails'))){
+			 $CFG[$config->key] = json_decode($config->value);
+		}else{
+			$CFG[$config->key] = $config->value;
+		}
+	}
+}
+
 $sql = "SELECT idState, name, title, alt, src FROM states";
 $flags = array();
 if($query = $db->query($sql)){
@@ -102,7 +114,7 @@ if(count($_GET)>0){
 }
 
 if($_SESSION['hide'] === 1){
-	$TOLERANCE = TOLERANCE;
+	$TOLERANCE = $CFG['tolerance'];
 }else{
 	$TOLERANCE = 0;
 }
@@ -117,7 +129,7 @@ $smarty->assign('page', $MAIN_PAGE_NAME);
 $smarty->assign('is_admin', $IS_ADMIN);
 $smarty->assign('flags', $flags);
 $smarty->assign('menu', $MENU);
-
+$smarty->assign('CFG', $CFG);
 $smarty->assign('connexion_url', $connexion_url);
 if(isset($annonce)){
 	$smarty->assign('annonce', $annonce);

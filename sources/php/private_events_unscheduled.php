@@ -12,7 +12,7 @@
 			" AND (((E.beginDate BETWEEN :0 AND :1".
 			" OR E.endDate BETWEEN :2 AND :3)";
 			if ($_SESSION['hide'] === 1){
-				$sql .= " AND (E.endDate - E.beginDate > ".TOLERANCE."))";
+				$sql .= " AND (E.endDate - E.beginDate > ".$CFG['tolerance']."))";
 				$param = array(TIMESTAMP_OF_72H_BEFORE_TODAY, TIMESTAMP_OF_LAST_CALENDAR_DAY, TIMESTAMP_OF_72H_BEFORE_TODAY, TIMESTAMP_OF_LAST_CALENDAR_DAY);
 			}else{
 				$sql .= ")";

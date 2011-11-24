@@ -1,10 +1,11 @@
 <?php
 
-$sql = "SELECT session_id
-	FROM statistics
-	WHERE session_id='".session_id()."'
-	AND dateVisit < ".(TIME+60*60);
-$stats = $db->query($sql);
+$sql = "SELECT session_id".
+		" FROM statistics".
+		" WHERE session_id=?".
+		" AND dateVisit < ?";
+$stats = $db->prepare($sql);
+$stats->execute(array(session_id(), TIME+60*60));
 $stats = $stats->fetch();
 
 if(!$stats[0]){
@@ -16,29 +17,31 @@ if(!$stats[0]){
 	$ip_addr = getIpAddr();
 
 	$ip = 0; // ip externe
-	foreach($IP_CRI as $ip_cri){
-		if(in_range($ip_addr, $ip_cri)){
-			$ip = 2; // ip cri
+	foreach($CFG['ip_service'] as $ip_service){
+		if(in_range($ip_addr, $ip_service)){
+			$ip = 2; // ip du service
 			continue;
 		}
 	}
 
 	if($ip === 0){
-		foreach($IP_INTERNE as $ip_interne){
-			if(in_range($ip_addr, $ip_interne)){
-				$ip = 1; // ip interne
+		foreach($CFG['ip_local'] as $ip_local){
+			if(in_range($ip_addr, $ip_local)){
+				$ip = 1; // ip du réseau local
 				continue;
 			}
 		}
 	}
 
 	if($operating_system === 'other' || $internet_browser === 'other'){
-		$sql="INSERT INTO statistics VALUES('".session_id()."', '".$operating_system."', '".$internet_browser."', '".$ip."', '".$_SERVER["HTTP_USER_AGENT"]."', ".TIME.")";
+		$params = array(session_id(), $operating_system, $internet_browser, $ip, $_SERVER['HTTP_USER_AGENT']);
 	}else{
-		$sql="INSERT INTO statistics VALUES('".session_id()."', '".$operating_system."', '".$internet_browser."', '".$ip."', NULL, ".TIME.")";
+		$params = array(session_id(), $operating_system, $internet_browser, $ip, NULL, TIME);
 	}
 
-	$db->exec($sql);
+	$sql = "INSERT INTO statistics(session_id, os, browser, ip, userAgent, dateVisit) VALUES(?,?,?,?,?)";
+	$query = $db->prepare($sql);
+	$query->execute($params);
 }
 
 ?>

@@ -13,22 +13,6 @@ define('DEBUG', FALSE);
 // définit si l'application est en mode developpement
 define('DEV', FALSE);
 
-// définit la tolérance aux faux-positifs de Nagios
-// l'évènement ne sera pas affiché à l'utilisateur lambda si la différence entre ka date de début et la date de fin d'évènement est inférieure à TOLERANCE
-define('TOLERANCE', 300);
-
-// tableau contenant des tableaux de plage d'IP faisant parties du réseau Interne
-$IP_INTERNE = array(array('127.0.0.0', '255.255.255.255'));
-
-// tableau contenant des tableaux de plage d'IP faisant parties du réseau des administrateurs d'ISOU
-$IP_CRI = array();
-
-// tableau contenant le login des administrateurs d'ISOU
-$ADMIN_USERS = array();
-
-// tableau contenant les mails des administrateurs d'ISOU
-$ADMIN_MAILS = array();
-
 // nom du service, notamment utilisé dans l'onglet du navigateur
 define('NAME', 'Isou');
 

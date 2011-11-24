@@ -135,7 +135,7 @@ $categories = array();
 if($service_records = $db->query($sql)){
 	while($service = $service_records->fetchObject('IsouService')){
 
-		$service->setEvents($service->getAllEvents(TOLERANCE, 10, $beginDateYesterday, $endDateYesterday));
+		$service->setEvents($service->getAllEvents($CFG['tolerance'], 10, $beginDateYesterday, $endDateYesterday));
 
 		if($service->hasEvents() === TRUE){
 			if($categoryName !== $service->getCategoryName()){
@@ -247,7 +247,7 @@ $smarty->assign('nagiosServices', $nagiosServices);
 
 $content = $smarty->fetch('mail_cron_daily_text.tpl');
 $header = 'MIME-Version: 1.0' . "\r\n" . 'Content-type: text/plain; charset=UTF-8' . "\r\n";
-foreach($ADMIN_MAILS as $mail){
+foreach($CFG['admin_mails'] as $mail){
 	if(filter_var($mail, FILTER_VALIDATE_EMAIL) === TRUE){
 		mail($mail, 'compte-rendu isou', $content, $header);
 	}

@@ -39,7 +39,7 @@ if(DEV === TRUE || DEBUG === TRUE){
 }
 
 if($IS_AUTH === true){
-	if(in_array(phpCAS::getUser(), $ADMIN_USERS) === TRUE){
+	if(in_array(phpCAS::getUser(), $CFG['admin_users']) === TRUE){
 		$IS_ADMIN = true;
 	}
 }

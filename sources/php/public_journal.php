@@ -40,7 +40,7 @@ $sql = "SELECT E.idEvent, E.beginDate, E.endDate, E.typeEvent".
 		" WHERE E.endDate IS NULL".
 		" OR (E.endDate > :0";
 if($_SESSION['hide'] === 1 || $IS_ADMIN === FALSE){
-	$sql .= " AND E.endDate-E.beginDate > ".TOLERANCE;
+	$sql .= " AND E.endDate-E.beginDate > ".$CFG['tolerance'];
 	$param = array($BEFORE);
 }else{
 	$param = array($BEFORE);
