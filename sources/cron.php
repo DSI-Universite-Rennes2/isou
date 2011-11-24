@@ -65,7 +65,10 @@ if($log instanceof Exception){
 	add_log(LOG_FILE, 'ISOU', 'error', $log->getMessage());
 }
 
-if(strftime('%d', TIME) != strftime('%d', $CFG['last_daily_cron_update'])){
+$daily_cron_time = explode(':', $CFG['daily_cron_hour']);
+$daily_cron_time = mktime($daily_cron_time[0], $daily_cron_time[1]);
+
+if(strftime('%d', TIME) != strftime('%d', $CFG['last_daily_cron_update']) && TIME >= $daily_cron_time){
 	// si on n'est pas le même jour que $CFG['last_daily_cron_update']
 	require BASE.'/cron/cron_daily.php';
 	$sql = "UPDATE configuration SET value=? WHERE key=?";
