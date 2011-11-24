@@ -217,7 +217,7 @@ class IsouEvent {
 	*   @return		array of IsouEvent()
 	*/
 	private function getNagiosEvents_recursive($idService){
-		global $db;
+		global $db, $CFG;
 
 		$nagiosEvents = array();
 
