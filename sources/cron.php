@@ -65,14 +65,14 @@ if($log instanceof Exception){
 	add_log(LOG_FILE, 'ISOU', 'error', $log->getMessage());
 }
 
-if(mktime('%d', TIME) != mktime('%d', $CFG['last_daily_cron_update'])){
+if(strftime('%d', TIME) != strftime('%d', $CFG['last_daily_cron_update'])){
 	// si on n'est pas le même jour que $CFG['last_daily_cron_update']
 	require BASE.'/cron/cron_daily.php';
 	$sql = "UPDATE configuration SET value=? WHERE key=?";
 	$query = $db->prepare($sql);
 	$query->execute(array(TIME, 'last_daily_cron_update'));
 
-	if(mktime('%u', TIME) === 1){
+	if(strftime('%u', TIME) === 1){
 		// si on est lundi
 		require BASE.'/cron/cron_weekly.php';
 		$sql = "UPDATE configuration SET value=? WHERE key=?";
@@ -80,7 +80,7 @@ if(mktime('%d', TIME) != mktime('%d', $CFG['last_daily_cron_update'])){
 		$query->execute(array(TIME, 'last_weekly_cron_update'));
 	}
 
-	if(mktime('%Y', TIME) !== mktime('%Y', $CFG['last_yearly_cron_update'])){
+	if(strftime('%Y', TIME) !== strftime('%Y', $CFG['last_yearly_cron_update'])){
 		// on n'est pas à la même année que $CFG['last_yearly_cron_update']
 		require BASE.'/cron/cron_yearly.php';
 		$sql = "UPDATE configuration SET value=? WHERE key=?";

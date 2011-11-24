@@ -1,5 +1,7 @@
 <?php
 
+require BASE.'/classes/smarty/Smarty.class.php';
+
 $smarty = new Smarty();
 $smarty->template_dir = BASE.'/html/';
 $smarty->compile_dir = BASE.'/classes/smarty/compile/';

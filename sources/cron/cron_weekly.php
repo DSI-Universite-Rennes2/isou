@@ -13,7 +13,6 @@ $insertRecords = array();
 $dbNameStat = '';
 
 if($statisticRecords = $db->query($sql)){
-	$toto = 0;
 	while($statisticRecord = $statisticRecords->fetch(PDO::FETCH_NUM)){
 		$countInsertRecords = count($insertRecords);
 
@@ -96,6 +95,5 @@ $sql = "DELETE FROM statistics WHERE dateVisit <= ".$limit;
 $query = $db->exec($sql);
 
 $dbStat = null;
-$db = null;
 
 ?>
