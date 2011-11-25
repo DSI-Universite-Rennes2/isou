@@ -15,7 +15,7 @@
 	$categories = array();
 	$service_options[0] = '&nbsp;';
 
-	$sql = "SELECT S.idService, S.name, S.nameForUsers, S.state, S.comment, C.name".
+	$sql = "SELECT S.idService, S.name, S.nameForUsers, S.url, S.state, S.comment, S.readonly, C.name".
 			" FROM services S, categories C".
 			" WHERE C.idCategory = S.idCategory".
 			" AND S.enable = 1".
@@ -99,7 +99,7 @@
 
 		while(isset($service_records[$i][0])){
 			$op++;
-			$services[$i] = new IsouService($service_records[$i][0], $service_records[$i][1], $service_records[$i][2], $service_records[$i][3], $service_records[$i][4], $service_records[$i][5]);
+			$services[$i] = new IsouService($service_records[$i][0], $service_records[$i][1], $service_records[$i][2], $service_records[$i][3], $service_records[$i][4], $service_records[$i][5], $service_records[$i][6], $service_records[$i][7]);
 
 			$days = array();
 			for($d=0;$d<7;$d++){

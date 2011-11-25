@@ -21,6 +21,7 @@ class IsouService {
 	protected $name;
 	protected $nameForUsers;
 	protected $state;
+	protected $readonly;
 	protected $comment;
 	protected $categoryName;
 	protected $events;
@@ -48,6 +49,7 @@ class IsouService {
 			$this->url = $this->url;
 			$this->state = intval($this->state);
 			$this->comment = $this->comment;
+			$this->readonly = $this->readonly;
 			$this->categoryName = $this->category;
 		}else if($countArgs === 7){
 			// instanciation "manuelle" depuis un appel explicite __construct(param1, param2, etc...)
@@ -57,7 +59,8 @@ class IsouService {
 			$this->url = $args[3];
 			$this->state = intval($args[4]);
 			$this->comment = $args[5];
-			$this->categoryName = $args[6];
+			$this->readonly = intval($args[6]);
+			$this->categoryName = $args[7];
 		}else{
 			$this->__destruct();
 			new Exception('Pas assez de paramètres');
@@ -83,6 +86,7 @@ class IsouService {
 	public function getUrl()				{ return $this->url; }
 	public function getState()				{ return $this->state; }
 	public function getComment()			{ return $this->comment; }
+	public function getReadonly()			{ return $this->readonly; }
 	public function getCategoryName()		{ return $this->categoryName; }
 
 	// Accessors SET
@@ -128,6 +132,14 @@ class IsouService {
 	*/
 	public function isClosed(){
 		return $this->state === 4;
+	}
+
+	/**
+	*   @desc		Return true if service is forced
+	*   @return		boolean
+	*/
+	public function isForced(){
+		return $this->readonly === 1;
 	}
 
 	/**
