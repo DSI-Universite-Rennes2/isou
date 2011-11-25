@@ -67,7 +67,7 @@ if(isset($_POST['scheduled'])){
 
 
 if(isset($_POST['beginDate']) && !empty($_POST['beginDate'])){
-	$beginDate = strtotimestamp($_POST['beginDate']);
+	$beginDate = strtotime($_POST['beginDate']);
 }else{
 	$beginDate = TIME;
 	$_POST['beginDate'] = strftime('%d/%m/%Y %H:%M', TIME);
