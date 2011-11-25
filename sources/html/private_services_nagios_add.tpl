@@ -24,7 +24,7 @@
 			</p>
 			<p>
 				{* {html_options id=hostname name=name options=$arrayHosts} *}
-				{html_options id=servicename name=name output=$arrayHosts values=$arrayHosts}
+				{html_options id=hostname name=name output=$arrayHosts values=$arrayHosts}
 				<input type="submit" name="insert" value="Enregistrer" />
 			</p>
 		</fieldset>
