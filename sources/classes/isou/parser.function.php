@@ -52,6 +52,12 @@ function status_dat2db($file){
 				}
 			}
 
+			// passe le service en vert si le problème est connu
+			if($problem_has_been_acknowledged == 1){
+				$problem_has_been_acknowledged = 0;
+				$current_state = 0;
+			}
+
 			if($problem_has_been_acknowledged == 0){
 				if($tag == 'servicestatus'){
 					$host_name = $service_description.'@'.$host_name;
