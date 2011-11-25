@@ -1,6 +1,6 @@
 <div id="content">
 
-<form method="post" action="{$smarty.const.URL}/index.php/configurationi#form-general" id="form-general">
+<form method="post" action="{$smarty.const.URL}/index.php/configuration#form-general" id="form-general">
 	<h2>Générale</h2>
 	{if isset($smarty.post.error.general)}
 	{if count($smarty.post.error.general) === 0}
