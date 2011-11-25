@@ -42,6 +42,18 @@
 	</div>
 	{/if}
 
+	{if count($forcedservices) > 0}
+		<h3>Liste des services actuellement forcés</h3>
+		<ul>
+		{foreach $forcedservices as $forcedservice}
+			<li>
+				<img src="{$smarty.const.URL}/images/{$flags.{$forcedservice->state}->src}" alt="{$flags.{$forcedservice->state}->alt}" />
+				{$forcedservice->nameForUsers}
+			</li>
+		{/foreach}
+		</ul>
+	{/if}
+
 	{if $smarty.get.type == 0}
 		<h3>Interruptions non prévues</h3>
 		<p id="add-form"><a id="button-add-event" href="#form-add-event">Ajouter une interruption non prévue</a></p>

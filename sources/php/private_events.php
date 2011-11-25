@@ -83,6 +83,9 @@
 		$smarty->assign('scheduled', $scheduled);
 	}
 
+	require BASE.'/php/private_events_forced.php';
+	$smarty->assign('forcedservices', $forcedservices);
+
 	$smarty->assign('optionNameForUsers', $optionNameForUsers);
 	if(isset($currentEdit)){
 		$smarty->assign('currentEdit', $currentEdit);
