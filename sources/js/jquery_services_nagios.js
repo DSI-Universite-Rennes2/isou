@@ -23,7 +23,8 @@ function addService(click){
 	$("#addFormMask").append($("<div id=\"closeAddForm\"><a href=\"#\" onclick=\"closeForm();\"><img alt=\"FERMER\" /></a></div>"));
 	$("#addFormMask").append($("#update"));
 	// $("#addFormMask").append($("<p><input onclick=\"directNagios();\" type=\"checkbox\" id=\"directNagios\" /><label for=\"directNagios\">Utiliser directement ce service Nagios dans Isou, sans passer par le système des dépendances</label></p>"));
-	$("#addFormMask").append($("#addform1, #addform2"));
+	$("#addFormMask").append($("#p-search, #addform1, #addform2"));
+
 
 	$("#addform1 .header label:gt(0)").css("display","none");
 	$("#addform2 .header label:gt(0)").css("display","none");
@@ -57,7 +58,7 @@ function addService(click){
 	$("#closeAddForm").css("text-align","right");
 	$("#closeAddForm").css("padding",".2em 1em");
 
-	$("#addform1, #addform2").css("display","block");
+	$("#p-search, #addform1, #addform2").css("display","block");
 	$("#addform1, #addform2").css("padding","1em");
 	$("#addform1, #addform2").css("margin","0em");
 	$("#addform1 > fieldset, #addform2 > fieldset").css("margin","0em");
@@ -75,10 +76,14 @@ function addService(click){
 
 //au chargement de la page
 $(document).ready(function(){
+
+	// TODO: mettre cette partie dans un tpl
+	$("#addform1").before('<p id="p-search" style="padding-bottom:1.5em;"><label for="search">Rechercher</label><input type="text" id="search" name="search" /></p>');
+
 	/* * * * * * * *
 	 * MODIFIE LE DOM
 	 * * * * */
-	$("#addform1, #addform2").css("display","none");
+	$("#p-search, #addform1, #addform2").css("display","none");
 	$("#addform1, #addform2").attr("action",$("#addform1").attr("action")+"&add");
 
 	/* * * * *
@@ -108,11 +113,10 @@ $(document).ready(function(){
 		$(this).css("border","0.2em ridge #6B8E23");
 	});
 
-	$("#addform1").prepend('<p style="padding-bottom:1.5em;"><label for="search">Rechercher</label><input type="text" id="search" name="search" /></p>');
-
+	// function qui permet de filtrer le menu déroulant listant tous les services Nagios
 	$("#search").keypress(function(){
 		// if($(this).val().length > 2){
-			$("#servicename option").each(function(){
+			$("#servicename option, #hostname option").each(function(){
 				if($(this).text().indexOf($("#search").val()) == -1){
 					if(!$(this).hasClass("invisible")){
 						$(this).addClass("invisible");
@@ -124,9 +128,9 @@ $(document).ready(function(){
 				}
 			});
 		// }
-        $("#servicename option").removeAttr("selected","selected");
-		$("#addform1 #servicename option[class!='invisible']").first().attr("selected","selected");
-		$("#addform2 #servicename option[class!='invisible']").first().attr("selected","selected");
+        $("#servicename option, #hostname option").removeAttr("selected","selected");
+		$("#servicename option[class!='invisible']").first().attr("selected","selected");
+		$("#hostname option[class!='invisible']").first().attr("selected","selected");
 	});
 
 	/* RECUPERATION DE L'INDEX FOURNIT DANS L'URL */
