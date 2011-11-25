@@ -207,9 +207,23 @@ if(isset($_POST['insert'])){
 							$query = $db->prepare($sql);
 							$query->execute(array($idService));
 						}
-						$error = 'L\'évènement a été inséré avec succès.';
-						unset($_POST);
-						add_log(LOG_FILE, phpCAS::getUser(), 'INSERT', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
+						$sql = "SELECT DISTINCT idService FROM dependencies WHERE idServiceParent = ?";
+						$query = $db->prepare($sql);
+						$query->execute(array($idService));
+						while($child = $query->fetch(PDO::FETCH_OBJ)){
+							$sql = "INSERT INTO events_isou (idEventIsou, period, isScheduled, idService, idEvent, idEventDescription)".
+								" VALUES(NULL, ?, ?, ?, ?, ?)";
+							$insert = $db->prepare($sql);
+							if(!$insert->execute(array($period, $isScheduled, $child->idService, $idEvent, $idEventDescription))){
+								$error = 'L\'évènement n\'a pas pu être inséré.';
+							}
+						}
+
+						if(!isset($error)){
+							$error = 'L\'évènement a été inséré avec succès.';
+							unset($_POST);
+							add_log(LOG_FILE, phpCAS::getUser(), 'INSERT', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
+						}
 					}else{
 						$error = 'L\'évènement n\'a pas pu être inséré.';
 					}
