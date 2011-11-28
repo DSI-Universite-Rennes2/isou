@@ -250,10 +250,13 @@ if(isset($_POST['delete']) && isset($idDelEvent)){
 	if($idDelEvent > 0){
 		$db->beginTransaction();
 		$commit = FALSE;
-
 		if(isset($_POST['message'])){
 			$sql = "DELETE FROM events_info WHERE idEvent = ?";
 		}else{
+			$sql = "SELECT S.idService, S.state FROM services S, events_isou EI WHERE S.idService=EI.idService AND EI.idEvent = ?";
+			$query = $db->prepare($sql);
+			$query->execute(array($idDelEvent));
+			$service = $query->fetchObject();
 			$sql = "DELETE FROM events_isou WHERE idEvent = ?";
 		}
 		$query = $db->prepare($sql);
@@ -265,9 +268,13 @@ if(isset($_POST['delete']) && isset($idDelEvent)){
 				if(isset($_POST['message'])){
 					$commit = TRUE;
 				}else{
-					$sql = "UPDATE services SET readonly=0 WHERE idService=(SELECT idService FROM events_isou WHERE idEvent = ?)";
+					if($service->state == '4'){
+						$sql = "UPDATE services SET readonly=0, state=0 WHERE idService=?";
+					}else{
+						$sql = "UPDATE services SET readonly=0 WHERE idService=?";
+					}
 					$query = $db->prepare($sql);
-					if($query->execute(array($idDelEvent))){
+					if($query->execute(array($service->idService))){
 						$commit = TRUE;
 					}
 				}
