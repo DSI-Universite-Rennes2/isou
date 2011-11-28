@@ -194,11 +194,18 @@ if(isset($_POST['insert'])){
 
 			$idEventDescription = 1;
 			if(!isset($error) && !empty($description)){
-				$sql = "INSERT INTO events_description (idEventDescription, description, autogen)".
-					" VALUES(NULL, ?, 0)";
+				$sql = "SELECT idEventDescription FROM events_description WHERE autogen=0 AND description=?";
 				$query = $db->prepare($sql);
-				if($query->execute(array($description))){
-					$idEventDescription = $db->lastInsertId();
+				$query->execute(array(trim($description)));
+				if($idEventDescription = $query->fetchObject()){
+					$idEventDescription = $idEventDescription->idEventDescription;
+				}else{
+					$sql = "INSERT INTO events_description (idEventDescription, description, autogen)".
+						" VALUES(NULL, ?, 0)";
+					$query = $db->prepare($sql);
+					if($query->execute(array(trim($description)))){
+						$idEventDescription = $db->lastInsertId();
+					}
 				}
 			}
 
