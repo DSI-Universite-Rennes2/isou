@@ -6,7 +6,7 @@
 	{if isset($event->edit)}
 		<li id="selected">{include file="private_events_edit.tpl"}</li>
 	{else}
-		<li class="regular">
+		<li{if isset($event->group)} class="group"{/if}>
 			<p class="pform1">Service <span class="bold">{$event->nameForUsers}</span>
 				interrompu
 			{if $event->endDate === 604800}

@@ -15,7 +15,10 @@
 			" ORDER BY E.beginDate";
 	$events = $db->prepare($sql);
 	$events->execute(array(TIME));
+
+	$lastIdEvent = NULL;
 	$closed = array();
+
 	while($event = $events->fetchObject()){
 
 		if((isset($_GET['modify']) && $_GET['modify'] == $event->idEvent) ||
@@ -23,6 +26,11 @@
 			$event->edit = TRUE;
 			$currentEdit = $event;
 		}
+
+		if($event->idEvent === $lastIdEvent){
+			$event->group = TRUE;
+		}
+		$lastIdEvent = $event->idEvent;
 
 		$closed[] = $event;
 	}

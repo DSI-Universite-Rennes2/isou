@@ -26,25 +26,22 @@
 			" LIMIT 0, 50";
 	$events = $db->prepare($sql);
 	$events->execute($param);
+
+	$lastIdEvent = NULL;
 	$unscheduled = array();
 
 	while($event = $events->fetchObject()){
-
-		// is not a scheduled event
-		if($event->isScheduled == 0){
-			// endDate is null
-			if(empty($event->endDate)){
-				$event->classCss = 'unscheduled';
-			}else{
-				$event->classCss = 'unscheduledfinished italic';
-			}
-		}
 
 		if((isset($_GET['modify']) && $_GET['modify'] == $event->idEvent) ||
 			(isset($_POST['idEvent']) && $_POST['idEvent'] == $event->idEvent)){
 			$event->edit = TRUE;
 			$currentEdit = $event;
 		}
+
+		if($event->idEvent === $lastIdEvent){
+			$event->group = TRUE;
+		}
+		$lastIdEvent = $event->idEvent;
 
 		$unscheduled[] = $event;
 	}

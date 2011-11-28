@@ -132,6 +132,10 @@ span.label{
 	margin-top: .2em;
 }
 
+.group{
+	margin-left: 3em;
+}
+
 .form > li{
 	background-color: #E5E5E5;
 	margin-top: .2em;

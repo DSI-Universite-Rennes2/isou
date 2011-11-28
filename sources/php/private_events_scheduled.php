@@ -19,6 +19,8 @@
 
 	$events = $db->prepare($sql);
 	$events->execute(array(TIMESTAMP_OF_72H_BEFORE_TODAY, TIMESTAMP_OF_LAST_CALENDAR_DAY, TIMESTAMP_OF_72H_BEFORE_TODAY, TIMESTAMP_OF_LAST_CALENDAR_DAY));
+
+	$lastIdEvent = NULL;
 	$scheduled = array();
 
 	while($event = $events->fetchObject()){
@@ -28,6 +30,11 @@
 			$event->edit = TRUE;
 			$currentEdit = $event;
 		}
+
+		if($event->idEvent === $lastIdEvent){
+			$event->group = TRUE;
+		}
+		$lastIdEvent = $event->idEvent;
 
 		$scheduled[] = $event;
 	}

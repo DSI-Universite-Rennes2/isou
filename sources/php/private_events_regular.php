@@ -13,6 +13,8 @@
 			" AND EI.isScheduled = 2".
 			" ORDER BY E.beginDate";
 	$events = $db->query($sql);
+
+	$lastIdEvent = NULL;
 	$regular = array();
 
 	while($event = $events->fetchObject()){
@@ -27,6 +29,11 @@
 			}
 			$currentEdit = $event;
 		}
+
+		if($event->idEvent === $lastIdEvent){
+			$event->group = TRUE;
+		}
+		$lastIdEvent = $event->idEvent;
 
 		$regular[] = $event;
 	}
