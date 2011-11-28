@@ -164,9 +164,26 @@ if(isset($_POST['insert'])){
 	}else{
 	// traitement de l'ajout d'un evenement isou
 		if($idService > 0 && ($endDate === NULL || $beginDate <= $endDate)){
+			$sql = "SELECT COUNT(E.idEvent) AS total FROM events E, events_isou EI".
+					" WHERE E.idEvent=EI.idEvent".
+					" AND EI.idService=?".
+					" AND EI.isScheduled=?".
+					" AND (E.endDate IS NULL OR".
+					" (E.endDate >= ? AND E.beginDate <= ?))";
+			$query = $db->prepare($sql);
+			$query->execute(array($idService, $isScheduled, TIME, TIME));
+			$exist = $query->fetchObject();
+			if($exist->total > 0){
+				if($isScheduled == 3){
+					$error = 'Ce service possède déjà un évènement de fermeture. Veuillez modifier ou supprimer l\'ancien évènement.';
+				}
+				if($isScheduled == 0){
+					$error = 'Un évènement non prévu est déjà en cours pour ce service. Veuillez modifier ou supprimer l\'ancien évènement.';
+				}
+			}
 
 			$idEventDescription = 1;
-			if(!empty($description)){
+			if(!isset($error) && !empty($description)){
 				$sql = "INSERT INTO events_description (idEventDescription, description, autogen)".
 					" VALUES(NULL, ?, 0)";
 				$query = $db->prepare($sql);
@@ -175,7 +192,7 @@ if(isset($_POST['insert'])){
 				}
 			}
 
-			if($isScheduled === 0){
+			if(!isset($error) && $isScheduled === 0){
 				if(isset($_POST['forced'])){
 					$forced = intval($_POST['forced']);
 					if($forced >= 0 && $forced < 5){
