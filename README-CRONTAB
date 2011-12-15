@@ -3,33 +3,18 @@ ISOU - CRONTAB
 
 A PROPOS DES CRONS OU EQUIVALENT
 ---------------------------------
-Il existe 3 scripts pour les taches planifiées
+Les diverses tâches automatisées lancées par ISOU sont réunis dans un seul script
 
-./cron/cron.php (au moins toutes les 5 minutes, idéalement toutes les minutes) :
+./cron.php (au moins toutes les 5 minutes, idéalement toutes les minutes) :
 permet de faire la synchronisation entre Isou et le fichier status.dat de Nagios
 permet la modification d'un statut d'une application
 permet de générer le fichier isou.json nécessaire à l'utilisation de l'extension Firefox "Fisou"
-
-./cron/cron_weekly.php (recommandé toutes les semaines) :
+permet de générer un rapport quotidien des évènements passés dans la veille
 permet de générer les statistiques de visite du site ISOU
-
-./cron/cron_yearly.php (obligatoirement le 1er janvier) :
 archive la base de données et réinitialise une nouvelle base (gain de performance)
-
-
-CONFIGURATION
---------------
-En attendant une modification du code source, vous devez indiquer dans chaque script le chemin absolu vers le fichier ./config.php
-
-Pour cela, il suffit de modifier la variable $pwd. 
-
-Exemple : $pwd = "/var/www/isou";
-En supposant que votre fichier config.php se trouve dans /var/www/isou/config.php
 
 
 Exemples de crontab unix :
 ---------------------------
 # /!\ note /!\ remplacer les "./cron" par le chemin complet
-*/5 * * * * /usr/bin/php -d log_errors=1 ./cron/cron.php 1>>./isou.log 2>>./isou.error.log
-0 0 * * 0 /usr/bin/php -d log_errors=1 ./cron/cron_weekly.php 1>>./isou_weekly.log 2>>./isou_weekly.error.log
-0 0 1 1 * /usr/bin/php -d log_errors=1 ./cron/cron_yearly.php 1>>./isou_yearly.log 2>>./isou_yearly.error.log
+*/5 * * * * /usr/bin/php -d log_errors=1 ./cron.php 1>>./isou.log 2>>./isou.error.log
