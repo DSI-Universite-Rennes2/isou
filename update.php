@@ -37,6 +37,36 @@ if(is_file($config)){
 	exit(1);
 }
 
+/*
+ * CREE UN BACKUP
+ */
+$display = "\nBackup de la précédente installation";
+try{
+	$backup_dir = SOURCE.'/backup/';
+	if(!is_dir(SOURCE.'/backup/')){
+		if(mkdir(SOURCE.'/backup/') === FALSE){
+			echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+			echo "Erreur retournée : impossible de créer le répertoire 'backup' dans ".SOURCE."/backup/\n";
+			echo "\033[0;31mÉchec de la mise à jour\033[0m\n";
+			exit(1);
+		}
+	}
+	$backup = new PharData($backup_dir.'backup_'.strftime('%Y%m%d_%H-%M').'.tar.gz');
+	$backup->buildFromDirectory($public_path);
+	$backup->buildFromDirectory($private_path);
+	echo $display.niceDot($display)." \033[0;32mok\033[0m\n\n";
+}catch (UnexpectedValueException $e){
+	echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	echo "Erreur retournée : ".$e->getMessage()."\n";
+	echo "\033[0;31mÉchec de la mise à jour\033[0m\n";
+	exit(1);
+}catch (BadMethodCallException $e){
+	echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	echo "Erreur retournée : ".$e->getMessage()."\n";
+	echo "\033[0;31mÉchec de la mise à jour\033[0m\n";
+	exit(1);
+}
+
 $update_git = FALSE;
 if(is_file(SOURCE.'/UPDATE_GIT_FLAG')){
 	$update_git = TRUE;
