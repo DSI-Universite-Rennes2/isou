@@ -40,7 +40,7 @@ if(is_file($config)){
 /*
  * CREE UN BACKUP
  */
-$display = "\nBackup de la précédente installation";
+$display = "\n\033[0;31mBackup de la précédente installation\033[0m";
 try{
 	$backup_dir = SOURCE.'/backup/';
 	if(!is_dir(SOURCE.'/backup/')){

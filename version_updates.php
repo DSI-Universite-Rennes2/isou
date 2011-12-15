@@ -234,7 +234,7 @@ if($version <= 0.96){
 // $sql = "UPDATE configuration SET value=? WHERE key='last_update'";
 
 if(count($notes) > 0){
-	echo 'Note de mise à jour !';
+	echo "\nNote de mise à jour !";
 	foreach($notes as $note){
 		echo $note."\n";
 	}
