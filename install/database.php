@@ -413,5 +413,17 @@ if($db2->exec($sql) === FALSE){
 	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 }
 
+/*
+ * 11. TABLE configuration
+ */
+$sql = "CREATE TABLE configuration (key VARCHAR(64) PRIMARY KEY, value VARCHAR(256))";
+if($db2->exec($sql) === FALSE){
+	echo "La création de la table 'configuration' a échoué.\n";
+	echo "\033[0;31mÉchec de l'installation\033[0m\n";
+	exit(1);
+}else{
+	$display = "Création de la table 'configuration'";
+	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+}
 
 ?>
