@@ -218,9 +218,9 @@ if($version <= 0.96){
 				$sql = "DELETE FROM events_isou WHERE idEventIsou=?";
 				$delete = $db->prepare($sql);
 				$delete->execute(array($event->idEventIsou));
-				$display = 'Suppression des évènements de fermeture de service (doublons uniquement)';
-				echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 			}
+			$display = 'Suppression des évènements de fermeture de service (doublons uniquement)';
+			echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 		}
 	}
 	$notes[] = 'Version 0.9.6';
