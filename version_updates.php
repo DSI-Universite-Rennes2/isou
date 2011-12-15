@@ -1,7 +1,37 @@
 <?php
 
+if(!defined('DEV')){
+	$pwd = dirname(__FILE__).'/sources'; 
+	if(is_file($pwd.'/functions.php') && is_file($pwd.'/config.php')){
+		require $pwd.'/functions.php';
+		require $pwd.'/config.php';
+		require dirname(__FILE__).'/install/functions.php';
+		$config = $pwd.'/config.php';
+	}else{
+	    echo "\033[0;31mLes fichiers ".$pwd."/functions.php et/ou ".$pwd."/config.php sont manquants.\033[0m\n";
+	    exit(1);
+	}
+}
+
+// initialisation de la base de données
+try{
+	if(!is_file(substr(DB_PATH, 7))){
+		throw new PDOException(DB_PATH.' n\'existe pas.');
+	}
+	$db = new PDO(DB_PATH, '', '');
+}catch(PDOException $e){
+	echo "L'initialisation de la base de données a échoué (".$e->getMessage().".\n";
+    echo "\033[0;31mÉchec de la mise à jour\033[0m\n";
+    exit(1);
+}
+
+// notes à afficher en dernière, après mise à jour
+$notes = array();
+
 // typage du numéro de version
-$version = (float) substr(VERSION, 0, strpos(VERSION, '.')+1).str_replace('.', '', substr(VERSION, strpos(VERSION, '.')+1));
+// #bug: problème avec LC_ALL, fr_FR.utf-8
+// $version = (float) substr(VERSION, 0, strpos(VERSION, '.')+1).str_replace('.', '', substr(VERSION, strpos(VERSION, '.')+1));
+$version =(float) substr(VERSION, 0, strpos(VERSION, '.')).'.'.str_replace('.', '', substr(VERSION, strpos(VERSION, '.')+1));
 
 // mise à jour pour les versions antérieures à la 0.9.5
 if($version <= 0.95){
@@ -32,7 +62,7 @@ if($version <= 0.95){
 	}
 
 	$display = "\nMise à jour du fichier ".BASE."/config.php";
-	if($update_cfg === TRUE){
+	if($update_cfg !== FALSE){
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
@@ -40,5 +70,173 @@ if($version <= 0.95){
 	}
 }
 
+if($version <= 0.96){
+	// création de la table configuration
+	$sql = "CREATE TABLE configuration (key VARCHAR(64) PRIMARY KEY, value VARCHAR(256))";
+	if($db->exec($sql) === FALSE){
+		echo "La création de la table 'configuration' a échoué.\n";
+		echo "\033[0;31mÉchec de l'installation\033[0m\n";
+		exit(1);
+	}else{
+		$display = "Création de la table 'configuration'";
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}
+
+	// insertion des écritures dans la table configuration
+	$sql = "INSERT INTO configuration(key, value) VALUES('tolerance','".TOLERANCE."')";
+	$display = '   Insertion de la clé "tolérance" dans la table configuration'; 
+	if($db->exec($sql) === FALSE){
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	}
+	
+	$sql = "INSERT INTO configuration(key, value) VALUES('ip_local','".json_encode($IP_INTERNE)."')";
+	$display = '   Insertion de la clé "ip_local" dans la table configuration'; 
+	if($db->exec($sql) === FALSE){
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	}
+
+	$sql = "INSERT INTO configuration(key, value) VALUES('ip_service','".json_encode($IP_CRI)."')";
+	$display = '   Insertion de la clé "ip_service" dans la table configuration'; 
+	if($db->exec($sql) === FALSE){
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	}
+
+	$sql = "INSERT INTO configuration(key, value) VALUES('admin_users', '".json_encode($ADMIN_USERS)."')";
+	$display = '   Insertion de la clé "admin_users" dans la table configuration'; 
+	if($db->exec($sql) === FALSE){
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	}
+
+	$sql = "INSERT INTO configuration(key, value) VALUES('admin_mails', '".json_encode($ADMIN_MAILS)."')";
+	$display = '   Insertion de la clé "admin_mails" dans la table configuration'; 
+	if($db->exec($sql) === FALSE){
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	}
+
+	$sql = "INSERT INTO configuration(key, value) VALUES('version', '".VERSION."')";
+	$display = '   Insertion de la clé "version" dans la table configuration'; 
+	if($db->exec($sql) === FALSE){
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	}
+
+	$sql = "INSERT INTO configuration(key, value) VALUES('last_update', '".TIME."')";
+	$display = '   Insertion de la clé "last_update" dans la table configuration'; 
+	if($db->exec($sql) === FALSE){
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	}
+
+	$sql = "INSERT INTO configuration(key, value) VALUES('last_check_update', '".TIME."')";
+	$display = '   Insertion de la clé "last_check_update" dans la table configuration'; 
+	if($db->exec($sql) === FALSE){
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	}
+
+	$sql = "INSERT INTO configuration(key, value) VALUES('last_cron_update', '0')";
+	$display = '   Insertion de la clé "last_cron_update" dans la table configuration'; 
+	if($db->exec($sql) === FALSE){
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	}
+
+	$sql = "INSERT INTO configuration(key, value) VALUES('last_daily_cron_update', '0')";
+	$display = '   Insertion de la clé "last_daily_cron_update" dans la table configuration'; 
+	if($db->exec($sql) === FALSE){
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	}
+
+	$sql = "INSERT INTO configuration(key, value) VALUES('daily_cron_hour', '17:00')";
+	$display = '   Insertion de la clé "daily_cron_hour" dans la table configuration'; 
+	if($db->exec($sql) === FALSE){
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	}
+
+	$sql = "INSERT INTO configuration(key, value) VALUES('last_weekly_cron_update', '".TIME."')";
+	$display = '   Insertion de la clé "last_weekly_cron_update" dans la table configuration'; 
+	if($db->exec($sql) === FALSE){
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	}
+
+	$sql = "INSERT INTO configuration(key, value) VALUES('last_yearly_cron_update', '".TIME."')";
+	$display = '   Insertion de la clé "last_yearly_cron_update" dans la table configuration'; 
+	if($db->exec($sql) === FALSE){
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	}
+
+	$sql = "INSERT INTO configuration(key, value) VALUES('local_password', '')";
+	$display = '   Insertion de la clé "local_password" dans la table configuration'; 
+	if($db->exec($sql) === FALSE){
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	}
+
+	$sql = "SELECT EI.idService, COUNT(E.idEvent) AS total FROM events E, events_isou EI".
+			" WHERE E.idEvent=EI.idEvent".
+			" AND EI.isScheduled=3".
+			" GROUP BY EI.idService";
+	$query = $db->prepare($sql);
+	$query->execute();
+	while($service = $query->fetchObject()){
+		if($service->total > 1){
+			$sql = "SELECT E.idEvent, EI.events_isou FROM events E, events_isou EI".
+					" WHERE E.idEvent=EI.idEvent".
+					" AND EI.isScheduled=3".
+					" ORDER BY E.beginDate DESC";
+			$events = $db->prepare($sql);
+			$events->execute();
+			// skip first
+			$event = $events->fetchObject();
+			while($event = $events->fetchObject()){
+				$sql = "DELETE FROM events WHERE idEvent=?";
+				$delete = $db->prepare($sql);
+				$delete->execute(array($event->idEvent));
+				$sql = "DELETE FROM events_isou WHERE idEventIsou=?";
+				$delete = $db->prepare($sql);
+				$delete->execute(array($event->idEventIsou));
+				$display = 'Suppression des évènements de fermeture de service (doublons uniquement)';
+				echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+			}
+		}
+	}
+	$notes[] = 'Version 0.9.6';
+	$notes[] = '-------------';
+	$notes[] = 'Attention ! La procédure pour appeler les crons a été modifié. Merci de supprimer tous les appels aux crons d\'Isou précédemment installés et d\'ajouter un appel (toutes les 5 minutes ou moins) à ce fichier : '.$public_path.'/cron.php';
+	$notes[] = '';
+}
+
+// $sql = "UPDATE configuration SET value=? WHERE key='version'";
+// $sql = "UPDATE configuration SET value=? WHERE key='last_update'";
+
+if(count($notes) > 0){
+	echo 'Note de mise à jour !';
+	foreach($notes as $note){
+		echo $note."\n";
+	}
+}
 
 ?>
