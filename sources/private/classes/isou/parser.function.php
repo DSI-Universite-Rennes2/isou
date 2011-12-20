@@ -120,7 +120,14 @@ function status_dat2db($file){
 
 					if($current_state != '0' && $ins){
 						$ins = FALSE;
-						$db->beginTransaction();
+						/*
+						try{
+							$db->beginTransaction();
+						}catch(PDOException $e){
+							var_dump($e);
+							die();
+						}
+						*/
 						$sql = "INSERT INTO events(beginDate, endDate, typeEvent)".
 								" VALUES(?, NULL, 1)";
 						$query = $db->prepare($sql);
@@ -139,14 +146,14 @@ function status_dat2db($file){
 						// Fatal error: Uncaught exception 'PDOException' with message 'There is already an active transaction'
 						// This should be specific to SQLite, sleep for 0.25 seconds
 						// and try again.  We do have to commit the open transaction first though
-						$db->commit();
-						usleep(250000);
+						// usleep(250000);
 
 						if($ins === TRUE){
-							$db->commit();
+							// $db->commit();
 							add_log(LOG_FILE, 'ISOU', 'INSERT', 'Un évènement Nagios a été inséré (VALUES(NULL, '.TIME.', NULL, '.$current_state.', '.$service[0].'))');
 						}else{
-							$db->rollBack();
+							// $db->rollBack();
+							echo "rollback \n";
 							add_log(LOG_FILE, 'ISOU', 'INSERT', 'Un évènement Nagios n\'a pas été inséré (VALUES(NULL, '.TIME.', NULL, '.$current_state.', '.$service[0].'))');
 						}
 					}
