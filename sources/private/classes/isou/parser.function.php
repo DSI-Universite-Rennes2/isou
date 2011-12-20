@@ -153,7 +153,6 @@ function status_dat2db($file){
 							add_log(LOG_FILE, 'ISOU', 'INSERT', 'Un évènement Nagios a été inséré (VALUES(NULL, '.TIME.', NULL, '.$current_state.', '.$service[0].'))');
 						}else{
 							// $db->rollBack();
-							echo "rollback \n";
 							add_log(LOG_FILE, 'ISOU', 'INSERT', 'Un évènement Nagios n\'a pas été inséré (VALUES(NULL, '.TIME.', NULL, '.$current_state.', '.$service[0].'))');
 						}
 					}
