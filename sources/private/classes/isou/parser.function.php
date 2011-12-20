@@ -118,14 +118,6 @@ function status_dat2db($file){
 						}
 					}
 
-					// dirty hack pour le problème :
-					// Fatal error: Uncaught exception 'PDOException' with message 'There is already an active transaction'
-					try{
-						$db->commit();
-					}catch(PDOException $e){
-					
-					}
-
 					if($current_state != '0' && $ins){
 						$ins = FALSE;
 						$db->beginTransaction();
@@ -142,6 +134,13 @@ function status_dat2db($file){
 							}
 							$query->closeCursor();
 						}
+
+						// dirty hack pour le problème :
+						// Fatal error: Uncaught exception 'PDOException' with message 'There is already an active transaction'
+						// This should be specific to SQLite, sleep for 0.25 seconds
+						// and try again.  We do have to commit the open transaction first though
+						$db->commit();
+						usleep(250000);
 
 						if($ins === TRUE){
 							$db->commit();
