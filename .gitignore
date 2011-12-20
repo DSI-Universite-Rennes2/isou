@@ -16,7 +16,10 @@ CVS
 
 # fichiers ISOU
 sources/private/classes/smarty/compile/*
-sources/public/config.php
+sources/private/cron/LOCK_CRON
 sources/private/database/*.sqlite3
+sources/private/status.dat
+sources/public/config.php
 sources/public/isou.json
-sources/public/status.dat
+fisou/build
+
