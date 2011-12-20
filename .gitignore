@@ -15,8 +15,8 @@ CVS
 /.cache
 
 # fichiers ISOU
-sources/classes/smarty/compile/*
-sources/config.php
-sources/database/*.sqlite3
-sources/isou.json
-sources/status.dat
+sources/private/classes/smarty/compile/*
+sources/public/config.php
+sources/private/database/*.sqlite3
+sources/public/isou.json
+sources/public/status.dat
