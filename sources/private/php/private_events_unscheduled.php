@@ -18,7 +18,7 @@
 				$sql .= ")";
 				$param = array(TIMESTAMP_OF_72H_BEFORE_TODAY, TIMESTAMP_OF_LAST_CALENDAR_DAY, TIMESTAMP_OF_72H_BEFORE_TODAY, TIMESTAMP_OF_LAST_CALENDAR_DAY);
 			}
-			$sql .= " OR E.endDate IS NULL OR S.readonly = 1)".
+			$sql .= " OR E.endDate IS NULL)".
 			" AND S.name = 'Service final'".
 			" AND S.enable = 1".
 			" AND EI.isScheduled = 0".
