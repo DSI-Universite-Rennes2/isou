@@ -81,6 +81,10 @@ if($log instanceof Exception){
 	add_log(LOG_FILE, 'ISOU', 'error', $log->getMessage());
 }
 
+$sql = "UPDATE configuration SET value=? WHERE key=?";
+$query = $db->prepare($sql);
+$query->execute(array(TIME, 'last_cron_update'));
+
 $daily_cron_time = explode(':', $CFG['daily_cron_hour']);
 $daily_cron_time = mktime($daily_cron_time[0], $daily_cron_time[1]);
 
