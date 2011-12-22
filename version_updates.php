@@ -1,7 +1,7 @@
 <?php
 
 if(!defined('DEV')){
-	$pwd = dirname(__FILE__).'/sources'; 
+	$pwd = dirname(__FILE__).'/sources/public'; 
 	if(is_file($pwd.'/functions.php') && is_file($pwd.'/config.php')){
 		require $pwd.'/functions.php';
 		require $pwd.'/config.php';
