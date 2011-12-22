@@ -236,11 +236,11 @@ $smarty->assign('nagiosServices', $nagiosServices);
 
 $subject = 'Rapport ISOU du '.strftime('%A %e %B', $beginDateYesterday);
 $content = $smarty->fetch('mail_cron_daily_text.tpl');
-$header = 'MIME-Version: 1.0' . "\r\n" . 'Content-type: text/plain; charset=UTF-8' . "\r\n";
+$header = "MIME-Version: 1.0\r\n Content-type: text/plain; charset=UTF-8\r\n";
 
 foreach($CFG['admin_mails'] as $mail){
 	if(filter_var($mail, FILTER_VALIDATE_EMAIL) !== FALSE){
-		mail($mail, $subject, $content, $header);
+		mail($mail, utf8_decode($subject), $content, $header);
 	}
 }
 

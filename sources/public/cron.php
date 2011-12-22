@@ -36,7 +36,7 @@ if(is_file(BASE.'/cron/LOCK_CRON')){
 	}
 
 	if(is_file(BASE.'/cron/LOCK_WARNING')){
-		$header = 'MIME-Version: 1.0' . "\r\n" . 'Content-type: text/plain; charset=UTF-8' . "\r\n";
+		$header = "MIME-Version: 1.0\r\n Content-type: text/plain; charset=UTF-8\r\n";
 		$content = "Le fichier '".BASE."/cron/LOCK_CRON' est toujours présent.\n\n".
 					"Il doit s'agir d'une erreur de programmation.\n".
 					"Merci de tuer le processus php associé à '".$pwd."/cron.php',\npuis de supprimer les fichiers '".BASE."/cron/LOCK_*'";
@@ -53,7 +53,7 @@ if(is_file(BASE.'/cron/LOCK_CRON')){
 	$atime = fileatime(BASE.'/cron/LOCK_CRON');
 	if($atime !== FALSE && $atime+(10*60) < TIME){
 		// si le fichier existe depuis plus de 10 minutes, alerter les admins
-		$header = 'MIME-Version: 1.0' . "\r\n" . 'Content-type: text/plain; charset=UTF-8' . "\r\n";
+		$header = "MIME-Version: 1.0\r\n Content-type: text/plain; charset=UTF-8\r\n";
 		$content = "Le fichier '".BASE."/cron/LOCK_CRON' a été créé depuis plus de 10 minutes\n\n".
 					" Le fichier '".BASE."/cron/LOCK_CRON' a été supprimé.";
 		touch(BASE.'/cron/LOCK_WARNING');
