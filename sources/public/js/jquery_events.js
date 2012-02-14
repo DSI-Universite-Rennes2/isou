@@ -136,7 +136,7 @@ $(document).ready(function(){
 	url.toLowerCase();
 
 	// ajoute un calendrier après les inputs des formulaires
-	$("#beginDate, #endDate, #beginDateMessage, #endDateMessage, #beginDateUpd, #endDateUpd").after("<a href=\"#\"><img src=\""+url+"/images/calendar.png\" alt=\"calendrier\" title=\"afficher le calendrier\" width=\"1em\" height=\"1em\" /></a>");
+	$("#beginDate, #endDate, #beginDateMessage, #endDateMessage, #beginDateUpd, #endDateUpd").after("<a href=\"#\"><img src=\""+url+"/images/calendar.png\" alt=\"calendrier\" title=\"afficher le calendrier\" width=\"16px\" height=\"16px\" /></a>");
 
 	jQuery("#beginDate, #endDate, #beginDateMessage, #endDateMessage, #beginDateUpd, #endDateUpd").dynDateTime({
 							showsTime: true,
