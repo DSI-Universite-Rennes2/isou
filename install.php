@@ -10,7 +10,8 @@ define('BASE', dirname(__FILE__));
 require BASE.'/install/functions.php';
 require BASE.'/version.php';
 
-$owner = trim(readline("\033[0;31mIMPORTANT : installez l'application avec votre utilisateur web (apache, www-data ou autre)\033[0m\nVoulez-vous continuer ? (y/n)\n"));
+echo "\033[0;31mIMPORTANT : installez l'application avec votre utilisateur web (apache, www-data ou autre)\033[0m\nVoulez-vous continuer ? (y/n)\n";
+$owner = trim(fread(STDIN, 2048));
 if(strtolower($owner) === 'n'){
 	echo "\033[0;31mMerci de relancer l'installation avec le bon utilisateur.\033[0m\n";
 	exit(0);
@@ -20,8 +21,9 @@ if(strtolower($owner) === 'n'){
  * COPIE DES FICHIERS ET REPERTOIRES 'PUBLICS'
  */
 echo "\033[0;34mCOPIE DES FICHIERS\033[0m\n";
-$public_path = trim(readline("Indiquez le répertoire d'installation de votre application\n".
-						"exemple : \033[1;30m/var/www/\033[0m\n"));
+echo "Indiquez le répertoire d'installation de votre application\n".
+						"exemple : \033[1;30m/var/www/\033[0m\n";
+$public_path = trim(fread(STDIN, 2048));
 
 if(substr($public_path, -1) === '/'){
 	$public_path = substr($public_path, 0, -1);
@@ -60,9 +62,10 @@ foreach($files as $file){
 /*
  * COPIE DES FICHIERS ET REPERTOIRES 'PRIVÉS'
  */
-$private_path = trim(readline("\nIndiquez un répertoire non accessible via votre serveur Web (\033[1;35moptionnel\033[0m)\n".
+echo "\nIndiquez un répertoire non accessible via votre serveur Web (\033[1;35moptionnel\033[0m)\n".
 						"exemple : \033[1;30m/var/www-private/\033[0m\n".
-						"Défaut: \033[1;34m".$public_path."\033[0m\n"));
+						"Défaut: \033[1;34m".$public_path."\033[0m\n";
+$private_path = trim(fread(STDIN, 2048));
 if(empty($private_path)){
 	$private_path = $public_path;
 }else{

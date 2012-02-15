@@ -10,7 +10,8 @@ define('SOURCE', dirname(__FILE__));
 require SOURCE.'/install/functions.php';
 require SOURCE.'/version.php';
 
-$owner = trim(readline("\033[0;31mIMPORTANT : mettez à jour l'application avec votre utilisateur web (apache, www-data ou autre)\033[0m\nVoulez-vous continuer ? (y/n)\n"));
+echo "\033[0;31mIMPORTANT : mettez à jour l'application avec votre utilisateur web (apache, www-data ou autre)\033[0m\nVoulez-vous continuer ? (y/n)\n";
+$owner = trim(fread(STDIN, 2048));
 if(strtolower($owner) === 'n'){
 	echo "\033[0;31mMerci de relancer l'installation avec le bon utilisateur.\033[0m\n";
 	exit(0);
@@ -19,8 +20,9 @@ if(strtolower($owner) === 'n'){
 /*
  * COPIE DES FICHIERS ET REPERTOIRES 'PUBLICS'
  */
-$config = trim(readline("Indiquez le chemin du fichier config.php\n".
-						"exemple : \033[1;30m/var/www/config.php\033[0m\n"));
+echo "Indiquez le chemin du fichier config.php\n".
+		"exemple : \033[1;30m/var/www/config.php\033[0m\n";
+$config = trim(fread(STDIN, 2048));
 
 if(is_file($config)){
 	// $public_path = strstr($config, '/config.php', TRUE);
@@ -72,7 +74,8 @@ if(is_file(SOURCE.'/UPDATE_GIT_FLAG')){
 	$update_git = TRUE;
 }else{
 	if(is_dir(SOURCE.'/.git')){
-		$update_git = trim(readline("\nVoulez-vous que l'installateur fusionne votre version avec la version officielle ? (y/n)\n"));
+		echo "\nVoulez-vous que l'installateur fusionne votre version avec la version officielle ? (y/n)\n";
+		$update_git = trim(fread(STDIN, 2048));
 		if(strtolower($update_git) === 'y'){
 			$update_git = TRUE;
 		}
@@ -140,7 +143,8 @@ if($update_git === TRUE){
 		echo "\033[0;31mÉchec de la mise à jour. Merci de corriger les conflits, puis de relancer la mise à jour.\033[0m\n";
 		exit(1);
 	}else{
-		$update_git = trim(readline("La fusion entre les deux versions semble s'être passée correctement. Voulez-vous continuer ? (y/n)\n"));
+		echo "La fusion entre les deux versions semble s'être passée correctement. Voulez-vous continuer ? (y/n)\n";
+		$update_git = trim(fread(STDIN, 2048));
 		if(strtolower($update_git) !== 'y'){
 			echo "\033[0;31mMerci de corriger les conflits, puis de relancer la mise à jour.\033[0m\n";
 			exit(0);
