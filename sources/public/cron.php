@@ -36,14 +36,13 @@ if(is_file(BASE.'/cron/LOCK_CRON')){
 	}
 
 	if(is_file(BASE.'/cron/LOCK_WARNING')){
-		$header = "MIME-Version: 1.0\r\nContent-type: text/plain; charset=UTF-8\r\n";
-		$content = "Le fichier '".BASE."/cron/LOCK_CRON' est toujours présent.\n\n".
+		$message = "Le fichier '".BASE."/cron/LOCK_CRON' est toujours présent.\n\n".
 					"Il doit s'agir d'une erreur de programmation.\n".
 					"Merci de tuer le processus php associé à '".$pwd."/cron.php',\npuis de supprimer les fichiers '".BASE."/cron/LOCK_*'";
 		touch(BASE.'/cron/LOCK_SPAM');
 		foreach($CFG['admin_mails'] as $mail){
 			if(filter_var($mail, FILTER_VALIDATE_EMAIL) !== FALSE){
-				mail($mail, 'ISOU: erreur de fichier LOCK', $content, $header);
+				isoumail($mail, 'ISOU: erreur de fichier LOCK', $message);
 			}
 		}
 		exit;
@@ -53,14 +52,13 @@ if(is_file(BASE.'/cron/LOCK_CRON')){
 	$atime = fileatime(BASE.'/cron/LOCK_CRON');
 	if($atime !== FALSE && $atime+(10*60) < TIME){
 		// si le fichier existe depuis plus de 10 minutes, alerter les admins
-		$header = "MIME-Version: 1.0\r\nContent-type: text/plain; charset=UTF-8\r\n";
-		$content = "Le fichier '".BASE."/cron/LOCK_CRON' a été créé depuis plus de 10 minutes\n\n".
-					" Le fichier '".BASE."/cron/LOCK_CRON' a été supprimé.";
+		$message = "Le fichier '".BASE."/cron/LOCK_CRON' a été créé depuis plus de 10 minutes\n\n".
+					"Le fichier '".BASE."/cron/LOCK_CRON' a été supprimé.";
 		touch(BASE.'/cron/LOCK_WARNING');
 		touch(BASE.'/cron/LOCK_CRON');
 		foreach($CFG['admin_mails'] as $mail){
 			if(filter_var($mail, FILTER_VALIDATE_EMAIL) !== FALSE){
-				mail($mail, 'ISOU: erreur de fichier LOCK', $content, $header);
+				isoumail($mail, 'ISOU: erreur de fichier LOCK', $message);
 			}
 		}
 	}else{

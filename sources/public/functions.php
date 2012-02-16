@@ -174,7 +174,7 @@ function add_log($file, $user = 'ISOU', $type, $message, $level = 1){
 			fwrite($handle, $log."\n");
 		}else{
 			if(defined('SUPPORT_ISOU')){
-				mail(SUPPORT_ISOU, 'Impossible d\'écrire dans les logs d\'ISOU', utf8_decode($log));
+				isoumail(SUPPORT_ISOU, 'Impossible d\'écrire dans les logs d\'ISOU', $log);
 			}
 		}
 	}
@@ -200,6 +200,24 @@ function secondstohuman($seconds){
 	}else{
 		return $seconds.' '.plurial($seconds, 'seconde', FALSE);
 	}
+}
+
+function isoumail($to, $subject, $message){
+	global $CFG;
+
+	if(!isset($CFG['local_mail']) || empty($CFG['local_mail'])){
+		$from = $to;
+	}else{
+		$from = $CFG['local_mail'];
+	}
+
+	$headers = "MIME-Version: 1.0\r\n".
+				"Content-type: text/plain; charset=UTF-8\r\n".
+				"From Message automatique de ".NAME." <".$from.">\r\n".
+				"Reply-To: ".$from."\r\r";
+	$additionnal = "-f $from";
+
+	return mail($to, $subject, $message, $headers, $additionnal);
 }
 
 ?>

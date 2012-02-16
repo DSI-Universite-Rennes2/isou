@@ -235,12 +235,11 @@ while($service = $services->fetchObject()){
 $smarty->assign('nagiosServices', $nagiosServices);
 
 $subject = 'Rapport ISOU du '.strftime('%A %e %B', $beginDateYesterday);
-$content = $smarty->fetch('mail_cron_daily_text.tpl');
-$header = "MIME-Version: 1.0\r\nContent-type: text/plain; charset=UTF-8\r\n";
+$message = $smarty->fetch('mail_cron_daily_text.tpl');
 
 foreach($CFG['admin_mails'] as $mail){
 	if(filter_var($mail, FILTER_VALIDATE_EMAIL) !== FALSE){
-		mail($mail, utf8_decode($subject), $content, $header);
+		isoumail($mail, $subject, $message);
 	}
 }
 
