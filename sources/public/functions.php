@@ -211,13 +211,13 @@ function isoumail($to, $subject, $message){
 		$from = $CFG['local_mail'];
 	}
 
-	$headers = "MIME-Version: 1.0\r\n".
-				"Content-type: text/plain; charset=UTF-8\r\n".
-				"From Message automatique de ".NAME." <".$from.">\r\n".
-				"Reply-To: ".$from."\r\r";
+	$headers =	"From: Message automatique de ".NAME." <".$from.">\r\n".
+				"Reply-To: ".$from."\r\n".
+				"MIME-Version: 1.0\r\n".
+				"Content-type: text/plain; charset=UTF-8\r\n";
 	$additionnal = "-f $from";
 
-	return mail($to, $subject, $message, $headers, $additionnal);
+	return mail($to, mb_encode_mimeheader($subject), $message, $headers, $additionnal);
 }
 
 ?>
