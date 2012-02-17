@@ -208,6 +208,21 @@ if(isset($_POST['adminmails'])){
 	}
 }
 
+// vérification du formulaire d'ajout de l'expéditeur
+if(isset($_POST['localmail'])){
+	$_POST['error']['localmail'] = array();
+	$_POST['localmail'] = trim($_POST['localmail']);
+	if(!empty($_POST['localmail']) && !filter_var($_POST['localmail'], FILTER_VALIDATE_EMAIL)){
+		$_POST['error']['localmail']['error_localmail'] = 'L\'adresse mail saisie n\'est pas valide';
+	}else{
+		$sql = "UPDATE configuration SET value=? WHERE key='local_mail'";
+		$query = $db->prepare($sql);
+		if($query->execute(array($_POST['localmail'])) === FALSE){
+			$_POST['error']['localmail']['error_localmail'] = 'La clé "local_mail" n\'a pas pu être mise à jour';
+		}
+	}
+}
+
 // traitement des liens "d'effacement"
 if(isset($_GET['action'], $_GET['key'])){
 	// reset cron

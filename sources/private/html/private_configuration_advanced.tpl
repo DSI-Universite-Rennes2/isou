@@ -89,7 +89,7 @@
 
 {if isset($smarty.post.error.admin_users)}
 {if count($smarty.post.error.admin_users) == 0}
-	<p id="update">La plage a été supprimée.</p>
+	<p id="update">L'administrateur a été supprimée.</p>
 {else}
 	{foreach $smarty.post.error.admin_users as $error}
 	<p id="update">{$error}</p>
@@ -125,7 +125,7 @@
 
 {if isset($smarty.post.error.admin_mails)}
 {if count($smarty.post.error.admin_mails) == 0}
-	<p id="update">La plage a été supprimée.</p>
+	<p id="update">Le mail a été supprimée.</p>
 {else}
 	{foreach $smarty.post.error.admin_mails as $error}
 	<p id="update">{$error}</p>
@@ -133,10 +133,9 @@
 {/if}
 {/if}
 
-
 <p>
 	<span class="label"><label for="adminmails">Liste des mails administrateurs.</label><br />
-	<span class="example">note : sert à la notification quotidienne</span></span>
+	<span class="example">note : sert aux diverses notifications (alerte, rapport, etc...)</span></span>
 	<span class="input">
 	{foreach $CFG.admin_mails as $mail}
 	{$mail}
@@ -147,6 +146,37 @@
 	<input type="text" name="adminmails" id="adminmails" value="{$smarty.post.adminmails|default:''}" /><input type="submit" name="adminmailssubmit" value="ajouter" />
 	</span><br />
 	<span class="key">admin_mails</span><br />
+</p>
+</form>
+
+<form method="post" action="{$smarty.const.URL}/index.php/configuration?type=advanced#form-localmail" id="form-localmail">
+{if isset($smarty.post.error.localmail)}
+{if count($smarty.post.error.localmail) == 0}
+	<p id="update">Le mail a été ajouté.</p>
+{else}
+	{foreach $smarty.post.error.localmail as $error}
+	<p id="update">{$error}</p>
+	{/foreach}
+{/if}
+{/if}
+
+{if isset($smarty.post.error.local_mail)}
+{if count($smarty.post.error.local_mail) == 0}
+	<p id="update">Le mail a été supprimée.</p>
+{else}
+	{foreach $smarty.post.error.local_mail as $error}
+	<p id="update">{$error}</p>
+	{/foreach}
+{/if}
+{/if}
+
+<p>
+	<span class="label"><label for="localmail">Expéditeur des mails envoyés par {$smarty.const.NAME}.</label><br />
+	<span class="example">note : si l'expéditeur n'est pas renseigné, c'est l'adresse des destinataires qui sera utilisée</span></span>
+	<span class="input">
+	<input type="text" name="localmail" id="localmail" value="{$smarty.post.localmail|default:$CFG.local_mail}" /><input type="submit" name="localmailsubmit" value="ajouter" />
+	</span><br />
+	<span class="key">local_mail</span><br />
 </p>
 </form>
 
