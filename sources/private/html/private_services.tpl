@@ -12,7 +12,6 @@
 </div>
 
 <div id="content">
-<a name="content"></a>
 	{if isset($smarty.get.service) && $smarty.get.service === 'nagios'}
 		{include file="private_services_nagios.tpl"}
 	{else}
