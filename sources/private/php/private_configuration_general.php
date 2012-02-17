@@ -12,10 +12,14 @@ if(isset($_POST['generalsubmit'])){
 	if(isset($_POST['tolerance'], $_POST['dailycronhour'], $_POST['localpassword'])){
 		// tolerance
 		$_POST['tolerance'] = intval($_POST['tolerance']);
-		$sql = "UPDATE configuration SET value=? WHERE key='tolerance'";
-		$query = $db->prepare($sql);
-		if($query->execute(array($_POST['tolerance'])) === FALSE){
-			$_POST['error']['general']['error_tolerance'] = 'La clé "tolerance" n\'a pas pu être mise à jour';
+		if($_POST['tolerance'] % 60 === 0){
+			$sql = "UPDATE configuration SET value=? WHERE key='tolerance'";
+			$query = $db->prepare($sql);
+			if($query->execute(array($_POST['tolerance'])) === FALSE){
+				$_POST['error']['general']['error_tolerance'] = 'La clé "tolerance" n\'a pas pu être mise à jour';
+			}
+		}else{
+			$_POST['error']['general']['error_tolerance'] = 'La clé "tolerance" doit être un multiple de 60';
 		}
 
 		// daily_cron_hour
