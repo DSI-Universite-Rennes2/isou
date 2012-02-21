@@ -98,7 +98,7 @@ if(strftime('%d', TIME) != strftime('%d', $CFG['last_daily_cron_update']) && TIM
 	$query = $db->prepare($sql);
 	$query->execute(array(TIME, 'last_daily_cron_update'));
 
-	if(strftime('%u', TIME) === 1){
+	if(strftime('%u', TIME) === '1'){
 		// si on est lundi
 		require BASE.'/cron/cron_weekly.php';
 		$sql = "UPDATE configuration SET value=? WHERE key=?";
