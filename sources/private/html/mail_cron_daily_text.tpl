@@ -1,3 +1,25 @@
+Résumé
+-------
+Nombre total de visites : {$visits->count}
+Nombre de serivces Isou forcés : {count($forcedservices)}
+Nombre de services Nagios supprimés : {count($nagiosServices)}
+
+{if count($nagiosServices) > 0}
+Liste des services Nagios supprimés
+------------------------------------
+{foreach $nagiosServices as $service}
+   - {$service}
+{/foreach}
+{/if}
+
+{if count($forcedservices) > 0}
+Liste des services actuellement forcés
+---------------------------------------
+{foreach $forcedservices as $forcedservice}
+- {$forcedservice->nameForUsers} : {$flags.{$forcedservice->state}->alt}
+{/foreach}
+{/if}
+
 {if count($categories) > 0}
 Liste des services indisponibles de la journée
 -----------------------------------------------
@@ -18,8 +40,8 @@ Liste des services indisponibles de la journée
 {/section}
 {/if}
 
-Statistique des visites
------------------------
+Statistiques des visites
+-------------------------
  ** Visites (hors bots et autres) **
    - Visites externes : {$visits->externe}
    - Visites UHB : {$visits->interne}
@@ -45,12 +67,5 @@ Total des visites : {$visits->bots}
    - {$bot->userAgent|escape:'htmlall'} : {$bot->total} visites
 {/foreach}
 
-{if count($nagiosServices) > 0}
-Liste des services Nagios supprimés
------------------------------------
-{foreach $nagiosServices as $service}
-   - {$service}
-{/foreach}
-{/if}
 
 

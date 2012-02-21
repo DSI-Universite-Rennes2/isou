@@ -234,6 +234,28 @@ while($service = $services->fetchObject()){
 
 $smarty->assign('nagiosServices', $nagiosServices);
 
+// SERVICES FERMES
+$sql = "SELECT S.idService, S.name, S.nameForUsers, S.state".
+	" FROM services S".
+	" WHERE S.readonly = 1".
+	" AND S.name = 'Service final'".
+	" ORDER BY S.nameForUsers";
+$services = $db->prepare($sql);
+$services->execute();
+
+$forcedservices = $services->fetchAll(PDO::FETCH_OBJ);
+
+$sql = "SELECT idState, name, title, alt, src FROM states";
+$flags = array();
+if($query = $db->query($sql)){
+	while($flag = $query->fetch(PDO::FETCH_OBJ)){
+		$flags[] = $flag;
+	}
+}
+
+$smarty->assign('forcedservices', $forcedservices);
+$smarty->assign('flags', $flags);
+
 $subject = 'Rapport ISOU du '.strftime('%A %e %B', $beginDateYesterday);
 $message = $smarty->fetch('mail_cron_daily_text.tpl');
 
