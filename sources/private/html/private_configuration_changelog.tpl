@@ -78,6 +78,7 @@
 		<ul>
 			<li>Les services verrouillés/forcés sont affichés au-dessus de la liste des évènements, et non dans la liste parmi les autres évènements</li>
 			<li>Remplacement de la commande <code>readline</code> (non disponible dans les paquets debian) par <code>fgets</code></li>
+			<li>Ajout des services verrouillés/forcés dans le rapport quotidien</li>
 		</ul>
 	</li>
 	<li>Correction de bugs
@@ -85,6 +86,7 @@
 			<li>Suppression des transactions PDO qui semblent poser problème avec sqlite3 (et entrainaient le plantage du script exécuté par le cron)</li>
 			<li>Correction d'un bug d'affichage de l'icône du calendrier sur la page évènement</li>
 			<li>Correction de l'affichage de l'année dans les exemples données sur la page 'évènement'</li>
+			<li>Correction d'un bug qui empêchait le lancement du cron hebdomadaire</li>
 		</ul>
 	</li>
 </ul>
