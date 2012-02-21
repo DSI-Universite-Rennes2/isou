@@ -7,7 +7,7 @@
 error_reporting(0);
 define('BASE', dirname(__FILE__));
 
-require BASE.'/install/functions.php';
+require BASE.'/functions.php';
 require BASE.'/version.php';
 
 echo "\033[0;31mIMPORTANT : installez l'application avec votre utilisateur web (apache, www-data ou autre)\033[0m\nVoulez-vous continuer ? (y/n)\n";
@@ -17,89 +17,8 @@ if(strtolower($owner) === 'n'){
 	exit(0);
 }
 
-/*
- * COPIE DES FICHIERS ET REPERTOIRES 'PUBLICS'
- */
-echo "\033[0;34mCOPIE DES FICHIERS\033[0m\n";
-echo "Indiquez le répertoire d'installation de votre application\n".
-						"exemple : \033[1;30m/var/www/\033[0m\n";
-$public_path = trim(fread(STDIN, 2048));
-
-if(substr($public_path, -1) === '/'){
-	$public_path = substr($public_path, 0, -1);
-}
-
-if(!is_dir($public_path)){
-	if(empty($public_path) || !mkdir($public_path)){
-		echo "La création du répertoire ".$public_path." a échoué.\n";
-		echo "\033[0;31mÉchec de l'installation\033[0m\n";
-		exit(1);
-	}
-}
-
-$files = array();
-$files[0] = 'css';
-$files[1] = 'images';
-$files[2] = 'js';
-$files[3] = 'config.menu.php';
-$files[4] = 'functions.php';
-$files[5] = 'index.php';
-$files[6] = 'rss.php';
-$files[7] = 'rss.xsl';
-
-echo "\n";
-foreach($files as $file){
-	$display = "Copie de ".BASE."/sources/".$file." vers ".$public_path."/".$file;
-	if(cp(BASE.'/sources/'.$file, $public_path.'/'.$file)){
-		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
-	}else{
-		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
-		echo "\033[0;31mÉchec de l'installation\033[0m\n";
-		exit(1);
-	}
-}
-
-/*
- * COPIE DES FICHIERS ET REPERTOIRES 'PRIVÉS'
- */
-echo "\nIndiquez un répertoire non accessible via votre serveur Web (\033[1;35moptionnel\033[0m)\n".
-						"exemple : \033[1;30m/var/www-private/\033[0m\n".
-						"Défaut: \033[1;34m".$public_path."\033[0m\n";
-$private_path = trim(fread(STDIN, 2048));
-if(empty($private_path)){
-	$private_path = $public_path;
-}else{
-	if(substr($private_path, -1) === '/'){
-		$private_path = substr($private_path, 0, -1);
-	}
-	if(!is_dir($private_path)){
-		if(!mkdir($private_path)){
-			$private_path = $public_path;
-		}else{
-			echo "\n";
-		}
-	}else{
-		echo "\n";
-	}
-}
-
-$files = array();
-$files[0] = 'classes';
-$files[1] = 'cron';
-$files[2] = 'database';
-$files[3] = 'html';
-$files[4] = 'php';
-
-foreach($files as $file){
-	$display = "Copie de ".BASE."/sources/".$file." vers ".$public_path."/".$file;
-	if(cp(BASE.'/sources/'.$file, $private_path.'/'.$file)){
-		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
-	}else{
-		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
-		echo "\033[0;31mÉchec de l'installation\033[0m\n";
-		exit(1);
-	}
-}
+$private_path = realpath(BASE.'/../');
+$public_path = realpath(BASE.'/../public/');
 
 /*
  * INSTALLATION BASE DE DONNÉES
@@ -114,7 +33,7 @@ try{
 }
 $display = "Création de la base de données 'isou.sqlite3'";
 echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
-require BASE.'/install/database.php';
+require BASE.'/scripts/install_database.php';
 
 try{
 	$db1 = new PDO('sqlite:'.$private_path.'/database/isou-visits.sqlite3');
