@@ -119,7 +119,7 @@ if(is_file(BASE.'/cron/LOCK_CRON')){
 // mise à jour du numéro de version dans le fichier config.php
 if(strlen($CFG['version']) < 12){
 	// update old old old version
-	// require BASE.'/upgrade/lib/update_preversion.php';
+	require BASE.'/upgrade/scripts/update_0.9.6.php';
 	$CFG['version'] = '2012-02-16.1';
 }
 
@@ -134,7 +134,7 @@ if($CFG['version'] === '2012-02-16.1'){
 	$query = $db->prepare($sql);
 	$query->execute(array('auto_backup', '1'));
 
-	require BASE.'/upgrade/lib/update_2012-02-16.1.php';
+	require BASE.'/upgrade/scripts/update_2012-02-16.1.php';
 	$CFG['version'] = '2012-02-16.2';
 }
 
