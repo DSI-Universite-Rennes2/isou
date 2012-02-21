@@ -249,7 +249,7 @@ a, a:visited, a:hover, a:link, a:active, a:focus{
 	font-weight: bold;
 }
 
-#update, #unavailable{
+#update, #unavailable, .update{
 	background-color: orange;
 	border: .3em red solid;
 	margin: .8em 0em;

@@ -223,6 +223,22 @@ if(isset($_POST['localmail'])){
 	}
 }
 
+// vérification du formulaire d'ajout de la clé auto_backup
+$smarty->assign('autobackup', array('Non', 'Oui'));
+if(isset($_POST['autobackup'])){
+	$_POST['error']['autobackup'] = array();
+	$_POST['autobackup'] = intval($_POST['autobackup']);
+	if($_POST['autobackup'] !== 1){
+		$_POST['autobackup'] = 0;
+	}
+	$sql = "UPDATE configuration SET value=? WHERE key=?";
+	$query = $db->prepare($sql);
+	if($query->execute(array($_POST['autobackup'], 'auto_backup')) === FALSE){
+		$_POST['error']['autobackup']['error_autobackup'] = 'La clé "auto_backup" n\'a pas pu être mise à jour';
+	}
+}
+
+
 // traitement des liens "d'effacement"
 if(isset($_GET['action'], $_GET['key'])){
 	// reset cron

@@ -22,6 +22,7 @@ if($PAGE_NAME === 'rss'){
 	exit();
 }
 
+require BASE.'/upgrade/version.php';
 require BASE.'/php/common_database.php';
 
 $sql = "SELECT key, value FROM configuration";
@@ -35,6 +36,7 @@ if($query = $db->query($sql)){
 		}
 	}
 }
+
 
 require BASE.'/php/common_authentification.php';
 require BASE.'/php/common_statistics.php';
@@ -120,7 +122,32 @@ if($_SESSION['hide'] === 1){
 	$TOLERANCE = 0;
 }
 
-require $model;
+if(CURRENT_VERSION === $CFG['version']){
+	require $model;
+}else{
+	if(($IS_ADMIN && is_file(BASE.'/upgrade/LOCK_CONFIG')) === FALSE){
+		$template = 'public_update';
+	}else{
+		require $model;
+	}
+
+	if($IS_ADMIN && !is_file(BASE.'/upgrade/LOCK_UPDATE')){
+		if(isset($_GET['confirm']) && $_GET['confirm'] === '1'){
+			$old_version = $CFG['version'];
+
+			require BASE.'/upgrade/update.php';
+
+			// pdo connection closed previously, in update.php
+
+			touch(BASE.'/upgrade/LOCK_CONFIG');
+
+			header('Location: '.URL.'/index.php/configuration?type=changelog&version='.$old_version);
+			exit();
+		}else{
+			$smarty->assign('updatelink', TRUE);
+		}
+	}
+}
 
 $smarty->assign('FULLURL', get_base_url('full', HTTPS));
 $smarty->assign('title', $title);

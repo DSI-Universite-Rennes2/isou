@@ -205,10 +205,10 @@ function secondstohuman($seconds){
 function isoumail($to, $subject, $message){
 	global $CFG;
 
-	if(!isset($CFG['local_mail']) || empty($CFG['local_mail'])){
-		$from = $to;
-	}else{
+	if(isset($CFG['local_mail']) && filter_var($CFG['local_mail'], FILTER_VALIDATE_EMAIL)){
 		$from = $CFG['local_mail'];
+	}else{
+		$from = $to;
 	}
 
 	$headers =	"From: Message automatique de ".NAME." <".$from.">\r\n".

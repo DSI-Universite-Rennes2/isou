@@ -149,7 +149,8 @@
 </p>
 </form>
 
-<form method="post" action="{$smarty.const.URL}/index.php/configuration?type=advanced#form-localmail" id="form-localmail">
+<h2>Divers</h2>
+<form method="post" action="{$smarty.const.URL}/index.php/configuration?type=advanced#form-divers" id="form-divers">
 {if isset($smarty.post.error.localmail)}
 {if count($smarty.post.error.localmail) == 0}
 	<p id="update">Le mail a été ajouté.</p>
@@ -160,23 +161,34 @@
 {/if}
 {/if}
 
-{if isset($smarty.post.error.local_mail)}
-{if count($smarty.post.error.local_mail) == 0}
-	<p id="update">Le mail a été supprimée.</p>
+<p>
+	<span class="label"><label for="localmail">Expéditeur des mails envoyés par {$smarty.const.NAME}.</label><br />
+	<span class="example">note : si l'expéditeur n'est pas renseigné, c'est l'adresse des destinataires qui sera utilisée</span></span>
+	<span class="input">
+	<input type="text" name="localmail" id="localmail" value="{$smarty.post.localmail|default:$CFG.local_mail}" />
+	</span><br />
+	<span class="key">local_mail</span><br />
+</p>
+
+{if isset($smarty.post.error.autobackup)}
+{if count($smarty.post.error.autobackup) == 0}
+	<p class="update">La clé 'auto_backup' a été ajoutée.</p>
 {else}
-	{foreach $smarty.post.error.local_mail as $error}
-	<p id="update">{$error}</p>
+	{foreach $smarty.post.error.autobackup as $error}
+	<p class="update">{$error}</p>
 	{/foreach}
 {/if}
 {/if}
 
 <p>
-	<span class="label"><label for="localmail">Expéditeur des mails envoyés par {$smarty.const.NAME}.</label><br />
-	<span class="example">note : si l'expéditeur n'est pas renseigné, c'est l'adresse des destinataires qui sera utilisée</span></span>
+	<span class="label"><label for="autobackup">Activer la sauvegarde automatique lors de mise à jour ?</label></span>
 	<span class="input">
-	<input type="text" name="localmail" id="localmail" value="{$smarty.post.localmail|default:$CFG.local_mail}" /><input type="submit" name="localmailsubmit" value="ajouter" />
+	{html_options name='autobackup' options=$autobackup selected=$smarty.post.autobackup|default:$CFG.auto_backup}
 	</span><br />
-	<span class="key">local_mail</span><br />
+	<span class="key">auto_backup</span><br />
+</p>
+<p>
+	<input type="submit" name="update" value="enregistrer" />
 </p>
 </form>
 

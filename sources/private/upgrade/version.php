@@ -1,5 +1,5 @@
 <?php
 
-define('CURRENT_VERSION', '0.9.6');
+define('CURRENT_VERSION', '2012-02-16.1');
 
 ?>

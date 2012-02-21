@@ -65,7 +65,12 @@ if(is_file(BASE.'/cron/LOCK_CRON')){
 		exit;
 	}
 }else{
-	touch(BASE.'/cron/LOCK_CRON');
+	if(is_file(BASE.'/upgrade/LOCK_UPDATE')){
+		// don't run cron during an update
+		exit;
+	}else{
+		touch(BASE.'/cron/LOCK_CRON');
+	}
 }
 
 // cron servant à la synchro avec Nagios

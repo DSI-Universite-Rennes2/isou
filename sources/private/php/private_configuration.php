@@ -2,7 +2,6 @@
 
 $css = '<link rel="stylesheet" type="text/css" href="'.URL.'/css/configuration.css" media="screen" />';
 $script = '';
-$title = NAME.' - Configuration'; // remove
 
 // $script = '<script type="text/javascript" src="'.URL.'/js/jquery-min.js"></script>';
 if(isset($_GET['type']) && $_GET['type'] == 'advanced'){
