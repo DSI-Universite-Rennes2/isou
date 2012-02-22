@@ -39,7 +39,7 @@ function cp($source, $destination){
 
 // ajoute des points pour aligner les retours d'étape
 function niceDot($string, $len = 125){
-	$strlen = strlen($string);
+	$strlen = strlen(utf8_decode($string));
 	if($strlen < $len){
 		return str_repeat('.', $len-$strlen);
 	}else{
