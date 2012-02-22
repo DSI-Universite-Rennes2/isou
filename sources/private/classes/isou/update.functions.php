@@ -7,20 +7,25 @@
 // MISE EN CACHE : parsing du status.dat ou utilisation de la bdd
 function update_nagios_to_db(){
 
-	try {
-		$db = new PDO(DB_PATH, '', '');
-	} catch (PDOException $e) {
-		add_log(LOG_FILE, 'ISOU', 'ERROR_DB', $e->getMessage());
-	}
+	if(defined('UNITS') === FALSE){
+		try {
+			$db = new PDO(DB_PATH, '', '');
+		} catch (PDOException $e) {
+			add_log(LOG_FILE, 'ISOU', 'ERROR_DB', $e->getMessage());
+		}
 
-	// parse le status.dat et mets à jour les états dans la base de données
-	$log = status_dat2db(STATUSDAT_URL);
+		// parse le status.dat et mets à jour les états dans la base de données
+		$log = status_dat2db(STATUSDAT_URL);
 
-	if($log instanceof Exception){
-		// close pdo connection
-		$db = null;
-		return $log;
-		exit;
+		if($log instanceof Exception){
+			// close pdo connection
+			$db = null;
+			return $log;
+			exit;
+		}
+	}else{
+		global $db2;
+		$db = $db2;
 	}
 
 	// reactive tous les services finaux
@@ -41,9 +46,10 @@ function update_nagios_to_db(){
 	$sql = "UPDATE services".
 			" SET readonly = 0".
 			" WHERE readonly = 1".
+			" AND state != 0". // note: les services forcés en vert n'ont pas d'évènements !!!
 			" AND idService NOT IN (SELECT s.idService".
 									" FROM events e, events_isou ei, services s".
-									" WHERE readonly = 1".
+									" WHERE s.readonly = 1".
 									" AND ei.idService = s.idService".
 									" AND e.idEvent = ei.idEvent".
 									" AND ((e.beginDate < ".TIME." AND e.endDate > ".TIME.") OR e.endDate is null)".
@@ -67,6 +73,7 @@ function update_nagios_to_db(){
 				" FROM services".
 				" WHERE state BETWEEN 1 AND 3";
 
+	$array_dependence = array();
 	if($queryCount = $db->query($sql_count)){
 		$count = $queryCount->fetchAll();
 		$queryCount->closeCursor();
@@ -79,13 +86,11 @@ function update_nagios_to_db(){
 			$sql = "SELECT idService, state, readonly".
 					" FROM services".
 					" WHERE state BETWEEN 1 AND 3";
-			$array = array();
 			if($dependence_records = $db->query($sql)){
 				$dependences = $dependence_records->fetchAll(PDO::FETCH_OBJ);
 
 				foreach($dependences as $parent){
-					$array = make_dependencies($parent, $array, $db);
-					$array = array_unique($array);
+					$array_dependence = make_dependencies($parent, $array_dependence, $db);
 				}
 			}else{
 				add_log(LOG_FILE, 'ISOU', 'update', 'Les dépendances n\'ont pas pu être mises à jour (1)');
@@ -101,12 +106,6 @@ function update_nagios_to_db(){
 		}
 	}else{
 		add_log(LOG_FILE, 'ISOU', 'update', 'Les dépendances n\'ont pas pu être mises à jour (2)');
-	}
-
-	if(isset($array)){
-		$array_dependence = $array;
-	}else{
-		$array_dependence = array();
 	}
 
 	// ajoute les interruptions de services non prévues dans la base de données
@@ -150,11 +149,7 @@ function update_nagios_to_db(){
 					$description = NULL;
 					if(isset($array_dependence[$dependence[$d][0]])){
 						if(count($array_dependence[$dependence[$d][0]]) > 0){
-							$description = "";
-							foreach($array_dependence[$dependence[$d][0]] as $descript){
-								$description .= $descript."\n";
-							}
-							$description = substr($description, 0, -1);
+							$description = implode("\n", $array_dependence[$dependence[$d][0]]);
 						}
 					}
 
@@ -168,13 +163,27 @@ function update_nagios_to_db(){
 						if($description === NULL){
 							$description = 1;
 						}else{
-							$sql = "INSERT INTO events_description(description, autogen)".
-									" VALUES(:0, 1)";
+							// check doublon
+							$duplicate = FALSE;
+							$sql = "SELECT idEventDescription FROM events_description WHERE description=?";
 							$query = $db->prepare($sql);
 							if($query->execute(array($description))){
-								$description = $db->lastInsertId();
+								if($duplicate = $query->fetch(PDO::FETCH_OBJ)){
+									$duplicate = $duplicate->idEventDescription;
+								}
+							}
+
+							if($duplicate === FALSE){
+								$sql = "INSERT INTO events_description(description, autogen)".
+										" VALUES(:0, 1)";
+								$query = $db->prepare($sql);
+								if($query->execute(array($description))){
+									$description = $db->lastInsertId();
+								}else{
+									$description = 1;
+								}
 							}else{
-								$description = 1;
+								$description = $duplicate;
 							}
 						}
 						$sql = "INSERT INTO events_isou(period, isScheduled, idService, idEvent, idEventDescription)".
@@ -351,9 +360,7 @@ function make_dependencies($parent,$array,$db){
 			" WHERE D.idServiceParent = ?".
 			" AND D.stateOfParent = ?".
 			" AND S.idService = D.idService";
-
 	$depend_records = $db->prepare($sql);
-
 	if($depend_records->execute(array($parent->idService, $parent->state))){
 		$depends = $depend_records->fetchAll(PDO::FETCH_OBJ);
 		foreach($depends as $child){
@@ -365,12 +372,17 @@ function make_dependencies($parent,$array,$db){
 			if($db->query($sql)){
 				if(!isset($array[$child->idService])){
 					$array[$child->idService] = array();
+					if(isset($array[$parent->idService])){
+						$array[$child->idService] = $array[$parent->idService];
+					}else{
+						$array[$child->idService] = array();
+					}
 				}
 
 				if(!empty($child->message) && !in_array($child->message, $array[$child->idService])){
 					$array[$child->idService][] = $child->message;
 				}
-
+				
 				if($child->readonly == '0'){
 					$array = make_dependencies($child, $array, $db);
 				}
