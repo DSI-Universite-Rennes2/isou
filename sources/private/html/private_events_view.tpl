@@ -48,7 +48,8 @@
 		{foreach $forcedservices as $forcedservice}
 			<li>
 				<img src="{$smarty.const.URL}/images/{$flags.{$forcedservice->state}->src}" alt="{$flags.{$forcedservice->state}->alt}" />
-				{$forcedservice->nameForUsers}
+				{$forcedservice->nameForUsers} 
+				<a href="{$smarty.const.URL}/index.php/evenements/{if $smarty.get.type == 0}nonprevus{elseif $smarty.get.type == 2}reguliers{elseif $smarty.get.type == 3}fermes{elseif $smarty.get.type == 4}messages{else}prevus{/if}?id={$forcedservice->idService}&amp;unlock=1"><img src="{$smarty.const.URL}/images/icon_padlock.gif" alt="déverrouiller le service {$forcedservice->nameForUsers}" title="déverrouiller le service" /></a>
 			</li>
 		{/foreach}
 		</ul>

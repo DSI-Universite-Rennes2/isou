@@ -35,6 +35,7 @@ if(isset($_POST['cancel'])){
 	exit();
 }
 
+
 /* * * * * * * * * * * * * * * * * *
 	Init vars
 * * * * * * * * * * * * * * * * * */
@@ -192,8 +193,25 @@ if(isset($_POST['insert'])){
 				}
 			}
 
+			if(!isset($error) && $isScheduled === 0){
+				if(isset($_POST['forced'])){
+					$forced = intval($_POST['forced']);
+					if($forced >= 0 && $forced < 5){
+						$sql = "UPDATE services SET state=?, readonly=1 WHERE idService = ?";
+						$query = $db->prepare($sql);
+						if($query->execute(array($forced, $idService)) === FALSE){
+							$error = 'L\'évènement n\'a pas pu être inséré.';
+						}else{
+							if($forced === 0){
+								$dontaddevent = TRUE;
+							}
+						}
+					}
+				}
+			}
+
 			$idEventDescription = 1;
-			if(!isset($error) && !empty($description)){
+			if(!isset($error) && !isset($dontaddevent) && !empty($description)){
 				$sql = "SELECT idEventDescription FROM events_description WHERE autogen=0 AND description=?";
 				$query = $db->prepare($sql);
 				$query->execute(array(trim($description)));
@@ -209,24 +227,12 @@ if(isset($_POST['insert'])){
 				}
 			}
 
-			if(!isset($error) && $isScheduled === 0){
-				if(isset($_POST['forced'])){
-					$forced = intval($_POST['forced']);
-					if($forced >= 0 && $forced < 5){
-						$sql = "UPDATE services SET state=?, readonly=1 WHERE idService = ?";
-						$query = $db->prepare($sql);
-						if($query->execute(array($forced, $idService)) === FALSE){
-							$error = 'L\'évènement n\'a pas pu être inséré.';
-						}
-					}
-				}
-			}
 
-			if($isScheduled === 2 && $endDate === NULL){
+			if($isScheduled === 2 && $endDate === NULL && !isset($dontaddevent)){
 				$error = 'Veuillez indiquer une date de fin.';
 			}
 
-			if(!isset($error)){
+			if(!isset($error) && !isset($dontaddevent)){
 				$sql = "INSERT INTO events (idEvent, beginDate, endDate, typeEvent)".
 						" VALUES(NULL, ?, ?, 0)";
 				$query = $db->prepare($sql);
