@@ -59,6 +59,7 @@
 			<ul>
 				<li>auto_backup : permet de définir la création automatique d'une sauvegarde lors des mises à jour</li>
 				<li>local_mail : permet de définir l'expéditeur de mails générés par l'application</li>
+			</ul>
 			</li>
 			<li>Scission de la page configuration en 3 nouvelles pages (configuration générale, avancée et changelog)</li>
 			<li>Réorganisation de l'arborescence de l'application
@@ -72,11 +73,13 @@
 				<li>Le nouveau système se repose complètement sur GIT</li>
 			</ul>
 			</li>
+			<li>Création de tests unitaires</li>
 		</ul>
 	</li>
 	<li>Améliorations diverses
 		<ul>
 			<li>Les services verrouillés/forcés sont affichés au-dessus de la liste des évènements, et non dans la liste parmi les autres évènements</li>
+			<li>Les services verrouillés/forcés état de fonctionnement, n'engendre plus la création d'un évènement</li>
 			<li>Remplacement de la commande <code>readline</code> (non disponible dans les paquets debian) par <code>fgets</code></li>
 			<li>Ajout des services verrouillés/forcés dans le rapport quotidien</li>
 		</ul>
