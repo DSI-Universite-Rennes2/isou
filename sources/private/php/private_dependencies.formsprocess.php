@@ -9,6 +9,9 @@ if(isset($_POST['cancel'])){
 	exit();
 }
 
+require BASE.'/classes/htmlpurifier-4.4.0-lite/library/HTMLPurifier.auto.php';
+$HTMLPurifier = new HTMLPurifier();
+
 if(isset($_POST['stateOfParent'])){
 	$_POST['stateOfParent'] = intval($_POST['stateOfParent']);
 }else{
@@ -35,6 +38,8 @@ if(isset($_POST['childService'])){
 
 if(!isset($_POST['description']) || empty($_POST['description'])){
 	$_POST['description'] = NULL;
+}else{
+	$_POST['description'] = $HTMLPurifier->purify($_POST['description']);	
 }
 
 /* * * * * * * * * * * * * * * * * *

@@ -113,7 +113,7 @@ $(document).ready(function(){
 	}
 
 	/* TRANSFORMATION DES ANCRES EN PARAMETRE D'URL */
-	$(".service dl dd p a").each(function(index){
+	$(".service dl dd p a:lt(2)").each(function(index){
 		$(this).attr("href",$(this).attr("href").replace("#S","&S="));
 	});
 
@@ -127,9 +127,10 @@ $(document).ready(function(){
 	var id = 0;
 
 	$("dt").each(function(index){
-		if(tmp != $(this).text()){
-			tmp = $(this).text();
-			$("#isoulist").append($("<li><a href=\"javascript:changeService("+id+")\" title=\"Afficher les dépendances du service '"+$(this).text()+"'\">"+$(this).text()+"</a></li>"));
+		var name = $(this).text().replace(/"/g,'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+		if(tmp != name){
+			tmp = name;
+			$("#isoulist").append($("<li><a href=\"javascript:changeService("+id+")\" title=\"Afficher les dépendances du service '"+name+"'\">"+name+"</a></li>"));
 			id++;
 		}
 	});
@@ -155,7 +156,7 @@ $(document).ready(function(){
 	);
 
 	$("#isoulist li a").click(function(){
-			$("#isoulist li a").css("background-color","#B0E0E6");
+		$("#isoulist li a").css("background-color","#B0E0E6");
 		$(this).css("background-color","#87CEFA");
 	});
 

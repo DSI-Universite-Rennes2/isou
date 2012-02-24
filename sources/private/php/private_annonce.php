@@ -7,7 +7,10 @@ $title = NAME.' - Annonce';
 $error = '';
 
 if(isset($_POST['submit'])){
-	$message = $_POST['message'];
+	require BASE.'/classes/htmlpurifier-4.4.0-lite/library/HTMLPurifier.auto.php';
+	$HTMLPurifier = new HTMLPurifier();
+	$message = $HTMLPurifier->purify($_POST['message']);
+
 	(isset($_POST['afficher']))?$afficher=1:$afficher=0;
 
 	$sql = "UPDATE annonce SET message = ?, afficher = ?";

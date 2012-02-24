@@ -10,7 +10,7 @@
 	if(isset($_POST['insert'])){
 		if(isset($_POST['name']) && !empty($_POST['name'])){
 
-			$name = $_POST['name'];
+			$name = htmlspecialchars($_POST['name']);
 
 			$count = 0;
 			$sql = "SELECT count(*)".
@@ -35,11 +35,12 @@
 	/* * * * * * * * * * * * * * * * * *
 		Traitement d'une modification
 	* * * * * * * * * * * * * * * * * */
-	if(isset($_POST['modify'])){
-		if(isset($_POST['idCategory']) && is_numeric(0+$_POST['idCategory']) && $_POST['idCategory']>0 &&
-		isset($_POST['name']) && !empty($_POST['name'])){
+	if(isset($_POST['modify'], $_POST['idCategory'], $_POST['name'])){
+		$idCategory = intval($_POST['idCategory']);
+
+		if($_POST['idCategory'] > 0 && !empty($_POST['name'])){
 			$idCategory = $_POST['idCategory'];
-			$name =  $_POST['name'];
+			$name =  htmlspecialchars($_POST['name']);
 
 			$sql = "UPDATE categories ".
 				" SET name = ?".

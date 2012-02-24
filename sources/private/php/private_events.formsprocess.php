@@ -40,6 +40,9 @@ if(isset($_POST['cancel'])){
 	Init vars
 * * * * * * * * * * * * * * * * * */
 
+require BASE.'/classes/htmlpurifier-4.4.0-lite/library/HTMLPurifier.auto.php';
+$HTMLPurifier = new HTMLPurifier();
+
 $error = NULL;
 
 if(isset($_POST['name'])){
@@ -94,13 +97,13 @@ if(isset($_POST['period']) && $isScheduled == 2){
 }
 
 if(isset($_POST['description'])){
-	$description = trim($_POST['description']);
+	$description = $HTMLPurifier->purify($_POST['description']);
 }else{
 	$description = '';
 }
 
 if(isset($_POST['descriptionUpd'])){
-	$descriptionUpd = trim($_POST['descriptionUpd']);
+	$descriptionUpd = $HTMLPurifier->purify($_POST['descriptionUpd']);
 }else{
 	$descriptionUpd = '';
 }
@@ -139,7 +142,7 @@ if(isset($_POST['insert'])){
 
 	// traitement de l'ajout d'un message informatif
 	if(isset($_POST['message'])){
-		$message = trim($_POST['message']);
+		$message = $HTMLPurifier->purify($_POST['message']);
 		if(!empty($message)){
 			$sql = "INSERT INTO events (idEvent, beginDate, endDate, typeEvent)".
 					" VALUES(NULL, ?, ?, 2)";
@@ -342,7 +345,7 @@ if(isset($_POST['modify'])){
 
 	// traitement de la mise à jour d'un message informatif
 	if(isset($_POST['message']) && !empty($_POST['message'])){
-		$message = trim($_POST['message']);
+		$message = $HTMLPurifier->purify($_POST['message']);
 		if(!empty($message)){
 			$sql = "UPDATE events SET beginDate=?, endDate=? WHERE idEvent=?";
 			$query = $db->prepare($sql);

@@ -29,6 +29,7 @@ if(isset($_POST['cancel'])){
 	/* * * * * * * * * * * * * * * * * *
 		Traitement d'un ajout
 	* * * * * * * * * * * * * * * * * */
+
 	if(isset($_POST['insert'])){
 		$error = 'false';
 
@@ -44,12 +45,12 @@ if(isset($_POST['cancel'])){
 		}
 
 		if(isset($_POST['name'])){
-			$name = $_POST['name'];
+			$name = htmlspecialchars($_POST['name']);
 		}else{
 			$name = 'Service final';
 		}
 
-		if(isset($_POST['url']) && !empty($_POST['url'])){
+		if(isset($_POST['url']) && filter_var($_POST['url'], FILTER_VALIDATE_URL)){
 			$url = $_POST['url'];
 		}else{
 			$url = '';
@@ -63,7 +64,7 @@ if(isset($_POST['cancel'])){
 			$rssKey = NULL;
 		}else{
 			// isou services
-			$nameForUsers = $_POST['nameForUsers'];
+			$nameForUsers = htmlspecialchars($_POST['nameForUsers']);
 			$enable = 1;
 			$visible = 1;
 			$sql = "SELECT rssKey FROM services WHERE rssKey IS NOT NULL ORDER BY rssKey DESC";
@@ -72,7 +73,8 @@ if(isset($_POST['cancel'])){
 			$rssKey = $rssKey[0]+1;
 		}
 
-		(isset($_POST['comment']))?$comment = $_POST['comment']:$comment = '';
+		// (isset($_POST['comment']))?$comment = $_POST['comment']:$comment = '';
+		$comment = '';
 
 		$sql = "INSERT INTO services (name, nameForUsers, url, state, comment, enable, visible, readonly, rssKey, idCategory)".
 			" VALUES(?, ?, ?, 0, ?, ?, ?, 0, ?, ?)";
@@ -177,15 +179,24 @@ if(isset($_POST['cancel'])){
 			$_POST['idService'] = 0;
 		}
 
-		if(isset($_POST['name']) && !empty($_POST['name'])){
-			$_POST['nameForUsers'] = $_POST['name'];
+		if(isset($_POST['name'])){
+			$_POST['name'] = htmlspecialchars($_POST['name']);
+		}else{
+			$_POST['name'] = '';
+		}
+		
+		if(isset($_POST['nameForUsers'])){
+			$_POST['nameForUsers'] = htmlspecialchars($_POST['nameForUsers']);
+		}else{
+			$_POST['nameForUsers'] = '';
 		}
 
-		if(!isset($_POST['url']) || empty($_POST['url'])){
+		if(!isset($_POST['url']) || !filter_var($_POST['url'], FILTER_VALIDATE_URL)){
 			$_POST['url'] = '';
 		}
 
-		if($_POST['idService']>0){
+		$names = $_POST['nameForUsers'].$_POST['name'];
+		if($_POST['idService']>0 && !empty($names)){
 			$comment = '';
 
 			if(!empty($_POST['nameForUsers']) && !empty($_POST['category'])){
@@ -195,9 +206,9 @@ if(isset($_POST['cancel'])){
 					" WHERE idService = ?";
 				$query = $db->prepare($sql);
 				if($query->execute(array($_POST['nameForUsers'],$_POST['url'],$comment,$_POST['category'],$_POST['idService']))){
-					unset($_POST['idService']);
 					$error = 'Le service '.stripslashes($_POST['nameForUsers']).' a été modifié dans la base';
-					add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Service #'.$_POST['idService'].' : SET nameForUsers = '.$_POST['nameForUsers'].', state = '.$state.', comment = '.$comment.', enable = 1, visible = 1, readonly = '.$_POST['readonly'].', idCategory = '.$_POST['category']);
+					add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Service #'.$_POST['idService'].' : SET nameForUsers = '.$_POST['nameForUsers'].', comment = '.$comment.', enable = 1, idCategory = '.$_POST['category']);
+					unset($_POST['idService']);
 				}else{
 					$error = 'Le service '.stripslashes($_POST['nameForUsers']).' n\'a pas pu être mis à jour dans la base';
 				}
@@ -208,9 +219,9 @@ if(isset($_POST['cancel'])){
 					" WHERE idService = ?";
 				$query = $db->prepare($sql);
 				if($query->execute(array($_POST['name'], $comment, $_POST['idService']))){
-					unset($_POST['idService']);
 					$error = 'Le service '.stripslashes($_POST['name']).' remplace le service précédemment sélectionné';
 					add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Service #'.$_POST['idService'].' : SET nameForUsers = NULL, comment = '.$comment.', enable = 0, visible = 0, idCategory = '.$_POST['category']);
+					unset($_POST['idService']);
 				}else{
 					$error = 'Le service '.stripslashes($_POST['name']).' n\'a pas pu être mis à jour dans la base';
 				}
