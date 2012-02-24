@@ -46,7 +46,7 @@
 		<a name="formatDate1"></a>
 		Le format de date demandé est de type "DD/MM/YYYY hh:mm".<br />
 		Exemple :<br />
-		Pour le {$smarty.now|date_format:'%A %d %B %Y à %H heures et %M minutes'}, la valeur attendue est {$smarty.now|date_format:'%d/%m/%y %H:%M'}.<br /><br />
+		Pour le {$smarty.now|date_format:'%A %d %B %Y à %H heures et %M minutes'}, la valeur attendue est {$smarty.now|date_format:'%d/%m/%Y %H:%M'}.<br /><br />
 		<a class="quickaccess-form" href="#form-stat-graphic" title="revenir au formulaire">Revenir au formulaire.</a>
 	</p>
 
