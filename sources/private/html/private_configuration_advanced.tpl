@@ -181,7 +181,8 @@
 {/if}
 
 <p>
-	<span class="label"><label for="autobackup">Activer la sauvegarde automatique lors de mise à jour ?</label></span>
+	<span class="label"><label for="autobackup">Activer la sauvegarde automatique lors de mise à jour ?</label><br />
+	<span class="example">attention :  peut considérablement ralentir le processus de mise à jour</span></span>
 	<span class="input">
 	{html_options name='autobackup' options=$autobackup selected=$smarty.post.autobackup|default:$CFG.auto_backup}
 	</span><br />

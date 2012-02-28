@@ -26,7 +26,7 @@ if(defined('STDIN')){
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 	}
 
-	echo "\nSouhaitez-vous activer les sauvegardes automatiques lors des mises à jour de l'application ?\n";
+	echo "\nSouhaitez-vous activer les sauvegardes automatiques lors des mises à jour de l'application (ATTENTION : peut considérablement ralentir le processus de mise à jour) ?\n";
 	echo "Défaut: \033[1;34mOui\033[0m\n";
 	$AUTO_BACKUP = trim(fgets(STDIN));
 
