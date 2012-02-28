@@ -46,7 +46,11 @@ $json = array("fisou" => $services);
 
 if($events = $db->query($sql)){
 	while($service = $events->fetch(PDO::FETCH_ASSOC)){
-		$service['description'] = explode("\n", trim($service['description']));
+		// remove html tags
+		$service['description'] = preg_replace('/<([a-zA-Z]+).*>(.*)<\/\1>/U', '\2', $service['description']);
+		// remove html single tags
+		$service['description'] = trim(preg_replace('/<([a-zA-Z]+).*\/>/U', '', $service['description']));
+		$service['description'] = explode("\n", $service['description']);
 		if(count($service['description']) === 1 && empty($service['description'][0])){
 			$service['description'] = array();
 		}
