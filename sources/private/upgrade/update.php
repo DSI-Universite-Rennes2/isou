@@ -119,7 +119,9 @@ if(is_file(BASE.'/cron/LOCK_CRON')){
 // mise à jour du numéro de version dans le fichier config.php
 if(strlen($CFG['version']) < 12){
 	// update old old old version
-	require BASE.'/upgrade/scripts/update_0.9.6.php';
+	if($CFG['version'] != '0.9.6'){
+		require BASE.'/upgrade/scripts/update_0.9.6.php';
+	}
 	$CFG['version'] = '2012-02-16.1';
 }
 
