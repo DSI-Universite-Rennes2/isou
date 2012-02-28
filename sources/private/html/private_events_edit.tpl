@@ -62,7 +62,7 @@
 				{/if}
 
 				<p>
-					<label for="descriptionUpd" class="label">Raison de l'interruption</label>
+					<label for="descriptionUpd" class="label">Raison de l'interruption (html autorisé)</label>
 					<textarea id="description" name="descriptionUpd" cols="40" rows="6">{$smarty.post.descriptionUpd|default:$currentEdit->description}</textarea>
 				</p>
 				<p class="info-date-format">

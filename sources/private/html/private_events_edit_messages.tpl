@@ -18,7 +18,7 @@
 				<input type="text" name="endDate" id="endDateUpd" title="Format : Jour Mois Annee H:M" maxlength="16" value="{$currentEdit->endDate|date_format:'%d/%m/%Y %H:%M'|default:''}" />
 			</p>
 			<p>
-				<label for="message" class="label">Message :</label>
+				<label for="message" class="label">Message (html autorisé) :</label>
 				<!-- <input type="text" id="message" name="message" value="{$event->shortText}" /> -->
 				<textarea id="message" name="message" cols="40" rows="6">{$currentEdit->shortText}</textarea>
 			</p>

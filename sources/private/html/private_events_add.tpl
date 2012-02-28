@@ -72,7 +72,7 @@
 	{/if}
 
 	<p>
-	<label for="description" class="label">Raison de la maintenance</label>
+	<label for="description" class="label">Raison de la maintenance (html autorisé)</label>
 	<textarea id="description" name="description" cols="40" rows="6">{$smarty.post.description|default:''}</textarea>
 	</p>
 	<p class="info-date-format">

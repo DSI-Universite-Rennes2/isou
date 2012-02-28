@@ -21,7 +21,7 @@
 
 	<p>
 		<label for="message" class="label">
-			Message d'information
+			Message d'information (html autorisé)
 			<span class="required" title="champs obligatoire">*</span>
 		</label>
 		<textarea id="message" name="message" cols="40" rows="6">{$smarty.post.message|default:''}</textarea>
