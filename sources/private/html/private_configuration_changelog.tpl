@@ -55,6 +55,11 @@
 <ul>
 	<li>Nouveautés
 		<ul>
+			<li>Mise à jour de sécurité
+			<ul>
+				<li>Corrections de toutes les failles XSS présentes dans les pages d'administration</li>
+			</ul>
+			</li>
 			<li>Nouvelles variables
 			<ul>
 				<li>auto_backup : permet de définir la création automatique d'une sauvegarde lors des mises à jour</li>

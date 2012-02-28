@@ -7,7 +7,7 @@ CONFIGURATION NECESSAIRE
 - php 5 avec support de pdo-sqlite (testé en version 5.3)
 - php-cli
 - crontab ou équivalent
-- nagios 3 (testé en version 3)
+- nagios (testé en version 3)
 
 RECOMMANDE
 -----------
@@ -19,10 +19,10 @@ INSTALLATION
 Sous unix :
 $ cd /chemin/installation && mkdir isou
 $ git clone git://git.cru.fr/isounagios.git
-$ php /chemin/installation/isounagios/install.php
+$ php /chemin/installation/isounagios/sources/private/upgrade/install.php
 puis faire pointer votre serveur sur /chemin/installation/isounagios/sources/public/
 
-Sous windows :
+Sous windows (obsolète) :
 récupérer le dépôt git
 copier le répertoire ./sources sur votre serveur web
 copier les fichiers du dossier ./database contenant isou.sqlite3 et isou-visits.sqlite3 sur votre serveur web dans ./database
@@ -32,11 +32,11 @@ copier les fichiers du dossier ./database contenant isou.sqlite3 et isou-visits.
 MISE A JOUR
 ------------
 Sous unix :
-$ cd /chemin/installation
+$ cd /chemin/isou
 $ git pull
-$ php update.php
+$ php sources/private/upgrade/update.php
 
-Sous windows :
+Sous windows (obsolète) :
 récupérer le dépôt git
 copier le dossier ./sources
 
