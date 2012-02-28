@@ -38,7 +38,7 @@ if(isset($_GET['version'])){
 		}
 
 		$newversion['201202161'] = TRUE;
-		$CFG['version'] = '2012-02-16.2';
+		$CFG['version'] = '2012-02-16.1';
 		$smarty->assign('autobackup', array('Non', 'Oui'));
 	}
 
@@ -54,7 +54,7 @@ if(isset($_GET['version'])){
 		$version = $db->prepare($sql);
 		$version->execute(array(CURRENT_VERSION));
 
-		header('Location: '.URL.'/index.php/configuration?type=changelog');
+		header('Location: '.URL.'/index.php/configuration?type=changelog#'.$CFG['version']);
 		exit();
 	}
 
