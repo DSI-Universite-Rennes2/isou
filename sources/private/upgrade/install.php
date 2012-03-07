@@ -191,6 +191,42 @@ if($AUTO_BACKUP == 0){
 	$AUTO_BACKUP = 1;
 }
 
+
+$config = array();
+// since 0.9.6
+$config['tolerance'] = $TOLERANCE;
+$config['ip_local'] = $IP_INTERNE;
+$config['ip_service'] = $IP_CRI;
+$config['admin_users'] = $ADMIN_USERS;
+$config['admin_mails'] = $ADMIN_MAILS;
+$config['version'] = CURRENT_VERSION;
+$config['last_update'] = TIME;
+$config['last_check_update'] = TIME;
+$config['last_cron_update'] = 0;
+$config['last_daily_cron_update'] = 0;
+$config['daily_cron_hour'] = '06:00';
+$config['last_weekly_cron_update'] = TIME;
+$config['last_yearly_cron_update'] = TIME;
+$config['local_password '] = '';
+// since 20120216.1
+$config['auto_backup'] = $AUTO_BACKUP;
+$config['local_mail'] = $LOCAL_MAIL;
+
+echo "Paramètrage de la table 'configuration'\n";
+foreach($config as $key => $value){
+	$sql = "INSERT INTO configuration(key, value) VALUES(?, ?)";
+	$query = $db2->prepare($sql);
+	$display = "	Insertion de la clé \"".$key."\" dans la table configuration";
+	if($query->execute(array($key, $value)) === FALSE){
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}
+}
+
+echo "\n";
+
+
 $config = "<?php
 
 /* * * * * * * * * * * * * * * * *
@@ -274,46 +310,14 @@ if(DEV === TRUE || DEBUG === TRUE){
 
 ?>";
 
-$config = array();
-// since 0.9.6
-$config['tolerance'] = $TOLERANCE;
-$config['ip_local'] = $IP_INTERNE;
-$config['ip_service'] = $IP_CRI;
-$config['admin_users'] = $ADMIN_USERS;
-$config['admin_mails'] = $ADMIN_MAILS;
-$config['version'] = CURRENT_VERSION;
-$config['last_update'] = TIME;
-$config['last_check_update'] = TIME;
-$config['last_cron_update'] = 0;
-$config['last_daily_cron_update'] = 0;
-$config['daily_cron_hour'] = '06:00';
-$config['last_weekly_cron_update'] = TIME;
-$config['last_yearly_cron_update'] = TIME;
-$config['local_password '] = '';
-// since 20120216.1
-$config['auto_backup'] = $AUTO_BACKUP;
-$config['local_mail'] = $LOCAL_MAIL;
-
-echo "Paramètrage de la table 'configuration'\n";
-foreach($config as $key => $value){
-	$sql = "INSERT INTO configuration(key, value) VALUES(?, ?)";
-	$query = $db2->prepare($sql);
-	$display = "	Insertion de la clé \"".$key."\" dans la table configuration";
-	if($query->execute(array($key, $value)) === FALSE){
-		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
-	}else{
-		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
-	}
-}
-
-echo "\n";
-
 if(file_put_contents($public_path.'/config.php', $config) !== FALSE){
 	echo "\033[0;32mL'installation est terminée.\033[0m\n\n";
 	echo "\033[1;30mVous pouvez éditer le fichier de configuration présent dans ".$public_path."/config.php\n";
 	echo "Vous pouvez également éditer le fichier de configuration des menus présent dans ".$public_path."/config.menu.php\n\n";
 	echo "\033[0m\033[0;31mIMPORTANT :\033[0m\033[1;30m n'oubliez pas de lire le fichier ".BASE."/README-CRONTAB pour configurer vos crons\033[0m\n\n";
 }else{
+	echo "Fichier config.php :\n";
+	echo "--------------------\n";
 	echo $config;
 	echo "\n\nLe fichier config.php n'a pas pu être enregistré dans ".$public_path."/config.php\n";
 }
