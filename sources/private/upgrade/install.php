@@ -18,7 +18,7 @@ if(strtolower($owner) === 'n'){
 }
 
 $private_path = realpath(BASE.'/../');
-$public_path = realpath(BASE.'/../public/');
+$public_path = realpath(BASE.'/../../public/');
 
 /*
  * INSTALLATION BASE DE DONNÉES
