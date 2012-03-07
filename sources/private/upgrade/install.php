@@ -195,10 +195,10 @@ if($AUTO_BACKUP == 0){
 $config = array();
 // since 0.9.6
 $config['tolerance'] = $TOLERANCE;
-$config['ip_local'] = $IP_INTERNE;
-$config['ip_service'] = $IP_CRI;
-$config['admin_users'] = $ADMIN_USERS;
-$config['admin_mails'] = $ADMIN_MAILS;
+$config['ip_local'] = json_encode($IP_INTERNE);
+$config['ip_service'] = json_encode($IP_CRI);
+$config['admin_users'] = json_encode($ADMIN_USERS);
+$config['admin_mails'] = json_encode($ADMIN_MAILS);
 $config['version'] = CURRENT_VERSION;
 $config['last_update'] = TIME;
 $config['last_check_update'] = TIME;
