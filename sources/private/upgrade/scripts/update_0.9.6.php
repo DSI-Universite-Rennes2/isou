@@ -140,7 +140,7 @@ if(defined('STDIN')){
 			echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 		}
 
-		$sql = "INSERT INTO configuration(key, value) VALUES('daily_cron_hour', '17:00')";
+		$sql = "INSERT INTO configuration(key, value) VALUES('daily_cron_hour', '06:00')";
 		$display = '   Insertion de la clé "daily_cron_hour" dans la table configuration'; 
 		if($db->exec($sql) === FALSE){
 			echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
