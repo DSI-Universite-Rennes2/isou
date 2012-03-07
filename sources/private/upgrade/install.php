@@ -294,6 +294,7 @@ $config['local_password '] = '';
 $config['auto_backup'] = $AUTO_BACKUP;
 $config['local_mail'] = $LOCAL_MAIL;
 
+echo "Paramètrage de la table 'configuration'\n";
 foreach($config as $key => $value){
 	$sql = "INSERT INTO configuration(key, value) VALUES(?, ?)";
 	$query = $db2->prepare($sql);
@@ -304,6 +305,8 @@ foreach($config as $key => $value){
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 	}
 }
+
+echo "\n";
 
 if(file_put_contents($public_path.'/config.php', $config) !== FALSE){
 	echo "\033[0;32mL'installation est terminée.\033[0m\n\n";
