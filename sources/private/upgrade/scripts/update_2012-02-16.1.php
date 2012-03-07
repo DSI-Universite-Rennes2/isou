@@ -30,7 +30,7 @@ if(defined('STDIN')){
 	echo "Défaut: \033[1;34mOui\033[0m\n";
 	$AUTO_BACKUP = trim(fgets(STDIN));
 
-	if($AUTO_BACKUP == 0){
+	if(!empty($AUTO_BACKUP) && in_array($AUTO_BACKUP, array('N', 'n', 0))){
 		$AUTO_BACKUP = 0;
 	}else{
 		$AUTO_BACKUP = 1;

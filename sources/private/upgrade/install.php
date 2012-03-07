@@ -185,7 +185,7 @@ echo "\nSouhaitez-vous activer les sauvegardes automatiques lors des mises à jo
 echo "Défaut: \033[1;34mOui\033[0m\n";
 $AUTO_BACKUP = trim(fgets(STDIN));
 
-if($AUTO_BACKUP == 0){
+if(!empty($AUTO_BACKUP) && in_array($AUTO_BACKUP, array('N', 'n', 0))){
 	$AUTO_BACKUP = 0;
 }else{
 	$AUTO_BACKUP = 1;
@@ -207,7 +207,7 @@ $config['last_daily_cron_update'] = 0;
 $config['daily_cron_hour'] = '06:00';
 $config['last_weekly_cron_update'] = TIME;
 $config['last_yearly_cron_update'] = TIME;
-$config['local_password '] = '';
+$config['local_password'] = '';
 // since 20120216.1
 $config['auto_backup'] = $AUTO_BACKUP;
 $config['local_mail'] = $LOCAL_MAIL;
