@@ -119,31 +119,17 @@ if(empty($CAS_PORT)){
 echo "\nQuelles sont les comptes CAS autorisés à administrer l'application (séparés par des virgules) ?\n";
 echo "Défaut: \033[1;34mvide\033[0m\n";
 echo "exemple : \033[1;30mdurand_m, dupont_t\033[0m\n";
-$ADMIN_USERS = trim(fgets(STDIN));
-if(empty($ADMIN_USERS)){
-	$ADMIN_USERS = 'array()';
-}else{
-	$users = explode(',', $ADMIN_USERS);
-	$ADMIN_USERS = '';
-	foreach($users as $user){
-		$ADMIN_USERS .= '\''.trim($user).'\',';
-	}
-	$ADMIN_USERS = 'array('.substr($ADMIN_USERS, 0, -1).')';
+$ADMIN_USERS = explode(',', trim(fgets(STDIN)));
+if(!is_array($ADMIN_USERS)){
+	$ADMIN_USERS = array();
 }
 
 echo "\nQuelles sont les adresses mails devant recevoir des alertes mails (séparés par des virgules) ?\n";
 echo "Défaut: \033[1;34mvide\033[0m\n";
 echo "exemple : \033[1;30mexample1@example.com, example2@example.com\033[0m\n";
-$ADMIN_MAILS = trim(fgets(STDIN));
-if(empty($ADMIN_MAILS)){
-	$ADMIN_MAILS = 'array()';
-}else{
-	$mails = explode(',', $ADMIN_MAILS);
-	$ADMIN_MAILS = '';
-	foreach($mails as $mail){
-		$ADMIN_MAILS .= '\''.trim($mail).'\',';
-	}
-	$ADMIN_MAILS = 'array('.substr($ADMIN_MAILS, 0, -1).')';
+$ADMIN_MAILS = explode(',', trim(fgets(STDIN)));
+if(!is_array($ADMIN_MAILS)){
+	$ADMIN_MAILS = array();
 }
 
 echo "\nQuelles sont les plages IP de votre réseau universitaire (bornes d'IP séparée par une virgule, plages d'IP séparées par un point-virgule) ?\n";
@@ -151,20 +137,12 @@ echo "Défaut: \033[1;34m127.0.0.0,255.255.255.255\033[0m\n";
 echo "exemple : \033[1;30m170.3.20.0,170.3.30.255;192.168.30.10,192.168.30.20\033[0m\n";
 $IP_INTERNE = trim(fgets(STDIN));
 if(empty($IP_INTERNE)){
-	$IP_INTERNE = 'array(array(\'127.0.0.0\', \'255.255.255.255\'))';
+	$IP_INTERNE = array(array('127.0.0.0', '255.255.255.255'));
 }else{
-	$ranges = explode(';', $IP_INTERNE);
-	$IP_INTERNE = '';
-	foreach($ranges as $range){
-		$ips = explode(',', $range);
-		$IP_INTERNE .= 'array(';
-		foreach($ips as $ip){
-			$IP_INTERNE .= '\''.$ip.'\',';
-		}
-		$IP_INTERNE = substr($IP_INTERNE, 0, -1).'),';
+	$IP_INTERNE = explode(';', $IP_INTERNE);
+	foreach($IP_INTERNE as $ip){
+		$ip = explode(',', $ip);
 	}
-	$IP_INTERNE = 'array('.substr($IP_INTERNE, 0, -1).')';
-	echo "\n";
 }
 
 echo "\nQuelles sont les plages IP de votre service ?\n";
@@ -172,20 +150,12 @@ echo "Défaut: \033[1;34mvide\033[0m\n";
 echo "exemple : \033[1;30m170.3.20.0,170.3.30.255;192.168.30.10,192.168.30.20\033[0m\n";
 $IP_CRI = trim(fgets(STDIN));
 if(empty($IP_CRI)){
-	$IP_CRI = 'array()';
+	$IP_CRI = array();
 }else{
-	$ranges = explode(';', $IP_CRI);
-	$IP_CRI = '';
-	foreach($ranges as $range){
-		$ips = explode(',', $range);
-		$IP_CRI .= 'array(';
-		foreach($ips as $ip){
-			$IP_CRI .= '\''.$ip.'\',';
-		}
-		$IP_CRI = substr($IP_CRI, 0, -1).'),';
+	$IP_CRI = explode(';', $IP_CRI);
+	foreach($IP_CRI as $ip){
+		$ip = explode(',', $ip);
 	}
-	$IP_CRI = 'array('.substr($IP_CRI, 0, -1).')';
-	echo "\n";
 }
 
 echo "\nQuelle tolérance souhaitez-vous appliquer lorsque Nagios détecte une panne (permet de ne pas recenser les faux-positifs) ?\n";
@@ -194,6 +164,30 @@ $TOLERANCE = trim(fgets(STDIN));
 $TOLERANCE = intval($TOLERANCE)*60;
 if(empty($TOLERANCE)){
 	$TOLERANCE = 5*60;
+}
+
+$error = TRUE;
+while($error === TRUE){
+	echo "\nSouhaitez-vous avec un expéditeur spécifique pour les alertes mails de l'application ?\n";
+	echo "Défaut: \033[1;34mvide\033[0m\n";
+	echo "exemple : \033[1;30misou@example.com\033[0m\n";
+	$LOCAL_MAIL = trim(fgets(STDIN));
+
+	if(!empty($LOCAL_MAIL) && !filter_var($LOCAL_MAIL, FILTER_VALIDATE_EMAIL)){
+		echo "\n\033[0;31mL'adresse mail saisie n'est pas valide.\033[0m\n";
+	}else{
+		$error = FALSE;
+	}
+}
+
+echo "\nSouhaitez-vous activer les sauvegardes automatiques lors des mises à jour de l'application (ATTENTION : peut considérablement ralentir le processus de mise à jour) ?\n";
+echo "Défaut: \033[1;34mOui\033[0m\n";
+$AUTO_BACKUP = trim(fgets(STDIN));
+
+if($AUTO_BACKUP == 0){
+	$AUTO_BACKUP = 0;
+}else{
+	$AUTO_BACKUP = 1;
 }
 
 $config = "<?php
@@ -210,22 +204,6 @@ define('DEBUG', FALSE);
 
 // définit si l'application est en mode developpement
 define('DEV', FALSE);
-
-// définit la tolérance aux faux-positifs de Nagios
-// l'évènement ne sera pas affiché à l'utilisateur lambda si la différence entre ka date de début et la date de fin d'évènement est inférieure à TOLERANCE
-define('TOLERANCE', ".$TOLERANCE.");
-
-// tableau contenant des tableaux de plage d'IP faisant parties du réseau Interne
-\$IP_INTERNE = ".$IP_INTERNE.";
-
-// tableau contenant des tableaux de plage d'IP faisant parties du réseau des administrateurs d'ISOU
-\$IP_CRI = ".$IP_CRI.";
-
-// tableau contenant le login des administrateurs d'ISOU
-\$ADMIN_USERS = ".$ADMIN_USERS.";
-
-// tableau contenant le mail des administrateurs d'ISOU
-\$ADMIN_MAILS = ".$ADMIN_MAILS.";
 
 // nom du service, notamment utilisé dans l'onglet du navigateur
 define('NAME', '".addslashes($NAME)."');
@@ -255,9 +233,6 @@ define('CAS_PORT', ".$CAS_PORT.");
 /* * * * * * * * * * * * * * * * *
  *  CONSTANTES A NE PAS MODIFIER *
  * * * * * * * * * * * * * * * * */
-
-// numero de version de l'application
-define('VERSION', '".CURRENT_VERSION."');
 
 // locale utilisée par l'application
 setlocale(LC_TIME, 'fr_FR.UTF8');
@@ -297,6 +272,37 @@ if(DEV === TRUE || DEBUG === TRUE){
 }
 
 ?>";
+
+$config = array();
+// since 0.9.6
+$config['tolerance'] = $TOLERANCE;
+$config['ip_local'] = $IP_INTERNE;
+$config['ip_service'] = $IP_CRI;
+$config['admin_users'] = $ADMIN_USERS;
+$config['admin_mails'] = $ADMIN_MAILS;
+$config['version'] = CURRENT_VERSION;
+$config['last_update'] = TIME;
+$config['last_check_update'] = TIME;
+$config['last_cron_update'] = 0;
+$config['last_daily_cron_update'] = 0;
+$config['daily_cron_hour'] = '06:00';
+$config['last_weekly_cron_update'] = TIME;
+$config['last_yearly_cron_update'] = TIME;
+$config['local_password '] = '';
+// since 20120216.1
+$config['auto_backup'] = $AUTO_BACKUP;
+$config['local_mail'] = $LOCAL_MAIL;
+
+foreach($config as $key => $value){
+	$sql = "INSERT INTO configuration(key, value) VALUES(?, ?)";
+	$db2->prepare($sql);
+	$display = "	Insertion de la clé \"".$key."\" dans la table configuration";
+	if($db2->execute(array($key, $value)) === FALSE){
+		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
+	}else{
+		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
+	}
+}
 
 if(file_put_contents($public_path.'/config.php', $config) !== FALSE){
 	echo "\033[0;32mL'installation est terminée.\033[0m\n\n";
