@@ -6,6 +6,7 @@
 
 error_reporting(0);
 define('BASE', dirname(__FILE__));
+define('TIME', time());
 
 require BASE.'/functions.php';
 require BASE.'/version.php';
@@ -295,9 +296,9 @@ $config['local_mail'] = $LOCAL_MAIL;
 
 foreach($config as $key => $value){
 	$sql = "INSERT INTO configuration(key, value) VALUES(?, ?)";
-	$db2->prepare($sql);
+	$query = $db2->prepare($sql);
 	$display = "	Insertion de la clé \"".$key."\" dans la table configuration";
-	if($db2->execute(array($key, $value)) === FALSE){
+	if($query->execute(array($key, $value)) === FALSE){
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
