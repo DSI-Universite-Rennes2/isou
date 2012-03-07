@@ -3,6 +3,12 @@
 // chemin d'accès du site
 $pwd = dirname(__FILE__);
 
+if(!is_file($pwd.'/config.php')){
+	echo 'L\'application ne semble pas être installée.'.
+		' Merci d\'exécuter en ligne de commande le script install.php qui se trouve dans ./sources/private/upgrade.';
+	exit(1);
+}
+
 require $pwd.'/functions.php';
 require $pwd.'/config.php';
 require BASE.'/classes/smarty/Smarty.class.php';
