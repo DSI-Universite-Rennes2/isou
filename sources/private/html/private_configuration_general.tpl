@@ -119,4 +119,26 @@
 	<span class="key">last_check_update</span>
 </p>
 
+<h2>Version des bibliothèques tierces utilisées</h2>
+
+<p>
+	<span class="label">HTMLPurifier</span>
+	<span class="input">{$HTMLPurifierVersion}</span><br />
+</p>
+
+<p>
+	<span class="label">jQuery</span>
+	<span class="input" id="jquery-version">Non définie</span><br />
+</p>
+
+<p>
+	<span class="label">phpCAS</span>
+	<span class="input">{$phpCASVersion}</span>
+</p>
+
+<p>
+	<span class="label">Smarty</span>
+	<span class="input">{$smarty.version}</span><br />
+</p>
+
 </div>

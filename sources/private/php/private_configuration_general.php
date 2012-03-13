@@ -1,8 +1,20 @@
 <?php
 
 $css = '<link rel="stylesheet" type="text/css" href="'.URL.'/css/configuration.css" media="screen" />';
-$script = '';
+$script = '<script type="text/javascript" src="'.URL.'/js/jquery-min.js"></script>'.
+			'<script type="text/javascript" src="'.URL.'/js/jquery_configuration.js"></script>';
 $title = NAME.' - Configuration générale';
+
+if(!defined('HTMLPurifier')){
+	require BASE.'/classes/htmlpurifier-4.4.0-lite/library/HTMLPurifier.auto.php';
+}
+$HTMLPurifier = new HTMLPurifier();
+$smarty->assign('HTMLPurifierVersion', $HTMLPurifier->version);
+
+if(!defined('phpCAS')){
+	require BASE.'/classes/phpCAS/CAS.php';
+}
+$smarty->assign('phpCASVersion', phpCAS::getVersion());
 
 $_POST['error'] = array();
 
