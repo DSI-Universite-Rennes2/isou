@@ -441,6 +441,17 @@ if(isset($_POST['modify'])){
 						$query = $db->prepare($sql);
 						$updateMessage = $query->execute(array($idService));
 					}
+
+					if($forced === 0){
+						// supprimer tous les évènements en cours, si on force le service à l'état 'en fonctionnement'
+						$sql = "DELETE FROM events_isou WHERE idEvent = ?";
+						$query = $db->prepare($sql);
+						$query->execute(array($idEvent));
+
+						$sql = "DELETE FROM events WHERE idEvent = ?";
+						$query = $db->prepare($sql);
+						$query->execute(array($idEvent));
+					}
 				}
 			}elseif($isScheduled == 3){
 				$sql = "UPDATE services SET state=4 WHERE idService=?";
