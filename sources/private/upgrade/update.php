@@ -16,13 +16,20 @@ if(defined('STDIN')){
 		touch($pwd);
 	}
 
-	$pwd = dirname(__FILE__).'/../../public';
 
 	echo "\033[0;31mIMPORTANT : mettez à jour l'application avec votre utilisateur web (apache, www-data ou autre)\033[0m\nVoulez-vous continuer ? (y/n)\n";
 	$owner = trim(fgets(STDIN));
 	if(strtolower($owner) === 'n'){
 		echo "\033[0;31mMerci de relancer l'installation avec le bon utilisateur.\033[0m\n";
 		exit(0);
+	}
+
+	echo "\nDans quel répertoire se trouve votre fichier config.php ?\n";
+	echo "Défaut: \033[1;34m".realpath(dirname(__FILE__).'/../../public')."\033[0m\n";
+	$pwd = trim(fgets(STDIN));
+
+	if(is_dir($pwd) === FALSE){
+		$pwd = dirname(__FILE__).'/../../public';
 	}
 
 	$file = $pwd.'/functions.php';
