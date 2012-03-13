@@ -147,6 +147,10 @@ if(defined('STDIN')){
 	$version = $db->prepare($sql);
 	$version->execute(array(CURRENT_VERSION));
 
+	$sql = "UPDATE configuration SET value=? WHERE key='last_update'";
+	$version = $db->prepare($sql);
+	$version->execute(array(TIME));
+
 	echo "\033[0;32mMise à jour terminée !\033[0m\n\n";
 }else{
 	$file = LOG_PATH.'/update_'.CURRENT_VERSION.'.log';
