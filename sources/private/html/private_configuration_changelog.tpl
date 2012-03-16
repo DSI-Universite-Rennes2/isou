@@ -52,6 +52,13 @@
 {/if}
 {/if}
 
+<h2 id="index">Index des différentes mises à jour</h2>
+<ul class="fastlink">
+	<li><a href="{$smarty.const.URL}/index.php/configuration?type=changelog#2012-03-16.1">Dernière version</a></li>
+	<li><a href="{$smarty.const.URL}/index.php/configuration?type=changelog#2012-02-16.1">Build 2012-02-16.1</a></li>
+	<li><a href="{$smarty.const.URL}/index.php/configuration?type=changelog#2012-03-16.1">Build 2012-03-16.1</a></li>
+</ul>
+
 <h2 id="2012-02-16.1">Build 2012-02-16.1</h2>
 <ul>
 	<li>Nouveautés
@@ -99,5 +106,26 @@
 		</ul>
 	</li>
 </ul>
+<p class="fastlink"><a href="{$smarty.const.URL}/index.php/configuration?type=changelog#index">Retour à l'index</a></p>
+
+<h2 id="2012-03-16.1">Build 2012-03-16.1</h2>
+<ul>
+	<li>Améliorations diverses
+		<ul>
+			<li>La modification d'un évènement dont le service passerait à l'état 'en fonctionnement', 
+				engendre la suppression automatique de l'évènement.</li>
+			<li>Les numéros de version des différentes bibliothèques tierces utilisées dans Isou sont maintenant affichés 
+				dans le menu "configuration" rubrique "générale".</li>
+			<li>Possibilité d'indiquer explicitement le chemin vers le répertoire du fichier config.php lors d'une mise à jour en ligne de commande</li>
+			<li>Prise en compte de l'oscillation d'état dans Nagios</li>
+		</ul>
+	</li>
+	<li>Correction de bugs
+		<ul>
+			<li>Mise à jour du champ "last_update" après une installation d'une nouvelle version</li>
+		</ul>
+	</li>
+</ul>
+<p class="fastlink"><a href="{$smarty.const.URL}/index.php/configuration?type=changelog#index">Retour à l'index</a></p>
 
 </div>

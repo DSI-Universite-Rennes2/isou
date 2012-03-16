@@ -9,7 +9,12 @@ $newversion = array();
 
 // vérification du formulaire général
 if(isset($_GET['version'])){
-	if($CFG['version'] === '2012-02-16.1'){
+	if(strlen($CFG['version']) < 12){
+		$intVersion = 1;
+	}else{
+		$intVersion = intval(str_replace('.', '', str_replace('-', '', $CFG['version'])));
+	}
+	if($intVersion < 2012-02-16.1){
 		if(isset($_POST['localmail'])){
 			$_POST['error']['localmail'] = array();
 			$_POST['localmail'] = trim($_POST['localmail']);
@@ -54,7 +59,7 @@ if(isset($_GET['version'])){
 		$version = $db->prepare($sql);
 		$version->execute(array(CURRENT_VERSION));
 
-		header('Location: '.URL.'/index.php/configuration?type=changelog#'.$CFG['version']);
+		header('Location: '.URL.'/index.php/configuration?type=changelog#'.CURRENT_VERSION);
 		exit();
 	}
 

@@ -62,6 +62,14 @@ if(defined('STDIN')){
 		$CFG = array();
 		$CFG['version'] = $query->value;
 	}
+
+	if($CFG['version'] === CURRENT_VERSION){
+		echo "\033[0;32mIsou est déjà à jour !\033[0m\n\n";
+		exit(0);
+	}
+
+	echo "\nMise à jour de la version ".$CFG['version']." à la version ".CURRENT_VERSION."\n";
+	// $old_version = $CFG['version'];
 }else{
 	// web call
 
@@ -123,16 +131,19 @@ if(is_file(BASE.'/cron/LOCK_CRON')){
 	echo "\n\n";
 }
 
+
 // mise à jour du numéro de version dans le fichier config.php
 if(strlen($CFG['version']) < 12){
 	// update old old old version
 	if($CFG['version'] != '0.9.6'){
 		require BASE.'/upgrade/scripts/update_0.9.6.php';
 	}
-	$CFG['version'] = '2012-02-16.1';
+	$intVersion = 1;
+}else{
+	$intVersion = intval(str_replace('.', '', str_replace('-', '', $CFG['version'])));
 }
 
-if($CFG['version'] === '2012-02-16.1'){
+if($intVersion < 201202161){
 	// insertion de la variable 'local_mail'
 	$sql = "INSERT INTO configuration(key, value) VALUES (?,?)";
 	$query = $db->prepare($sql);
@@ -144,7 +155,7 @@ if($CFG['version'] === '2012-02-16.1'){
 	$query->execute(array('auto_backup', '1'));
 
 	require BASE.'/upgrade/scripts/update_2012-02-16.1.php';
-	$CFG['version'] = '2012-02-16.2';
+	$intVersion++;
 }
 
 if(defined('STDIN')){
@@ -158,6 +169,8 @@ if(defined('STDIN')){
 	$version = $db->prepare($sql);
 	$version->execute(array(TIME));
 
+	// URL n'est pas calculée en CLI
+	// echo "Le changelog est disponible à l'adresse suivante : ".URL."/index.php/configuration?type=changelog&version=".$old_version."\n\n";
 	echo "\033[0;32mMise à jour terminée !\033[0m\n\n";
 }else{
 	$file = LOG_PATH.'/update_'.CURRENT_VERSION.'.log';

@@ -134,7 +134,9 @@ if(CURRENT_VERSION === $CFG['version']){
 	if(($IS_ADMIN && is_file(BASE.'/upgrade/LOCK_CONFIG')) === FALSE){
 		$template = 'public_update';
 	}else{
-		require $model;
+		// le model est requis pour les admins, afin de définir notamment les nouvelles vars
+		$template = 'private_configuration';
+		require BASE.'/php/private_configuration.php';
 	}
 
 	if($IS_ADMIN && !is_file(BASE.'/upgrade/LOCK_UPDATE')){
