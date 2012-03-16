@@ -37,7 +37,7 @@ function status_dat2db($file){
 			while(!feof($handle) && $continue){
 				$tp =  trim(fgets($handle, 4096));
 				if(!preg_match('#}#',$tp)){
-					if(preg_match('#host_name=|service_description=|check_command=|current_state=|problem_has_been_acknowledged=#',$tp)){
+					if(preg_match('#host_name=|service_description=|check_command=|current_state=|problem_has_been_acknowledged=|is_flapping=#',$tp)){
 						$split = explode('=',$tp);
 						switch($split[0]){
 							case 'host_name': $host_name=$split[1];break;
@@ -45,6 +45,7 @@ function status_dat2db($file){
 							case 'check_command': $check_command=$split[1];break;
 							case 'current_state': $current_state=$split[1];break;
 							case 'problem_has_been_acknowledged' : $problem_has_been_acknowledged=$split[1];break;
+							case 'is_flapping' : $is_flapping=$split[1];break;
 						}
 					}
 				}else{
@@ -56,6 +57,11 @@ function status_dat2db($file){
 			if($problem_has_been_acknowledged == 1){
 				$problem_has_been_acknowledged = 0;
 				$current_state = 0;
+			}
+
+			// passe le service en rouge si il est en "flapping"
+			if($is_flapping == 1){
+				$current_state = 2;
 			}
 
 			if($problem_has_been_acknowledged == 0){
