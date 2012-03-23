@@ -91,7 +91,7 @@ require BASE.'/upgrade/functions.php';
 /*
  * CREE UN BACKUP
  */
-if(defined('PharData') && isset($CFG['auto_backup']) && $CFG['auto_backup'] === '1'){
+if(isset($CFG['auto_backup']) && $CFG['auto_backup'] === '1'){
 	$display = "\nBackup de la précédente installation";
 	try{
 		$backup_dir = BASE.'/backup/';
