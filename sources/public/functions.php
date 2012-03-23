@@ -220,4 +220,18 @@ function isoumail($to, $subject, $message){
 	return mail($to, mb_encode_mimeheader($subject), $message, $headers, $additionnal);
 }
 
+// pour les versions php < 5.3
+if(!defined('FILTER_VALIDATE_EMAIL')){
+	define('FILTER_VALIDATE_EMAIL', TRUE);
+
+	function filter_var($mail, $filtre){
+		if(!preg_match('`^[[:alnum:]]([-_.]?[[:alnum:]_?])*@[[:alnum:]]([-.]?[[:alnum:]])+\.([a-z]{2,6})$`', $mail)){
+			return FALSE;
+		}else{
+			return TRUE;
+		}
+	}
+}
+
+
 ?>
