@@ -4,19 +4,19 @@
      xmlns:em="http://www.mozilla.org/2004/em-rdf#">
   <Description about="urn:mozilla:install-manifest">
     <em:id>fisou@uhb.fr</em:id>
-    <em:version>0.6.0</em:version>
+    <em:version>11.0.0</em:version>
     <!-- Target Application this theme can install into,
         with minimum and maximum supported versions. -->
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
         <em:minVersion>3.0</em:minVersion>
-        <em:maxVersion>8.*</em:maxVersion>
+        <em:maxVersion>11.*</em:maxVersion>
       </Description>
     </em:targetApplication>
     <em:name>Fisou</em:name>
     <em:description>Extension Firefox pour Isou</em:description>
-    <em:creator>CRI Rennes 2</em:creator>
+    <em:creator>DSI Rennes 2</em:creator>
     <!-- Add update links here -->
     <em:optionsURL>chrome://fisou/content/preferences.xul</em:optionsURL>
     <em:homepageURL>https://services.univ-rennes2.fr/isou/xpi/index.php</em:homepageURL>
