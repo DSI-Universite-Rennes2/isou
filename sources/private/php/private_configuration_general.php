@@ -11,7 +11,7 @@ if(!defined('HTMLPurifier')){
 $HTMLPurifier = new HTMLPurifier();
 $smarty->assign('HTMLPurifierVersion', $HTMLPurifier->version);
 
-if(!defined('phpCAS')){
+if(!class_exists('phpCAS')){
 	require BASE.'/classes/phpCAS/CAS.php';
 }
 $smarty->assign('phpCASVersion', phpCAS::getVersion());
