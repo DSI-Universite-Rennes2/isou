@@ -53,15 +53,15 @@ function status_dat2db($file){
 				}
 			}
 
+			// passe le service en rouge si il est en "flapping"
+			if($is_flapping == 1){
+				$current_state = 2;
+			}
+
 			// passe le service en vert si le problème est connu
 			if($problem_has_been_acknowledged == 1){
 				$problem_has_been_acknowledged = 0;
 				$current_state = 0;
-			}
-
-			// passe le service en rouge si il est en "flapping"
-			if($is_flapping == 1){
-				$current_state = 2;
 			}
 
 			if($problem_has_been_acknowledged == 0){
