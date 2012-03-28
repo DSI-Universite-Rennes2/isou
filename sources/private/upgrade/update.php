@@ -64,6 +64,7 @@ if(defined('STDIN')){
 	}
 
 	if($CFG['version'] === CURRENT_VERSION){
+		unlink(BASE.'/upgrade/LOCK_UPDATE');
 		echo "\033[0;32mIsou est déjà à jour !\033[0m\n\n";
 		exit(0);
 	}
