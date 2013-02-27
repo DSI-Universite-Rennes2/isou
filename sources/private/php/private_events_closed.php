@@ -10,11 +10,11 @@
 			" AND EI.idEventDescription = D.idEventDescription".
 			" AND E.typeEvent = 0".
 			" AND EI.isScheduled = 3".
-			" AND ((E.endDate IS NOT NULL AND E.endDate > :0) OR".
-			" (E.endDate IS NULL))".
+			// " AND ((E.endDate IS NOT NULL AND E.endDate > :0) OR".
+			// " (E.endDate IS NULL))".
 			" ORDER BY E.beginDate";
 	$events = $db->prepare($sql);
-	$events->execute(array(TIME));
+	$events->execute();
 
 	$lastIdEvent = NULL;
 	$closed = array();
