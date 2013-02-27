@@ -141,8 +141,8 @@ if(empty($IP_INTERNE)){
 	$IP_INTERNE = array(array('127.0.0.0', '255.255.255.255'));
 }else{
 	$IP_INTERNE = explode(';', $IP_INTERNE);
-	foreach($IP_INTERNE as $ip){
-		$ip = explode(',', $ip);
+	foreach($IP_INTERNE as $key => $ip){
+		$IP_INTERNE[$key] = explode(',', $ip);
 	}
 }
 
@@ -154,8 +154,8 @@ if(empty($IP_CRI)){
 	$IP_CRI = array();
 }else{
 	$IP_CRI = explode(';', $IP_CRI);
-	foreach($IP_CRI as $ip){
-		$ip = explode(',', $ip);
+	foreach($IP_CRI as $key => $ip){
+		$IP_CRI[$key] = explode(',', $ip);
 	}
 }
 
