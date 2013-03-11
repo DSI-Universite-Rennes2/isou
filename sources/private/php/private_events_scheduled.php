@@ -3,7 +3,10 @@
 	/* * * * * * * * * * * *
 	 * Affichage des interruptions prévues
 	 * * * * * * * * * * * */
-	$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, EI.idEventDescription, D.description, EI.isScheduled, S.idService, S.name, S.nameForUsers, S.state, S.readonly".
+	$firstDay = strftime('%Y-%m-%dT%H:%M', TIMESTAMP_OF_72H_BEFORE_TODAY);
+	$lastDay = strftime('%Y-%m-%dT%H:%M', TIMESTAMP_OF_LAST_CALENDAR_DAY);
+
+	$sql = "SELECT E.idEvent, strftime('%s',E.beginDate) AS beginDate, strftime('%s',E.endDate) AS endDate, EI.period, EI.idEventDescription, D.description, EI.isScheduled, S.idService, S.name, S.nameForUsers, S.state, S.readonly".
 			" FROM events E, events_isou EI, services S, events_description D".
 			" WHERE S.idService = EI.idService".
 			" AND EI.idEventDescription = D.idEventDescription".
@@ -18,7 +21,7 @@
 			" ORDER BY E.beginDate DESC";
 
 	$events = $db->prepare($sql);
-	$events->execute(array(TIMESTAMP_OF_72H_BEFORE_TODAY, TIMESTAMP_OF_LAST_CALENDAR_DAY, TIMESTAMP_OF_72H_BEFORE_TODAY, TIMESTAMP_OF_LAST_CALENDAR_DAY));
+	$events->execute(array($firstDay, $lastDay, $firstDay, $lastDay));
 
 	$lastIdEvent = NULL;
 	$scheduled = array();

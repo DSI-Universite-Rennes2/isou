@@ -55,8 +55,8 @@ class IsouEvent {
 		if($countArgs === 0 && isset($this->idService)){
 			// instanciation depuis un appel implicite de pdo (fetchObject)
 			$this->id = intval($this->idEvent);
-			$this->beginDate = intval($this->beginDate);
-			$this->endDate = intval($this->endDate);
+			$this->beginDate = strftime('%Y-%m-%dT%H:%M', $this->beginDate);
+			$this->endDate = $this->endDate;
 			$this->period = intval($this->period);
 			$this->serviceName = $this->serviceName;
 			$this->state = $this->state;
@@ -71,8 +71,8 @@ class IsouEvent {
 		}else if($countArgs === 1 && is_object($args[0])){
 			// instanciation depuis un appel explicite __construct(param) (stdClass ou pdo)
 			$this->id = intval($args[0]->idEvent);
-			$this->beginDate = intval($args[0]->beginDate);
-			$this->endDate = intval($args[0]->endDate);
+			$this->beginDate = strftime('%Y-%m-%dT%H:%M', $args[0]->beginDate);
+			$this->endDate = $args[0]->endDate;
 			$this->period = intval($args[0]->period);
 			$this->serviceName = $args[0]->serviceName;
 			$this->state = $args[0]->state;
@@ -87,8 +87,8 @@ class IsouEvent {
 		}else if($countArgs === 10){
 			// instanciation "manuelle" depuis un appel explicite __construct(param1, param2, etc...)
 			$this->id = intval($args[0]);
-			$this->beginDate = intval($args[1]);
-			$this->endDate = intval($args[2]);
+			$this->beginDate = strftime('%Y-%m-%dT%H:%M', $args[1]);
+			$this->endDate = $args[2];
 			$this->period = intval($args[3]);
 			$this->serviceName = $args[4];
 			$this->state = intval($args[5]);
@@ -109,6 +109,8 @@ class IsouEvent {
 
 		if(empty($this->endDate)){
 			$this->endDate = NULL;
+		}else{
+			$this->endDate = strftime('%Y-%m-%dT%H:%M', $this->endDate);
 		}
 
 		if(!is_null($this->state) && $this->isScheduled < 2){
@@ -118,15 +120,16 @@ class IsouEvent {
 			if(is_null($this->endDate)){
 				$endDate = mktime(23,59,59);
 			}else{
-				$date = getdate($this->endDate);
+				$endDate = $this->endDate;
+				/*$date = getdate($this->endDate);
 				$m = $date['mon'];
 				$d = $date['mday'];
 				$y = $date['year'];
-				$endDate = mktime(23,59,59,$m,$d,$y);
+				$endDate = mktime(23,59,59,$m,$d,$y);*/
 			}
 
 			while($beginDate <= $endDate){
-				$formatBeginDate = strftime('%m/%d/%y', $beginDate);
+				$formatBeginDate = substr($beginDate, 0, 10); // YYYY-MM-DD
 				$i=0;
 				$noExist = true;
 				while(isset(self::$array_events[$formatBeginDate][$i]) && $noExist){

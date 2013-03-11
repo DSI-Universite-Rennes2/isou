@@ -8,7 +8,7 @@
 	$title = NAME.' - Liste';
 
 	// 2 jours avant
-	$BEFORE = mktime(0,0,0)-(48*60*60);
+	$BEFORE = strftime('%Y-%m-%dT%H:%M', mktime(0,0,0)-(48*60*60));
 
 	require BASE.'/classes/isou/isou_service.class.php';
 	require BASE.'/classes/isou/isou_event.class.php';
@@ -42,7 +42,7 @@
 			if($service->isClosed() === TRUE){
 				$service->closedEvent = $service->getClosedInterruption();
 			}else{
-				$service->lastEvent = $service->getAllEvents($TOLERANCE, 10, $BEFORE, TIME);// $service->getLastInterruptions($TOLERANCE, 1);
+				$service->lastEvent = $service->getAllEvents($TOLERANCE, 10, $BEFORE, strftime('%Y-%m-%dT%H:%M', TIME));// $service->getLastInterruptions($TOLERANCE, 1);
 				$service->nextEvent = $service->getNextEvents(1);
 				$service->regularInterruption = $service->getRegularInterruptions();
 			}

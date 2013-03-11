@@ -25,6 +25,9 @@ if($CALENDAR_STEP === 'WEEKLY'){
 	$time = $first_months_day-((intval(strftime('%u', $first_months_day))-1)*24*60*60);
 }
 
+$beginDate = strftime('%Y-%m-%dT%H:%M', $time);
+$endDate = strftime('%Y-%m-%dT%H:%M', $time+35*24*60*60);
+
 // recupere tous les services dans la bdd
 $sql = "SELECT S.idService, S.name, S.nameForUsers, S.url, S.state, S.comment, C.name AS category".
 		" FROM services S, categories C".
@@ -38,7 +41,7 @@ $i=0;
 $services = array();
 if($service_records = $db->query($sql)){
 	while($service = $service_records->fetchObject('IsouService')){
-		$service->setEvents($service->getScheduledEvents($TOLERANCE, -1, $time, $time+35*24*60*60));
+		$service->setEvents($service->getScheduledEvents($TOLERANCE, -1, $beginDate, $endDate));
 		if($service->hasEvents() === TRUE){
 			$services[$i] = $service;
 			$i++;
@@ -84,10 +87,10 @@ for($row=0;$row<5;$row++){
 
 		$events = array();
 
-		if(isset($array_events[strftime('%m/%d/%y',$time)]) && is_array($array_events[strftime('%m/%d/%y',$time)])){
+		if(isset($array_events[strftime('%Y-%m-%d',$time)]) && is_array($array_events[strftime('%Y-%m-%d',$time)])){
 			$i=0;
-			while(isset($array_events[strftime('%m/%d/%y',$time)][$i])){
-				$nameForUsers = $array_events[strftime('%m/%d/%y',$time)][$i];
+			while(isset($array_events[strftime('%Y-%m-%d',$time)][$i])){
+				$nameForUsers = $array_events[strftime('%Y-%m-%d',$time)][$i];
 				$event = new stdClass();
 				$event->stripName = strip_accents(substr($nameForUsers,0,-3));
 				$event->name = substr($nameForUsers,0,-3);
