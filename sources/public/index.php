@@ -131,30 +131,8 @@ if($_SESSION['hide'] === 1){
 if(CURRENT_VERSION === $CFG['version']){
 	require $model;
 }else{
-	if(($IS_ADMIN && is_file(BASE.'/upgrade/LOCK_CONFIG')) === FALSE){
-		$template = 'public_update';
-	}else{
-		// le model est requis pour les admins, afin de définir notamment les nouvelles vars
-		$template = 'private_configuration';
-		require BASE.'/php/private_configuration.php';
-	}
-
-	if($IS_ADMIN && !is_file(BASE.'/upgrade/LOCK_UPDATE')){
-		if(isset($_GET['confirm']) && $_GET['confirm'] === '1'){
-			$old_version = $CFG['version'];
-
-			require BASE.'/upgrade/update.php';
-
-			// pdo connection closed previously, in update.php
-
-			touch(BASE.'/upgrade/LOCK_CONFIG');
-
-			header('Location: '.URL.'/index.php/configuration?type=changelog&version='.$old_version);
-			exit();
-		}else{
-			$smarty->assign('updatelink', TRUE);
-		}
-	}
+	// maintenance page
+	$template = 'public_update';
 }
 
 $smarty->assign('FULLURL', get_base_url('full', HTTPS));
