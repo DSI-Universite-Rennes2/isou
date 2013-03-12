@@ -34,6 +34,11 @@
 			$currentEdit = $event;
 		}
 
+		$event->beginDate = gmstrftime('%Y-%m-%dT%H:%M', $event->beginDate);
+		if($event->endDate !== NULL){
+			$event->endDate = gmstrftime('%Y-%m-%dT%H:%M', $event->endDate);
+		}
+
 		if($event->idEvent === $lastIdEvent){
 			$event->group = TRUE;
 		}

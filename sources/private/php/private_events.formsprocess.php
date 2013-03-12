@@ -21,7 +21,7 @@ function strtotimestamp($date){
 	}
 
 	if(preg_match('#^\d{2}/\d{2}/\d{4} \d{2}:\d{2}$#',$date)){
-		return mktime(intval(substr($date,11,2)), intval(substr($date,14,2)), 0, intval(substr($date,3,2)), intval(substr($date,0,2)), intval(substr($date,6,4)))+TIME_OFFSET;
+		return mktime(intval(substr($date,11,2)), intval(substr($date,14,2)), 0, intval(substr($date,3,2)), intval(substr($date,0,2)), intval(substr($date,6,4)));
 	}else{
 		return NULL;
 	}
@@ -70,15 +70,25 @@ if(isset($_POST['scheduled'])){
 }
 
 
-if(isset($_POST['beginDate']) && !empty($_POST['beginDate'])){
-	$beginDate = strftime('%Y-%m-%dT%H:%M', strtotimestamp($_POST['beginDate']));
+if(isset($_POST['beginDate'])){
+	$beginDate = strtotimestamp($_POST['beginDate']);
+	if($beginDate !== NULL){
+		$beginDate = strftime('%Y-%m-%dT%H:%M', strtotimestamp($_POST['beginDate']));
+	}
 }else{
+	$beginDate = NULL;
+}
+
+if($beginDate === NULL){
 	$beginDate = strftime('%Y-%m-%dT%H:%M', TIME);
 	$_POST['beginDate'] = strftime('%d/%m/%Y %H:%M', TIME);
 }
 
 if(isset($_POST['endDate'])){
-	$endDate = strftime('%Y-%m-%dT%H:%M', strtotimestamp($_POST['endDate']));
+	$endDate = strtotimestamp($_POST['endDate']);
+	if($endDate !== NULL){
+		$endDate = strftime('%Y-%m-%dT%H:%M', $endDate);
+	}
 }else{
 	$endDate = NULL;
 }
