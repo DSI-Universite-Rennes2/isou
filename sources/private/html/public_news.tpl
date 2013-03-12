@@ -88,7 +88,7 @@
 						{if $event->getEndDate() === NULL}
 							<span class="current-event">Le service est actuellement perturbé depuis le {$event->getBeginDate()|date_format:"%A %d %B %Y %H:%M"}.</span>
 						{else}
-							{if $event->getEndDate() !== NULL && $event->getEndDate() < $smarty.const.TIME}
+							{if $event->getEndDate() !== NULL && $event->getEndDate() < $smarty.const.TIME|date_format:"%Y-%m-%dT%H:%M"}
 								{if {$event->getBeginDate()|date_format:"%A%d%B"} === {$event->getEndDate()|date_format:"%A%d%B"}}
 									<span class="previous-event">Le service a été perturbé le {$event->getBeginDate()|date_format:"%A %d %B %Y"} de {$event->getBeginDate()|date_format:"%H:%M"} à {$event->getEndDate()|date_format:"%H:%M"}.</span>
 								{else}
