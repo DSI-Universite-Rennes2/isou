@@ -50,6 +50,18 @@ try {
 	exit(0);
 }
 
+$sql = "SELECT key, value FROM configuration";
+$CFG = array();
+if($query = $db->query($sql)){
+	while($config = $query->fetch(PDO::FETCH_OBJ)){
+		if(in_array($config->key, array('ip_local', 'ip_service', 'admin_users', 'admin_mails'))){
+			 $CFG[$config->key] = json_decode($config->value);
+		}else{
+			$CFG[$config->key] = $config->value;
+		}
+	}
+}
+
 
 // interruption de services
 $firstDate = strftime('%Y-%m-%dT%H:%M', $now-(30*24*60*60));
@@ -66,7 +78,7 @@ $sql = 'SELECT E.idEvent, strftime(\'%s\',E.beginDate) AS beginDate, strftime(\'
 	$rssKey.
 	' AND EI.isScheduled < 2'.
 	' AND E.beginDate BETWEEN ? AND ?'.
-	' AND (E.endDate IS NULL OR strftime(\'%s\',E.endDate)-strftime(\'%s\',E.beginDate) > (10*60))'.
+	' AND (E.endDate IS NULL OR strftime(\'%s\',E.endDate)-strftime(\'%s\',E.beginDate) > '.$CFG['tolerance'].')'.
 	' LIMIT 0, 200';
 $event_records = $db->prepare($sql);
 if($event_records->execute(array($firstDate, $lastDate))){
@@ -88,7 +100,7 @@ $sql = 'SELECT E.idEvent, strftime(\'%s\',E.endDate) AS endDate, strftime(\'%s\'
 	' AND EI.isScheduled < 2'.
 	' AND E.endDate BETWEEN ? AND ?'.
 	' AND E.endDate IS NOT NULL'.
-	' AND strftime(\'%s\',E.endDate)-strftime(\'%s\',E.beginDate) > (10*60)'.
+	' AND strftime(\'%s\',E.endDate)-strftime(\'%s\',E.beginDate) > '.$CFG['tolerance'].
 	' LIMIT 0, 200';
 $event_records = $db->prepare($sql);
 if($event_records->execute(array($firstDate, $lastDate))){
