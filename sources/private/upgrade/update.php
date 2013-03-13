@@ -19,6 +19,7 @@ if(is_file($pwd)){
 echo "\033[0;31mIMPORTANT : mettez à jour l'application avec votre utilisateur web (apache, www-data ou autre)\033[0m\nVoulez-vous continuer ? (y/n)\n";
 $owner = trim(fgets(STDIN));
 if(strtolower($owner) === 'n'){
+	unlink(BASE.'/upgrade/LOCK_UPDATE');
 	echo "\033[0;31mMerci de relancer l'installation avec le bon utilisateur.\033[0m\n";
 	exit(0);
 }
@@ -128,6 +129,7 @@ if(strlen($CFG['version']) < 12){
 	$intVersion = intval(str_replace('.', '', str_replace('-', '', $CFG['version'])));
 }
 
+// mise à jour 2012.1
 if($intVersion < 201202161){
 	// insertion de la variable 'local_mail'
 	$sql = "INSERT INTO configuration(key, value) VALUES (?,?)";
@@ -139,7 +141,13 @@ if($intVersion < 201202161){
 	$query = $db->prepare($sql);
 	$query->execute(array('auto_backup', '1'));
 
-	require BASE.'/upgrade/scripts/update_2012-02-16.1.php';
+	require BASE.'/upgrade/scripts/update_2012.1.php';
+	$intVersion++;
+}
+
+// mise à jour 2013.1
+if($intVersion < 201300001){
+	require BASE.'/upgrade/scripts/update_2013.1.php';
 	$intVersion++;
 }
 
@@ -155,7 +163,7 @@ $version->execute(array(TIME));
 
 // URL n'est pas calculée en CLI
 // echo "Le changelog est disponible à l'adresse suivante : ".URL."/index.php/configuration?type=changelog&version=".$old_version."\n\n";
-echo "\033[0;32mMise à jour terminée !\033[0m\n\n";
+echo "\n\033[0;32mMise à jour terminée !\033[0m\n\n";
 
 // close pdo connection
 $db = null;
