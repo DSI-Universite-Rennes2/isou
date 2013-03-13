@@ -67,7 +67,7 @@ $current_year = $current_year['year'];
 for($y=2009;$y<$current_year;$y++){
 	$db_path = BASE.'/database/isou-'.$y.'.sqlite3';
 	if(is_file($db_path)){
-		$display = 'Conversation des dates pour la base "isou-'.$y.'.sqlite3"';
+		$display = 'Conversion des dates pour la base "isou-'.$y.'.sqlite3"';
 		echo $display.niceDot($display);
 		try{
 			$old_db = new PDO('sqlite:'.$db_path, '', '');
