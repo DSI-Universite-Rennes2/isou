@@ -141,8 +141,10 @@ if($service_records = $db->query($sql)){
 				$endDate = $event->getEndDate();
 				if($endDate === NULL){
 					$endDate = TIME;
+				}else{
+					$endDate = strtotime($endDate);
 				}
-				$service->total += $endDate - $event->getBeginDate();
+				$service->total += $endDate - strtotime($event->getBeginDate());
 			}
 			$service->total = secondstohuman($service->total);
 			$categories[count($categories)-1]->services[] = $service;
