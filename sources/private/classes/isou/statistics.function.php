@@ -267,4 +267,3 @@ function getOperatingSystem($user_agent){
 }
 
 ?>
-

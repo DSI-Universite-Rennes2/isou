@@ -34,6 +34,7 @@
 	<input type="hidden" class="hidden" name="history" value="1">
 	<input type="hidden" class="hidden" name="graph" value="none">
 	<input type="submit" name="submit" value="Envoyer" />
+	<input type="submit" name="export" value="Exporter au format csv" />
 </p>
 
 </fieldset>

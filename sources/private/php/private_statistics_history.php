@@ -229,5 +229,14 @@ if(isset($pageRange)){
 	$smarty->assign('pageRange', $pageRange);
 }
 
-?>
+if(isset($_GET['export'])){
+	header("Cache-Control: public");
+	header("Content-Description: File Transfer");
+	header("Content-Disposition: attachment; filename=isou_export.csv");
+	header("Content-Type: text/csv; charset=utf-8");
+	header("Content-Transfer-Encoding: binary");
+	$smarty->display('private_statistics_history_export.tpl');
+	exit(0);
+}
 
+?>
