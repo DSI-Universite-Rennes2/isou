@@ -95,7 +95,7 @@ $stdin = trim(fgets(STDIN));
 if(strtolower($stdin) !== 'n'){
 	echo "\nChangelog de la version 2013.1:\n";
 	echo "\t- correction du bug provoqué lors des changements d'heure hiver/été (bug reporté par l'université de La Rochelle)\n";
-	echo "\t- correction de bugs du script d'installation (bug reporté par l'université de Bretagne occidentale)\n";
+	echo "\t- correction de bugs dans le script d'installation (bugs reportés par l'université de Bretagne occidentale)\n";
 	echo "\t- suppression de la possibilité de mettre à jour l'application par l'interface web\n";
 	echo "\t- utilisation de la variable permettant de ne pas afficher les services dont l'interruption\n";
 	echo " est \"inférieur à\" dans l'affichage du flux RSS\n";
