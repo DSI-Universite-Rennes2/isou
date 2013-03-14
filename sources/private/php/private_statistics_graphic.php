@@ -248,7 +248,7 @@ if(isset($_GET['serviceSelect'], $_GET['beginDate'], $_GET['endDate'], $_GET['gr
 
 			$sql_count = "SELECT count(*) FROM events E, events_isou EI".$sql." AND E.idEvent=EI.idEvent";
 
-			$sql = "SELECT S.idService, S.nameForUsers, E.beginDate, E.endDate".
+			$sql = "SELECT S.idService, S.nameForUsers, strftime('%s', E.beginDate) AS beginDate, strftime('%s', E.endDate) AS endDate".
 			" FROM events E, events_isou EI, services S".$sql;
 			if($_GET['serviceSelect'] === 'all'){
 				$sql .= " AND S.idService = EI.idService".
@@ -260,11 +260,12 @@ if(isset($_GET['serviceSelect'], $_GET['beginDate'], $_GET['endDate'], $_GET['gr
 						" AND E.typeEvent = 0";
 			}
 			$sql .= " AND S.nameForUsers IS NOT NULL".
-					" AND E.beginDate >= ".$beginDate.
-					" AND (E.endDate <= ".$endDate.")";// AND E.endDate NOT NULL)";
+					" AND strftime('%s', E.beginDate) >= ?".
+					" AND (strftime('%s', E.endDate) <= ?)";// AND E.endDate NOT NULL)";
 			// TODO: mettre en place une meilleure gestion des évènements commencés avant beginDate
 
-			$query = $db->query($sql);
+			$query = $db->prepare($sql);
+			$query->execute(array($beginDate, $endDate));
 
 			while($event = $query->fetch(PDO::FETCH_OBJ)){
 				if($event->endDate === NULL){
