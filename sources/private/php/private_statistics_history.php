@@ -42,6 +42,7 @@
 	for($i = 10;$i<101;$i = $i + 10){
 		$maxResultSelect[] = $i;
 	}
+	$maxResultSelect[-1] = 'illimité';
 
 	$smarty->assign('serviceSelect', $serviceSelect);
 	$smarty->assign('yearSelect', $yearSelect);
@@ -137,8 +138,11 @@ if(isset($_GET['serviceSelect'])){
 	($_GET['endSort'] === 1)?$_GET['endSort'] = ' DESC':$_GET['endSort'] = '';
 
 	// LIMIT [nombre_ligne] OFFSET [debut]
-	$sql .= $filter." ORDER BY E.beginDate".$_GET['beginSort'].", E.endDate".$_GET['endSort'].
-		" LIMIT ".(($_GET['maxResultSelect']+1)*10)." OFFSET ".(($_GET['page']-1)*(($_GET['maxResultSelect']+1)*10));
+	$sql .= $filter." ORDER BY E.beginDate".$_GET['beginSort'].", E.endDate".$_GET['endSort'];
+
+	if($_GET['maxResultSelect'] !== -1){
+		$sql .= " LIMIT ".(($_GET['maxResultSelect']+1)*10)." OFFSET ".(($_GET['page']-1)*(($_GET['maxResultSelect']+1)*10));
+	}
 
 	$query = $db->prepare($sql);
 	$query->execute($params);
@@ -163,7 +167,11 @@ if(isset($_GET['serviceSelect'])){
 	$cnt = $db->prepare($sql);
 	$cnt->execute($params);
 	$cnt = $cnt->fetch();
-	$nbPage = ceil($cnt[0]/(($_GET['maxResultSelect']+1)*10));
+	if($_GET['maxResultSelect'] == -1){
+		$nbPage = 1;
+	}else{
+		$nbPage = ceil($cnt[0]/(($_GET['maxResultSelect']+1)*10));
+	}
 
 	$fullUrl = get_base_url('full', HTTPS);
 	if(strpos($fullUrl, 'page=') === FALSE){
