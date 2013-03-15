@@ -19,7 +19,7 @@ if(is_file($pwd)){
 echo "\033[0;31mIMPORTANT : mettez à jour l'application avec votre utilisateur web (apache, www-data ou autre)\033[0m\nVoulez-vous continuer ? (y/n)\n";
 $owner = trim(fgets(STDIN));
 if(strtolower($owner) === 'n'){
-	unlink(BASE.'/upgrade/LOCK_UPDATE');
+	unlink($pwd);
 	echo "\033[0;31mMerci de relancer l'installation avec le bon utilisateur.\033[0m\n";
 	exit(0);
 }
