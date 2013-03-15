@@ -280,18 +280,19 @@ function update_nagios_to_db(){
 	if($events->execute()){
 		while($event = $events->fetch(PDO::FETCH_OBJ)){
 			$sql = "UPDATE events".
-					" SET beginDate=(beginDate+:0), endDate=(endDate+:0)".
+					" SET beginDate=strftime('%Y-%m-%d %H:%M:%S', beginDate, :0),".
+				   	" endDate=strftime('%Y-%m-%d %H:%M:%S', endDate, :0)".
 					" WHERE endDate < :1".
 					" AND idEvent = :2".
 					" AND typeEvent = 0";
 			$query = $db->prepare($sql);
 
-			if(!empty($event->period) && $query->execute(array($event->period, TIME, $event->idEvent))){
+			if(!empty($event->period) && $query->execute(array('+'.$event->period.' seconds', strftime('%Y-%m-%dT%H:%M', TIME), $event->idEvent))){
 				if($query->rowCount() > 0){
 					while($query->rowCount() > 0){
 						$query->closeCursor();
 						$query = $db->prepare($sql);
-						$query->execute(array($event->period, TIME, $event->idEvent));
+						$query->execute(array('+'.$event->period.' seconds', strftime('%Y-%m-%dT%H:%M', TIME), $event->idEvent));
 					}
 					$cntUpd++;
 				}
