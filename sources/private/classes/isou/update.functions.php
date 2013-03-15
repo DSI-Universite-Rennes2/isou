@@ -121,9 +121,10 @@ function update_nagios_to_db(){
 	if($dependence_records = $db->query($sql)){
 		$dependence = $dependence_records->fetchAll();
 		$dependence_records->closeCursor();
+		$time_offset = TIME-mktime(0,0,0,1,1,1970);
 		while(isset($dependence[$d][0])){
 			$addEvent=false;
-			$sql = "SELECT E.beginDate, E.endDate".
+			$sql = "SELECT strftime('%s', E.beginDate) AS beginDate, strftime('%s', E.endDate) AS endDate".
 					" FROM events E, events_isou EI".
 					" WHERE E.idEvent = EI.idEvent".
 					" AND EI.idService = ".$dependence[$d][0];
@@ -135,8 +136,9 @@ function update_nagios_to_db(){
 					if(is_null($event_record[1])){
 						$event_record[1] = 0;
 					}
-					if(($event_record[0] <= TIME && $event_record[1] >= TIME)
-							 || ($event_record[0] <= TIME && $event_record[1] == 0)
+
+					if(($event_record[0] <= $time_offset && $event_record[1] >= $time_offset)
+							 || ($event_record[0] <= $time_offset && $event_record[1] == 0)
 							){
 						$coverEvent = true;
 					}
