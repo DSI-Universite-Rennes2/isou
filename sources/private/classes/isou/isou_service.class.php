@@ -250,6 +250,7 @@ class IsouService {
 				" AND (SELECT count(*) FROM events E, events_isou EI".
 				" WHERE EI.idService = ?".
 				" AND EI.idEvent = E.idEvent".
+				" AND EI.isScheduled != 2".
 				" AND (E.endDate IS NULL OR".
 				" (E.beginDate <= '".$TIME."' AND E.endDate >= '".$TIME."'))) = 0".
 				// fin_
