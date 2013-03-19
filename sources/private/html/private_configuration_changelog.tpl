@@ -54,10 +54,29 @@
 
 <h2 id="index">Index des différentes mises à jour</h2>
 <ul class="fastlink">
-	<li><a href="{$smarty.const.URL}/index.php/configuration?type=changelog#2012-03-16.1">Dernière version</a></li>
+	<li><a href="{$smarty.const.URL}/index.php/configuration?type=changelog#2013.1">Dernière version</a></li>
+	<li><a href="{$smarty.const.URL}/index.php/configuration?type=changelog#2013.1">Build 2013.1</a></li>
 	<li><a href="{$smarty.const.URL}/index.php/configuration?type=changelog#2012-02-16.1">Build 2012-02-16.1</a></li>
 	<li><a href="{$smarty.const.URL}/index.php/configuration?type=changelog#2012-03-16.1">Build 2012-03-16.1</a></li>
 </ul>
+
+<h2 id="2013.1">Build 2013.1</h2>
+<ul>
+	<li>Nouveautés
+		<ul>
+			<li>Nouveau système de stockage des dates en base de données</li>
+			<li>Suppression de l'interface de mise à jour par le web</li>
+			<li>Possibilité d'exporter les historiques des interruptions de services au format CSV</li>
+		</ul>
+	</li>
+	<li>Correction de bugs
+		<ul>
+			<li>Correction du bug provoqué lors des changements d'heure hiver/été (bug reporté par l'université de La Rochelle)</li>
+			<li>Correction de bugs dans le script d'installation (bugs reportés par l'université de Bretagne occidentale)</li>
+		</ul>
+	</li>
+</ul>
+<p class="fastlink"><a href="{$smarty.const.URL}/index.php/configuration?type=changelog#index">Retour à l'index</a></p>
 
 <h2 id="2012-02-16.1">Build 2012-02-16.1</h2>
 <ul>
