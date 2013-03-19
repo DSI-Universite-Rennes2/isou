@@ -70,15 +70,25 @@ if(isset($_POST['scheduled'])){
 }
 
 
-if(isset($_POST['beginDate']) && !empty($_POST['beginDate'])){
+if(isset($_POST['beginDate'])){
 	$beginDate = strtotimestamp($_POST['beginDate']);
+	if($beginDate !== NULL){
+		$beginDate = strftime('%Y-%m-%dT%H:%M', strtotimestamp($_POST['beginDate']));
+	}
 }else{
-	$beginDate = TIME;
+	$beginDate = NULL;
+}
+
+if($beginDate === NULL){
+	$beginDate = strftime('%Y-%m-%dT%H:%M', TIME);
 	$_POST['beginDate'] = strftime('%d/%m/%Y %H:%M', TIME);
 }
 
 if(isset($_POST['endDate'])){
 	$endDate = strtotimestamp($_POST['endDate']);
+	if($endDate !== NULL){
+		$endDate = strftime('%Y-%m-%dT%H:%M', $endDate);
+	}
 }else{
 	$endDate = NULL;
 }

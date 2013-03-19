@@ -42,6 +42,7 @@
 	for($i = 10;$i<101;$i = $i + 10){
 		$maxResultSelect[] = $i;
 	}
+	$maxResultSelect[-1] = 'illimité';
 
 	$smarty->assign('serviceSelect', $serviceSelect);
 	$smarty->assign('yearSelect', $yearSelect);
@@ -81,10 +82,10 @@
 		$_GET['typeSelect'] = 0;
 	}
 
-	if(isset($_GET['maxResult'])){
-		$_GET['maxResult'] = intval($_GET['maxResult']);
+	if(isset($_GET['maxResultSelect'])){
+		$_GET['maxResultSelect'] = intval($_GET['maxResultSelect']);
 	}else{
-		$_GET['maxResult'] = 20;
+		$_GET['maxResultSelect'] = 20;
 	}
 
 	if(isset($_GET['page'])){
@@ -96,8 +97,8 @@
 $events = array();
 
 if(isset($_GET['serviceSelect'])){
-
-	$sql = "SELECT S.nameForUsers, E.beginDate, E.endDate, ED.description, EI.isScheduled".
+	$params = array();
+	$sql = "SELECT S.nameForUsers, strftime('%s', E.beginDate) AS beginDate, strftime('%s', E.endDate) AS endDate, ED.description, EI.isScheduled".
 		" FROM events E, events_isou EI, events_description ED, services S".
 		" WHERE S.idService = EI.idService".
 		" AND ED.idEventDescription = EI.idEventDescription".
@@ -125,18 +126,31 @@ if(isset($_GET['serviceSelect'])){
 			$begin = mktime(0,0,0,1,1,$_GET['yearSelect']);
 			$end = mktime(23,59,59,12,31,$_GET['yearSelect']);
 		}
-		$filter .= " AND E.beginDate BETWEEN ".$begin." AND ".$end;
+		$filter .= " AND strftime('%s', E.beginDate) BETWEEN ? AND ?";
+		$params = array($begin, $end);
+	}
+
+	if ($_SESSION['hide'] === 1){
+		$filter .= " AND (E.endDate IS NULL OR (strftime('%s', E.endDate) - strftime('%s', E.beginDate) > ".$CFG['tolerance']."))";
 	}
 
 	($_GET['beginSort'] === 1)?$_GET['beginSort'] = ' DESC':$_GET['beginSort'] = '';
 	($_GET['endSort'] === 1)?$_GET['endSort'] = ' DESC':$_GET['endSort'] = '';
 
-	$sql .= $filter." ORDER BY E.beginDate".$_GET['beginSort'].", E.endDate".$_GET['endSort'].
-		" LIMIT ".($_GET['page']-1)*$_GET['maxResult'].", ".$_GET['maxResult'];
+	// LIMIT [nombre_ligne] OFFSET [debut]
+	$sql .= $filter." ORDER BY E.beginDate".$_GET['beginSort'].", E.endDate".$_GET['endSort'];
 
-	$query = $db->query($sql);
+	if($_GET['maxResultSelect'] !== -1){
+		$sql .= " LIMIT ".(($_GET['maxResultSelect']+1)*10)." OFFSET ".(($_GET['page']-1)*(($_GET['maxResultSelect']+1)*10));
+	}
+
+	$query = $db->prepare($sql);
+	$query->execute($params);
 	$total = 0;
 	while($event = $query->fetch(PDO::FETCH_OBJ)){
+		if($event->endDate === NULL){
+			$event->endDate = TIME;
+		}
 		$event->total = round(($event->endDate-$event->beginDate)/60);
 		$total += $event->total;
 		$events[] = $event;
@@ -150,13 +164,17 @@ if(isset($_GET['serviceSelect'])){
 			" WHERE E.idEvent = EI.idEvent".
 			$filter;
 
-	$cnt = $db->query($sql);
+	$cnt = $db->prepare($sql);
+	$cnt->execute($params);
 	$cnt = $cnt->fetch();
-	$nbPage = ceil($cnt[0]/$_GET['maxResult']);
-
-	if(isset($_GET['page'])){
-		$fullUrl = get_base_url('full', HTTPS);
+	if($_GET['maxResultSelect'] == -1){
+		$nbPage = 1;
 	}else{
+		$nbPage = ceil($cnt[0]/(($_GET['maxResultSelect']+1)*10));
+	}
+
+	$fullUrl = get_base_url('full', HTTPS);
+	if(strpos($fullUrl, 'page=') === FALSE){
 		$fullUrl = get_base_url('full', HTTPS).'&amp;page='.$_GET['page'];
 	}
 
@@ -219,5 +237,14 @@ if(isset($pageRange)){
 	$smarty->assign('pageRange', $pageRange);
 }
 
-?>
+if(isset($_GET['export'])){
+	header("Cache-Control: public");
+	header("Content-Description: File Transfer");
+	header("Content-Disposition: attachment; filename=isou_export.csv");
+	header("Content-Type: text/csv; charset=utf-8");
+	header("Content-Transfer-Encoding: binary");
+	$smarty->display('private_statistics_history_export.tpl');
+	exit(0);
+}
 
+?>

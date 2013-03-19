@@ -4,7 +4,7 @@
 	 * Affichage des interruptions régulières
 	 * * * * * * * * * * * */
 
-	$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, EI.idEventDescription, D.description, EI.isScheduled, S.idService, S.name, S.nameForUsers, S.state, S.readonly".
+	$sql = "SELECT E.idEvent, strftime('%s',E.beginDate) AS beginDate, strftime('%s',E.endDate) AS endDate, EI.period, EI.idEventDescription, D.description, EI.isScheduled, S.idService, S.name, S.nameForUsers, S.state, S.readonly".
 			" FROM events E, events_isou EI, services S, events_description D".
 			" WHERE S.idService = EI.idService".
 			" AND EI.idEvent = E.idEvent".
@@ -28,6 +28,11 @@
 				$event->strperiod = 'daily';
 			}
 			$currentEdit = $event;
+		}
+
+		$event->beginDate = gmstrftime('%Y-%m-%dT%H:%M', $event->beginDate);
+		if($event->endDate !== NULL){
+			$event->endDate = gmstrftime('%Y-%m-%dT%H:%M', $event->endDate);
 		}
 
 		if($event->idEvent === $lastIdEvent){

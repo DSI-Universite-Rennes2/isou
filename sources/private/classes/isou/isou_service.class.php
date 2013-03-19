@@ -164,7 +164,9 @@ class IsouService {
 	public function getNextEvents($limit = -1){
 		global $db;
 
-		$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, D.description, EI.isScheduled".
+		$TIME = strftime('%Y-%m-%dT%H:%M', TIME);
+
+		$sql = "SELECT E.idEvent, strftime('%s',E.beginDate) AS beginDate, strftime('%s',E.endDate) AS endDate, EI.period, D.description, EI.isScheduled".
 		" FROM events E, events_isou EI, events_description D".
 		" WHERE EI.idEvent = E.idEvent".
 		" AND EI.idEventDescription = D.idEventDescription".
@@ -176,7 +178,7 @@ class IsouService {
 		" LIMIT :2";
 		$event_records = $db->prepare($sql);
 		$events = array();
-		if($event_records->execute(array($this->id, TIME, $limit))){
+		if($event_records->execute(array($this->id, $TIME, $limit))){
 			while($event = $event_records->fetch(PDO::FETCH_OBJ)){
 				$event->serviceName = $this->nameForUsers;
 				$event->state = $this->state;
@@ -195,7 +197,7 @@ class IsouService {
 	public function getScheduledEvents($tolerance = 0, $limit = -1, $beginDate = '', $endDate = ''){
 		global $db;
 
-		$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, D.description, EI.isScheduled".
+		$sql = "SELECT E.idEvent, strftime('%s',E.beginDate) AS beginDate, strftime('%s',E.endDate) AS endDate, EI.period, D.description, EI.isScheduled".
 				" FROM events E, events_isou EI, events_description D".
 				" WHERE EI.idEvent = E.idEvent".
 				" AND EI.idEventDescription = D.idEventDescription".
@@ -204,7 +206,7 @@ class IsouService {
 				" AND EI.isScheduled = 1".
 				" AND ((E.endDate >= ?".
 				" AND E.beginDate <= ?".
-				" AND ((E.endDate-E.beginDate) > ?*1))".
+				" AND ((strftime('%s',E.endDate)-strftime('%s',E.beginDate)) > ?*1))".
 				" OR (E.endDate IS NULL))".
 				" ORDER BY E.beginDate".
 				" LIMIT ?";
@@ -232,7 +234,9 @@ class IsouService {
 	public function getAllEvents($tolerance = 0, $limit = -1, $beginDate = '', $endDate = ''){
 		global $db;
 
-		$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, D.description, EI.isScheduled".
+		$TIME = strftime('%Y-%m-%dT%H:%M', TIME);
+
+		$sql = "SELECT E.idEvent, strftime('%s',E.beginDate) AS beginDate, strftime('%s',E.endDate) AS endDate, EI.period, D.description, EI.isScheduled".
 				" FROM events E, events_isou EI, events_description D".
 				" WHERE EI.idService = ?".
 				" AND EI.idEventDescription = D.idEventDescription".
@@ -242,12 +246,13 @@ class IsouService {
 				" (".
 				// n'afficher que les interruptions régulières si elles ont lieu en ce moment
 				// sauf si il y a un autre type évènement en cours
-				" EI.isScheduled = 2 AND E.beginDate <= ".TIME." AND E.endDate >= ".TIME.
+				" EI.isScheduled = 2 AND E.beginDate <= '".$TIME."' AND E.endDate >= '".$TIME."'".
 				" AND (SELECT count(*) FROM events E, events_isou EI".
 				" WHERE EI.idService = ?".
 				" AND EI.idEvent = E.idEvent".
+				" AND EI.isScheduled != 2".
 				" AND (E.endDate IS NULL OR".
-				" (E.beginDate <= ".TIME." AND E.endDate >= ".TIME."))) = 0".
+				" (E.beginDate <= '".$TIME."' AND E.endDate >= '".$TIME."'))) = 0".
 				// fin_
 				" ) OR (".
 				// toutes les interruptions non prévues passées, en cours, à venir (dans la limite de $beginDate et $endDate)
@@ -255,7 +260,7 @@ class IsouService {
 				" AND (E.endDate IS NULL OR".
 				" ((E.beginDate BETWEEN ? AND ?".
 				" OR E.endDate BETWEEN ? AND ?)".
-				" AND (E.endDate-E.beginDate > ".$tolerance.")".
+				" AND (strftime('%s',E.endDate)-strftime('%s',E.beginDate) > ".$tolerance.")".
 				" ))".
 				// fin_
 				" ) OR (".
@@ -292,18 +297,16 @@ class IsouService {
 		global $db;
 
 		if(empty($beginDate)){
-			$beginDate = TIME-48*60*60;
-		}else{
-			$beginDate = intval($beginDate);
+			$beginDate = strftime('%Y-%m-%dT%H:%M', TIME-48*60*60);
 		}
 
 		if(empty($endDate)){
-			$endDate = TIME+48*60*60;
-		}else{
-			$endDate = intval($endDate);
+			$endDate = strftime('%Y-%m-%dT%H:%M', TIME+48*60*60);
 		}
 
-		$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, D.description, EI.isScheduled".
+		$TIME = strftime('%Y-%m-%dT%H:%M', TIME);
+
+		$sql = "SELECT E.idEvent, strftime('%s',E.beginDate) AS beginDate, strftime('%s',E.endDate) AS endDate, EI.period, D.description, EI.isScheduled".
 			" FROM events E, events_isou EI, events_description D".
 			" WHERE EI.idEvent = E.idEvent".
 			" AND EI.idEventDescription = D.idEventDescription".
@@ -321,7 +324,7 @@ class IsouService {
 			" LIMIT :7";
 		$event_records = $db->prepare($sql);
 		$events = array();
-		if($event_records->execute(array($this->id, $beginDate, TIME, $beginDate, TIME, TIME, TIME, $limit))){
+		if($event_records->execute(array($this->id, $beginDate, $TIME, $beginDate, $TIME, $TIME, $TIME, $limit))){
 			while($event = $event_records->fetch(PDO::FETCH_OBJ)){
 				$event->serviceName = $this->nameForUsers;
 				$event->state = $this->state;
@@ -340,8 +343,10 @@ class IsouService {
 	public function getClosedInterruption(){
 		global $db;
 
+		$TIME = strftime('%Y-%m-%dT%H:%M', TIME);
+
 		// le service est fermé
-		$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, D.description, EI.isScheduled".
+		$sql = "SELECT E.idEvent, strftime('%s',E.beginDate) AS beginDate, strftime('%s',E.endDate) AS endDate, EI.period, D.description, EI.isScheduled".
 			" FROM events E, events_isou EI, events_description D".
 			" WHERE EI.idEvent = E.idEvent".
 			" AND EI.idEventDescription = D.idEventDescription".
@@ -351,7 +356,7 @@ class IsouService {
 			" AND (E.endDate >= :1 OR E.endDate IS NULL)".
 			" ORDER BY E.beginDate";
 		$event_records = $db->prepare($sql);
-		if($event_records->execute(array($this->getId(), TIME))){
+		if($event_records->execute(array($this->getId(), $TIME))){
 			if($event = $event_records->fetch(PDO::FETCH_OBJ)){
 				$event->serviceName = $this->nameForUsers;
 				$event->state = $this->state;
@@ -370,7 +375,7 @@ class IsouService {
 	public function getRegularInterruptions(){
 		global $db;
 
-		$sql = "SELECT E.idEvent, E.beginDate, E.endDate, EI.period, D.description, EI.isScheduled".
+		$sql = "SELECT E.idEvent, strftime('%s',E.beginDate) AS beginDate, strftime('%s',E.endDate) AS endDate, EI.period, D.description, EI.isScheduled".
 			" FROM events E, events_isou EI, events_description D".
 			" WHERE EI.idEvent = E.idEvent".
 			" AND EI.idEventDescription = D.idEventDescription".

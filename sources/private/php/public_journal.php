@@ -6,9 +6,9 @@
 	$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/css/record.css" media="screen" />';
 
 	// 2 jours avant
-	$BEFORE = mktime(0,0,0)-(48*60*60);
+	$BEFORE = strftime('%Y-%m-%dT%H:%M', mktime(0,0,0)-(48*60*60));
 	// 2 jours apres
-	$AFTER = mktime(0,0,0)+(48*60*60);
+	$AFTER = strftime('%Y-%m-%dT%H:%M', mktime(0,0,0)+(48*60*60));
 
 // Fonction de comparaison
 function cmp($a, $b) {
@@ -35,12 +35,12 @@ function cmp($a, $b) {
 }
 
 
-$sql = "SELECT E.idEvent, E.beginDate, E.endDate, E.typeEvent".
+$sql = "SELECT E.idEvent, strftime('%s', E.beginDate) AS beginDate, strftime('%s', E.endDate) AS endDate, E.typeEvent".
 		" FROM events E".
 		" WHERE E.endDate IS NULL".
 		" OR (E.endDate > :0";
 if($_SESSION['hide'] === 1 || $IS_ADMIN === FALSE){
-	$sql .= " AND E.endDate-E.beginDate > ".$CFG['tolerance'];
+	$sql .= " AND strftime('%s', E.endDate)-strftime('%s', E.beginDate) > ".$CFG['tolerance'];
 	$param = array($BEFORE);
 }else{
 	$param = array($BEFORE);
@@ -93,8 +93,12 @@ if($service_records->execute($param)){
 
 			if($event = $query->fetchObject()){
 				$event->typeEvent = 0;
-				$event->beginDate = $service_record->beginDate;
-				$event->endDate = $service_record->endDate;
+				$event->beginDate = gmstrftime('%Y-%m-%dT%H:%M', $service_record->beginDate);
+				if($service_record->endDate === NULL){
+					$event->endDate = NULL;
+				}else{
+					$event->endDate = gmstrftime('%Y-%m-%dT%H:%M', $service_record->endDate);
+				}
 
 				// 0 for unscheduled events, 1 for scheduled events, 2 for regular events, 3 for closed services
 				switch($event->isScheduled){
@@ -117,7 +121,7 @@ if($service_records->execute($param)){
 							" AND (E.endDate <= ?".
 							" OR E.endDate IS NULL)";
 					$query = $db->prepare($sql);
-					$query->execute(array($event->idService, ($event->beginDate-10), ($event->endDate-10)));
+					$query->execute(array($event->idService, $event->beginDate, $event->endDate));
 					if($state = $query->fetch(PDO::FETCH_NUM)){
 						$event->state = $state[0];
 					}

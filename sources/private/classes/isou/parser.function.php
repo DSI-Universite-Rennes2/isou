@@ -108,7 +108,7 @@ function status_dat2db($file){
 					if(isset($event_nagios[0])){
 						if($event_nagios[1] != $current_state){
 							// $sql = "UPDATE events_nagios SET endDate = '".TIME."' WHERE idEventNagios = ".$event_nagios[0];
-							$sql = "UPDATE events SET endDate = ".TIME.
+							$sql = "UPDATE events SET endDate = '".strftime('%Y-%m-%dT%H:%M', TIME)."'".
 									" WHERE typeEvent = 1 AND idEvent = (SELECT idEvent FROM events_nagios WHERE idEventNagios = ".$event_nagios[0].")";
 							$upd_nagios = $db->prepare($sql);
 
@@ -137,7 +137,7 @@ function status_dat2db($file){
 						$sql = "INSERT INTO events(beginDate, endDate, typeEvent)".
 								" VALUES(?, NULL, 1)";
 						$query = $db->prepare($sql);
-						if($query->execute(array(TIME))){
+						if($query->execute(array(strftime('%Y-%m-%dT%H:%M', TIME)))){
 							$idEvent = $db->lastInsertId();
 							$sql = "INSERT INTO events_nagios (state, idService, idEvent)".
 									" VALUES(:0, :1, :2)";

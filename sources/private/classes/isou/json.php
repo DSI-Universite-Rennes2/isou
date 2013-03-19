@@ -28,13 +28,13 @@ try{
 	exit();
 }
 
-$sql = "SELECT S.nameForUsers as name, S.state as state, E.beginDate as date, ED.description".
+$sql = "SELECT S.nameForUsers as name, S.state as state, strftime('%s', E.beginDate) as date, ED.description".
 	" FROM services S, events_description ED, events E, events_isou EI".
 	" WHERE S.idService = EI.idService".
 	" AND E.idEvent = EI.idEvent".
 	" AND ED.idEventDescription = EI.idEventDescription".
 	" AND (E.endDate IS NULL".
-	" OR E.beginDate < ".TIME." AND E.endDate > ".TIME.")".
+	" OR E.beginDate < '".strftime('%Y-%m-%dT%H:%M', TIME)."' AND E.endDate > '".strftime('%Y-%m-%dT%H:%M', TIME)."')".
  	" AND EI.isScheduled < 2".
 	" AND S.enable = 1".
 	" AND S.visible = 1".

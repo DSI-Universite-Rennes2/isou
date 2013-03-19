@@ -52,6 +52,9 @@ if(class_exists('IsouService') === FALSE){
 	$calendar = TRUE;
 }
 
+$BEFORE = strftime('%Y-%m-%dT%H:%M', $BEFORE);
+$AFTER = strftime('%Y-%m-%dT%H:%M', $AFTER);
+
 $sql = "SELECT EI.shortText, EI.longText".
 		" FROM events_info EI, events E".
 		" WHERE E.idEvent = EI.idEvent".

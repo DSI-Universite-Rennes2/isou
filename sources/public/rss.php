@@ -50,9 +50,24 @@ try {
 	exit(0);
 }
 
+$sql = "SELECT key, value FROM configuration";
+$CFG = array();
+if($query = $db->query($sql)){
+	while($config = $query->fetch(PDO::FETCH_OBJ)){
+		if(in_array($config->key, array('ip_local', 'ip_service', 'admin_users', 'admin_mails'))){
+			 $CFG[$config->key] = json_decode($config->value);
+		}else{
+			$CFG[$config->key] = $config->value;
+		}
+	}
+}
+
 
 // interruption de services
-$sql = 'SELECT E.idEvent, E.beginDate, E.endDate, ED.description, EI.isScheduled, S.nameForUsers, C.name'.
+$firstDate = strftime('%Y-%m-%dT%H:%M', $now-(30*24*60*60));
+$lastDate = strftime('%Y-%m-%dT%H:%M', TIME+10*60);
+
+$sql = 'SELECT E.idEvent, strftime(\'%s\',E.beginDate) AS beginDate, strftime(\'%s\',E.endDate) AS endDate, ED.description, EI.isScheduled, S.nameForUsers, C.name'.
 	' FROM events E, events_isou EI, events_description ED, services S, categories C'.
 	' WHERE S.idService = EI.idService'.
 	' AND E.idEvent = EI.idEvent'.
@@ -62,18 +77,18 @@ $sql = 'SELECT E.idEvent, E.beginDate, E.endDate, ED.description, EI.isScheduled
 	' AND S.enable = 1'.
 	$rssKey.
 	' AND EI.isScheduled < 2'.
-	' AND E.beginDate BETWEEN '.($now-(30*24*60*60)).' AND '.(TIME+10*60).
-	' AND (E.endDate IS NULL OR E.endDate-E.beginDate > (10*60))'.
+	' AND E.beginDate BETWEEN ? AND ?'.
+	' AND (E.endDate IS NULL OR strftime(\'%s\',E.endDate)-strftime(\'%s\',E.beginDate) > '.$CFG['tolerance'].')'.
 	' LIMIT 0, 200';
-
-if($event_records = $db->query($sql)){
+$event_records = $db->prepare($sql);
+if($event_records->execute(array($firstDate, $lastDate))){
 	while($event = $event_records->fetch()){
 		$record[count($record)] = array('b', new IsouEvent($event[0],$event[1],$event[2],NULL,$event[5], 0, $event[4], NULL, NULL, $event[3]),$event[6]);
 	}
 }
 
 // reprise de services
-$sql = 'SELECT E.idEvent, E.endDate, E.beginDate, ED.description, EI.isScheduled, S.nameForUsers, C.name'.
+$sql = 'SELECT E.idEvent, strftime(\'%s\',E.endDate) AS endDate, strftime(\'%s\',E.beginDate) AS beginDate, ED.description, EI.isScheduled, S.nameForUsers, C.name'.
 	' FROM events E, events_isou EI, events_description ED, services S, categories C'.
 	' WHERE S.idService = EI.idService '.
 	' AND E.idEvent = EI.idEvent'.
@@ -83,12 +98,12 @@ $sql = 'SELECT E.idEvent, E.endDate, E.beginDate, ED.description, EI.isScheduled
 	' AND S.enable = 1'.
 	$rssKey.
 	' AND EI.isScheduled < 2'.
-	' AND E.endDate BETWEEN '.($now-(30*24*60*60)).' AND '.(TIME+10*60).
+	' AND E.endDate BETWEEN ? AND ?'.
 	' AND E.endDate IS NOT NULL'.
-	' AND E.endDate-E.beginDate > (10*60)'.
+	' AND strftime(\'%s\',E.endDate)-strftime(\'%s\',E.beginDate) > '.$CFG['tolerance'].
 	' LIMIT 0, 200';
-
-if($event_records = $db->query($sql)){
+$event_records = $db->prepare($sql);
+if($event_records->execute(array($firstDate, $lastDate))){
 	while($event = $event_records->fetch()){
 		$record[count($record)] = array('e',new IsouEvent($event[0],$event[1],$event[2],NULL,$event[5], 0, $event[4], NULL, NULL, $event[3]),$event[6]);
 	}
@@ -123,8 +138,8 @@ if(count($record) > MAXFEED){
 
 for($i=count($record)-1;$i>=$maxFeed;$i--){
 
-	$beginDate = $record[$i][1]->getBeginDate();
-	$endDate = $record[$i][1]->getEndDate();
+	$beginDate = strtotime($record[$i][1]->getBeginDate());
+	$endDate = strtotime($record[$i][1]->getEndDate());
 
 	$title = '';
 	$link = '';

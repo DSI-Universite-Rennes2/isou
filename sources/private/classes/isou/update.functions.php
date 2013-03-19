@@ -52,7 +52,7 @@ function update_nagios_to_db(){
 									" WHERE s.readonly = 1".
 									" AND ei.idService = s.idService".
 									" AND e.idEvent = ei.idEvent".
-									" AND ((e.beginDate < ".TIME." AND e.endDate > ".TIME.") OR e.endDate is null)".
+									" AND ((e.beginDate < '".strftime('%Y-%m-%dT%H:%M', TIME)."' AND e.endDate > '".strftime('%Y-%m-%dT%H:%M', TIME)."') OR e.endDate is null)".
 									")";
 	$query = $db->prepare($sql);
 	if($query->execute(array())){
@@ -121,9 +121,10 @@ function update_nagios_to_db(){
 	if($dependence_records = $db->query($sql)){
 		$dependence = $dependence_records->fetchAll();
 		$dependence_records->closeCursor();
+		$time_offset = TIME-mktime(0,0,0,1,1,1970);
 		while(isset($dependence[$d][0])){
 			$addEvent=false;
-			$sql = "SELECT E.beginDate, E.endDate".
+			$sql = "SELECT strftime('%s', E.beginDate) AS beginDate, strftime('%s', E.endDate) AS endDate".
 					" FROM events E, events_isou EI".
 					" WHERE E.idEvent = EI.idEvent".
 					" AND EI.idService = ".$dependence[$d][0];
@@ -135,8 +136,9 @@ function update_nagios_to_db(){
 					if(is_null($event_record[1])){
 						$event_record[1] = 0;
 					}
-					if(($event_record[0] <= TIME && $event_record[1] >= TIME)
-							 || ($event_record[0] <= TIME && $event_record[1] == 0)
+
+					if(($event_record[0] <= $time_offset && $event_record[1] >= $time_offset)
+							 || ($event_record[0] <= $time_offset && $event_record[1] == 0)
 							){
 						$coverEvent = true;
 					}
@@ -158,7 +160,7 @@ function update_nagios_to_db(){
 					$sql = "INSERT INTO events(beginDate, endDate, typeEvent)".
 						" VALUES(?, NULL, 0)";
 					$query = $db->prepare($sql);
-					if($query->execute(array(TIME))){
+					if($query->execute(array(strftime('%Y-%m-%dT%H:%M', TIME)))){
 						$idEvent = $db->lastInsertId();
 						if($description === NULL){
 							$description = 1;
@@ -242,7 +244,7 @@ function update_nagios_to_db(){
 								" AND (".
 										"(".
 											// évènement non prévu dont le service est à l'état 0
-											"E.beginDate < ".TIME.
+											"E.beginDate < '".strftime('%Y-%m-%dT%H:%M', TIME)."'".
 											" AND S.state = 0".
 											" AND E.endDate IS NULL".
 											" AND EI.isScheduled = 0".
@@ -252,8 +254,8 @@ function update_nagios_to_db(){
 															" FROM events E, events_isou EI".
 															" WHERE E.idEvent = EI.idEvent".
 															" AND EI.isScheduled = 1".
-															" AND E.beginDate <= ".TIME.
-															" AND (E.endDate > ".TIME.
+															" AND E.beginDate <= '".strftime('%Y-%m-%dT%H:%M', TIME)."'".
+															" AND (E.endDate > '".strftime('%Y-%m-%dT%H:%M', TIME)."'".
 															" OR E.endDate IS NULL)".
 															")".
 										")".
@@ -261,7 +263,7 @@ function update_nagios_to_db(){
 							")".
 			" AND endDate IS NULL";
 	$query = $db->prepare($sql);
-	if($query->execute(array(TIME))){
+	if($query->execute(array(strftime('%Y-%m-%dT%H:%M', TIME)))){
 		if($query->rowCount() > 0){
 			add_log(LOG_FILE, 'ISOU', 'update', 'Nombre de lignes modifiées (réactivation de services) : '.$query->rowCount());
 		}
@@ -278,18 +280,19 @@ function update_nagios_to_db(){
 	if($events->execute()){
 		while($event = $events->fetch(PDO::FETCH_OBJ)){
 			$sql = "UPDATE events".
-					" SET beginDate=(beginDate+:0), endDate=(endDate+:0)".
+					" SET beginDate=strftime('%Y-%m-%dT%H:%M', beginDate, :0),".
+				   	" endDate=strftime('%Y-%m-%dT%H:%M', endDate, :0)".
 					" WHERE endDate < :1".
 					" AND idEvent = :2".
 					" AND typeEvent = 0";
 			$query = $db->prepare($sql);
 
-			if(!empty($event->period) && $query->execute(array($event->period, TIME, $event->idEvent))){
+			if(!empty($event->period) && $query->execute(array('+'.$event->period.' seconds', strftime('%Y-%m-%dT%H:%M', TIME), $event->idEvent))){
 				if($query->rowCount() > 0){
 					while($query->rowCount() > 0){
 						$query->closeCursor();
 						$query = $db->prepare($sql);
-						$query->execute(array($event->period, TIME, $event->idEvent));
+						$query->execute(array('+'.$event->period.' seconds', strftime('%Y-%m-%dT%H:%M', TIME), $event->idEvent));
 					}
 					$cntUpd++;
 				}
@@ -316,7 +319,7 @@ function update_nagios_to_db(){
 									" OR E.endDate IS NULL)".
 									" AND EI.isScheduled = 3)";
 	$query = $db->prepare($sql);
-	if($query->execute(array(TIME))){
+	if($query->execute(array(strftime('%Y-%m-%dT%H:%M', TIME)))){
 		if($query->rowCount() > 0){
 			add_log(LOG_FILE, 'ISOU', 'update', 'Nombre de lignes modifiées (fermeture de service) : '. $query->rowCount());
 		}
@@ -338,7 +341,7 @@ function update_nagios_to_db(){
 									" OR E.endDate IS NULL)".
 									" AND EI.isScheduled = 3)";
 	$query = $db->prepare($sql);
-	if($query->execute(array(TIME))){
+	if($query->execute(array(strftime('%Y-%m-%dT%H:%M', TIME)))){
 		if($query->rowCount() > 0){
 			add_log(LOG_FILE, 'ISOU', 'update', 'Nombre de lignes modifiées (réouverture de service) : '. $query->rowCount());
 		}
