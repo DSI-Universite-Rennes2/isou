@@ -42,7 +42,7 @@
 
 
 <table id="historique" summary="Historique des interruptions">
-	<caption>Historique des interruptions{if isset($total)} (total : {$total} interruptions){/if}</caption>
+	<caption>Historique des interruptions{if isset($total)} (total de la page: {$total} minutes d'interruption){/if}</caption>
 	<tr>
 	<th>Service</th>
 		<th>Date de début</th>

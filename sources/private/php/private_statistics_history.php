@@ -115,19 +115,41 @@ if(isset($_GET['serviceSelect'])){
 	}
 
 	if(isset($serviceSelect[$_GET['serviceSelect']]) && $_GET['serviceSelect'] != 'all'){
-		$filter .= " AND EI.idService = ".intval($_GET['serviceSelect']);
+		$filter .= " AND EI.idService = ?";
+		$params[] = $_GET['serviceSelect'];
 	}
 
 	if($_GET['yearSelect'] !== 0){
-		if($_GET['monthSelect'] !== 0){
-			$begin = mktime(0,0,0,$_GET['monthSelect'],1,$_GET['yearSelect']);
-			$end = mktime(0,0,0,$_GET['monthSelect']+1,1,$_GET['yearSelect']);
+		if($_GET['yearSelect'] == date('Y')){
+			$db_stat = $db;
 		}else{
-			$begin = mktime(0,0,0,1,1,$_GET['yearSelect']);
-			$end = mktime(23,59,59,12,31,$_GET['yearSelect']);
+			try{
+				$db_name = substr(str_replace('isou.sqlite3', 'isou-'.$_GET['yearSelect'].'.sqlite3', DB_PATH), 7);
+				if(!is_file($db_name)){
+					throw new PDOException($db_name.' n\'existe pas.');
+				}
+				$db_stat = new PDO('sqlite:'.$db_name, '', '');
+			}catch(PDOException $e){
+				$db_stat = null;
+			}
 		}
-		$filter .= " AND strftime('%s', E.beginDate) BETWEEN ? AND ?";
-		$params = array($begin, $end);
+
+		if($_GET['monthSelect'] !== 0){
+			// 2012-01-10T04:20
+			if($_GET['monthSelect'] < 10){
+				$begin = $_GET['yearSelect'].'-0'.$_GET['monthSelect'].'-01T00:00';
+				$end = $_GET['yearSelect'].'-0'.($_GET['monthSelect']+1).'-01T00:00';
+			}else{
+				$begin = $_GET['yearSelect'].'-'.$_GET['monthSelect'].'-01T00:00';
+				$end = $_GET['yearSelect'].'-'.($_GET['monthSelect']+1).'-01T00:00';
+			}
+		}else{
+			$begin = $_GET['yearSelect'].'-01-01T00:00';
+			$end = $_GET['yearSelect'].'-12-31T23:59';
+		}
+		$filter .= " AND E.beginDate BETWEEN ? AND ?";
+		$params[] = $begin;
+		$params[] = $end;
 	}
 
 	if ($_SESSION['hide'] === 1){
@@ -144,89 +166,92 @@ if(isset($_GET['serviceSelect'])){
 		$sql .= " LIMIT ".(($_GET['maxResultSelect']+1)*10)." OFFSET ".(($_GET['page']-1)*(($_GET['maxResultSelect']+1)*10));
 	}
 
-	$query = $db->prepare($sql);
-	$query->execute($params);
-	$total = 0;
-	while($event = $query->fetch(PDO::FETCH_OBJ)){
-		if($event->endDate === NULL){
-			$event->endDate = TIME;
+	if($db_stat !== NULL){
+		$query = $db_stat->prepare($sql);
+		$query->execute($params);
+
+		$total = 0;
+		while($event = $query->fetch(PDO::FETCH_OBJ)){
+			if($event->endDate === NULL){
+				$event->endDate = TIME;
+			}
+			$event->total = round(($event->endDate-$event->beginDate)/60);
+			$total += $event->total;
+			$events[] = $event;
 		}
-		$event->total = round(($event->endDate-$event->beginDate)/60);
-		$total += $event->total;
-		$events[] = $event;
-	}
 
-	/* * * * * * * * * * * * * * * * * *
-	 * GENERATION PAGE
-	 * * * * * * * * * * * * * * * * * */
-	$sql = "SELECT count(*)".
-			" FROM events_isou EI, events E".
-			" WHERE E.idEvent = EI.idEvent".
-			$filter;
+		/* * * * * * * * * * * * * * * * * *
+		 * GENERATION PAGE
+		 * * * * * * * * * * * * * * * * * */
+		$sql = "SELECT count(*)".
+				" FROM events_isou EI, events E".
+				" WHERE E.idEvent = EI.idEvent".
+				$filter;
 
-	$cnt = $db->prepare($sql);
-	$cnt->execute($params);
-	$cnt = $cnt->fetch();
-	if($_GET['maxResultSelect'] == -1){
-		$nbPage = 1;
-	}else{
-		$nbPage = ceil($cnt[0]/(($_GET['maxResultSelect']+1)*10));
-	}
-
-	$fullUrl = get_base_url('full', HTTPS);
-	if(strpos($fullUrl, 'page=') === FALSE){
-		$fullUrl = get_base_url('full', HTTPS).'&amp;page='.$_GET['page'];
-	}
-
-	$range = 3;
-	$pageRange = '';
-
-	// 3 plages et 2 ...
-	if($nbPage < $range*3+$range*2){
-		for($i=1;$i<=$nbPage;$i++){
-			$pageRange .= '<a href="'.str_replace('page='.$_GET['page'],'page='.$i,$fullUrl).'" title="Aller à la page '.$i.'">'.$i.'</a> ';
-		}
-	}else{
-		if($_GET['page'] < $range*2 || $_GET['page']-1 > ($nbPage-$range*2)){
-			// les pages du milieu de defaut ; page appelee est soit en debut, soit en fin
-			$startMidRange = ceil($nbPage/2)-ceil($range/2);
-			$endMidRange = ceil($nbPage/2)+ceil($range/2);
+		$cnt = $db_stat->prepare($sql);
+		$cnt->execute($params);
+		$cnt = $cnt->fetch();
+		if($_GET['maxResultSelect'] == -1){
+			$nbPage = 1;
 		}else{
-			// les pages autour de la page demandée
-			$startMidRange = $_GET['page']-ceil($range/2);
-			$endMidRange =	$_GET['page']+ceil($range/2);
+			$nbPage = ceil($cnt[0]/(($_GET['maxResultSelect']+1)*10));
 		}
 
-		$middleRange = '';
-		for($i=$startMidRange;$i < $endMidRange;$i++){
-			$middleRange .= '<a href="'.str_replace('page='.$_GET['page'],'page='.$i,$fullUrl).'" title="Aller à la page '.$i.'">'.$i.'</a> ';
+		$fullUrl = get_base_url('full', HTTPS);
+		if(strpos($fullUrl, 'page=') === FALSE){
+			$fullUrl = get_base_url('full', HTTPS).'&amp;page='.$_GET['page'];
 		}
-		$middleRange = '... '.$middleRange.'... ';
 
-		if($_GET['page'] >= $range && $_GET['page'] < $range*2){
-			$irange = $_GET['page']+1;
+		$range = 3;
+		$pageRange = '';
+
+		// 3 plages et 2 ...
+		if($nbPage < $range*3+$range*2){
+			for($i=1;$i<=$nbPage;$i++){
+				$pageRange .= '<a href="'.str_replace('page='.$_GET['page'],'page='.$i,$fullUrl).'" title="Aller à la page '.$i.'">'.$i.'</a> ';
+			}
 		}else{
-			$irange = $range;
+			if($_GET['page'] < $range*2 || $_GET['page']-1 > ($nbPage-$range*2)){
+				// les pages du milieu de defaut ; page appelee est soit en debut, soit en fin
+				$startMidRange = ceil($nbPage/2)-ceil($range/2);
+				$endMidRange = ceil($nbPage/2)+ceil($range/2);
+			}else{
+				// les pages autour de la page demandée
+				$startMidRange = $_GET['page']-ceil($range/2);
+				$endMidRange =	$_GET['page']+ceil($range/2);
+			}
+
+			$middleRange = '';
+			for($i=$startMidRange;$i < $endMidRange;$i++){
+				$middleRange .= '<a href="'.str_replace('page='.$_GET['page'],'page='.$i,$fullUrl).'" title="Aller à la page '.$i.'">'.$i.'</a> ';
+			}
+			$middleRange = '... '.$middleRange.'... ';
+
+			if($_GET['page'] >= $range && $_GET['page'] < $range*2){
+				$irange = $_GET['page']+1;
+			}else{
+				$irange = $range;
+			}
+
+			for($i=1;$i<=$irange;$i++){
+				$pageRange .= '<a href="'.str_replace('page='.$_GET['page'],'page='.$i,$fullUrl).'" title="Aller à la page '.$i.'">'.$i.'</a> ';
+			}
+			$pageRange .= $middleRange;
+
+
+			if($_GET['page'] <= $nbPage-$range+1 && $_GET['page']-1 > $nbPage-$range*2){
+				$irange = $_GET['page']-1;
+			}else{
+				$irange = $nbPage-$range+1;
+			}
+
+			for($i=$irange;$i<=$nbPage;$i++){
+				$pageRange .= '<a href="'.str_replace('page='.$_GET['page'],'page='.$i,$fullUrl).'" title="Aller à la page '.$i.'">'.$i.'</a> ';
+			}
 		}
 
-		for($i=1;$i<=$irange;$i++){
-			$pageRange .= '<a href="'.str_replace('page='.$_GET['page'],'page='.$i,$fullUrl).'" title="Aller à la page '.$i.'">'.$i.'</a> ';
-		}
-		$pageRange .= $middleRange;
-
-
-		if($_GET['page'] <= $nbPage-$range+1 && $_GET['page']-1 > $nbPage-$range*2){
-			$irange = $_GET['page']-1;
-		}else{
-			$irange = $nbPage-$range+1;
-		}
-
-		for($i=$irange;$i<=$nbPage;$i++){
-			$pageRange .= '<a href="'.str_replace('page='.$_GET['page'],'page='.$i,$fullUrl).'" title="Aller à la page '.$i.'">'.$i.'</a> ';
-		}
+		$pageRange = str_replace('Aller à la page '.$_GET['page'].'"','Aller à la page '.$_GET['page'].'" class="selectedIndex"',$pageRange);
 	}
-
-	$pageRange = str_replace('Aller à la page '.$_GET['page'].'"','Aller à la page '.$_GET['page'].'" class="selectedIndex"',$pageRange);
 }
 
 $smarty->assign('events', $events);
@@ -236,7 +261,7 @@ if(isset($total)){
 if(isset($pageRange)){
 	$smarty->assign('pageRange', $pageRange);
 }
-
+$db_stat = NULL;
 if(isset($_GET['export'])){
 	header("Cache-Control: public");
 	header("Content-Description: File Transfer");
