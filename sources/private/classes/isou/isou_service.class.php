@@ -281,7 +281,7 @@ class IsouService {
 			while($event = $event_records->fetch(PDO::FETCH_OBJ)){
 				$event->serviceName = $this->nameForUsers;
 				$event->state = $this->state;
-				$event->isScheduled = 0; // nvm ?
+				// $event->isScheduled = 0; // nvm ?
 				$event->type = NULL; // 'LastInterruption';
 				$events[] = new IsouEvent($event);
 			}

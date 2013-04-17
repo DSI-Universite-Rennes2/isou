@@ -150,6 +150,9 @@ if($service_records = $db->query($sql)){
 				$service->total += $endDate - strtotime($event->getBeginDate());
 			}
 			if($service->total === 0){
+				if(!isset($categories[count($categories)-1]->services[0])){
+					unset($categories[count($categories)-1]);
+				}
 				continue;
 			}
 			$service->total = secondstohuman($service->total);
