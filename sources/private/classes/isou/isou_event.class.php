@@ -223,19 +223,20 @@ class IsouEvent {
 		global $db, $CFG;
 
 		$nagiosEvents = array();
+		$tolerance = $CFG['tolerance'].' seconds';
 
 		// si l'evenement n'est pas en cours, on recup tous les evenements nagios
 		// on met +/- 10 secondes de tolérence
-		$sql = "SELECT DISTINCT s.name, s.nameForUsers, e.beginDate, e.endDate, en.state".
+		$sql = "SELECT DISTINCT s.name, s.nameForUsers, strftime('%s',E.beginDate) AS beginDate, strftime('%s',E.endDate) AS endDate, en.state".
 				" FROM events e, events_nagios en, services s, dependencies d".
 				" WHERE s.idService = en.idService".
 				" AND e.idEvent = en.idEvent".
 				" AND d.idServiceParent = s.idService".
-				" AND d.idService = ".$idService.
-				" AND e.beginDate >= ".($this->beginDate-$CFG['tolerance']).
-				" AND e.endDate <= ".($this->endDate+$CFG['tolerance']);
+				" AND d.idService = ?".
+				" AND e.beginDate >= strftime('%Y-%m-%dT%H:%M', ?, ?)".
+				" AND e.endDate <= strftime('%Y-%m-%dT%H:%M', ?, ?)";
 		$nagios_records = $db->prepare($sql);
-		if($nagios_records->execute(array())){
+		if($nagios_records->execute(array($idService, $this->beginDate, '-'.$tolerance, $this->endDate, '+'.$tolerance))){
 			$j = 0;
 			while($nagios_record = $nagios_records->fetchObject()){
 				// TODO: à déplacer vers le constructeur...
