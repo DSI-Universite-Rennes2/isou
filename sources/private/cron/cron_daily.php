@@ -118,7 +118,7 @@ $sql = "SELECT DISTINCT S.idService, S.name, S.nameForUsers, S.url, S.state, S.c
 	" AND S.enable = 1".
 	" AND S.visible = 1".
 	" ORDER BY C.position, UPPER(S.nameForUsers)";
-$i=0;
+$i=-1;
 $categoryName = '';
 $categories = array();
 if($service_records = $db->query($sql)){
@@ -128,16 +128,20 @@ if($service_records = $db->query($sql)){
 
 		if($service->hasEvents() === TRUE){
 			if($categoryName !== $service->getCategoryName()){
+				$i++;
 				$categoryName = $service->getCategoryName();
-				$categories[] = new stdClass();
-				$categories[count($categories)-1]->name = $service->getCategoryName();
-				$categories[count($categories)-1]->services = array();
+				$categories[$i] = new stdClass();
+				$categories[$i]->name = $service->getCategoryName();
+				$categories[$i]->services = array();
 			}
 
 			$service->stripName = strip_accents($service->getNameForUsers());
 
 			$service->total = 0;
 			foreach($service->getEvents() as $event){
+				if($event->getScheduled() == 2){
+					continue;
+				}
 				$endDate = $event->getEndDate();
 				if($endDate === NULL){
 					$endDate = TIME;
@@ -146,9 +150,16 @@ if($service_records = $db->query($sql)){
 				}
 				$service->total += $endDate - strtotime($event->getBeginDate());
 			}
+			if($service->total === 0){
+				if(!isset($categories[$i]->services[0])){
+					unset($categories[$i]);
+					$i--;
+					$categoryName = '';
+				}
+				continue;
+			}
 			$service->total = secondstohuman($service->total);
-			$categories[count($categories)-1]->services[] = $service;
-			$i++;
+			$categories[$i]->services[] = $service;
 		}
 	}
 }
