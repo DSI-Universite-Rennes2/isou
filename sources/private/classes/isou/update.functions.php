@@ -121,29 +121,21 @@ function update_nagios_to_db(){
 	if($dependence_records = $db->query($sql)){
 		$dependence = $dependence_records->fetchAll();
 		$dependence_records->closeCursor();
-		$time_offset = TIME-mktime(0,0,0,1,1,1970);
+		$time_ISO8601 = strftime('%Y-%m-%dT%H:%M');
 		while(isset($dependence[$d][0])){
 			$addEvent=false;
-			$sql = "SELECT strftime('%s', E.beginDate) AS beginDate, strftime('%s', E.endDate) AS endDate".
+			$sql = "SELECT E.beginDate, E.endDate".
 					" FROM events E, events_isou EI".
 					" WHERE E.idEvent = EI.idEvent".
 					" AND EI.idService = ".$dependence[$d][0];
 			if($event_records = $db->query($sql)){
-				$event_record = $event_records->fetch();
-				$i = 0;
-				$coverEvent = false;
-				while($event_record && !$coverEvent){
-					if(is_null($event_record[1])){
-						$event_record[1] = 0;
+				$coverEvent = FALSE;
+				while($event_record = $event_records->fetch(PDO::FETCH_OBJ) && $coverEvent === FALSE){
+					if($event_record->endDate === NULL){
+						$event_record->endDate = $time_ISO8601;
 					}
 
-					if(($event_record[0] <= $time_offset && $event_record[1] >= $time_offset)
-							 || ($event_record[0] <= $time_offset && $event_record[1] == 0)
-							){
-						$coverEvent = true;
-					}
-					$event_record = $event_records->fetch();
-					$i++;
+					$coverEvent = ($event_record->beginDate <= $time_ISO8601 && $event_record->endDate >= $time_ISO8601);
 				}
 
 				if(!$coverEvent){
@@ -385,7 +377,7 @@ function make_dependencies($parent,$array,$db){
 				if(!empty($child->message) && !in_array($child->message, $array[$child->idService])){
 					$array[$child->idService][] = $child->message;
 				}
-				
+
 				if($child->readonly == '0'){
 					$array = make_dependencies($child, $array, $db);
 				}
