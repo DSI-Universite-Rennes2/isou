@@ -109,7 +109,7 @@ function update_nagios_to_db(){
 	}
 
 	// ajoute les interruptions de services non prévues dans la base de données
-	$d = 0;
+
 	// tous les services dont l'état est superieur a zero et qui n'ont pas evenements en cours
 	$sql = "SELECT idService".
 		" FROM services".
@@ -117,33 +117,35 @@ function update_nagios_to_db(){
 		" AND nameForUsers IS NOT NULL".
 		" AND enable = 1".
 		" AND idService NOT IN(SELECT EI.idService FROM events E, events_isou EI WHERE E.endDate IS NULL AND E.idEvent = EI.idEvent)";
-
-	if($dependence_records = $db->query($sql)){
-		$dependence = $dependence_records->fetchAll();
-		$dependence_records->closeCursor();
+	$query = $db->prepare($sql);
+	if($query->execute()){
+		$services = $query->fetchAll(PDO::FETCH_OBJ);
+		$query->closeCursor();
 		$time_ISO8601 = strftime('%Y-%m-%dT%H:%M');
-		while(isset($dependence[$d][0])){
+		foreach($services as $service){
 			$addEvent=false;
 			$sql = "SELECT E.beginDate, E.endDate".
 					" FROM events E, events_isou EI".
 					" WHERE E.idEvent = EI.idEvent".
-					" AND EI.idService = ".$dependence[$d][0];
-			if($event_records = $db->query($sql)){
+					" AND EI.idService = ?";
+			$query = $db->prepare($sql);
+			if($query->execute(array($service->idService))){
 				$coverEvent = FALSE;
-				while($event_record = $event_records->fetch(PDO::FETCH_OBJ) && $coverEvent === FALSE){
-					if($event_record->endDate === NULL){
-						$event_record->endDate = $time_ISO8601;
+
+				while(($event = $query->fetch(PDO::FETCH_OBJ)) && $coverEvent === FALSE){
+					if($event->endDate === NULL){
+						$event->endDate = $time_ISO8601;
 					}
 
-					$coverEvent = ($event_record->beginDate <= $time_ISO8601 && $event_record->endDate >= $time_ISO8601);
+					$coverEvent = ($event->beginDate <= $time_ISO8601 && $event->endDate >= $time_ISO8601);
 				}
 
 				if(!$coverEvent){
 					// ajout d'un evenement non prevu
 					$description = NULL;
-					if(isset($array_dependence[$dependence[$d][0]])){
-						if(count($array_dependence[$dependence[$d][0]]) > 0){
-							$description = implode("\n", $array_dependence[$dependence[$d][0]]);
+					if(isset($array_dependence[$service->idService])){
+						if(count($array_dependence[$service->idService]) > 0){
+							$description = implode("\n", $array_dependence[$service->idService]);
 						}
 					}
 
@@ -183,7 +185,7 @@ function update_nagios_to_db(){
 						$sql = "INSERT INTO events_isou(period, isScheduled, idService, idEvent, idEventDescription)".
 							" VALUES(NULL, 0, ?, ?, ?)";
 						$query = $db->prepare($sql);
-						if($query->execute(array($dependence[$d][0], $idEvent, $description))){
+						if($query->execute(array($service->idService, $idEvent, $description))){
 							$commit = TRUE;
 						}
 					}
@@ -195,16 +197,14 @@ function update_nagios_to_db(){
 						}
 					}else{
 						$db->rollBack();
-						add_log(LOG_FILE, 'ISOU', 'update', 'L\'interruption du service '.$dependence[$d][0].' n\'a pas pu être ajouté');
+						add_log(LOG_FILE, 'ISOU', 'update', 'L\'interruption du service '.$service->idService.' n\'a pas pu être ajouté');
 					}
 
 					$query->closeCursor();
 				}
-				$d++;
 			}else{
-				add_log(LOG_FILE, 'ISOU', 'update', 'Les évènements du service '.$dependence[$d][0].' n\'ont pas pu être traités');
+				add_log(LOG_FILE, 'ISOU', 'update', 'Les évènements du service '.$service->idService.' n\'ont pas pu être traités');
 			}
-			$event_records->closeCursor();
 		}
 	}else{
 		add_log(LOG_FILE, 'ISOU', 'update', 'L\'ajout des nouvelles interruptions n\'a pas pu être effectué');
