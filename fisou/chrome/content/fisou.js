@@ -59,8 +59,10 @@ var Fisou = {
 	},
 	refreshData: function(){
 		var httpRequest = null;
-		var jsonUrl = "https://services.univ-rennes2.fr/isou/isou.json";
-		// var jsonUrl = "http://localhost/isou_package/sources/isou.json";
+
+		// suppression du cache
+		// src: https://developer.mozilla.org/es/docs/XMLHttpRequest/Usar_XMLHttpRequest#Bypassing_the_cache
+		var jsonUrl = "https://services.univ-rennes2.fr/isou/isou.json?"+(new Date()).getTime();
 
 		const preferencesService = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService ).getBranch("");
 		if(preferencesService.prefHasUserValue("fisou.key")){
@@ -71,6 +73,13 @@ var Fisou = {
 
 		httpRequest = new XMLHttpRequest();
 		httpRequest.open("GET", jsonUrl, true);
+
+		if(preferencesService.prefHasUserValue("fisou.delaysync")){
+			var delay = preferencesService.getIntPref("fisou.delaysync");
+		}else{
+			var delay = 5;
+		}
+		var lastScan = new Date();
 		httpRequest.onreadystatechange=function(){
 			if (httpRequest.readyState == 4){
 				if (httpRequest.status == 200){
@@ -85,7 +94,6 @@ var Fisou = {
 					}
 
 					var statusLabel = document.getElementById("fisou-status-label");
-					var lastScan = new Date();
 
 					var json = JSON.parse(httpRequest.responseText);
 
@@ -113,12 +121,6 @@ var Fisou = {
 						var description;
 						var newEvent = false;
 
-						if(preferencesService.prefHasUserValue("fisou.delaysync")){
-							var delay = preferencesService.getIntPref("fisou.delaysync");
-						}else{
-							var delay = 5;
-						}
-
 						var servicesNotification = "";
 						var servicesNotificationCount = 0;
 
@@ -140,7 +142,7 @@ var Fisou = {
 								}
 							}
 
-							if((json.fisou.services[i].date*1000+delay*60000) >= lastScan.getTime()){
+							if((json.fisou.services[i].date*1000+delay*60000) >= lastScan.getTime()-(lastScan.getTimezoneOffset()*60*1000)){
 								servicesNotificationCount++;
 								servicesNotification += json.fisou.services[i].name+", ";
 							}
@@ -194,7 +196,6 @@ var Fisou = {
 					tooltip.appendChild(description);
 
 					// ajout de la date de scan
-					var lastScan = new Date();
 					lastScan = "Dernière MAJ : "+lastScan.toLocaleTimeString();
 					description = document.createElement("description");
 					description.setAttribute("value","");
@@ -217,11 +218,6 @@ var Fisou = {
 		httpRequest.send(null);
 
 		// toutes les X mins, on remet à jour les données
-		if(preferencesService.prefHasUserValue("fisou.delaysync")){
-			var delay = preferencesService.getIntPref("fisou.delaysync");
-		}else{
-			var delay = 5;
-		}
 		clearTimeout(this.mainTimeout);
 		this.mainTimeout = setTimeout("Fisou.refreshData()", delay*60000);
 	}
