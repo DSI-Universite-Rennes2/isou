@@ -3,8 +3,8 @@
 $year = intval(strftime('%Y', TIME));
 
 if(!is_file(BASE.'/database/isou-'.($year-1).'.sqlite3')){
-	$newyear = mktime(0, 0, 0, 1, 1, $year);
-	$oldyear = mktime(23, 59, 59, 12, 31, $year-1);
+	$newyear = $year.'-01-01T00:00';
+	$oldyear = ($year-1).'-12-31T23:59';
 
 	// fermer tous les évènements en cours
 	$sql = "UPDATE events SET endDate = ? WHERE endDate IS NULL";
