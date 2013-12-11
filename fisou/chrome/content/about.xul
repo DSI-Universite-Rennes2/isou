@@ -11,7 +11,7 @@
 <groupbox align="center" orient="horizontal" style="background-color:#FFFFFF;">
 <vbox>
 	<text value="Fisou" style="font-weight: bold; font-size: x-large;"/>
-	<text value="Version 11.0.0"/>
+	<text value="Version 12.0.0"/>
 	<separator class="thin"/>
 	<text value="Développé par:" style="font-weight: bold;"/>
 	<text value="DSI Rennes 2" class="url"
