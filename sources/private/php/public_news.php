@@ -77,6 +77,7 @@ $sql = "SELECT DISTINCT S.idService, S.name, S.nameForUsers, S.url, S.state, S.c
 	" AND EI.idEvent = E.idEvent".
 	" AND E.typeEvent = 0".
 	" AND S.idService = EI.idService".
+	" AND S.state != 4".
 	" AND S.enable = 1".
 	" AND S.visible = 1".
 	" ORDER BY C.position, UPPER(S.nameForUsers)";

@@ -36,6 +36,7 @@ $sql = "SELECT S.nameForUsers as name, S.state as state, strftime('%s', E.beginD
 	" AND (E.endDate IS NULL".
 	" OR E.beginDate < '".strftime('%Y-%m-%dT%H:%M', TIME)."' AND E.endDate > '".strftime('%Y-%m-%dT%H:%M', TIME)."')".
  	" AND EI.isScheduled < 2".
+	" AND S.state != 4".
 	" AND S.enable = 1".
 	" AND S.visible = 1".
 	$rssKey.
