@@ -24,5 +24,7 @@ sources/private/upgrade/LOCK_UPDATE
 sources/private/status.dat
 sources/public/config.php
 sources/public/isou.json
+sources/public/xpi/*.xpi
+sources/public/xpi/update.rdf
 fisou/build
 units/units.sqlite3

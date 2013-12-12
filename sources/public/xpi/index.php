@@ -3,6 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Fisou - Extension d'Isou pour Firefox</title>
+	<link href="../css/favicon.ico" rel="shortcut icon">
 	<!-- <link rel="stylesheet" type="text/css" href="style-www.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="style-print.css" media="print" /> -->
 </head>
@@ -14,7 +15,13 @@
 	</header>
 	<nav>
 		<ul>
-		<?php if(is_file('fisou0.6.0.xpi')){ ?>
+		<?php if(is_file('fisou12.0.0.xpi')){ ?>
+		<li><a href="#fisou1200">Fisou 12.0.0</a></li>
+		<?php } if(is_file('fisou9.0.0.xpi')){ ?>
+		<li><a href="#fisou900">Fisou 9.0.0</a></li>
+		<?php } if(is_file('fisou0.6.1.xpi')){ ?>
+		<li><a href="#fisou061">Fisou 0.6.1</a></li>
+		<?php } if(is_file('fisou0.6.0.xpi')){ ?>
 		<li><a href="#fisou060">Fisou 0.6.0</a></li>
 		<?php } if(is_file('fisou0.5.0.xpi')){ ?>
 		<li><a href="#fisou050">Fisou 0.5.0</a></li>
@@ -33,7 +40,40 @@
 		<?php } ?>
 		</ul>
 	</nav>
-	<?php if(is_file('fisou0.6.0.xpi')){ ?>
+	<?php if(is_file('fisou12.0.0.xpi')){ ?>
+	<section>
+		<a name="fisou1200"></a>
+		<h1>Fisou 12.0.0</h1>
+		<p>Date de sortie : 11 décembre 2013</p>
+		<p>Télécharger : <a href="fisou12.0.0.xpi" hash="sha1:<?php echo sha1_file("fisou12.0.0.xpi");?>" onclick="return install(event);">Fisou12.0.0.xpi</a></p>
+		<p>Modifications :</p>
+		<ul>
+		<li>correction d'un bug de cache lors du rafraichissement de l'état des services (bug existant depuis la mise à jour de Firefox 15 ou Firefox 16)</li>
+		</ul>
+	</section>
+	<?php } if(is_file('fisou9.0.0.xpi')){ ?>
+	<section>
+		<a name="fisou900"></a>
+		<h1>Fisou 9.0.0</h1>
+		<p>Date de sortie : 20 décembre 2011</p>
+		<p>Télécharger : <a href="fisou9.0.0.xpi" hash="sha1:<?php echo sha1_file("fisou9.0.0.xpi");?>" onclick="return install(event);">Fisou9.0.0.xpi</a></p>
+		<p>Modifications :</p>
+		<ul>
+		<li>ajout du support pour Firefox 9</li>
+		</ul>
+	</section>
+	<?php } if(is_file('fisou0.6.1.xpi')){ ?>
+	<section>
+		<a name="fisou061"></a>
+		<h1>Fisou 0.6.1</h1>
+		<p>Date de sortie : 20 décembre 2011</p>
+		<p>Télécharger : <a href="fisou0.6.1.xpi" hash="sha1:<?php echo sha1_file("fisou0.6.1.xpi");?>" onclick="return install(event);">Fisou0.6.1.xpi</a></p>
+		<p>Modifications :</p>
+		<ul>
+		<li>changement du mirroir pour le fichier json</li>
+		</ul>
+	</section>
+	<?php } if(is_file('fisou0.6.0.xpi')){ ?>
 	<section>
 		<a name="fisou060"></a>
 		<h1>Fisou 0.6.0</h1>
