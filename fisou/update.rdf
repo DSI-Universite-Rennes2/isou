@@ -3,8 +3,8 @@
 <RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 
-  <!-- Cette ressource de description inclut toutes les informations de mise à jour
-       et de compatibilité pour un unique module ayant l'id copaing@copaing.net.
+<!-- Cette ressource de description inclut toutes les informations de mise à jour
+       et de compatibilité pour un unique module ayant l'id fisou@uhb.fr.
        Vous pouvez lister plusieurs informations de module dans un même fichier RDF. -->
   <RDF:Description about="urn:mozilla:extension:fisou@uhb.fr">
     <em:updates>
@@ -16,9 +16,10 @@
               <RDF:Description>
                 <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
                 <em:minVersion>3.0</em:minVersion>
-                <em:maxVersion>11.*</em:maxVersion>
+                <em:maxVersion>25.*</em:maxVersion>
                 <!-- Ceci est l'emplacement de téléchargement du module -->
-                <em:updateLink>https://services.univ-rennes2.fr/isou/xpi/fisou.xpi</em:updateLink>
+                <!-- Ne pas oublier d'ajouter une variable dans l'url, sinon FF semble mettre en cache le fichier... :/ -->
+                <em:updateLink>https://services.univ-rennes2.fr/isou/xpi/fisou.xpi?version=12</em:updateLink>
                 <!-- Une page décrivant les nouveautés de la mise à jour -->
                 <!-- <em:updateInfoURL>https://services.univ-rennes2.fr/isou/xpi/index.php?version=%APP_VERSION%</em:updateInfoURL> -->
               </RDF:Description>
