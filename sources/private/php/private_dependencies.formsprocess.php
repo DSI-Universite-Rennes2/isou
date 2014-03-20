@@ -57,7 +57,7 @@ if(isset($_POST['insert'])){
 				$query = $db->prepare($sql);
 				if($query->execute(array($_POST['description'], $_POST['childService'], $_POST['parentService']))){
 					$error = 'Les dépendances ont été insérées avec succès.';
-					add_log(LOG_FILE, phpCAS::getUser(), 'INSERT', 'Dépendance #'.$db->lastInsertId().' : VALUES('.$description.', 1 et 2, 1 et 2, '.$childService.', '.$parentService.')');
+					add_log(LOG_FILE, NULL, 'INSERT', 'Dépendance #'.$db->lastInsertId().' : VALUES('.$description.', 1 et 2, 1 et 2, '.$childService.', '.$parentService.')');
 				}else{
 					$_POST['insert'] = NULL;
 					$error = 'La dépendance avec les états à 2-2 n\'a pas pu être insérée.';
@@ -73,7 +73,7 @@ if(isset($_POST['insert'])){
 			$query = $db->prepare($sql);
 			if($query->execute(array($_POST['description'], $_POST['newStateForChild'], $_POST['stateOfParent'], $_POST['childService'], $_POST['parentService']))){
 				$error = 'La dépendance a été insérée avec succès.';
-				add_log(LOG_FILE, phpCAS::getUser(), 'INSERT', 'Dépendance #'.$db->lastInsertId().' : VALUES('.$description.', '.$newStateForChild.', '.$stateOfParent.', '.$childService.', '.$parentService.')');
+				add_log(LOG_FILE, NULL, 'INSERT', 'Dépendance #'.$db->lastInsertId().' : VALUES('.$description.', '.$newStateForChild.', '.$stateOfParent.', '.$childService.', '.$parentService.')');
 			}else{
 				$_POST['insert'] = NULL;
 				$error = 'La dépendance n\'a pas pu être insérée.';
@@ -110,7 +110,7 @@ if(isset($_POST['delete']) && isset($_POST['idDelDependence'])){
 		$query = $db->prepare($sql);
 		if($query->execute(array($_POST['idDelDependence']))){
 			$error = 'La dépendance #'.$_POST['idDelDependence'].' a été supprimée avec succès.';
-			add_log(LOG_FILE, phpCAS::getUser(), 'DELETE', 'Dépendance #'.$_POST['idDelDependence']);
+			add_log(LOG_FILE, NULL, 'DELETE', 'Dépendance #'.$_POST['idDelDependence']);
 		}else{
 			$error = 'La dépendance #'.$_POST['idDelDependence'].' n\'a pas pu être supprimée.';
 		}
@@ -133,7 +133,7 @@ if(isset($_POST['modify'])){
 		$query = $db->prepare($sql);
 		if($query->execute(array($_POST['description'],$_POST['newStateForChild'], $_POST['stateOfParent'], $_POST['childService'], $_POST['parentService'], $_POST['idDependence']))){
 			$error = 'La base a été mise à jour avec succès';
-			add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Dépendance #'.$_POST['idDependence'].' : SET message = '.$_POST['description'].', newStateForChild = '.$_POST['newStateForChild'].', stateOfParent = '.$_POST['stateOfParent'].', idService = '.$_POST['childService'].', idServiceParent = '.$_POST['parentService']);
+			add_log(LOG_FILE, NULL, 'UPDATE', 'Dépendance #'.$_POST['idDependence'].' : SET message = '.$_POST['description'].', newStateForChild = '.$_POST['newStateForChild'].', stateOfParent = '.$_POST['stateOfParent'].', idService = '.$_POST['childService'].', idServiceParent = '.$_POST['parentService']);
 			unset($_POST['idDependence']);
 		}else{
 			$error = 'La base n\'a pas pu être mis à jour';

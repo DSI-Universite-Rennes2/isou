@@ -7,7 +7,7 @@ if(isset($_GET['mask'])){
 		" AND name = 'Service final'";
 	$query = $db->prepare($sql);
 	if($query->execute(array($_GET['mask']))){
-		add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Service #'.$_GET['mask'].' a été masqué');
+		add_log(LOG_FILE, NULL, 'UPDATE', 'Service #'.$_GET['mask'].' a été masqué');
 	}
 }
 
@@ -18,7 +18,7 @@ if(isset($_GET['show'])){
 		" AND name = 'Service final'";
 	$query = $db->prepare($sql);
 	if($query->execute(array($_GET['show']))){
-		add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Service #'.$_GET['mask'].' est visible');
+		add_log(LOG_FILE, NULL, 'UPDATE', 'Service #'.$_GET['mask'].' est visible');
 	}
 }
 
@@ -81,7 +81,7 @@ if(isset($_POST['cancel'])){
 		$query = $db->prepare($sql);
 		if($query->execute(array($name,$nameForUsers,$url,$comment,$enable,$visible,$rssKey,$category))){
 			$error = 'Le service '.$nameForUsers.' a été ajouté à la base';
-			add_log(LOG_FILE, phpCAS::getUser(), 'INSERT', 'Service #'.$db->lastInsertId().' : VALUES('.$name.', '.$nameForUsers.', 0, '.$comment.', '.$enable.', '.$visible.', 0, '.$rssKey.', '.$category.')');
+			add_log(LOG_FILE, NULL, 'INSERT', 'Service #'.$db->lastInsertId().' : VALUES('.$name.', '.$nameForUsers.', 0, '.$comment.', '.$enable.', '.$visible.', 0, '.$rssKey.', '.$category.')');
 		}else{
 			$error = 'Le service '.stripslashes($nameForUsers).' n\'a pas pu être ajouté à la base';
 		}
@@ -155,7 +155,7 @@ if(isset($_POST['cancel'])){
 		if($commit === TRUE){
 			$db->commit();
 			$error = 'Le service '.$_POST['name'].' est maintenant supprimé dans la base, ainsi que ses évènements et dépendances liées';
-			add_log(LOG_FILE, phpCAS::getUser(), 'DELETE', 'Service #'.$idService);
+			add_log(LOG_FILE, NULL, 'DELETE', 'Service #'.$idService);
 		}else{
 			$db->rollBack();
 			$error = 'Le service '.$_POST['name'].' n\'a pas pu être supprimé dans la base';
@@ -207,7 +207,7 @@ if(isset($_POST['cancel'])){
 				$query = $db->prepare($sql);
 				if($query->execute(array($_POST['nameForUsers'],$_POST['url'],$comment,$_POST['category'],$_POST['idService']))){
 					$error = 'Le service '.stripslashes($_POST['nameForUsers']).' a été modifié dans la base';
-					add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Service #'.$_POST['idService'].' : SET nameForUsers = '.$_POST['nameForUsers'].', comment = '.$comment.', enable = 1, idCategory = '.$_POST['category']);
+					add_log(LOG_FILE, NULL, 'UPDATE', 'Service #'.$_POST['idService'].' : SET nameForUsers = '.$_POST['nameForUsers'].', comment = '.$comment.', enable = 1, idCategory = '.$_POST['category']);
 					unset($_POST['idService']);
 				}else{
 					$error = 'Le service '.stripslashes($_POST['nameForUsers']).' n\'a pas pu être mis à jour dans la base';
@@ -220,7 +220,7 @@ if(isset($_POST['cancel'])){
 				$query = $db->prepare($sql);
 				if($query->execute(array($_POST['name'], $comment, $_POST['idService']))){
 					$error = 'Le service '.stripslashes($_POST['name']).' remplace le service précédemment sélectionné';
-					add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Service #'.$_POST['idService'].' : SET nameForUsers = NULL, comment = '.$comment.', enable = 0, visible = 0, idCategory = '.$_POST['category']);
+					add_log(LOG_FILE, NULL, 'UPDATE', 'Service #'.$_POST['idService'].' : SET nameForUsers = NULL, comment = '.$comment.', enable = 0, visible = 0, idCategory = '.$_POST['category']);
 					unset($_POST['idService']);
 				}else{
 					$error = 'Le service '.stripslashes($_POST['name']).' n\'a pas pu être mis à jour dans la base';
