@@ -21,7 +21,7 @@ if(isset($_POST['submit'])){
 		}else{
 			$error = 'L\'annonce a bien été retirée.';
 		}
-		add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Modification de l\'annonce ');
+		add_log(LOG_FILE, NULL, 'UPDATE', 'Modification de l\'annonce ');
 	}else{
 		$error = 'La modification n\'a pas été enregistrée !';
 	}

@@ -22,7 +22,7 @@ function get_parents($idChild){
 		}
 
 	} catch (PDOException $e) {
-		add_log(LOG_FILE, phpCAS::getUser(), 'ERROR_DB', $e->getMessage());
+		add_log(LOG_FILE, NULL, 'ERROR_DB', $e->getMessage());
 	}
 
 	// close pdo connection

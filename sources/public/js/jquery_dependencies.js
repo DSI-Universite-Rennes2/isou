@@ -103,12 +103,17 @@ $(document).ready(function(){
 
 	/* RECUPERATION DE L'INDEX FOURNIT DANS L'URL */
 	var anchor = '';
-	if(window.location.search != ""){
-		anchor = window.location.search.split("&S=");
-		if(anchor[0] == '?add'){
+	if(window.location.search != ''){
+		if(window.location.search == '?add'){
 			anchor = 'add';
 		}else{
-			anchor = anchor[1];
+			anchor = window.location.search.split('&S=');
+			if(anchor[1] == undefined){
+				anchor = '';
+			}else{
+				// set service id
+				anchor = anchor[1];
+			}
 		}
 	}
 
@@ -197,7 +202,8 @@ $(document).ready(function(){
 		}
 	}else{
 		if(window.location.hash != ''){
-			changeService(parseInt(window.location.hash.substr(1)));
+			// remove "#S" from anchor
+			changeService(parseInt(window.location.hash.substr(2)));
 		}else{
 			changeService(0);
 		}

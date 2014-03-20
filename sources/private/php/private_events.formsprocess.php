@@ -165,7 +165,7 @@ if(isset($_POST['insert'])){
 				if($query->execute(array($message, $description, $idEvent))){
 					$error = 'Le message a été inséré avec succès.';
 					unset($_POST);
-					add_log(LOG_FILE, phpCAS::getUser(), 'INSERT', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
+					add_log(LOG_FILE, NULL, 'INSERT', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
 				}else{
 					$error = 'Le message n\'a pas pu être inséré.';
 				}
@@ -275,7 +275,7 @@ if(isset($_POST['insert'])){
 						if(!isset($error)){
 							$error = 'L\'évènement a été inséré avec succès.';
 							unset($_POST);
-							add_log(LOG_FILE, phpCAS::getUser(), 'INSERT', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
+							add_log(LOG_FILE, NULL, 'INSERT', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
 						}
 					}else{
 						$error = 'L\'évènement n\'a pas pu être inséré.';
@@ -340,7 +340,7 @@ if(isset($_POST['delete']) && isset($idDelEvent)){
 		}else{
 			$db->rollBack();
 			$error = 'L\'évènement #'.$_POST['idDelEvent'].' n\'a pas pu être supprimée.';
-			add_log(LOG_FILE, phpCAS::getUser(), 'DELETE', 'Evènement #'.$_POST['idDelEvent']);
+			add_log(LOG_FILE, NULL, 'DELETE', 'Evènement #'.$_POST['idDelEvent']);
 		}
 	}else{
 		$error = 'L\'évènement #'.$_POST['idDelEvent'].'n\'a pas pu être supprimée.';
@@ -367,7 +367,7 @@ if(isset($_POST['modify'])){
 			if($updateMessage === TRUE){
 				$error = 'Le message a été mis à jour avec succès.';
 				unset($_POST);
-				add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$message.', '.$description.', '.$idEvent.')');
+				add_log(LOG_FILE, NULL, 'UPDATE', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$message.', '.$description.', '.$idEvent.')');
 			}else{
 				$error = 'Le message a été partiellement modifié.';
 			}
@@ -476,7 +476,7 @@ if(isset($_POST['modify'])){
 			if($updateMessage === TRUE){
 				$error = 'L\'évènement a été mise à jour avec succès.';
 				unset($_POST);
-				add_log(LOG_FILE, phpCAS::getUser(), 'UPDATE', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
+				add_log(LOG_FILE, NULL, 'UPDATE', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
 			}else{
 				$error = 'L\'évènement n\'a pas pu être mis à jour.';
 			}
