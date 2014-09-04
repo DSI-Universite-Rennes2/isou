@@ -18,7 +18,7 @@ INSTALLATION
 -------------
 Sous unix :
 $ cd /chemin/installation && mkdir isou
-$ git clone git://git.cru.fr/isounagios.git
+$ git clone git://git.renater.fr/isounagios.git
 $ php /chemin/installation/isounagios/sources/private/upgrade/install.php
 puis faire pointer votre serveur sur /chemin/installation/isounagios/sources/public/
 
@@ -51,7 +51,7 @@ MODIFICATION DE FICHIERS
 Si vous modifiez les fichiers d'origine, il est préférable de créer une nouvelle branche git contenant vos modifications, puis de la fusionner avec la branche officielle lors des mises à jour.
 
 exemple :
-$ git clone git://git.cru.fr/isounagios.git
+$ git clone git://git.renater.fr/isounagios.git
 $ cd isounagios/
 $ git checkout -b ma_branche
  faire ses modifications
