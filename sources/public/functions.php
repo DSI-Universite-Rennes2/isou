@@ -75,6 +75,10 @@ function get_base_url($type = 'dirname', $secured = false){
 		$_SERVER['SERVER_NAME'] = $_SERVER["HTTP_X_FORWARDED_HOST"];
 	}
 
+	if(isset($_SERVER['SERVER_PORT']) && !in_array($_SERVER['SERVER_PORT'], array(80, 443))){
+		$_SERVER['SERVER_NAME'] .= ':'.$_SERVER['SERVER_PORT'];
+	}
+
 	if($type == 'dirname'){
 		// exemple : http://moodledev-1.uhb.fr/isou/
 		return $secured.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']);	
