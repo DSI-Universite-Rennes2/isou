@@ -1,8 +1,12 @@
 <?php
-	$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/styles/classic/dependencies.css" media="screen">';
-	$script = '<script type="text/javascript" src="'.URL.'/scripts/jquery-min.js"></script>
-			<script type="text/javascript" src="'.URL.'/scripts/jquery_dependencies.js"></script>';
-	$title = NAME.' - Administration des Dépendances';
+
+	$TITLE = NAME.' - Administration des Dépendances';
+
+	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery-min.js');
+	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery_dependencies.js');
+
+	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/dependencies.css');
+
 	$update = '';
 
 	require PRIVATE_PATH.'/php/dependencies/formsprocess.php';

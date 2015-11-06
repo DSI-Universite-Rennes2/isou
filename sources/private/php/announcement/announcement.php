@@ -1,8 +1,8 @@
 <?php
 
-$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/styles/classic/annonce.css" media="screen" />';
-$script = '';
-$title = NAME.' - Annonce';
+$TITLE = NAME.' - Annonce';
+
+$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/annonce.css');
 
 $error = '';
 

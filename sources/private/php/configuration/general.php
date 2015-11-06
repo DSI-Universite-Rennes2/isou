@@ -1,9 +1,9 @@
 <?php
 
-$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/styles/classic/configuration.css" media="screen" />';
-$script = '<script type="text/javascript" src="'.URL.'/scripts/jquery-min.js"></script>'.
-			'<script type="text/javascript" src="'.URL.'/scripts/jquery_configuration.js"></script>';
-$title = NAME.' - Configuration générale';
+$TITLE = NAME.' - Configuration générale';
+
+$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery-min.js');
+$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery_configuration.js');
 
 if(!defined('HTMLPurifier')){
 	require PRIVATE_PATH.'/classes/htmlpurifier/library/HTMLPurifier.auto.php';

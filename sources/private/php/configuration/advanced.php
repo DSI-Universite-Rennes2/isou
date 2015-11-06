@@ -1,8 +1,6 @@
 <?php
 
-$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/styles/classic/configuration.css" media="screen" />';
-$script = '';
-$title = NAME.' - Configuration avancée';
+$TITLE = NAME.' - Configuration avancée';
 
 $_POST['error'] = array();
 

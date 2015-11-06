@@ -1,8 +1,8 @@
 <?php
 
-	$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/styles/classic/categories.css" media="screen" />';
-	$script = '';
-	$title = NAME.' - Administration des Catégories';
+	$TITLE = NAME.' - Administration des Catégories';
+
+	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/categories.css');
 
 	/* * * * * * * * * * * * * * * * * *
 		Traitement d'un ajout

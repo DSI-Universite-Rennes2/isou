@@ -36,10 +36,12 @@ if(class_exists('IsouService') === FALSE){
 	require PRIVATE_PATH.'/classes/isou/isou_service.class.php';
 	require PRIVATE_PATH.'/classes/isou/isou_event.class.php';
 
-	$script = '<script type="text/javascript" src="'.URL.'/scripts/jquery-min.js"></script>';
-	$script .= '<script type="text/javascript" src="'.URL.'/scripts/jquery_news.js"></script>';
-	$title = NAME.' - Actualité';
-	$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/styles/classic/news.css" media="screen" />';
+	$TITLE = NAME.' - Actualité';
+
+	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery-min.js');
+	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery_news.js');
+
+	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/news.css');
 
 	// 2 jours avant
 	$BEFORE = mktime(0,0,0)-(48*60*60);

@@ -1,9 +1,8 @@
 <?php
 
-	$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/styles/classic/board.css" media="screen" />';
-	$script = '';
+	$TITLE = NAME.' - Tableau';
 
-	$title = NAME.' - Tableau';
+	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/board.css');
 
 	// 2 jours avant
 	$BEFORE = mktime(0,0,0)-(48*60*60);

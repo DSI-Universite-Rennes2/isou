@@ -1,9 +1,11 @@
 <?php
 
-$title = NAME.' - Configuration Flux RSS';
-$script = '<script type="text/javascript" src="'.URL.'/scripts/jquery-min.js"></script>
-			<script type="text/javascript" src="'.URL.'/scripts/jquery_rss_config.js"></script>';
-$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/styles/classic/rss_config.css" media="screen" />';
+$TITLE = NAME.' - Configuration Flux RSS';
+
+$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery-min.js');
+$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery_rss_config.js');
+
+$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/rss_config.css');
 
 $sql = "SELECT C.idCategory, C.name, S.nameForUsers, S.rssKey".
 		" FROM categories C, services S".

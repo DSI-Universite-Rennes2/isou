@@ -4,11 +4,12 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<title>{$title}</title>
+<title>{$TITLE}</title>
 
-<link rel="stylesheet" type="text/css" href="{$smarty.const.URL}/styles/classic/common.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="{$smarty.const.URL}/styles/classic/menu.css" media="screen" />
-{$css}
+{foreach $STYLES as $STYLE}
+	<link href="{$STYLE->url}" type="text/css" media="{$STYLE->media}" rel="{$STYLE->rel}" />
+{/foreach}
+
 <link rel="shortcut icon" href="{$smarty.const.URL}/styles/classic/favicon.ico" />
 
 <link href="{$smarty.const.URL}/index.php/rss/config" title="Page d'abonnement au flux RSS d'ISOU" type="application/rss+xml" rel="alternate" />

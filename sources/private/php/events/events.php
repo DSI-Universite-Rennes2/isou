@@ -1,14 +1,14 @@
 <?php
 
-	$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/styles/classic/events.css" media="screen">'.
-			'<link rel="stylesheet" type="text/css" media="all" href="'.URL.'/styles/classic/private_events_calendar.css"  />';
+	$TITLE = NAME.' - Administration des Evènements';
 
-	$script = '<script type="text/javascript" src="'.URL.'/scripts/jquery-min.js"></script>'.
-				'<script type="text/javascript" src="'.URL.'/scripts/jquery.dynDateTime.min.js"></script>'.
-				'<script type="text/javascript" src="'.URL.'/scripts/jquery.dynDateTime-fr.min.js"></script>'.
-				'<script type="text/javascript" src="'.URL.'/scripts/jquery_events.js"></script>';
+	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery-min.js');
+	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery.dynDateTime.min.js');
+	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery.dynDateTime-fr.min.js');
+	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery_events.js');
 
-	$title = NAME.' - Administration des Evènements';
+	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/events.css');
+	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/private_events_calendar.css', 'all');
 
 	$p=0;
 	$date = getdate();

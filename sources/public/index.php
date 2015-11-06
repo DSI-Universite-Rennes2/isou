@@ -13,10 +13,22 @@ $smarty = new Smarty();
 $smarty->template_dir = PRIVATE_PATH.'/html/';
 $smarty->compile_dir = PRIVATE_PATH.'/classes/smarty/compile/';
 
-$title = NAME;
-$script = '';
-$css = '';
+// set title
+$TITLE = NAME;
 
+// load scripts
+require PRIVATE_PATH.'/classes/helpers/script.php';
+
+$SCRIPTS = array();
+
+// load styles
+require PRIVATE_PATH.'/classes/helpers/style.php';
+
+$STYLES = array();
+$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/common.css');
+$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/menu.css');
+
+// parse url
 $PAGE_NAME = get_page_name('index.php', true);
 
 if($PAGE_NAME === 'rss'){
@@ -131,9 +143,9 @@ if(CURRENT_VERSION === $CFG['version']){
 }
 
 $smarty->assign('FULLURL', get_base_url('full', HTTPS));
-$smarty->assign('title', $title);
-$smarty->assign('script', $script);
-$smarty->assign('css', $css);
+$smarty->assign('TITLE', $TITLE);
+$smarty->assign('SCRIPTS', $SCRIPTS);
+$smarty->assign('STYLES', $STYLES);
 $smarty->assign('page', $MAIN_PAGE_NAME);
 $smarty->assign('is_admin', $IS_ADMIN);
 $smarty->assign('flags', $flags);

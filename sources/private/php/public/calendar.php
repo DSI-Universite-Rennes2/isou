@@ -1,9 +1,12 @@
 <?php
-$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/styles/classic/calendar.css" media="screen" />'.
-		'<link rel="stylesheet" type="text/css" href="'.URL.'/styles/classic/news.css" media="screen" />';
-$script = '<script type="text/javascript" src="'.URL.'/scripts/jquery-min.js"></script>
-<script type="text/javascript" src="'.URL.'/scripts/jquery_calendar.js"></script>';
-$title = NAME.' - Calendrier';
+
+$TITLE = NAME.' - Calendrier';
+
+$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery-min.js');
+$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery_calendar.js');
+
+$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/calendar.css');
+$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/news.css');
 
 require PRIVATE_PATH.'/classes/isou/isou_service.class.php';
 require PRIVATE_PATH.'/classes/isou/isou_event.class.php';

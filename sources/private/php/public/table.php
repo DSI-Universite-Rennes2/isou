@@ -1,11 +1,12 @@
 <?php
 
-	$css = '<link rel="stylesheet" type="text/css" href="'.URL.'/styles/classic/table.css" media="screen" />';
-	$css .= '<link rel="stylesheet" type="text/css" href="'.URL.'/styles/classic/contact.css" media="screen" />';
-	$script = '<script type="text/javascript" src="'.URL.'/scripts/jquery-min.js"></script>';
-	$script .= '<script type="text/javascript" src="'.URL.'/scripts/jquery_table.js"></script>';
+	$TITLE = NAME.' - Liste';
 
-	$title = NAME.' - Liste';
+	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery-min.js');
+	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery_table.js');
+
+	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/table.css');
+	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/contact.css');
 
 	// 2 jours avant
 	$BEFORE = strftime('%Y-%m-%dT%H:%M', mktime(0,0,0)-(48*60*60));
