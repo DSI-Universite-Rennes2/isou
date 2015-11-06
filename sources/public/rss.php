@@ -7,7 +7,6 @@ $pwd = dirname(__FILE__);
 
 define('MAXFEED',100);
 
-require $pwd.'/functions.php';
 require $pwd.'/config.php';
 require BASE.'/classes/isou/isou_event.class.php';
 require BASE.'/classes/smarty/Smarty.class.php';

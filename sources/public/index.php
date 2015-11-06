@@ -9,7 +9,6 @@ if(!is_file($pwd.'/config.php')){
 	exit(1);
 }
 
-require $pwd.'/functions.php';
 require $pwd.'/config.php';
 require BASE.'/classes/smarty/Smarty.class.php';
 
@@ -29,7 +28,7 @@ if($PAGE_NAME === 'rss'){
 }
 
 require BASE.'/upgrade/version.php';
-require BASE.'/php/common_database.php';
+require BASE.'/php/common/database.php';
 
 $sql = "SELECT key, value FROM configuration";
 $CFG = array();
@@ -44,8 +43,8 @@ if($query = $db->query($sql)){
 }
 
 
-require BASE.'/php/common_authentification.php';
-require BASE.'/php/common_statistics.php';
+require BASE.'/php/common/authentification.php';
+require BASE.'/php/common/statistics.php';
 
 $sql = "SELECT idState, name, title, alt, src FROM states";
 $flags = array();
@@ -152,10 +151,10 @@ if(isset($refresh_url)){
 	$smarty->assign('refresh_url',  $refresh_url);
 }
 
-$smarty->display('html_head.tpl');
-$smarty->display('html_body_header.tpl');
+$smarty->display('common/html_head.tpl');
+$smarty->display('common/html_body_header.tpl');
 $smarty->display($template.'.tpl');
-$smarty->display('html_body_footer.tpl');
+$smarty->display('common/html_body_footer.tpl');
 
 // close pdo connection
 $db = null;

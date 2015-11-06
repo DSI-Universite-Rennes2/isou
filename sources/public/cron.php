@@ -8,7 +8,6 @@ if(!defined('STDIN')){
 // chemin d'accès du site
 $pwd = dirname(__FILE__);
 
-require $pwd.'/functions.php';
 require $pwd.'/config.php';
 
 error_reporting(-1);
