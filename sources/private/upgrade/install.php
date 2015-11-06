@@ -5,11 +5,11 @@
 // http://www.if-not-true-then-false.com/2010/php-class-for-coloring-php-command-line-cli-scripts-output-php-output-colorizing-using-bash-shell-colors/
 
 error_reporting(0);
-define('BASE', dirname(__FILE__));
+define('PRIVATE_PATH', __DIR__);
 define('TIME', time());
 
-require BASE.'/functions.php';
-require BASE.'/version.php';
+require PRIVATE_PATH.'/functions.php';
+require PRIVATE_PATH.'/version.php';
 
 echo "\033[0;31mIMPORTANT : installez l'application avec votre utilisateur web (apache, www-data ou autre)\033[0m\nVoulez-vous continuer ? (y/n)\n";
 $owner = trim(fread(STDIN, 2048));
@@ -18,8 +18,8 @@ if(strtolower($owner) === 'n'){
 	exit(0);
 }
 
-$private_path = realpath(BASE.'/../');
-$public_path = realpath(BASE.'/../../public/');
+$private_path = realpath(PRIVATE_PATH.'/../');
+$public_path = realpath(PRIVATE_PATH.'/../../public/');
 
 /*
  * INSTALLATION BASE DE DONNÉES
@@ -34,7 +34,7 @@ try{
 }
 $display = "Création de la base de données 'isou.sqlite3'";
 echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
-require BASE.'/scripts/install_database.php';
+require PRIVATE_PATH.'/scripts/install_database.php';
 
 /*
  * CREATION DU FICHIER CONFIG.PHP
@@ -237,7 +237,7 @@ define('NAME', '".addslashes($NAME)."');
 define('HEADER', '".addslashes($HEADER)."');
 
 // chemin d'installation de l'application
-define('BASE', '".$private_path."');
+define('PRIVATE_PATH', '".$private_path."');
 
 // chemin ou url du fichier status.dat de Nagios
 define('STATUSDAT_URL', '".addslashes($STATUSDAT_URL)."');
@@ -278,13 +278,13 @@ define('RSS_URL', URL.'/rss.php');
 define('ISOU_URL', URL.'/index.php');
 
 // répertoire des logs
-define('LOG_PATH', BASE.'/log/');
+define('LOG_PATH', PRIVATE_PATH.'/log/');
 
 // format du nom de fichier des logs
 define('LOG_FILE', LOG_PATH.'/'.strftime('%y-%m-%d',TIME).'.log');
 
 // connecteur pdo de la base de données
-define('DB_PATH', 'sqlite:'.BASE.'/database/isou.sqlite3');
+define('DB_PATH', 'sqlite:'.PRIVATE_PATH.'/database/isou.sqlite3');
 
 // définition du niveau de rapport d'erreur de PHP
 if(DEV === TRUE || DEBUG === TRUE){
@@ -299,7 +299,7 @@ if(file_put_contents($public_path.'/config.php', $config) !== FALSE){
 	echo "\033[0;32mL'installation est terminée.\033[0m\n\n";
 	echo "\033[1;30mVous pouvez éditer le fichier de configuration présent dans ".$public_path."/config.php\n";
 	echo "Vous pouvez également éditer le fichier de configuration des menus présent dans ".$public_path."/config.menu.php\n\n";
-	echo "\033[0m\033[0;31mIMPORTANT :\033[0m\033[1;30m n'oubliez pas de lire le fichier ".BASE."/README-CRONTAB pour configurer vos crons\033[0m\n\n";
+	echo "\033[0m\033[0;31mIMPORTANT :\033[0m\033[1;30m n'oubliez pas de lire le fichier ".PRIVATE_PATH."/README-CRONTAB pour configurer vos crons\033[0m\n\n";
 }else{
 	echo "Fichier config.php :\n";
 	echo "--------------------\n";

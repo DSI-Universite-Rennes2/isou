@@ -157,7 +157,7 @@ if(isset($currentEdit)){
 }
 
 if($IS_ADMIN === TRUE){
-	require BASE.'/php/events/elementsforms.php';
+	require PRIVATE_PATH.'/php/events/elementsforms.php';
 }
 
 ?>

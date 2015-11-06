@@ -6,7 +6,7 @@ if(DEBUG === TRUE){
 	$IS_ADMIN = true;
 	$IS_AUTH = false;
 }else{
-	require BASE.'/classes/phpCAS/CAS.php';
+	require PRIVATE_PATH.'/classes/phpCAS/CAS.php';
 
 	// initialize phpCAS
 	phpCAS::client(CAS_VERSION_2_0, CAS_URL, CAS_PORT, CAS_URI);

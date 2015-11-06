@@ -17,10 +17,10 @@
 	define('TIMESTAMP_OF_72H_BEFORE_TODAY', mktime(0,0,0)-3*24*60*60);
 
 	if(count($_POST) > 0){
-		require BASE.'/php/events/formsprocess.php';
+		require PRIVATE_PATH.'/php/events/formsprocess.php';
 	}
 
-	require BASE.'/php/events/elementsforms.php';
+	require PRIVATE_PATH.'/php/events/elementsforms.php';
 
 	/* * * * * * * * * * *
 	 * Données formulaire
@@ -55,35 +55,35 @@
 		switch($PAGE_NAME[1]){
 			case 'nonprevus' : 
 				$_GET['type'] = 0;
-				require BASE.'/php/events/unscheduled.php';
+				require PRIVATE_PATH.'/php/events/unscheduled.php';
 				$smarty->assign('unscheduled', $unscheduled);
 				break;
 			case 'reguliers' :
 				$_GET['type'] = 2;
-			   	require BASE.'/php/events/regular.php';
+			   	require PRIVATE_PATH.'/php/events/regular.php';
 				$smarty->assign('regular', $regular);
 				break;
 			case 'fermes' :
 				$_GET['type'] = 3;
-				require BASE.'/php/events/closed.php';
+				require PRIVATE_PATH.'/php/events/closed.php';
 				$smarty->assign('closed', $closed);
 				break;
 			case 'messages' :
 				$_GET['type'] = 4;
-				require BASE.'/php/events/messages.php';
+				require PRIVATE_PATH.'/php/events/messages.php';
 				$smarty->assign('messages', $messages);
 				break;
 			default : 
-				require BASE.'/php/events/scheduled.php';
+				require PRIVATE_PATH.'/php/events/scheduled.php';
 				$smarty->assign('scheduled', $scheduled);
 				break;
 		}
 	}else{
-		require BASE.'/php/events/scheduled.php';
+		require PRIVATE_PATH.'/php/events/scheduled.php';
 		$smarty->assign('scheduled', $scheduled);
 	}
 
-	require BASE.'/php/events/forced.php';
+	require PRIVATE_PATH.'/php/events/forced.php';
 	$smarty->assign('forcedservices', $forcedservices);
 
 	$smarty->assign('optionNameForUsers', $optionNameForUsers);

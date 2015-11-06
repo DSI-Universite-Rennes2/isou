@@ -5,8 +5,8 @@ $script = '<script type="text/javascript" src="'.URL.'/scripts/jquery-min.js"></
 <script type="text/javascript" src="'.URL.'/scripts/jquery_calendar.js"></script>';
 $title = NAME.' - Calendrier';
 
-require BASE.'/classes/isou/isou_service.class.php';
-require BASE.'/classes/isou/isou_event.class.php';
+require PRIVATE_PATH.'/classes/isou/isou_service.class.php';
+require PRIVATE_PATH.'/classes/isou/isou_event.class.php';
 
 $date = getdate();
 if(isset($_GET['p'])){
@@ -111,7 +111,7 @@ for($row=0;$row<5;$row++){
 $smarty->assign('calendar', $rows);
 $smarty->assign('now', mktime(0,0,0));
 
-require BASE.'/php/public/news.php';
+require PRIVATE_PATH.'/php/public/news.php';
 
 ?>
 

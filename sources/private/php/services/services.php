@@ -5,14 +5,14 @@
 
 	$update = '';
 
-	require BASE.'/php/services/formsprocess.php';
+	require PRIVATE_PATH.'/php/services/formsprocess.php';
 
 	$script = '<script type="text/javascript" src="'.URL.'/scripts/jquery-min.js"></script>';
 	if(isset($_GET['service']) && $_GET['service'] == 'nagios'){
-		require BASE.'/php/services/nagios.php';
+		require PRIVATE_PATH.'/php/services/nagios.php';
 		$script .= '<script type="text/javascript" src="'.URL.'/scripts/jquery_services_nagios.js"></script>';
 	}else{
-		require BASE.'/php/services/isou.php';
+		require PRIVATE_PATH.'/php/services/isou.php';
 		$script .= '<script type="text/javascript" src="'.URL.'/scripts/jquery_services_isou.js"></script>';
 	}
 

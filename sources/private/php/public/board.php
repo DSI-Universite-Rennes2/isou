@@ -8,8 +8,8 @@
 	// 2 jours avant
 	$BEFORE = mktime(0,0,0)-(48*60*60);
 
-	require BASE.'/classes/isou/isou_service.class.php';
-	require BASE.'/classes/isou/isou_event.class.php';
+	require PRIVATE_PATH.'/classes/isou/isou_service.class.php';
+	require PRIVATE_PATH.'/classes/isou/isou_event.class.php';
 
 	$services = array();
 	$categories = array();

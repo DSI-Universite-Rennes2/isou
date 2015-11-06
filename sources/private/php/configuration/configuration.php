@@ -5,12 +5,12 @@ $script = '';
 
 // $script = '<script type="text/javascript" src="'.URL.'/scripts/jquery-min.js"></script>';
 if(isset($_GET['type']) && $_GET['type'] == 'advanced'){
-	require BASE.'/php/configuration/advanced.php';
+	require PRIVATE_PATH.'/php/configuration/advanced.php';
 //	$script .= '<script type="text/javascript" src="'.URL.'/scripts/jquery_services_nagios.js"></script>';
 }elseif(isset($_GET['type']) && $_GET['type'] == 'changelog'){
-	require BASE.'/php/configuration/changelog.php';
+	require PRIVATE_PATH.'/php/configuration/changelog.php';
 }else{
-	require BASE.'/php/configuration/general.php';
+	require PRIVATE_PATH.'/php/configuration/general.php';
 //	$script .= '<script type="text/javascript" src="'.URL.'/scripts/jquery_services_isou.js"></script>';
 }
 

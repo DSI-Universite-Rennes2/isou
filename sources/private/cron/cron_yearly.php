@@ -2,7 +2,7 @@
 
 $year = intval(strftime('%Y', TIME));
 
-if(!is_file(BASE.'/database/isou-'.($year-1).'.sqlite3')){
+if(!is_file(PRIVATE_PATH.'/database/isou-'.($year-1).'.sqlite3')){
 	$newyear = $year.'-01-01T00:00';
 	$oldyear = ($year-1).'-12-31T23:59';
 
@@ -11,7 +11,7 @@ if(!is_file(BASE.'/database/isou-'.($year-1).'.sqlite3')){
 	$query = $db->prepare($sql);
 	$query->execute(array($oldyear));
 
-	if(copy(BASE.'/database/isou.sqlite3', BASE.'/database/isou-'.($year-1).'.sqlite3')){
+	if(copy(PRIVATE_PATH.'/database/isou.sqlite3', PRIVATE_PATH.'/database/isou-'.($year-1).'.sqlite3')){
 		$sql = "DELETE FROM events_isou WHERE idEvent = (SELECT idEvent FROM events WHERE endDate < ? AND endDate IS NOT NULL)";
 		$query = $db->prepare($sql);
 		$query->execute(array($newyear));

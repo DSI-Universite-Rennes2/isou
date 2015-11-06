@@ -33,8 +33,8 @@ function get_parents($idChild){
 
 if(class_exists('IsouService') === FALSE){
 	// used by news page
-	require BASE.'/classes/isou/isou_service.class.php';
-	require BASE.'/classes/isou/isou_event.class.php';
+	require PRIVATE_PATH.'/classes/isou/isou_service.class.php';
+	require PRIVATE_PATH.'/classes/isou/isou_event.class.php';
 
 	$script = '<script type="text/javascript" src="'.URL.'/scripts/jquery-min.js"></script>';
 	$script .= '<script type="text/javascript" src="'.URL.'/scripts/jquery_news.js"></script>';

@@ -9,7 +9,7 @@ if(isset($_POST['cancel'])){
 	exit();
 }
 
-require BASE.'/classes/htmlpurifier/library/HTMLPurifier.auto.php';
+require PRIVATE_PATH.'/classes/htmlpurifier/library/HTMLPurifier.auto.php';
 $HTMLPurifier = new HTMLPurifier();
 
 if(isset($_POST['stateOfParent'])){

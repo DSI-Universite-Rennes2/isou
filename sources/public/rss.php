@@ -2,18 +2,15 @@
 
 header("content-type: application/xml");
 
-// chemin d'accès du site
-$pwd = dirname(__FILE__);
-
 define('MAXFEED',100);
 
-require $pwd.'/config.php';
-require BASE.'/classes/isou/isou_event.class.php';
-require BASE.'/classes/smarty/Smarty.class.php';
+require __DIR__.'/config.php';
+require PRIVATE_PATH.'/classes/isou/isou_event.class.php';
+require PRIVATE_PATH.'/classes/smarty/Smarty.class.php';
 
 $smarty = new Smarty();
-$smarty->template_dir = BASE.'/html/';
-$smarty->compile_dir = BASE.'/classes/smarty/compile/';
+$smarty->template_dir = PRIVATE_PATH.'/html/';
+$smarty->compile_dir = PRIVATE_PATH.'/classes/smarty/compile/';
 
 // find filter on rss url
 if(isset($_GET['key'])){

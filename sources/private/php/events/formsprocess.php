@@ -40,7 +40,7 @@ if(isset($_POST['cancel'])){
 	Init vars
 * * * * * * * * * * * * * * * * * */
 
-require BASE.'/classes/htmlpurifier/library/HTMLPurifier.auto.php';
+require PRIVATE_PATH.'/classes/htmlpurifier/library/HTMLPurifier.auto.php';
 $HTMLPurifier = new HTMLPurifier();
 
 $error = NULL;

@@ -1,6 +1,6 @@
 <?php
 
-// add_log(BASE.'/log/fisou.log', 'FISOU', 'JSON', getIpAddr());
+// add_log(PRIVATE_PATH.'/log/fisou.log', 'FISOU', 'JSON', getIpAddr());
 
 // find filter on rss url
 if(isset($_GET['key'])){

@@ -36,7 +36,7 @@ if($version <= 0.95){
 		$update_cfg = file_put_contents($config, $cfg);
 	}
 
-	$display = "\nMise à jour du fichier ".BASE."/config.php";
+	$display = "\nMise à jour du fichier ".PRIVATE_PATH."/config.php";
 	if($update_cfg !== FALSE){
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 	}else{

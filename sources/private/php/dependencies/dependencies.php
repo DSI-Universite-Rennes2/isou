@@ -5,7 +5,7 @@
 	$title = NAME.' - Administration des Dépendances';
 	$update = '';
 
-	require BASE.'/php/dependencies/formsprocess.php';
+	require PRIVATE_PATH.'/php/dependencies/formsprocess.php';
 
 	/* génération du champs select avec tous les services enfants */
 	$sql = "SELECT S.idService, S.nameForUsers, S.name ".

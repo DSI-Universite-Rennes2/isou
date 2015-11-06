@@ -65,7 +65,7 @@ echo "\n\033[0;32mNote: cette opération peut prendre quelques minutes...\033[0m
 $current_year = getdate();
 $current_year = $current_year['year'];
 for($y=2009;$y<$current_year;$y++){
-	$db_path = BASE.'/database/isou-'.$y.'.sqlite3';
+	$db_path = PRIVATE_PATH.'/database/isou-'.$y.'.sqlite3';
 	if(is_file($db_path)){
 		$display = 'Conversion des dates pour la base "isou-'.$y.'.sqlite3"';
 		echo $display.niceDot($display);

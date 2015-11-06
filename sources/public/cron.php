@@ -5,14 +5,11 @@ if(!defined('STDIN')){
 	die();
 }
 
-// chemin d'accès du site
-$pwd = dirname(__FILE__);
-
-require $pwd.'/config.php';
+require __DIR__.'/config.php';
 
 error_reporting(-1);
 
-require BASE.'/php/common_database.php';
+require PRIVATE_PATH.'/php/common_database.php';
 
 // load CFG
 $sql = "SELECT key, value FROM configuration";
@@ -28,17 +25,17 @@ if($query = $db->query($sql)){
 }
 
 // crée un fichier LOCK
-if(is_file(BASE.'/cron/LOCK_CRON')){
-	if(is_file(BASE.'/cron/LOCK_SPAM')){
+if(is_file(PRIVATE_PATH.'/cron/LOCK_CRON')){
+	if(is_file(PRIVATE_PATH.'/cron/LOCK_SPAM')){
 		// don't spam ! :-)
 		exit;
 	}
 
-	if(is_file(BASE.'/cron/LOCK_WARNING')){
-		$message = "Le fichier '".BASE."/cron/LOCK_CRON' est toujours présent.\n\n".
+	if(is_file(PRIVATE_PATH.'/cron/LOCK_WARNING')){
+		$message = "Le fichier '".PRIVATE_PATH."/cron/LOCK_CRON' est toujours présent.\n\n".
 					"Il doit s'agir d'une erreur de programmation.\n".
-					"Merci de tuer le processus php associé à '".$pwd."/cron.php',\npuis de supprimer les fichiers '".BASE."/cron/LOCK_*'";
-		touch(BASE.'/cron/LOCK_SPAM');
+					"Merci de tuer le processus php associé à '".__DIR__."/cron.php',\npuis de supprimer les fichiers '".PRIVATE_PATH."/cron/LOCK_*'";
+		touch(PRIVATE_PATH.'/cron/LOCK_SPAM');
 		foreach($CFG['admin_mails'] as $mail){
 			if(filter_var($mail, FILTER_VALIDATE_EMAIL) !== FALSE){
 				isoumail($mail, 'ISOU: erreur de fichier LOCK', $message);
@@ -48,13 +45,13 @@ if(is_file(BASE.'/cron/LOCK_CRON')){
 	}
 
 	// un cron est déjà en cours d'execution
-	$atime = fileatime(BASE.'/cron/LOCK_CRON');
+	$atime = fileatime(PRIVATE_PATH.'/cron/LOCK_CRON');
 	if($atime !== FALSE && $atime+(10*60) < TIME){
 		// si le fichier existe depuis plus de 10 minutes, alerter les admins
-		$message = "Le fichier '".BASE."/cron/LOCK_CRON' a été créé depuis plus de 10 minutes\n\n".
-					"Le fichier '".BASE."/cron/LOCK_CRON' a été supprimé.";
-		touch(BASE.'/cron/LOCK_WARNING');
-		touch(BASE.'/cron/LOCK_CRON');
+		$message = "Le fichier '".PRIVATE_PATH."/cron/LOCK_CRON' a été créé depuis plus de 10 minutes\n\n".
+					"Le fichier '".PRIVATE_PATH."/cron/LOCK_CRON' a été supprimé.";
+		touch(PRIVATE_PATH.'/cron/LOCK_WARNING');
+		touch(PRIVATE_PATH.'/cron/LOCK_CRON');
 		foreach($CFG['admin_mails'] as $mail){
 			if(filter_var($mail, FILTER_VALIDATE_EMAIL) !== FALSE){
 				isoumail($mail, 'ISOU: erreur de fichier LOCK', $message);
@@ -64,17 +61,17 @@ if(is_file(BASE.'/cron/LOCK_CRON')){
 		exit;
 	}
 }else{
-	if(is_file(BASE.'/upgrade/LOCK_UPDATE')){
+	if(is_file(PRIVATE_PATH.'/upgrade/LOCK_UPDATE')){
 		// don't run cron during an update
 		exit;
 	}else{
-		touch(BASE.'/cron/LOCK_CRON');
+		touch(PRIVATE_PATH.'/cron/LOCK_CRON');
 	}
 }
 
 // cron servant à la synchro avec Nagios
-require BASE.'/classes/isou/update.functions.php';
-require BASE.'/classes/isou/parser.function.php';
+require PRIVATE_PATH.'/classes/isou/update.functions.php';
+require PRIVATE_PATH.'/classes/isou/parser.function.php';
 
 // creation/modification du fichier de log
 $log = update_nagios_to_db();
@@ -92,14 +89,14 @@ $daily_cron_time = mktime($daily_cron_time[0], $daily_cron_time[1]);
 
 if(strftime('%d', TIME) != strftime('%d', $CFG['last_daily_cron_update']) && TIME >= $daily_cron_time){
 	// si on n'est pas le même jour que $CFG['last_daily_cron_update']
-	require BASE.'/cron/cron_daily.php';
+	require PRIVATE_PATH.'/cron/cron_daily.php';
 	$sql = "UPDATE configuration SET value=? WHERE key=?";
 	$query = $db->prepare($sql);
 	$query->execute(array(TIME, 'last_daily_cron_update'));
 
 	if(strftime('%Y', TIME) !== strftime('%Y', $CFG['last_yearly_cron_update'])){
 		// on n'est pas à la même année que $CFG['last_yearly_cron_update']
-		require BASE.'/cron/cron_yearly.php';
+		require PRIVATE_PATH.'/cron/cron_yearly.php';
 		$sql = "UPDATE configuration SET value=? WHERE key=?";
 		$query = $db->prepare($sql);
 		$query->execute(array(TIME, 'last_yearly_cron_update'));
@@ -108,15 +105,15 @@ if(strftime('%d', TIME) != strftime('%d', $CFG['last_daily_cron_update']) && TIM
 
 error_reporting(0);
 // génère le fichier isou.json
-require BASE.'/classes/isou/json.php';
+require PRIVATE_PATH.'/classes/isou/json.php';
 
 // supprime les fichiers LOCK
-if(is_file(BASE.'/cron/LOCK_CRON')){
-	unlink(BASE.'/cron/LOCK_CRON');
+if(is_file(PRIVATE_PATH.'/cron/LOCK_CRON')){
+	unlink(PRIVATE_PATH.'/cron/LOCK_CRON');
 }
 
-if(is_file(BASE.'/cron/LOCK_WARNING')){
-	unlink(BASE.'/cron/LOCK_WARNING');
+if(is_file(PRIVATE_PATH.'/cron/LOCK_WARNING')){
+	unlink(PRIVATE_PATH.'/cron/LOCK_WARNING');
 }
 
 ?>

@@ -48,11 +48,11 @@ if(isset($_GET['version'])){
 	}
 
 	if(count($newversion) === 0){
-		if(is_file(BASE.'/upgrade/LOCK_UPDATE')){
-			unlink(BASE.'/upgrade/LOCK_UPDATE');
+		if(is_file(PRIVATE_PATH.'/upgrade/LOCK_UPDATE')){
+			unlink(PRIVATE_PATH.'/upgrade/LOCK_UPDATE');
 		}
-		if(is_file(BASE.'/upgrade/LOCK_CONFIG')){
-			unlink(BASE.'/upgrade/LOCK_CONFIG');
+		if(is_file(PRIVATE_PATH.'/upgrade/LOCK_CONFIG')){
+			unlink(PRIVATE_PATH.'/upgrade/LOCK_CONFIG');
 		}
 
 		$sql = "UPDATE configuration SET value=? WHERE key='version'";
@@ -70,11 +70,11 @@ if(isset($_GET['version'])){
 		}
 
 		if($errors === 0){
-			if(is_file(BASE.'/upgrade/LOCK_UPDATE')){
-				unlink(BASE.'/upgrade/LOCK_UPDATE');
+			if(is_file(PRIVATE_PATH.'/upgrade/LOCK_UPDATE')){
+				unlink(PRIVATE_PATH.'/upgrade/LOCK_UPDATE');
 			}
-			if(is_file(BASE.'/upgrade/LOCK_CONFIG')){
-				unlink(BASE.'/upgrade/LOCK_CONFIG');
+			if(is_file(PRIVATE_PATH.'/upgrade/LOCK_CONFIG')){
+				unlink(PRIVATE_PATH.'/upgrade/LOCK_CONFIG');
 			}
 
 			$sql = "UPDATE configuration SET value=? WHERE key='version'";

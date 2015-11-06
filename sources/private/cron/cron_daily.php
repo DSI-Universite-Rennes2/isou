@@ -1,16 +1,16 @@
 <?php
 
-require BASE.'/classes/smarty/Smarty.class.php';
+require PRIVATE_PATH.'/classes/smarty/Smarty.class.php';
 
 $smarty = new Smarty();
-$smarty->template_dir = BASE.'/html/';
-$smarty->compile_dir = BASE.'/classes/smarty/compile/';
+$smarty->template_dir = PRIVATE_PATH.'/html/';
+$smarty->compile_dir = PRIVATE_PATH.'/classes/smarty/compile/';
 
 //
 // SUMMARY OF EVENTS
 //
-require BASE.'/classes/isou/isou_service.class.php';
-require BASE.'/classes/isou/isou_event.class.php';
+require PRIVATE_PATH.'/classes/isou/isou_service.class.php';
+require PRIVATE_PATH.'/classes/isou/isou_event.class.php';
 
 $sql = "SELECT DISTINCT S.idService, S.name, S.nameForUsers, S.url, S.state, S.comment, C.name AS category".
 	" FROM categories C, services S, events E, events_isou EI".

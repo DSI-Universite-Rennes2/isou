@@ -20,9 +20,9 @@ define('NAME', 'Isou');
 define('HEADER', 'ISOU : État des services numériques offerts par l\'Université');
 
 // chemin d'installation de l'application
-define('BASE', '/var/www');
+define('PRIVATE_PATH', '/var/www');
 
-require BASE.'/common/functions.php';
+require PRIVATE_PATH.'/common/functions.php';
 
 // chemin ou url du fichier status.dat de Nagios
 define('STATUSDAT_URL', '/var/nagios/status.dat');
@@ -66,13 +66,13 @@ define('RSS_URL', URL.'/rss.php');
 define('ISOU_URL', URL.'/index.php');
 
 // répertoire des logs
-define('LOG_PATH', BASE.'/log/');
+define('LOG_PATH', PRIVATE_PATH.'/log/');
 
 // format du nom de fichier des logs
 define('LOG_FILE', LOG_PATH.'/'.strftime('%y-%m-%d',TIME).'.log');
 
 // connecteur pdo de la base de données
-define('DB_PATH', 'sqlite:'.BASE.'/database/isou.sqlite3');
+define('DB_PATH', 'sqlite:'.PRIVATE_PATH.'/database/isou.sqlite3');
 
 // définition du niveau de rapport d'erreur de PHP
 if(DEV === TRUE || DEBUG === TRUE){

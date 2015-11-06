@@ -6,13 +6,13 @@ $script = '<script type="text/javascript" src="'.URL.'/scripts/jquery-min.js"></
 $title = NAME.' - Configuration générale';
 
 if(!defined('HTMLPurifier')){
-	require BASE.'/classes/htmlpurifier/library/HTMLPurifier.auto.php';
+	require PRIVATE_PATH.'/classes/htmlpurifier/library/HTMLPurifier.auto.php';
 }
 $HTMLPurifier = new HTMLPurifier();
 $smarty->assign('HTMLPurifierVersion', $HTMLPurifier->version);
 
 if(!class_exists('phpCAS')){
-	require BASE.'/classes/phpCAS/CAS.php';
+	require PRIVATE_PATH.'/classes/phpCAS/CAS.php';
 }
 $smarty->assign('phpCASVersion', phpCAS::getVersion());
 

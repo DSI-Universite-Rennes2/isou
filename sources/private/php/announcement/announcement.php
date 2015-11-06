@@ -7,7 +7,7 @@ $title = NAME.' - Annonce';
 $error = '';
 
 if(isset($_POST['submit'])){
-	require BASE.'/classes/htmlpurifier/library/HTMLPurifier.auto.php';
+	require PRIVATE_PATH.'/classes/htmlpurifier/library/HTMLPurifier.auto.php';
 	$HTMLPurifier = new HTMLPurifier();
 	$message = $HTMLPurifier->purify($_POST['message']);
 

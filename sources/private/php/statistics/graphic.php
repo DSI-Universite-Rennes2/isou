@@ -222,8 +222,8 @@ if(isset($_GET['serviceSelect'], $_GET['beginDate'], $_GET['endDate'], $_GET['gr
 		if($year === date('Y')){
 			$dbname = DB_PATH;
 		}else{
-			if(is_file(BASE.'/database/isou-'.$year.'.sqlite3')){
-				$dbname = 'sqlite:'.BASE.'/database/isou-'.$year.'.sqlite3';
+			if(is_file(PRIVATE_PATH.'/database/isou-'.$year.'.sqlite3')){
+				$dbname = 'sqlite:'.PRIVATE_PATH.'/database/isou-'.$year.'.sqlite3';
 			}
 		}
 

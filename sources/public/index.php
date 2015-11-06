@@ -1,20 +1,17 @@
 <?php
 
-// chemin d'accès du site
-$pwd = dirname(__FILE__);
-
-if(!is_file($pwd.'/config.php')){
+if(!is_file(__DIR__.'/config.php')){
 	echo 'L\'application ne semble pas être installée.'.
 		' Merci d\'exécuter en ligne de commande le script install.php qui se trouve dans ./sources/private/upgrade.';
 	exit(1);
 }
 
-require $pwd.'/config.php';
-require BASE.'/classes/smarty/Smarty.class.php';
+require __DIR__.'/config.php';
+require PRIVATE_PATH.'/classes/smarty/Smarty.class.php';
 
 $smarty = new Smarty();
-$smarty->template_dir = BASE.'/html/';
-$smarty->compile_dir = BASE.'/classes/smarty/compile/';
+$smarty->template_dir = PRIVATE_PATH.'/html/';
+$smarty->compile_dir = PRIVATE_PATH.'/classes/smarty/compile/';
 
 $title = NAME;
 $script = '';
@@ -27,8 +24,8 @@ if($PAGE_NAME === 'rss'){
 	exit();
 }
 
-require BASE.'/upgrade/version.php';
-require BASE.'/php/common/database.php';
+require PRIVATE_PATH.'/upgrade/version.php';
+require PRIVATE_PATH.'/php/common/database.php';
 
 $sql = "SELECT key, value FROM configuration";
 $CFG = array();
@@ -43,7 +40,7 @@ if($query = $db->query($sql)){
 }
 
 
-require BASE.'/php/common/authentification.php';
+require PRIVATE_PATH.'/php/common/authentification.php';
 
 $sql = "SELECT idState, name, title, alt, src FROM states";
 $flags = array();
@@ -65,7 +62,7 @@ if(isset($PAGE_NAME)){
 	}
 	if(isset($MENU[$MAIN_PAGE_NAME])){
 		if($MENU[$MAIN_PAGE_NAME]->public === TRUE || $IS_ADMIN){
-			$model = BASE.$MENU[$MAIN_PAGE_NAME]->model;
+			$model = PRIVATE_PATH.$MENU[$MAIN_PAGE_NAME]->model;
 			$template = $MENU[$MAIN_PAGE_NAME]->template;
 		}
 	}
@@ -73,7 +70,7 @@ if(isset($PAGE_NAME)){
 
 if(!isset($model)){
 	$MAIN_PAGE_NAME = $DEFAULTMENU;
-	$model = BASE.$MENU[$DEFAULTMENU]->model;
+	$model = PRIVATE_PATH.$MENU[$DEFAULTMENU]->model;
 	$template = $MENU[$DEFAULTMENU]->template;
 }
 
@@ -98,8 +95,8 @@ if($IS_ADMIN){
 	}
 
 	if(isset($_GET['refresh'])){
-		require BASE.'/classes/isou/parser.function.php';
-		require BASE.'/classes/isou/update.functions.php';
+		require PRIVATE_PATH.'/classes/isou/parser.function.php';
+		require PRIVATE_PATH.'/classes/isou/update.functions.php';
 
 		if(is_a(update_nagios_to_db(),'Exception')){
 			$refresh = FALSE;
