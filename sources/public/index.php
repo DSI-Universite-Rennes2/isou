@@ -28,14 +28,6 @@ $STYLES = array();
 $STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/common.css');
 $STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/menu.css');
 
-// parse url
-$PAGE_NAME = get_page_name('index.php', true);
-
-if($PAGE_NAME === 'rss'){
-	header('Location: '.RSS_URL);
-	exit();
-}
-
 require PRIVATE_PATH.'/upgrade/version.php';
 require PRIVATE_PATH.'/php/common/database.php';
 
@@ -66,27 +58,31 @@ if(isset($_GET['hide'])){
 	$_SESSION['hide'] = intval($_GET['hide']);
 }
 
-if(isset($PAGE_NAME)){
-	$PAGE_NAME = explode('/', $PAGE_NAME);
-	$MAIN_PAGE_NAME = 0;
-	if(isset($PAGE_NAME[0])){
-		$MAIN_PAGE_NAME = $PAGE_NAME[0];
-	}
-	if(isset($MENU[$MAIN_PAGE_NAME])){
-		if($MENU[$MAIN_PAGE_NAME]->public === TRUE || $IS_ADMIN){
-			$model = PRIVATE_PATH.$MENU[$MAIN_PAGE_NAME]->model;
-			$template = $MENU[$MAIN_PAGE_NAME]->template;
-		}
-	}
+$PAGE_NAME = explode('/', get_page_name('index.php', TRUE));
+
+// load menu
+require PRIVATE_PATH.'/libs/menu.php';
+
+$MENU = get_active_menu();
+if($IS_ADMIN === TRUE){
+	$ADMINISTRATION_MENU = get_administration_menu();
 }
 
-if(!isset($model)){
-	$MAIN_PAGE_NAME = $DEFAULTMENU;
-	$model = PRIVATE_PATH.$MENU[$DEFAULTMENU]->model;
-	$template = $MENU[$DEFAULTMENU]->template;
+if(isset($MENU[$PAGE_NAME[0]])){
+	$current_page = $MENU[$PAGE_NAME[0]];
+}elseif(isset($ADMINISTRATION_MENU[$PAGE_NAME[0]])){
+	$current_page = $ADMINISTRATION_MENU[$PAGE_NAME[0]];
+}else{
+	if(isset($CFG['default_menu'], $MENU[$CFG['default_menu']])){
+		$current_page = $MENU[$CFG['default_menu']];
+	}else{
+		$current_page = current($MENU);
+	}
 }
+$current_page->selected = TRUE;
 
-if($MENU[$MAIN_PAGE_NAME]->public === TRUE){
+// load announcement
+if($current_page->public === '1'){
 	$sql = "SELECT message FROM annonce WHERE afficher = 1 AND message != ''";
 	$annonce = '';
 	if($annonce = $db->query($sql)){
@@ -136,7 +132,7 @@ if($_SESSION['hide'] === 1){
 }
 
 if(CURRENT_VERSION === $CFG['version']){
-	require $model;
+	require PRIVATE_PATH.$current_page->model;
 }else{
 	// maintenance page
 	$template = 'public_update';
@@ -146,10 +142,12 @@ $smarty->assign('FULLURL', get_base_url('full', HTTPS));
 $smarty->assign('TITLE', $TITLE);
 $smarty->assign('SCRIPTS', $SCRIPTS);
 $smarty->assign('STYLES', $STYLES);
-$smarty->assign('page', $MAIN_PAGE_NAME);
 $smarty->assign('is_admin', $IS_ADMIN);
 $smarty->assign('flags', $flags);
-$smarty->assign('menu', $MENU);
+$smarty->assign('MENU', $MENU);
+if(isset($ADMINISTRATION_MENU)){
+	$smarty->assign('ADMINISTRATION_MENU', $ADMINISTRATION_MENU);
+}
 $smarty->assign('CFG', $CFG);
 $smarty->assign('connexion_url', $connexion_url);
 if(isset($annonce)){
@@ -161,7 +159,7 @@ if(isset($refresh_url)){
 
 $smarty->display('common/html_head.tpl');
 $smarty->display('common/html_body_header.tpl');
-$smarty->display($template.'.tpl');
+$smarty->display($template);
 $smarty->display('common/html_body_footer.tpl');
 
 // close pdo connection

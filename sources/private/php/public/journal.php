@@ -162,4 +162,6 @@ if($IS_ADMIN === TRUE){
 	require PRIVATE_PATH.'/php/events/elementsforms.php';
 }
 
+$template = 'public/journal.tpl';
+
 ?>

@@ -171,5 +171,7 @@
 
 	$smarty->assign('categories', $categories);
 
+	$template = 'public/board.tpl';
+
 ?>
 

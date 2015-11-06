@@ -167,6 +167,16 @@ input, select, textarea{
 	display: none;
 }
 
+.sr-only{
+	border: 0px none;
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0px;
+	position: absolute;
+	width: 1px;
+}
+
 #header{
 	text-align: right;
 	text-decoration: none;

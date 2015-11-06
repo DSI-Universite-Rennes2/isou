@@ -1,12 +1,20 @@
-<div class="submenu">
-	<h3>Afficher :</h3>
-	<ul>
+<div class="submenu-div">
+	<h3 class="menu-title">Afficher :</h3>
+	<ul class="submenu-ul">
 		{if isset($smarty.get.service) && $smarty.get.service === 'nagios'}
-			<li><a href="{$smarty.const.URL}/index.php/services?service=isou" title="Afficher la liste des services Isou">Services ISOU</a></li>
-			<li class="selectedPage"><a href="{$smarty.const.URL}/index.php/services?service=nagios" title="Afficher la liste des services Nagios">Services NAGIOS</a></li>
+			<li class="menu-ul-items">
+				<a class="menu-entries" href="{$smarty.const.URL}/index.php/services?service=isou" title="Afficher la liste des services Isou">Services ISOU</a>
+			</li>
+			<li class="menu-ul-items active">
+				<a class="menu-entries" href="{$smarty.const.URL}/index.php/services?service=nagios" title="Afficher la liste des services Nagios">Services NAGIOS</a>
+			</li>
 		{else}
-		<li class="selectedPage"><a href="{$smarty.const.URL}/index.php/services?service=isou" title="Afficher la liste des services Isou">Services ISOU</a></li>
-		<li><a href="{$smarty.const.URL}/index.php/services?service=nagios" title="Afficher la liste des services Nagios">Services NAGIOS</a></li>
+			<li class="menu-ul-items active">
+				<a class="menu-entries" href="{$smarty.const.URL}/index.php/services?service=isou" title="Afficher la liste des services Isou">Services ISOU</a>
+			</li>
+			<li class="menu-ul-items">
+				<a class="menu-entries" href="{$smarty.const.URL}/index.php/services?service=nagios" title="Afficher la liste des services Nagios">Services NAGIOS</a>
+			</li>
 		{/if}
 	</ul>
 </div>

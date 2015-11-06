@@ -64,6 +64,71 @@ if(isset($_POST['generalsubmit'])){
 	}
 }
 
+// vérification du formulaire menu
+$menu = get_menu();
+$active_menu_options = get_active_menu_sorted_by_url();
+if(isset($_POST['menusubmit'])){
+	$_POST['errors'] = array();
+	$_POST['successes'] = array();
+	if(isset($_POST['default_menu'])){
+		$menu_options = array();
+
+		// menu
+		foreach($menu as $item){
+			$menu_options[$item->url] = $item->label;
+
+			$active = NULL;
+			if(isset($_POST['menu'])){
+				$found = in_array($item->url, $_POST['menu']);
+			}else{
+				$found = FALSE;
+			}
+
+			if($item->active === '0' && $found){
+				$active = '1';
+			}elseif($item->active === '1' && !$found){
+				$active = '0';
+			}
+
+			if($active !== NULL){
+				$item->active = $active;
+				$results = $item->save();
+				$_POST['errors'] = array_merge($_POST['errors'], $results['errors']);
+				$_POST['successes'] = array_merge($_POST['successes'], $results['successes']);
+				if($item->active === '1'){
+					$MENU[$item->url] = clone($item);
+					$active_menu_options[$item->url] = $item->label;
+				}else{
+					unset($MENU[$item->url]);
+				}
+			}
+		}
+
+		// set default menu page
+		if(!isset($CFG['default_menu']) || $_POST['default_menu'] !== $CFG['default_menu']){
+			if(isset($active_menu_options[$_POST['default_menu']])){
+				$sql = "UPDATE configuration SET value=? WHERE key='default_menu'";
+				$query = $db->prepare($sql);
+				if($query->execute(array($_POST['default_menu'])) === FALSE){
+					$_POST['error']['menu']['error_menulocalpassword'] = 'La clé "local_password" n\'a pas pu être mise à jour';
+				}else{
+					$CFG['default_menu'] = $_POST['default_menu'];
+				}
+			}else{
+				$_POST['errors'][] = 'Le menu par défaut choisi n\'est pas dans la liste des menus activés.';
+			}
+		}
+	}
+}else{
+	$menu_options = array();
+	foreach($menu as $item){
+		$menu_options[$item->url] = $item->label;
+	}
+}
+$smarty->assign('menu_options', $menu_options);
+$smarty->assign('active_menu', array_keys($MENU));
+$smarty->assign('active_menu_options', $active_menu_options);
+
 // traitement des liens "d'effacement"
 if(isset($_GET['action'], $_GET['key'])){
 	// reset cron

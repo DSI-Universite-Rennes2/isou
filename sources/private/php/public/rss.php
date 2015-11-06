@@ -41,4 +41,6 @@ $smarty->assign('serviceItems', $serviceItems);
 $smarty->assign('URL', URL);
 $smarty->assign('urlKey', $urlKey);
 
+$template = 'public/rss.tpl';
+
 ?>

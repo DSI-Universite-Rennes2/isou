@@ -117,4 +117,6 @@ if($service_records = $db->query($sql)){
 $smarty->assign('categories', $categories);
 $smarty->assign('messages', $messages);
 
+$template = 'public/news.tpl';
+
 ?>

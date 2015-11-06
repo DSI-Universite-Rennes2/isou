@@ -21,4 +21,6 @@
 		require PRIVATE_PATH.'/php/statistics/graphic.php';
 	}
 
+	$template = 'statistics/statistics.tpl';
+
 ?>

@@ -1,126 +1,92 @@
-/* * * *
-	BARRE DES MENUS
-* * * */
-#menu-div .selectedPage a, .selectedPage a{
+.active .menu-entries{
 	color: #6A006D;
 }
 
-#menu-div{
+#menu{
 	background-color: #DEEEFF;
-	font-size: 0.8em;
+	font-size: .8em;
 	font-weight: bold;
 	height: 3em;
 	line-height: 3em;
-	margin: 0.7em 0;
+	margin: .7em 0;
 	padding: 0 2em;
 }
 
-#menu-title{
-	float: left;
-	line-height: 3em;
-}
-
-#menu-ul > li{
+.menu-title{
 	display: inline;
-	float: left;
-	text-align: center;
-
 }
 
-/* * * *
-	SOUS MENU
-* * * */
-.submenu{
-	background-color: lightblue;
-	margin: .7em 0em;
-	padding: .5em 1em;
-	font-size: .7em;
+.menu-ul{
+	display: inline;
+	margin: 0;
+}
+
+.menu-ul-items{
+	display: inline;
+	margin: 0 .5em;
+	text-align: center;
+}
+
+#administration-menu{
+	background-color: #FFA07A;
+	font-size: .8em;
 	font-weight: bold;
+	margin: .7em 0;
+	padding: 0 2em;
 	text-align: right;
 }
 
-.submenu h3{
-	display: inline;
+#administration-menu .menu-ul-items{
+	display: inline-block;
+	line-height: 2em;
 }
 
-.submenu ul{
-	display: inline;
-	margin-left: 0em;
-}
-
-.submenu li{
-	display: inline;
-	margin: 0em .3em;
+#administration-menu .menu-ul-items .menu-title{
+	display: block;
+	height: 1em;
 	line-height: 1em;
 }
 
-/*
- * MENU ADMIN
- */
+#administration-menu .menu-ul-items .menu-ul{
+	border-left: black .1em dotted;
+	border-right: black .1em dotted;
+	border-top: black .1em dotted;
+}
 
-.menu-admin{
-	/*position: fixed;*/
-	background-color: #FFA07A;
-	font-size: 0.8em;
+.submenu-div{
+	background-color: lightblue;
+	font-size: .7em;
 	font-weight: bold;
-	margin: 0.7em 0;
+	margin: .7em 0em;
+	padding: .5em 1em;
+	text-align: right;
+}
+
+.submenu-ul{
+	display: inline;
+}
+
+#menu-admin-preference-ul{
+	background-color: #FFA07A;
+	font-size: .6em;
+	font-weight: bold;
+	margin: .7em 0;
 	padding: 0 2em;
 	text-align: right;
-	/*bottom: 0;
-	width: 100%;*/
 }
 
-#menu-admin-div{
-	height: 3em;
-}
-
-#menu-admin-title{
-	line-height: 3em;
+.menu-admin-preference-li{
 	display: inline;
+	margin-right: .6em;
 }
 
-#menu-admin-ul{
-	float: right;
-}
-
-#menu-admin-ul > li{
-	display: inline;
-	float: left;
-	text-align: center;
-
-}
-
-#menu-admin-ul > li span{
-	display: block;
-}
-
-#menu-admin-preference{
-	font-size: 0.6em;
-}
-
-#menu-admin-preference a{
-	margin-right: 0.6em;
-}
-
-#menu-admin-preference a:before{
+.menu-admin-preference-li:before{
 	color: #000000;
 	content: '[ ';
 }
 
-#menu-admin-preference a:after{
+.menu-admin-preference-li:after{
 	color: #000000;
 	content: ' ]';
 }
 
-.submenu-admin-ul{
-	/*display: inline;*/
-	border-left: black 0.1em dotted;
-	border-right: black 0.1em dotted;
-	border-top: black 0.1em dotted;
-	margin: 0;
-}
-
-.submenu-admin-ul > li{
-	display: inline;
-	margin: 0 0.7em;
-}

@@ -13,4 +13,6 @@ if(isset($_GET['type']) && $_GET['type'] == 'advanced'){
 $smarty->assign('CFG', $CFG);
 $smarty->assign('error', $_POST['error']);
 
+$template = 'configuration/configuration.tpl';
+
 ?>

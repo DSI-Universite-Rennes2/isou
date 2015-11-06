@@ -136,4 +136,6 @@
 	$smarty->assign('count', $count);
 	$smarty->assign('categories', $categories);
 
+	$template = 'categories/categories.tpl';
+
 ?>

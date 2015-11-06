@@ -116,5 +116,7 @@ $smarty->assign('now', mktime(0,0,0));
 
 require PRIVATE_PATH.'/php/public/news.php';
 
+$template = 'public/calendar.tpl';
+
 ?>
 

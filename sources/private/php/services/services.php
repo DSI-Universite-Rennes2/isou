@@ -18,4 +18,6 @@
 		$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery_services_isou.js');
 	}
 
+	$template = 'services/services.tpl';
+
 ?>

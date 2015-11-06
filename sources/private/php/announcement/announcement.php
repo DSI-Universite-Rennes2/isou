@@ -48,4 +48,6 @@ $smarty->assign('error', $error);
 $smarty->assign('message', $message);
 $smarty->assign('afficher', $afficher);
 
+$template = 'announcement/announcement.tpl';
+
 ?>

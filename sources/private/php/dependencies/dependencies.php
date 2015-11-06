@@ -145,4 +145,7 @@
 
 	$smarty->assign('update', $update);
 	$smarty->assign('services', $services);
+
+	$template = 'dependencies/dependencies.tpl';
+
 ?>

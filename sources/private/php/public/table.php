@@ -56,5 +56,7 @@
 
 	$smarty->assign('categories', $categories);
 
+	$template = 'public/table.tpl';
+
 ?>
 

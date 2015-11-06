@@ -91,6 +91,8 @@
 		$smarty->assign('currentEdit', $currentEdit);
 	}
 
+	$template = 'events/view.tpl';
+
 ?>
 
 

@@ -38,6 +38,25 @@
 	</p>
 </form>
 
+<h2 id="configuration-des-menus">Configuration des menus</h2>
+<form method="post" action="{$smarty.const.URL}/index.php/configuration#form-general" id="form-general">
+	<fieldset>
+		<legend>Configuration du menu</legend>
+		{html_checkboxes name=menu options=$menu_options selected=$active_menu}
+	</fieldset>
+
+	<dl>
+		<div>
+			<dt><label for="default-menu">Page d'accueil par défaut</label></dt>
+			<dd>{html_options id="default-menu" name=default_menu options=$active_menu_options selected=$CFG.default_menu}</dd>
+		</div>
+	</dl>
+
+	<p>
+		<input type="submit" name="menusubmit" />
+	</p>
+</form>
+
 <h2 id="cron">Crons</h2>
 {if isset($smarty.post.error.last_cron_update)}
 	{if isset($smarty.post.error.last_cron_update.error_db)}

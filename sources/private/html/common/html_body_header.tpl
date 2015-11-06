@@ -27,55 +27,78 @@
 
 <h1>{$smarty.const.HEADER}</h1>
 
-<div id="menu-div">
-	<p id="menu-title"><a name="menu"></a><span>Consultation :</span></p>
-	<ul id="menu-ul">
-		{if isset($menu['actualite'])}<li{if $page === 'actualite'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/actualite" title="Afficher par actualité">actualité</a></li>{/if}
-		{if isset($menu['liste'])}<li{if $page === 'liste'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/liste" title="Afficher en liste" >liste</a></li>{/if}
-		{if isset($menu['tableau'])}<li{if $page === 'tableau'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/tableau" title="Afficher en tableau" >tableau</a></li>{/if}
-		{if isset($menu['journal'])}<li{if $page === 'journal'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/journal" title="Afficher le journal d'évènements" >journal</a></li>{/if}
-		{if isset($menu['calendrier'])}<li{if $page === 'calendrier'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/calendrier" title="Afficher en calendrier" >calendrier</a></li>{/if}
-		{if isset($menu['contact'])}<li{if $page === 'contact'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/contact" title="Nous contacter" >contact</a></li>{/if}
-		<li{if $page === 'rss'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/rss/config" title="S'abonner au flux RSS" >flux RSS <img width="31px" height="11px" alt="" src="{$smarty.const.URL}/images/rss_logo.gif" /></a></li>
-	</ul>
-</div>
+{if count($MENU) > 1 || isset($ADMINISTRATION_MENU)}
+<nav id="navigation" role="navigation">
+	<h1 class="sr-only">Navigation</h1>
 
-{if $is_admin === TRUE}
-
-<div id="menu-admin-div" class="menu-admin">
-	<p id="menu-admin-title"><span>Administration :</span></p>
-	<ul id="menu-admin-ul">
-		<li><span>Générale</span>
-		<ul class="submenu-admin-ul">
-			<li{if $page === 'evenements'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/evenements" title="Ajouter un évenement" >évènements</a></li>
-			<li{if $page === 'annonce'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/annonce" title="Ajouter une annonce générale" >annonce</a></li>
-			<li{if $page === 'statistiques'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/statistiques" title="Afficher les statistiques" >statistiques</a></li>
-		</ul>
+	{if count($MENU) > 1}
+	<div id="menu" class="container-fluid navbar navbar-default menu-div">
+		<div class="navbar-header menu-title">
+			<span class="navbar-brand">Consultation :</span>
+		</div>
+		<ul class="nav navbar-nav menu-ul">
+		{foreach $MENU as $menu}
+		<li class="menu-ul-items{if $menu->selected === TRUE} active{/if}">
+			<a class="menu-entries" href="{$smarty.const.URL}/index.php/{$menu->url}" title="{$menu->title}">{$menu->label}</a>
 		</li>
-		<li><span>Avancée</span>
-		<ul class="submenu-admin-ul">
-			<li{if $page === 'services'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/services" title="Ajouter un service" >services</a></li>
-			<li{if $page === 'dependances'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/dependances" title="Ajouter une dépendance" >dépendances</a></li>
-			<li{if $page === 'categories'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/categories" title="Ajouter une catégorie" >catégories</a></li>
-			<li{if $page === 'configuration'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/configuration" title="Configuration générale de l'application" >configuration</a></li>
-			<li{if $page === 'aide'} class="selectedPage" {/if}><a href="{$smarty.const.URL}/index.php/aide" title="Consulter la documentation" >aide</a></li>
+		{/foreach}
 		</ul>
-		</li>
-	</ul>
-	<div class="spacer"></div>
-</div>
+	</div>
+	{/if}
 
-	<p id="menu-admin-preference" class="menu-admin">
+	{if isset($ADMINISTRATION_MENU)}
+	<div id="administration-menu" class="container-fluid navbar navbar-inverse menu-div">
+		<div class="navbar-right">
+			<div class="navbar-header menu-title">
+				<span class="navbar-brand">Administration :</span>
+			</div>
+
+			<ul class="nav navbar-nav menu-ul">
+			<li class="menu-ul-items">
+				{* ADMINISTRATION GENERALE *}
+				<div class="navbar-header menu-title">
+					<span class="navbar-brand">Générale</span>
+				</div>
+				<ul class="nav navbar-nav menu-ul">
+				{foreach $ADMINISTRATION_MENU as $menu}
+					{if $menu->idsubmenu === '1'}
+					<li class="menu-ul-items{if $menu->selected === TRUE} active{/if}">
+						<a class="menu-entries" href="{$smarty.const.URL}/index.php/{$menu->url}" title="{$menu->title}">{$menu->label}</a>
+					</li>
+					{/if}
+				{/foreach}
+				</ul>
+			</li>
+			<li class="menu-ul-items">
+				{* ADMINISTRATION AVANCEE *}
+				<div class="navbar-header menu-title">
+					<span class="navbar-brand">Avancée</span>
+				</div>
+				<ul class="nav navbar-nav menu-ul">
+				{foreach $ADMINISTRATION_MENU as $menu}
+					{if $menu->idsubmenu === '2'}
+					<li class="menu-ul-items{if $menu->selected === TRUE} active{/if}">
+						<a class="menu-entries" href="{$smarty.const.URL}/index.php/{$menu->url}" title="{$menu->title}">{$menu->label}</a>
+					</li>
+					{/if}
+				{/foreach}
+				</ul>
+			</li>
+			</ul>
+		</div>
+	</div>
+
+	<ul id="menu-admin-preference-ul" class="menu-admin">
 		{if $smarty.session.hide === 0}
-		<a href="{$FULLURL}?hide=1">masquer les interruptions de moins de {$CFG.tolerance/60} minutes</a>
+		<li class="menu-admin-preference-li"><a href="{$FULLURL}?hide=1">masquer les interruptions de moins de {$CFG.tolerance/60} minutes</a></li>
 		{else}
-		<a href="{$FULLURL}?hide=0">afficher les interruptions de moins de {$CFG.tolerance/60} minutes</a>
+		<li class="menu-admin-preference-li"><a href="{$FULLURL}?hide=0">afficher les interruptions de moins de {$CFG.tolerance/60} minutes</a></li>
 		{/if}
-		<a href="{$refresh_url}" title="Réactuliser les données">
-			rafraîchir les données
-		</a>
-	</p>
+		<li class="menu-admin-preference-li"><a href="{$refresh_url}" title="Réactuliser les données">rafraîchir les données</a></li>
+	</ul>
 
+	{/if}
+</nav>
 {/if}
 
 {if isset($refresh)}

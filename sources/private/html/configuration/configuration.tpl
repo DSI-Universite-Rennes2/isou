@@ -1,35 +1,35 @@
-<div class="submenu">
-	<h3>Afficher :</h3>
-	<ul>
+<div class="submenu-div">
+	<h3 class="menu-title">Afficher :</h3>
+	<ul class="submenu-ul">
 		{if isset($smarty.get.type) && $smarty.get.type === 'advanced'}
-			<li>
-				<a href="{$smarty.const.URL}/index.php/configuration" title="Afficher la configuration générale">générale</a>
+			<li class="menu-ul-items">
+				<a class="menu-entries" href="{$smarty.const.URL}/index.php/configuration" title="Afficher la configuration générale">générale</a>
 			</li>
-			<li class="selectedPage">
-				<a href="{$smarty.const.URL}/index.php/configuration?type=advanced" title="Afficher la configuration avancée">avancée</a>
+			<li class="menu-ul-items active">
+				<a class="menu-entries" href="{$smarty.const.URL}/index.php/configuration?type=advanced" title="Afficher la configuration avancée">avancée</a>
 			</li>
-			<li>
-				<a href="{$smarty.const.URL}/index.php/configuration?type=changelog" title="Afficher la changelog">changelog</a>
+			<li class="menu-ul-items">
+				<a class="menu-entries" href="{$smarty.const.URL}/index.php/configuration?type=changelog" title="Afficher la changelog">changelog</a>
 			</li>
 		{elseif isset($smarty.get.type) && $smarty.get.type === 'changelog'}
-			<li>
-				<a href="{$smarty.const.URL}/index.php/configuration" title="Afficher la configuration générale">générale</a>
+			<li class="menu-ul-items">
+				<a class="menu-entries" href="{$smarty.const.URL}/index.php/configuration" title="Afficher la configuration générale">générale</a>
 			</li>
-			<li>
-				<a href="{$smarty.const.URL}/index.php/configuration?type=advanced" title="Afficher la configuration avancée">avancée</a>
+			<li class="menu-ul-items">
+				<a class="menu-entries" href="{$smarty.const.URL}/index.php/configuration?type=advanced" title="Afficher la configuration avancée">avancée</a>
 			</li>
-			<li class="selectedPage">
-				<a href="{$smarty.const.URL}/index.php/configuration?type=changelog" title="Afficher la changelog">changelog</a>
+			<li class="menu-ul-items active">
+				<a class="menu-entries" href="{$smarty.const.URL}/index.php/configuration?type=changelog" title="Afficher la changelog">changelog</a>
 			</li>
 		{else}
-			<li class="selectedPage">
-				<a href="{$smarty.const.URL}/index.php/configuration" title="Afficher la configuration générale">générale</a>
+			<li class="menu-ul-items active">
+				<a class="menu-entries" href="{$smarty.const.URL}/index.php/configuration" title="Afficher la configuration générale">générale</a>
 			</li>
-			<li>
-				<a href="{$smarty.const.URL}/index.php/configuration?type=advanced" title="Afficher la configuration avancée">avancée</a>
+			<li class="menu-ul-items">
+				<a class="menu-entries" href="{$smarty.const.URL}/index.php/configuration?type=advanced" title="Afficher la configuration avancée">avancée</a>
 			</li>
-			<li>
-				<a href="{$smarty.const.URL}/index.php/configuration?type=changelog" title="Afficher la changelog">changelog</a>
+			<li class="menu-ul-items">
+				<a class="menu-entries" href="{$smarty.const.URL}/index.php/configuration?type=changelog" title="Afficher la changelog">changelog</a>
 			</li>
 		{/if}
 	</ul>
