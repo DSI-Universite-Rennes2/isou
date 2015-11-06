@@ -44,7 +44,6 @@ if($query = $db->query($sql)){
 
 
 require BASE.'/php/common/authentification.php';
-require BASE.'/php/common/statistics.php';
 
 $sql = "SELECT idState, name, title, alt, src FROM states";
 $flags = array();

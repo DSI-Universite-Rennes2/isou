@@ -97,14 +97,6 @@ if(strftime('%d', TIME) != strftime('%d', $CFG['last_daily_cron_update']) && TIM
 	$query = $db->prepare($sql);
 	$query->execute(array(TIME, 'last_daily_cron_update'));
 
-	if(strftime('%u', TIME) === '1'){
-		// si on est lundi
-		require BASE.'/cron/cron_weekly.php';
-		$sql = "UPDATE configuration SET value=? WHERE key=?";
-		$query = $db->prepare($sql);
-		$query->execute(array(TIME, 'last_weekly_cron_update'));
-	}
-
 	if(strftime('%Y', TIME) !== strftime('%Y', $CFG['last_yearly_cron_update'])){
 		// on n'est pas à la même année que $CFG['last_yearly_cron_update']
 		require BASE.'/cron/cron_yearly.php';

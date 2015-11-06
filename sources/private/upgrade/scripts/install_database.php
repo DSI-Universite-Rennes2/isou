@@ -354,20 +354,6 @@ if($db2->exec($sql) === FALSE){
 
 
 /*
- * 10. TABLE statistics
- */
-$sql = "CREATE TABLE statistics (session_id VARCHAR(64),os VARCHAR(32),browser VARCHAR(32),ip VARCHAR(15),userAgent TEXT,dateVisit TIMESTAMP)";
-if($db2->exec($sql) === FALSE){
-	echo "La création de la table 'statistics' a échoué.\n";
-	echo "\033[0;31mÉchec de l'installation\033[0m\n";
-	exit(1);
-}else{
-	$display = "Création de la table 'statistics'";
-	echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
-}
-
-
-/*
  * 11. TABLE services
  */
 $sql = "CREATE TABLE services (idService INTEGER PRIMARY KEY,name VARCHAR(64),nameForUsers VARCHAR(64),url VARCHAR(64), state TINYINT,comment VARCHAR(64),enable TINYINT,visible TINYINT,readonly TINYINT,rssKey TINYINT ,idCategory TINYINT)";

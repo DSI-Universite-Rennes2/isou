@@ -36,18 +36,6 @@ $display = "Création de la base de données 'isou.sqlite3'";
 echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
 require BASE.'/scripts/install_database.php';
 
-try{
-	$db1 = new PDO('sqlite:'.$private_path.'/database/isou-visits.sqlite3');
-	$sql = 'CREATE TABLE visits(weeks TIMESTAMP, numOf TINYINT, os VARCHAR(32), browser VARCHAR(32), ip TINYINT, userAgent TEXT)';
-	$db1->query($sql);
-}catch(PDOException $e){
-	echo "La création de la base de données a échoué (".$e->getMessage().")\n";
-	echo "\033[0;31mÉchec de l'installation\033[0m\n";
-	exit(1);
-}
-$display = "\nCréation de la base de données 'isou-visits.sqlite3'";
-echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
-
 /*
  * CREATION DU FICHIER CONFIG.PHP
  */
@@ -297,9 +285,6 @@ define('LOG_FILE', LOG_PATH.'/'.strftime('%y-%m-%d',TIME).'.log');
 
 // connecteur pdo de la base de données
 define('DB_PATH', 'sqlite:'.BASE.'/database/isou.sqlite3');
-
-// connecteur pdo de la base de données des statistiques de visite
-define('DB_STAT_PATH', 'sqlite:'.BASE.'/database/isou-visits.sqlite3');
 
 // définition du niveau de rapport d'erreur de PHP
 if(DEV === TRUE || DEBUG === TRUE){

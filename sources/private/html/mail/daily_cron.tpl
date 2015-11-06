@@ -1,6 +1,5 @@
 Résumé
 -------
-Nombre total de visites : {$visits->count}
 Nombre de serivces Isou forcés : {count($forcedservices)}
 Nombre de services Nagios supprimés : {count($nagiosServices)}
 
@@ -39,33 +38,4 @@ Liste des services indisponibles de la journée
 
 {/section}
 {/if}
-
-Statistiques des visites
--------------------------
- ** Visites (hors bots et autres) **
-   - Visites externes : {$visits->externe}
-   - Visites UHB : {$visits->interne}
-   - Visites du CRI : {$visits->cri}
-   - Total des visites : {$visits->count}
-
- ** Navigateurs **
-{foreach from=$browsers item=browser}
-   - {$browser->browser} : {$browser->total} visites
-{/foreach}
-
- ** Système d'exploitation **
-{foreach from=$os item=o}
-   - {$o->os} : {$o->total} visites
-{/foreach}
-
- ** Bots et Autres **
-Total des visites : {$visits->bots}
-{if isset($googlebot)}
-   - googlebot : {$googlebot->total} visites
-{/if}
-{foreach from=$bots item=bot}
-   - {$bot->userAgent|escape:'htmlall'} : {$bot->total} visites
-{/foreach}
-
-
 

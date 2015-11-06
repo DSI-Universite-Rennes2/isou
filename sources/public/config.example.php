@@ -74,9 +74,6 @@ define('LOG_FILE', LOG_PATH.'/'.strftime('%y-%m-%d',TIME).'.log');
 // connecteur pdo de la base de données
 define('DB_PATH', 'sqlite:'.BASE.'/database/isou.sqlite3');
 
-// connecteur pdo de la base de données des statistiques de visite
-define('DB_STAT_PATH', 'sqlite:'.BASE.'/database/isou-visits.sqlite3');
-
 // définition du niveau de rapport d'erreur de PHP
 if(DEV === TRUE || DEBUG === TRUE){
 	error_reporting(-1);
