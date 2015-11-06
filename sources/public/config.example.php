@@ -22,7 +22,7 @@ define('HEADER', 'ISOU : État des services numériques offerts par l\'Universit
 // chemin d'installation de l'application
 define('PRIVATE_PATH', '/var/www');
 
-require PRIVATE_PATH.'/common/functions.php';
+require_once PRIVATE_PATH.'/common/functions.php';
 
 // chemin ou url du fichier status.dat de Nagios
 define('STATUSDAT_URL', '/var/nagios/status.dat');

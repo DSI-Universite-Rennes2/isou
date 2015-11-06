@@ -32,7 +32,7 @@ if(is_dir($pwd) === FALSE){
 	$pwd = __DIR__.'/../../public';
 }
 
-$file = $pwd.'/functions.php';
+$file = __DIR__.'/../common/functions.php';
 if(is_file($file)){
 	require $file;
 }else{
@@ -52,8 +52,12 @@ if(is_file($file)){
 	exit(1);
 }
 
+if (!defined('PRIVATE_PATH')) {
+	define('PRIVATE_PATH', BASE);
+}
+
 require PRIVATE_PATH.'/upgrade/version.php';
-require PRIVATE_PATH.'/php/common_database.php';
+require PRIVATE_PATH.'/php/common/database.php';
 
 // load CFG
 $sql = "SELECT key, value FROM configuration WHERE key='version'";
