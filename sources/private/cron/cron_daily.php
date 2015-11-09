@@ -24,7 +24,7 @@ $sql = "SELECT DISTINCT S.idService, S.name, S.nameForUsers, S.url, S.state, S.c
 $i=-1;
 $categoryName = '';
 $categories = array();
-if($service_records = $db->query($sql)){
+if($service_records = $DB->query($sql)){
 	while($service = $service_records->fetchObject('IsouService')){
 
 		$service->setEvents($service->getAllEvents($CFG['tolerance'], 10, $beginDateYesterday, $endDateYesterday));
@@ -110,9 +110,9 @@ if ($handle) {
 					" FROM services".
 					" WHERE name = '".$host_name."'".
 					" AND nameForUsers IS NULL";
-			$db->query($sql);
+			$DB->query($sql);
 
-			if($nameForUsers = $db->query($sql)){
+			if($nameForUsers = $DB->query($sql)){
 				$nameForUsers = $nameForUsers->fetch();
 			}
 
@@ -137,7 +137,7 @@ $sql = "SELECT S.idService, S.name, S.nameForUsers, S.visible".
 		" FROM services S".
 		" WHERE S.nameForUsers IS NULL".
 		" ORDER BY UPPER(S.name)";
-$services = $db->query($sql);
+$services = $DB->query($sql);
 
 $i = 0;
 $nagiosServices = array();
@@ -156,14 +156,14 @@ $sql = "SELECT S.idService, S.name, S.nameForUsers, S.state".
 	" WHERE S.readonly = 1".
 	" AND S.name = 'Service final'".
 	" ORDER BY S.nameForUsers";
-$services = $db->prepare($sql);
+$services = $DB->prepare($sql);
 $services->execute();
 
 $forcedservices = $services->fetchAll(PDO::FETCH_OBJ);
 
 $sql = "SELECT idState, name, title, alt, src FROM states";
 $flags = array();
-if($query = $db->query($sql)){
+if($query = $DB->query($sql)){
 	while($flag = $query->fetch(PDO::FETCH_OBJ)){
 		$flags[] = $flag;
 	}

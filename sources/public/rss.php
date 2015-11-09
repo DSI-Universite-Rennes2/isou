@@ -36,19 +36,19 @@ $record = array();
 $items = array();
 
 try {
-	$db = new PDO(DB_PATH, '', '');
+	$DB = new PDO(DB_PATH, '', '');
 } catch (PDOException $e) {
 	header("HTTP/1.0 503 Service Unavailable");
 
 	// close pdo connection
-	$db = null;
+	$DB = null;
 
 	exit(0);
 }
 
 $sql = "SELECT key, value FROM configuration";
 $CFG = array();
-if($query = $db->query($sql)){
+if($query = $DB->query($sql)){
 	while($config = $query->fetch(PDO::FETCH_OBJ)){
 		if(in_array($config->key, array('ip_local', 'ip_service', 'admin_users', 'admin_mails'))){
 			 $CFG[$config->key] = json_decode($config->value);
@@ -76,7 +76,7 @@ $sql = 'SELECT E.idEvent, strftime(\'%s\',E.beginDate) AS beginDate, strftime(\'
 	' AND E.beginDate BETWEEN ? AND ?'.
 	' AND (E.endDate IS NULL OR strftime(\'%s\',E.endDate)-strftime(\'%s\',E.beginDate) > '.$CFG['tolerance'].')'.
 	' LIMIT 0, 200';
-$event_records = $db->prepare($sql);
+$event_records = $DB->prepare($sql);
 if($event_records->execute(array($firstDate, $lastDate))){
 	while($event = $event_records->fetch()){
 		$record[count($record)] = array('b', new IsouEvent($event[0],$event[1],$event[2],NULL,$event[5], 0, $event[4], NULL, NULL, $event[3]),$event[6]);
@@ -98,7 +98,7 @@ $sql = 'SELECT E.idEvent, strftime(\'%s\',E.endDate) AS endDate, strftime(\'%s\'
 	' AND E.endDate IS NOT NULL'.
 	' AND strftime(\'%s\',E.endDate)-strftime(\'%s\',E.beginDate) > '.$CFG['tolerance'].
 	' LIMIT 0, 200';
-$event_records = $db->prepare($sql);
+$event_records = $DB->prepare($sql);
 if($event_records->execute(array($firstDate, $lastDate))){
 	while($event = $event_records->fetch()){
 		$record[count($record)] = array('e',new IsouEvent($event[0],$event[1],$event[2],NULL,$event[5], 0, $event[4], NULL, NULL, $event[3]),$event[6]);

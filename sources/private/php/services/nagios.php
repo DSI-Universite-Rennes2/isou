@@ -7,7 +7,7 @@ $arrayNagios = array();
 $sql = "SELECT idCategory, name".
 		" FROM categories".
 		" ORDER BY name";
-$categories = $db->query($sql);
+$categories = $DB->query($sql);
 
 $optionCategories = array(0 => '');
 
@@ -49,9 +49,9 @@ if ($handle) {
 					" FROM services".
 					" WHERE name = '".$host_name."'".
 					" AND nameForUsers IS NULL";
-			$db->query($sql);
+			$DB->query($sql);
 
-			if($nameForUsers = $db->query($sql)){
+			if($nameForUsers = $DB->query($sql)){
 				$nameForUsers = $nameForUsers->fetch();
 			}
 
@@ -77,7 +77,7 @@ sort($arrayHosts);
 $sql = "SELECT COUNT(S.idService)".
 		" FROM services S".
 		" WHERE S.nameForUsers IS NULL";
-$count = $db->query($sql);
+$count = $DB->query($sql);
 $count = $count->fetch();
 $countNagiosServices = $count[0];
 
@@ -85,7 +85,7 @@ $sql = "SELECT S.idService, S.name, S.nameForUsers, S.visible".
 		" FROM services S".
 		" WHERE S.nameForUsers IS NULL".
 		" ORDER BY UPPER(S.name)";
-$services = $db->query($sql);
+$services = $DB->query($sql);
 
 $i = 0;
 while($service = $services->fetchObject()){
@@ -107,7 +107,7 @@ while($service = $services->fetchObject()){
 			" WHERE S.idService = ".$service->idService.
 			" AND (D.idService = ".$service->idService.
 			" OR D.idServiceParent = ".$service->idService.")";
-			$dependy = $db->query($sql);
+			$dependy = $DB->query($sql);
 
 			if(!$dependy->fetch()){
 				$service->css = 'unassign';

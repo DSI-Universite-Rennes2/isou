@@ -13,7 +13,7 @@ $sql = "SELECT C.idCategory, C.name, S.nameForUsers, S.rssKey".
 		" AND S.rssKey IS NOT NULL".
 		" ORDER BY C.position, S.nameForUsers";
 
-$services = $db->query($sql);
+$services = $DB->query($sql);
 $serviceItems = array();
 $categoryItems = array();
 $key = 0;

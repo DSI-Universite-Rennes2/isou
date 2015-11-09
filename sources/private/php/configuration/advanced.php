@@ -73,7 +73,7 @@ if(isset($_POST['iplocalsubmit'])){
 		if(count($_POST['error']['iplocal']) === 0){
 			echo json_encode($CFG['ip_local']);
 			$sql = "UPDATE configuration SET value=? WHERE key='ip_local'";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			if($query->execute(array(json_encode($CFG['ip_local']))) === FALSE){
 				$_POST['error']['iplocal']['error_iplocal'] = 'La clé "ip_local" n\'a pas pu être mise à jour';
 			}
@@ -152,7 +152,7 @@ if(isset($_POST['ipservicesubmit'])){
 
 		if(count($_POST['error']['ipservice']) === 0){
 			$sql = "UPDATE configuration SET value=? WHERE key='ip_service'";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			if($query->execute(array(json_encode($CFG['ip_service']))) === FALSE){
 				$_POST['error']['ipservice']['error_ipservice'] = 'La clé "ip_service" n\'a pas pu être mise à jour';
 			}
@@ -175,7 +175,7 @@ if(isset($_POST['adminusers'])){
 		$CFG['admin_users'][] = $_POST['adminusers'];
 
 		$sql = "UPDATE configuration SET value=? WHERE key='admin_users'";
-		$query = $db->prepare($sql);
+		$query = $DB->prepare($sql);
 		if($query->execute(array(json_encode($CFG['admin_users']))) === FALSE){
 			$_POST['error']['adminusers']['error_adminusers'] = 'La clé "admin_users" n\'a pas pu être mise à jour';
 		}else{
@@ -197,7 +197,7 @@ if(isset($_POST['adminmails'])){
 		$CFG['admin_mails'][] = $_POST['adminmails'];
 
 		$sql = "UPDATE configuration SET value=? WHERE key='admin_mails'";
-		$query = $db->prepare($sql);
+		$query = $DB->prepare($sql);
 		if($query->execute(array(json_encode($CFG['admin_mails']))) === FALSE){
 			$_POST['error']['adminmails']['error_adminmails'] = 'La clé "admin_mails" n\'a pas pu être mise à jour';
 		}else{
@@ -214,7 +214,7 @@ if(isset($_POST['localmail'])){
 		$_POST['error']['localmail']['error_localmail'] = 'L\'adresse mail saisie n\'est pas valide';
 	}else{
 		$sql = "UPDATE configuration SET value=? WHERE key='local_mail'";
-		$query = $db->prepare($sql);
+		$query = $DB->prepare($sql);
 		if($query->execute(array($_POST['localmail'])) === FALSE){
 			$_POST['error']['localmail']['error_localmail'] = 'La clé "local_mail" n\'a pas pu être mise à jour';
 		}
@@ -230,7 +230,7 @@ if(isset($_POST['autobackup'])){
 		$_POST['autobackup'] = 0;
 	}
 	$sql = "UPDATE configuration SET value=? WHERE key=?";
-	$query = $db->prepare($sql);
+	$query = $DB->prepare($sql);
 	if($query->execute(array($_POST['autobackup'], 'auto_backup')) === FALSE){
 		$_POST['error']['autobackup']['error_autobackup'] = 'La clé "auto_backup" n\'a pas pu être mise à jour';
 	}
@@ -244,7 +244,7 @@ if(isset($_GET['action'], $_GET['key'])){
 		if(in_array($_GET['key'], array('last_cron_update', 'last_daily_cron_update', 'last_weekly_cron_update', 'last_yearly_cron_update')) === TRUE){
 			$_POST['error'][$_GET['key']] = array();
 			$sql = "UPDATE configuration SET value=NULL WHERE key=?";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			if($query->execute(array($_GET['key'])) === FALSE){
 				$_POST['error'][$_GET['key']]['error_db'] = 'La clé "'.$_GET['key'].'" n\'a pas pu être mise à jour';
 			}else{
@@ -260,7 +260,7 @@ if(isset($_GET['action'], $_GET['key'])){
 				// re-order index keys
 				$CFG[$_GET['key']] = array_merge($CFG[$_GET['key']]);
 				$sql = "UPDATE configuration SET value=? WHERE key=?";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				if($query->execute(array(json_encode($CFG[$_GET['key']]), $_GET['key'])) === FALSE){
 					$_POST['error'][$_GET['key']]['error_db'] = 'La valeur n\'a pas pu être supprimée de la clé "'.$_GET['key'].'".';
 				}else{

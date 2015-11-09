@@ -162,7 +162,7 @@ class IsouService {
 	 * 	@return array of IsouEvent
 	 */
 	public function getNextEvents($limit = -1){
-		global $db;
+		global $DB;
 
 		$TIME = strftime('%Y-%m-%dT%H:%M', TIME);
 
@@ -176,7 +176,7 @@ class IsouService {
 		" AND EI.isScheduled < 2".
 		" ORDER BY E.beginDate".
 		" LIMIT :2";
-		$event_records = $db->prepare($sql);
+		$event_records = $DB->prepare($sql);
 		$events = array();
 		if($event_records->execute(array($this->id, $TIME, $limit))){
 			while($event = $event_records->fetch(PDO::FETCH_OBJ)){
@@ -195,7 +195,7 @@ class IsouService {
 	 * 	@return array of IsouEvent
 	 */
 	public function getScheduledEvents($tolerance = 0, $limit = -1, $beginDate = '', $endDate = ''){
-		global $db;
+		global $DB;
 
 		$sql = "SELECT E.idEvent, strftime('%s',E.beginDate) AS beginDate, strftime('%s',E.endDate) AS endDate, EI.period, D.description, EI.isScheduled".
 				" FROM events E, events_isou EI, events_description D".
@@ -211,7 +211,7 @@ class IsouService {
 				" ORDER BY E.beginDate".
 				" LIMIT ?";
 
-		$event_records = $db->prepare($sql);
+		$event_records = $DB->prepare($sql);
 		$events = array();
 		if($event_records->execute(array($this->id, $beginDate, $endDate, $tolerance, $limit))){
 			while($event = $event_records->fetch(PDO::FETCH_OBJ)){
@@ -232,7 +232,7 @@ class IsouService {
 	 * 	@return array of IsouEvent
 	 */
 	public function getAllEvents($tolerance = 0, $limit = -1, $beginDate = '', $endDate = ''){
-		global $db;
+		global $DB;
 
 		$TIME = strftime('%Y-%m-%dT%H:%M', TIME);
 
@@ -274,7 +274,7 @@ class IsouService {
 				" )".
 				" ) ORDER BY E.beginDate DESC".
 				" LIMIT ?";
-		$event_records = $db->prepare($sql);
+		$event_records = $DB->prepare($sql);
 		$events = array();
 		// if($event_records->execute(array($this->id, TIME, TIME, $beginDate, $endDate, $beginDate, $endDate, $tolerance, $limit))){
 		if($event_records->execute(array($this->id, $this->id, $beginDate, $endDate, $beginDate, $endDate, $beginDate, $endDate, $beginDate, $endDate, $limit))){
@@ -294,7 +294,7 @@ class IsouService {
 	 * 	@return array of IsouEvent
 	 */
 	public function getLastInterruptions($tolerance = 0, $limit = -1, $beginDate = '', $endDate = ''){
-		global $db;
+		global $DB;
 
 		if(empty($beginDate)){
 			$beginDate = strftime('%Y-%m-%dT%H:%M', TIME-48*60*60);
@@ -322,7 +322,7 @@ class IsouService {
 			" OR E.endDate IS NULL)))".
 			" ORDER BY E.beginDate DESC".
 			" LIMIT :7";
-		$event_records = $db->prepare($sql);
+		$event_records = $DB->prepare($sql);
 		$events = array();
 		if($event_records->execute(array($this->id, $beginDate, $TIME, $beginDate, $TIME, $TIME, $TIME, $limit))){
 			while($event = $event_records->fetch(PDO::FETCH_OBJ)){
@@ -341,7 +341,7 @@ class IsouService {
 	 * 	@return array
 	 */
 	public function getClosedInterruption(){
-		global $db;
+		global $DB;
 
 		$TIME = strftime('%Y-%m-%dT%H:%M', TIME);
 
@@ -355,7 +355,7 @@ class IsouService {
 			" AND EI.isScheduled = 3".
 			" AND (E.endDate >= :1 OR E.endDate IS NULL)".
 			" ORDER BY E.beginDate";
-		$event_records = $db->prepare($sql);
+		$event_records = $DB->prepare($sql);
 		if($event_records->execute(array($this->getId(), $TIME))){
 			if($event = $event_records->fetch(PDO::FETCH_OBJ)){
 				$event->serviceName = $this->nameForUsers;
@@ -373,7 +373,7 @@ class IsouService {
 	 * 	@return array of IsouEvent
 	 */
 	public function getRegularInterruptions(){
-		global $db;
+		global $DB;
 
 		$sql = "SELECT E.idEvent, strftime('%s',E.beginDate) AS beginDate, strftime('%s',E.endDate) AS endDate, EI.period, D.description, EI.isScheduled".
 			" FROM events E, events_isou EI, events_description D".
@@ -383,7 +383,7 @@ class IsouService {
 			" AND EI.idService = :0".
 			" AND EI.isScheduled = 2".
 			" ORDER BY E.beginDate";
-		$event_records = $db->prepare($sql);
+		$event_records = $DB->prepare($sql);
 		$events = array();
 		if($event_records->execute(array($this->id))){
 			while($event = $event_records->fetch(PDO::FETCH_OBJ)){

@@ -62,7 +62,7 @@ $sql = "SELECT EI.shortText, EI.longText".
 		" WHERE E.idEvent = EI.idEvent".
 		" AND (E.beginDate > ?".
 		" OR E.endDate IS NULL)";
-$query = $db->prepare($sql);
+$query = $DB->prepare($sql);
 $messages = array();
 if($query->execute(array($BEFORE))){
 	while($message = $query->fetchObject()){
@@ -86,7 +86,7 @@ $sql = "SELECT DISTINCT S.idService, S.name, S.nameForUsers, S.url, S.state, S.c
 $i=0;
 $categoryName = '';
 $categories = array();
-if($service_records = $db->query($sql)){
+if($service_records = $DB->query($sql)){
 	while($service = $service_records->fetchObject('IsouService')){
 
 		if(isset($calendar)){

@@ -9,10 +9,10 @@ function status_dat2db($file){
 
 	if($handle = @fopen($file, "r")){
 		try {
-			$db = new PDO(DB_PATH, '', '');
+			$DB = new PDO(DB_PATH, '', '');
 		} catch (PDOException $e) {
 			// close pdo connection
-			$db = null;
+			$DB = null;
 			return new Exception("Impossible d'ouvrir la base de données ".DBPATH);
 			exit;
 		}
@@ -79,7 +79,7 @@ function status_dat2db($file){
 						" SET state = ".$current_state.
 						" WHERE name = '".$host_name."'".
 						" AND readonly = 0";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				if($query->execute()){
 					if($query->rowCount()>0){
 						// add_log(LOG_FILE, 'ISOU', 'UPDATE', 'Nombre de lignes modifiées (services '.$host_name.' mis à jour dans la db) : '. $query->rowCount());
@@ -92,7 +92,7 @@ function status_dat2db($file){
 						" FROM services S".
 						" WHERE name = '".$host_name."'".
 						" AND readonly = 0";
-				$services = $db->query($sql);
+				$services = $DB->query($sql);
 
 				while($service = $services->fetch()){
 					$sql = "SELECT EN.idEventNagios, EN.state".
@@ -101,7 +101,7 @@ function status_dat2db($file){
 							" AND E.typeEvent = 1".
 							" AND EN.idService = ".$service[0].
 							" AND E.endDate IS NULL";
-					$events_nagios = $db->query($sql);
+					$events_nagios = $DB->query($sql);
 					$ins = true;
 					$event_nagios = $events_nagios->fetch();
 					$events_nagios->closeCursor();
@@ -110,7 +110,7 @@ function status_dat2db($file){
 							// $sql = "UPDATE events_nagios SET endDate = '".TIME."' WHERE idEventNagios = ".$event_nagios[0];
 							$sql = "UPDATE events SET endDate = '".strftime('%Y-%m-%dT%H:%M', TIME)."'".
 									" WHERE typeEvent = 1 AND idEvent = (SELECT idEvent FROM events_nagios WHERE idEventNagios = ".$event_nagios[0].")";
-							$upd_nagios = $db->prepare($sql);
+							$upd_nagios = $DB->prepare($sql);
 
 							if($upd_nagios->execute()){
 								add_log(LOG_FILE, 'ISOU', 'UPDATE', 'L\'évènement Nagios #'.$event_nagios[0].' a été cloturé (SET endDate = '.TIME.' WHERE idEventNagios = '.$event_nagios[0].')');
@@ -128,7 +128,7 @@ function status_dat2db($file){
 						$ins = FALSE;
 						/*
 						try{
-							$db->beginTransaction();
+							$DB->beginTransaction();
 						}catch(PDOException $e){
 							var_dump($e);
 							die();
@@ -136,12 +136,12 @@ function status_dat2db($file){
 						*/
 						$sql = "INSERT INTO events(beginDate, endDate, typeEvent)".
 								" VALUES(?, NULL, 1)";
-						$query = $db->prepare($sql);
+						$query = $DB->prepare($sql);
 						if($query->execute(array(strftime('%Y-%m-%dT%H:%M', TIME)))){
-							$idEvent = $db->lastInsertId();
+							$idEvent = $DB->lastInsertId();
 							$sql = "INSERT INTO events_nagios (state, idService, idEvent)".
 									" VALUES(:0, :1, :2)";
-							$query = $db->prepare($sql);
+							$query = $DB->prepare($sql);
 							if($query->execute(array($current_state, $service[0], $idEvent))){
 								$ins = TRUE;
 							}
@@ -155,10 +155,10 @@ function status_dat2db($file){
 						// usleep(250000);
 
 						if($ins === TRUE){
-							// $db->commit();
+							// $DB->commit();
 							add_log(LOG_FILE, 'ISOU', 'INSERT', 'Un évènement Nagios a été inséré (VALUES(NULL, '.TIME.', NULL, '.$current_state.', '.$service[0].'))');
 						}else{
-							// $db->rollBack();
+							// $DB->rollBack();
 							add_log(LOG_FILE, 'ISOU', 'INSERT', 'Un évènement Nagios n\'a pas été inséré (VALUES(NULL, '.TIME.', NULL, '.$current_state.', '.$service[0].'))');
 						}
 					}
@@ -174,14 +174,14 @@ function status_dat2db($file){
 	$removed_services_nagios = '';
 	foreach($services_nagios as $service_nagios){
 		$sql = "SELECT name, nameForUsers FROM services WHERE name = ?";
-		$query = $db->prepare($sql);
+		$query = $DB->prepare($sql);
 		if($query->execute(array($service_nagios)) === FALSE){
 			$removed_services_nagios .= $service_nagios."\n";
 		}
 	}
 
 	// close pdo connection
-	$db = null;
+	$DB = null;
 
 	return true;
 }

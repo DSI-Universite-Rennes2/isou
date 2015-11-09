@@ -156,16 +156,16 @@ if(isset($_POST['insert'])){
 		if(!empty($message)){
 			$sql = "INSERT INTO events (idEvent, beginDate, endDate, typeEvent)".
 					" VALUES(NULL, ?, ?, 2)";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			if($query->execute(array($beginDate, $endDate))){
-				$idEvent = $db->lastInsertId();
+				$idEvent = $DB->lastInsertId();
 				$sql = "INSERT INTO events_info (idEventInfo, shortText, longText, idEvent)".
 					" VALUES(NULL, ?, ?, ?)";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				if($query->execute(array($message, $description, $idEvent))){
 					$error = 'Le message a été inséré avec succès.';
 					unset($_POST);
-					add_log(LOG_FILE, NULL, 'INSERT', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
+					add_log(LOG_FILE, NULL, 'INSERT', 'Evènement #'.$DB->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
 				}else{
 					$error = 'Le message n\'a pas pu être inséré.';
 				}
@@ -185,7 +185,7 @@ if(isset($_POST['insert'])){
 						" AND EI.isScheduled=0".
 						" AND (E.endDate IS NULL OR".
 						" (E.endDate >= ? AND E.beginDate <= ?))";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				$query->execute(array($idService, TIME, TIME));
 				$exist = $query->fetchObject();
 				if($exist->total > 0){
@@ -198,7 +198,7 @@ if(isset($_POST['insert'])){
 						" WHERE E.idEvent=EI.idEvent".
 						" AND EI.idService=?".
 						" AND EI.isScheduled=3";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				$query->execute(array($idService));
 				$exist = $query->fetchObject();
 				if($exist->total > 0){
@@ -211,7 +211,7 @@ if(isset($_POST['insert'])){
 					$forced = intval($_POST['forced']);
 					if($forced >= 0 && $forced < 5){
 						$sql = "UPDATE services SET state=?, readonly=1 WHERE idService = ?";
-						$query = $db->prepare($sql);
+						$query = $DB->prepare($sql);
 						if($query->execute(array($forced, $idService)) === FALSE){
 							$error = 'L\'évènement n\'a pas pu être inséré.';
 						}else{
@@ -226,16 +226,16 @@ if(isset($_POST['insert'])){
 			$idEventDescription = 1;
 			if(!isset($error) && !isset($dontaddevent) && !empty($description)){
 				$sql = "SELECT idEventDescription FROM events_description WHERE autogen=0 AND description=?";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				$query->execute(array(trim($description)));
 				if($idEventDescription = $query->fetchObject()){
 					$idEventDescription = $idEventDescription->idEventDescription;
 				}else{
 					$sql = "INSERT INTO events_description (idEventDescription, description, autogen)".
 						" VALUES(NULL, ?, 0)";
-					$query = $db->prepare($sql);
+					$query = $DB->prepare($sql);
 					if($query->execute(array(trim($description)))){
-						$idEventDescription = $db->lastInsertId();
+						$idEventDescription = $DB->lastInsertId();
 					}
 				}
 			}
@@ -248,25 +248,25 @@ if(isset($_POST['insert'])){
 			if(!isset($error) && !isset($dontaddevent)){
 				$sql = "INSERT INTO events (idEvent, beginDate, endDate, typeEvent)".
 						" VALUES(NULL, ?, ?, 0)";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				if($query->execute(array($beginDate, $endDate))){
-					$idEvent = $db->lastInsertId();
+					$idEvent = $DB->lastInsertId();
 					$sql = "INSERT INTO events_isou (idEventIsou, period, isScheduled, idService, idEvent, idEventDescription)".
 						" VALUES(NULL, ?, ?, ?, ?, ?)";
-					$query = $db->prepare($sql);
+					$query = $DB->prepare($sql);
 					if($query->execute(array($period, $isScheduled, $idService, $idEvent, $idEventDescription))){
 						if($isScheduled == 3){
 							$sql = "UPDATE services SET state=4 WHERE idService=?";
-							$query = $db->prepare($sql);
+							$query = $DB->prepare($sql);
 							$query->execute(array($idService));
 						}
 						$sql = "SELECT DISTINCT idService FROM dependencies WHERE idServiceParent = ?";
-						$query = $db->prepare($sql);
+						$query = $DB->prepare($sql);
 						$query->execute(array($idService));
 						while($child = $query->fetch(PDO::FETCH_OBJ)){
 							$sql = "INSERT INTO events_isou (idEventIsou, period, isScheduled, idService, idEvent, idEventDescription)".
 								" VALUES(NULL, ?, ?, ?, ?, ?)";
-							$insert = $db->prepare($sql);
+							$insert = $DB->prepare($sql);
 							if(!$insert->execute(array($period, $isScheduled, $child->idService, $idEvent, $idEventDescription))){
 								$error = 'L\'évènement n\'a pas pu être inséré.';
 							}
@@ -275,7 +275,7 @@ if(isset($_POST['insert'])){
 						if(!isset($error)){
 							$error = 'L\'évènement a été inséré avec succès.';
 							unset($_POST);
-							add_log(LOG_FILE, NULL, 'INSERT', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
+							add_log(LOG_FILE, NULL, 'INSERT', 'Evènement #'.$DB->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
 						}
 					}else{
 						$error = 'L\'évènement n\'a pas pu être inséré.';
@@ -301,22 +301,22 @@ if(isset($_POST['insert'])){
 * * * * * * * * * * * * * * * * * */
 if(isset($_POST['delete']) && isset($idDelEvent)){
 	if($idDelEvent > 0){
-		$db->beginTransaction();
+		$DB->beginTransaction();
 		$commit = FALSE;
 		if(isset($_POST['message'])){
 			$sql = "DELETE FROM events_info WHERE idEvent = ?";
 		}else{
 			$sql = "SELECT S.idService, S.state FROM services S, events_isou EI WHERE S.idService=EI.idService AND EI.idEvent = ?";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			$query->execute(array($idDelEvent));
 			$service = $query->fetchObject();
 			$sql = "DELETE FROM events_isou WHERE idEvent = ?";
 		}
-		$query = $db->prepare($sql);
+		$query = $DB->prepare($sql);
 		if($query->execute(array($idDelEvent))){
 			$sql = "DELETE FROM events ".
 					" WHERE idEvent = ?";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			if($query->execute(array($idDelEvent))){
 				if(isset($_POST['message'])){
 					$commit = TRUE;
@@ -326,7 +326,7 @@ if(isset($_POST['delete']) && isset($idDelEvent)){
 					}else{
 						$sql = "UPDATE services SET readonly=0 WHERE idService=?";
 					}
-					$query = $db->prepare($sql);
+					$query = $DB->prepare($sql);
 					if($query->execute(array($service->idService))){
 						$commit = TRUE;
 					}
@@ -335,10 +335,10 @@ if(isset($_POST['delete']) && isset($idDelEvent)){
 		}
 
 		if($commit === TRUE){
-			$db->commit();
+			$DB->commit();
 			$error = 'L\'évènement #'.$_POST['idDelEvent'].' a été supprimée avec succès.';
 		}else{
-			$db->rollBack();
+			$DB->rollBack();
 			$error = 'L\'évènement #'.$_POST['idDelEvent'].' n\'a pas pu être supprimée.';
 			add_log(LOG_FILE, NULL, 'DELETE', 'Evènement #'.$_POST['idDelEvent']);
 		}
@@ -358,16 +358,16 @@ if(isset($_POST['modify'])){
 		$message = $HTMLPurifier->purify($_POST['message']);
 		if(!empty($message)){
 			$sql = "UPDATE events SET beginDate=?, endDate=? WHERE idEvent=?";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			$updateMessage = $query->execute(array($beginDate, $endDate, $idEvent));
 			$sql = "UPDATE events_info SET shortText=?, longText=? WHERE idEvent = ?";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			$updateMessage = $updateMessage AND $query->execute(array($message, $description, $idEvent));
 
 			if($updateMessage === TRUE){
 				$error = 'Le message a été mis à jour avec succès.';
 				unset($_POST);
-				add_log(LOG_FILE, NULL, 'UPDATE', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$message.', '.$description.', '.$idEvent.')');
+				add_log(LOG_FILE, NULL, 'UPDATE', 'Evènement #'.$DB->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$message.', '.$description.', '.$idEvent.')');
 			}else{
 				$error = 'Le message a été partiellement modifié.';
 			}
@@ -385,7 +385,7 @@ if(isset($_POST['modify'])){
 						" FROM events_isou EI, events_description ED".
 						" WHERE ED.idEventDescription = EI.idEventDescription".
 						" AND EI.idEvent=?";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				if($query->execute(array($idEvent))){
 					$eventDescription = $query->fetch();
 					// vérifie si la description a changé
@@ -394,7 +394,7 @@ if(isset($_POST['modify'])){
 							$sql = "SELECT ED.idEventDescription".
 									" FROM events_description ED".
 									" WHERE ED.description = :0";
-							$query = $db->prepare($sql);
+							$query = $DB->prepare($sql);
 							// recherche éventuellement une description existante
 							if($query->execute(array($descriptionUpd))){
 								$newEventDescription = $query->fetch();
@@ -403,9 +403,9 @@ if(isset($_POST['modify'])){
 								}else{
 									// crée une description si elle n'existe pas
 									$sql = "INSERT INTO events_description VALUES(NULL, :0, :1)";
-									$query = $db->prepare($sql);
+									$query = $DB->prepare($sql);
 									if($query->execute(array($descriptionUpd, 0))){
-										$idEventDescription = $db->lastInsertId();
+										$idEventDescription = $DB->lastInsertId();
 									}else{
 										$errorDescription = TRUE;
 									}
@@ -426,12 +426,12 @@ if(isset($_POST['modify'])){
 
 			if($errorDescription === FALSE){
 				$sql = "UPDATE events_description SET description=? WHERE idEventDescription=?";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				$updateDescription = $query->execute(array($descriptionUpd, $idEventDescription));
 			}
 
 			$sql = "UPDATE events SET beginDate=?, endDate=? WHERE idEvent=?";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			$updateMessage = $query->execute(array($beginDate, $endDate, $idEvent));
 
 			if($isScheduled === 0){
@@ -444,39 +444,39 @@ if(isset($_POST['modify'])){
 					}
 					if($forced >= 0 && $forced < 5){
 						$sql = "UPDATE services SET state=?, readonly=1 WHERE idService = ?";
-						$query = $db->prepare($sql);
+						$query = $DB->prepare($sql);
 						$updateMessage = $query->execute(array($forced, $idService));
 					}else{
 						$sql = "UPDATE services SET readonly=0 WHERE idService = ?";
-						$query = $db->prepare($sql);
+						$query = $DB->prepare($sql);
 						$updateMessage = $query->execute(array($idService));
 					}
 
 					if($forced === 0){
 						// supprimer tous les évènements en cours, si on force le service à l'état 'en fonctionnement'
 						$sql = "DELETE FROM events_isou WHERE idEvent = ?";
-						$query = $db->prepare($sql);
+						$query = $DB->prepare($sql);
 						$query->execute(array($idEvent));
 
 						$sql = "DELETE FROM events WHERE idEvent = ?";
-						$query = $db->prepare($sql);
+						$query = $DB->prepare($sql);
 						$query->execute(array($idEvent));
 					}
 				}
 			}elseif($isScheduled == 3){
 				$sql = "UPDATE services SET state=4 WHERE idService=?";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				$query->execute(array($idService));
 			}
 
 			$sql = "UPDATE events_isou SET period=?, idEventDescription=?, isScheduled=?, idService=? WHERE idEvent=?";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			$updateMessage = $updateMessage AND $query->execute(array($period, $idEventDescription, $isScheduled, $idService, $idEvent));
 
 			if($updateMessage === TRUE){
 				$error = 'L\'évènement a été mise à jour avec succès.';
 				unset($_POST);
-				add_log(LOG_FILE, NULL, 'UPDATE', 'Evènement #'.$db->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
+				add_log(LOG_FILE, NULL, 'UPDATE', 'Evènement #'.$DB->lastInsertId().' : VALUES('.$beginDate.', '.$endDate.', '.$period.', '.$description.', '.$isScheduled.', '.$idService.')');
 			}else{
 				$error = 'L\'évènement n\'a pas pu être mis à jour.';
 			}

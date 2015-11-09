@@ -98,7 +98,7 @@ function monthStat(&$services, $event){
 			" WHERE S.nameForUsers IS NOT NULL".
 			" ORDER BY S.nameForUsers";
 	$serviceSelect = array();
-	if($services = $db->query($sql)){
+	if($services = $DB->query($sql)){
 		$serviceSelect['all'] = 'Tous les services';
 		while($service = $services->fetch()){
 			$serviceSelect[$service[0]] = $service[1];
@@ -229,7 +229,7 @@ if(isset($_GET['serviceSelect'], $_GET['beginDate'], $_GET['endDate'], $_GET['gr
 
 		if(isset($dbname)){
 			try {
-				$db = new PDO($dbname, '', '');
+				$DB = new PDO($dbname, '', '');
 			} catch (PDOException $e) {
 				continue;
 			}
@@ -264,7 +264,7 @@ if(isset($_GET['serviceSelect'], $_GET['beginDate'], $_GET['endDate'], $_GET['gr
 					" AND (strftime('%s', E.endDate) <= ?)";// AND E.endDate NOT NULL)";
 			// TODO: mettre en place une meilleure gestion des évènements commencés avant beginDate
 
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			$query->execute(array($beginDate, $endDate));
 
 			while($event = $query->fetch(PDO::FETCH_OBJ)){

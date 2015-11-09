@@ -29,12 +29,12 @@ class Menu{
 	}
 
 	public function save(){
-		global $db;
+		global $DB;
 
 		$results = array('successes' => array(), 'errors' => array());
 
 		$sql = "UPDATE menu SET active=? WHERE idmenu=?";
-		$query = $db->prepare($sql);
+		$query = $DB->prepare($sql);
 		if($query->execute(array($this->active, $this->id))){
 			if($this->active === '1'){
 				$results['successes'][] = 'Le menu "'.$this->label.'" a été activé.';

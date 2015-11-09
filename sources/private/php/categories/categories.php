@@ -15,13 +15,13 @@
 			$count = 0;
 			$sql = "SELECT count(*)".
 					" FROM categories";
-			$count = $db->query($sql);
+			$count = $DB->query($sql);
 			$count = $count->fetch();
 			$count = $count[0]+1;
 
 			$sql = "INSERT INTO categories (name, position)".
 					" VALUES(?, ?)";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			if($query->execute(array($name,$count))){
 				$error = 'La catégorie a été insérée avec succès.';
 			}else{
@@ -45,7 +45,7 @@
 			$sql = "UPDATE categories ".
 				" SET name = ?".
 				" WHERE idCategory = ?";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			if(!$query->execute(array($name, $idCategory))){
 				$error = 'La base n\'a pas pu être mis à jour';
 			}else{
@@ -59,7 +59,7 @@
 
 	$sql = "SELECT count(*)".
 			" FROM categories";
-	$count = $db->query($sql);
+	$count = $DB->query($sql);
 	$count = $count->fetch();
 	$count = $count[0];
 
@@ -72,7 +72,7 @@
 		$sql = "SELECT position".
 				" FROM categories".
 				" WHERE idCategory = ?";
-		$query = $db->prepare($sql);
+		$query = $DB->prepare($sql);
 		$query->execute(array($id));
 		$position = $query->fetch();
 
@@ -87,17 +87,17 @@
 			}
 
 			$commit = false;
-			if($db->beginTransaction()){
+			if($DB->beginTransaction()){
 				$sql = "UPDATE categories".
 				" SET position=position".$op1."1".
 				" WHERE idCategory = ?";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				if($query->execute(array($id))){
 					$sql = "UPDATE categories".
 							" SET position=position".$op2."1".
 							" WHERE position = ".$position[0].$op1."1".
 							" AND idCategory != ?";
-					$query = $db->prepare($sql);
+					$query = $DB->prepare($sql);
 					if($query->execute(array($id))){
 						$commit = true;
 					}
@@ -105,10 +105,10 @@
 			}
 
 			if($commit){
-				$db->commit();
+				$DB->commit();
 				$error = 'La base a été mise à jour avec succès';
 			}else{
-				$db->rollBack() ;
+				$DB->rollBack() ;
 				$error = 'La base n\'a pas pu être mis à jour';
 			}
 		}else{
@@ -123,7 +123,7 @@
 	$sql = "SELECT idCategory, name, position".
 		" FROM categories".
 		" ORDER BY position";
-	$results = $db->query($sql);
+	$results = $DB->query($sql);
 	$categories = array();
 	while($categorie = $results->fetchObject()){
 		$categories[] = $categorie;

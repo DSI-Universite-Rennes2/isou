@@ -34,7 +34,7 @@ function get_parents($idChild){
 $sql = "SELECT idCategory, name".
 		" FROM categories".
 		" ORDER BY position";
-$categories = $db->query($sql);
+$categories = $DB->query($sql);
 $optionCategories = array();
 while($category = $categories->fetch()){
 	$optionCategories[$category[0]] = $category[1];
@@ -48,7 +48,7 @@ $sql = "SELECT S.idService, S.name, S.nameForUsers, S.url, S.state, S.comment, S
 		" FROM services S, categories C".
 		" WHERE C.idCategory = S.idCategory".
 		" ORDER BY C.position, UPPER(S.nameForUsers)";
-$services = $db->query($sql);
+$services = $DB->query($sql);
 
 $currentCategory = '';
 

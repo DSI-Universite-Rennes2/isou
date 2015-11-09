@@ -16,7 +16,7 @@
 			" FROM services AS S".
 			" WHERE S.nameForUsers IS NOT NULL".
 			" ORDER BY UPPER(S.nameForUsers)";
-	$services = $db->query($sql);
+	$services = $DB->query($sql);
 	$optionChildService = array();
 	while($service = $services->fetchObject()){
 		$optionChildService[$service->idService] = $service->nameForUsers;
@@ -30,7 +30,7 @@
 				" FROM services AS S".
 				" WHERE S.nameForUsers IS NOT NULL)".
 			" ORDER BY UPPER(name)";
-	$services = $db->query($sql);
+	$services = $DB->query($sql);
 	$optionNagiosService = array();
 	while($service = $services->fetchObject()){
 		if(is_null($service->nameForUsers)){
@@ -44,7 +44,7 @@
 			" FROM services AS S".
 			" WHERE S.nameForUsers IS NOT NULL".
 			" ORDER BY UPPER(S.nameForUsers)";
-	$services = $db->query($sql);
+	$services = $DB->query($sql);
 	$optionIsouService = array();
 	while($service = $services->fetchObject()){
 		$optionIsouService[$service->idService] = $service->nameForUsers;
@@ -91,7 +91,7 @@
 			" AND C.idCategory = S.idCategory".
 			" ORDER BY UPPER(S.nameForUsers), D.newStateForChild";
 	}
-	$dependencies = $db->query($sql);
+	$dependencies = $DB->query($sql);
 	$dependencies = $dependencies->fetchAll();
 
 	$sql = "SELECT DISTINCT S.idService, S.nameForUsers".
@@ -99,7 +99,7 @@
 			" WHERE S.idService = D.idService".
 			" ORDER BY UPPER(S.nameForUsers)";
 
-	$result = $db->query($sql);
+	$result = $DB->query($sql);
 
 	$i = 0;
 	$services = array();
@@ -112,7 +112,7 @@
 			" AND S.idService = ".$service->idService.
 			" ORDER BY UPPER(S.nameForUsers), D.newStateForChild";
 
-		$dependencies = $db->query($sql);
+		$dependencies = $DB->query($sql);
 		$j = 0;
 
 		$service->dependency1 = array();
@@ -122,7 +122,7 @@
 			$sql = "SELECT S.nameForUsers, S.name".
 					" FROM services AS S".
 					" WHERE S.idService = ".$dependency->idServiceParent;
-			$parent = $db->query($sql);
+			$parent = $DB->query($sql);
 			$parent = $parent->fetchAll();
 
 			if(is_null($parent[0][0])){

@@ -20,7 +20,7 @@
 			" AND EI.isScheduled = 1".
 			" ORDER BY E.beginDate DESC";
 
-	$events = $db->prepare($sql);
+	$events = $DB->prepare($sql);
 	$events->execute(array($firstDay, $lastDay, $firstDay, $lastDay));
 
 	$lastIdEvent = NULL;

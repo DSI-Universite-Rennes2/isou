@@ -12,7 +12,7 @@
 			" AND E.typeEvent = 0".
 			" AND EI.isScheduled = 2".
 			" ORDER BY E.beginDate";
-	$events = $db->query($sql);
+	$events = $DB->query($sql);
 
 	$lastIdEvent = NULL;
 	$regular = array();

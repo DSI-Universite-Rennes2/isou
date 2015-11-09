@@ -17,7 +17,7 @@ while($error === TRUE){
 }
 
 $sql = "UPDATE configuration SET value=? WHERE key=?";
-$query = $db->prepare($sql);
+$query = $DB->prepare($sql);
 $display = 'Insertion de la clé "local_mail" dans la table configuration';
 if($query->execute(array($LOCAL_MAIL, 'local_mail')) === FALSE){
 	echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
@@ -36,7 +36,7 @@ if(!empty($AUTO_BACKUP) && in_array($AUTO_BACKUP, array('N', 'n', 0))){
 }
 
 $sql = "UPDATE configuration SET value=? WHERE key=?";
-$query = $db->prepare($sql);
+$query = $DB->prepare($sql);
 $display = 'Insertion de la clé "auto_backup" dans la table configuration';
 if($query->execute(array($AUTO_BACKUP, 'auto_backup')) === FALSE){
 	echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";

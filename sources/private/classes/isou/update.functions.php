@@ -9,7 +9,7 @@ function update_nagios_to_db(){
 
 	if(defined('UNITS') === FALSE){
 		try {
-			$db = new PDO(DB_PATH, '', '');
+			$DB = new PDO(DB_PATH, '', '');
 		} catch (PDOException $e) {
 			add_log(LOG_FILE, 'ISOU', 'ERROR_DB', $e->getMessage());
 		}
@@ -19,13 +19,13 @@ function update_nagios_to_db(){
 
 		if($log instanceof Exception){
 			// close pdo connection
-			$db = null;
+			$DB = null;
 			return $log;
 			exit;
 		}
 	}else{
 		global $db2;
-		$db = $db2;
+		$DB = $db2;
 	}
 
 	// reactive tous les services finaux
@@ -33,7 +33,7 @@ function update_nagios_to_db(){
 		" SET state = 0".
 		" WHERE name = 'Service final'".
 		" AND readonly = 0";
-	$query = $db->prepare($sql);
+	$query = $DB->prepare($sql);
 	if($query->execute()){
 		if($query->rowCount() > 0){
 			// add_log(LOG_FILE, 'ISOU', 'update', $query->rowCount().' services finaux ont été réinitialisés à l\'état 0');
@@ -54,7 +54,7 @@ function update_nagios_to_db(){
 									" AND e.idEvent = ei.idEvent".
 									" AND ((e.beginDate < '".strftime('%Y-%m-%dT%H:%M', TIME)."' AND e.endDate > '".strftime('%Y-%m-%dT%H:%M', TIME)."') OR e.endDate is null)".
 									")";
-	$query = $db->prepare($sql);
+	$query = $DB->prepare($sql);
 	if($query->execute(array())){
 		if($query->rowCount() > 0){
 			add_log(LOG_FILE, 'ISOU', 'update', 'Nombre de lignes modifiées (réactivation de services) : '.$query->rowCount());
@@ -74,7 +74,7 @@ function update_nagios_to_db(){
 				" WHERE state BETWEEN 1 AND 3";
 
 	$array_dependence = array();
-	if($queryCount = $db->query($sql_count)){
+	if($queryCount = $DB->query($sql_count)){
 		$count = $queryCount->fetchAll();
 		$queryCount->closeCursor();
 		$cnt = 0;
@@ -86,17 +86,17 @@ function update_nagios_to_db(){
 			$sql = "SELECT idService, state, readonly".
 					" FROM services".
 					" WHERE state BETWEEN 1 AND 3";
-			if($dependence_records = $db->query($sql)){
+			if($dependence_records = $DB->query($sql)){
 				$dependences = $dependence_records->fetchAll(PDO::FETCH_OBJ);
 
 				foreach($dependences as $parent){
-					$array_dependence = make_dependencies($parent, $array_dependence, $db);
+					$array_dependence = make_dependencies($parent, $array_dependence, $DB);
 				}
 			}else{
 				add_log(LOG_FILE, 'ISOU', 'update', 'Les dépendances n\'ont pas pu être mises à jour (1)');
 			}
 
-			if($queryCount = $db->query($sql_count)){
+			if($queryCount = $DB->query($sql_count)){
 				$count = $queryCount->fetchAll();
 				$queryCount->closeCursor();
 			}else{
@@ -117,7 +117,7 @@ function update_nagios_to_db(){
 		" AND nameForUsers IS NOT NULL".
 		" AND enable = 1".
 		" AND idService NOT IN(SELECT EI.idService FROM events E, events_isou EI WHERE E.endDate IS NULL AND E.idEvent = EI.idEvent)";
-	$query = $db->prepare($sql);
+	$query = $DB->prepare($sql);
 	if($query->execute()){
 		$services = $query->fetchAll(PDO::FETCH_OBJ);
 		$query->closeCursor();
@@ -128,7 +128,7 @@ function update_nagios_to_db(){
 					" FROM events E, events_isou EI".
 					" WHERE E.idEvent = EI.idEvent".
 					" AND EI.idService = ?";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			if($query->execute(array($service->idService))){
 				$coverEvent = FALSE;
 
@@ -149,20 +149,20 @@ function update_nagios_to_db(){
 						}
 					}
 
-					$db->beginTransaction();
+					$DB->beginTransaction();
 					$commit = FALSE;
 					$sql = "INSERT INTO events(beginDate, endDate, typeEvent)".
 						" VALUES(?, NULL, 0)";
-					$query = $db->prepare($sql);
+					$query = $DB->prepare($sql);
 					if($query->execute(array(strftime('%Y-%m-%dT%H:%M', TIME)))){
-						$idEvent = $db->lastInsertId();
+						$idEvent = $DB->lastInsertId();
 						if($description === NULL){
 							$description = 1;
 						}else{
 							// check doublon
 							$duplicate = FALSE;
 							$sql = "SELECT idEventDescription FROM events_description WHERE description=?";
-							$query = $db->prepare($sql);
+							$query = $DB->prepare($sql);
 							if($query->execute(array($description))){
 								if($duplicate = $query->fetch(PDO::FETCH_OBJ)){
 									$duplicate = $duplicate->idEventDescription;
@@ -172,9 +172,9 @@ function update_nagios_to_db(){
 							if($duplicate === FALSE){
 								$sql = "INSERT INTO events_description(description, autogen)".
 										" VALUES(:0, 1)";
-								$query = $db->prepare($sql);
+								$query = $DB->prepare($sql);
 								if($query->execute(array($description))){
-									$description = $db->lastInsertId();
+									$description = $DB->lastInsertId();
 								}else{
 									$description = 1;
 								}
@@ -184,19 +184,19 @@ function update_nagios_to_db(){
 						}
 						$sql = "INSERT INTO events_isou(period, isScheduled, idService, idEvent, idEventDescription)".
 							" VALUES(NULL, 0, ?, ?, ?)";
-						$query = $db->prepare($sql);
+						$query = $DB->prepare($sql);
 						if($query->execute(array($service->idService, $idEvent, $description))){
 							$commit = TRUE;
 						}
 					}
 
 					if($commit === TRUE){
-						$db->commit();
+						$DB->commit();
 						if($query->rowCount() > 0){
 							add_log(LOG_FILE, 'ISOU', 'update', 'Nombre de lignes modifiées (nouvel évènement non prévu) : '. $query->rowCount());
 						}
 					}else{
-						$db->rollBack();
+						$DB->rollBack();
 						add_log(LOG_FILE, 'ISOU', 'update', 'L\'interruption du service '.$service->idService.' n\'a pas pu être ajouté');
 					}
 
@@ -217,7 +217,7 @@ function update_nagios_to_db(){
 		" AND nameForUsers IS NOT NULL".
 		" AND enable = 1".
 		" AND visible = 1";
-	if($event_records = $db->query($sql)){
+	if($event_records = $DB->query($sql)){
 		$event_record = $event_records->fetch();
 */
 
@@ -254,7 +254,7 @@ function update_nagios_to_db(){
 									")".
 							")".
 			" AND endDate IS NULL";
-	$query = $db->prepare($sql);
+	$query = $DB->prepare($sql);
 	if($query->execute(array(strftime('%Y-%m-%dT%H:%M', TIME)))){
 		if($query->rowCount() > 0){
 			add_log(LOG_FILE, 'ISOU', 'update', 'Nombre de lignes modifiées (réactivation de services) : '.$query->rowCount());
@@ -267,7 +267,7 @@ function update_nagios_to_db(){
 
 	// change le temps de la prochaine interruption régulière
 	$sql = "SELECT idEvent, period FROM events_isou WHERE isScheduled = 2";
-	$events = $db->prepare($sql);
+	$events = $DB->prepare($sql);
 	$cntUpd = 0;
 	if($events->execute()){
 		while($event = $events->fetch(PDO::FETCH_OBJ)){
@@ -277,13 +277,13 @@ function update_nagios_to_db(){
 					" WHERE endDate < :1".
 					" AND idEvent = :2".
 					" AND typeEvent = 0";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 
 			if(!empty($event->period) && $query->execute(array('+'.$event->period.' seconds', strftime('%Y-%m-%dT%H:%M', TIME), $event->idEvent))){
 				if($query->rowCount() > 0){
 					while($query->rowCount() > 0){
 						$query->closeCursor();
-						$query = $db->prepare($sql);
+						$query = $DB->prepare($sql);
 						$query->execute(array('+'.$event->period.' seconds', strftime('%Y-%m-%dT%H:%M', TIME), $event->idEvent));
 					}
 					$cntUpd++;
@@ -310,7 +310,7 @@ function update_nagios_to_db(){
 									" AND (E.endDate > :0".
 									" OR E.endDate IS NULL)".
 									" AND EI.isScheduled = 3)";
-	$query = $db->prepare($sql);
+	$query = $DB->prepare($sql);
 	if($query->execute(array(strftime('%Y-%m-%dT%H:%M', TIME)))){
 		if($query->rowCount() > 0){
 			add_log(LOG_FILE, 'ISOU', 'update', 'Nombre de lignes modifiées (fermeture de service) : '. $query->rowCount());
@@ -332,7 +332,7 @@ function update_nagios_to_db(){
 									" AND (E.endDate > :0".
 									" OR E.endDate IS NULL)".
 									" AND EI.isScheduled = 3)";
-	$query = $db->prepare($sql);
+	$query = $DB->prepare($sql);
 	if($query->execute(array(strftime('%Y-%m-%dT%H:%M', TIME)))){
 		if($query->rowCount() > 0){
 			add_log(LOG_FILE, 'ISOU', 'update', 'Nombre de lignes modifiées (réouverture de service) : '. $query->rowCount());
@@ -342,20 +342,20 @@ function update_nagios_to_db(){
 	}
 
 	// close pdo connection
-	$db = null;
+	$DB = null;
 
 	return true;
 }
 
 // fonction recursive qui retourne les messages automatiques liés aux dépendances
 // met à jour l'état du service à l'instant T
-function make_dependencies($parent,$array,$db){
+function make_dependencies($parent,$array,$DB){
 	$sql = "SELECT S.idService, D.newStateForChild as state, D.message, S.readonly".
 			" FROM dependencies D, services S".
 			" WHERE D.idServiceParent = ?".
 			" AND D.stateOfParent = ?".
 			" AND S.idService = D.idService";
-	$depend_records = $db->prepare($sql);
+	$depend_records = $DB->prepare($sql);
 	if($depend_records->execute(array($parent->idService, $parent->state))){
 		$depends = $depend_records->fetchAll(PDO::FETCH_OBJ);
 		foreach($depends as $child){
@@ -364,7 +364,7 @@ function make_dependencies($parent,$array,$db){
 					" WHERE idService = ".$child->idService.
 					" AND state < ".$child->state.
 					" AND readonly = 0";
-			if($db->query($sql)){
+			if($DB->query($sql)){
 				if(!isset($array[$child->idService])){
 					$array[$child->idService] = array();
 					if(isset($array[$parent->idService])){
@@ -379,7 +379,7 @@ function make_dependencies($parent,$array,$db){
 				}
 
 				if($child->readonly == '0'){
-					$array = make_dependencies($child, $array, $db);
+					$array = make_dependencies($child, $array, $DB);
 				}
 			}else{
 				add_log(LOG_FILE, 'ISOU', 'error', 'L\'état du service #'.$depend[$d][0].' n\'a pas pu être mis à jour (boucle dépendance)');

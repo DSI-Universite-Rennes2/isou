@@ -33,7 +33,7 @@ require PRIVATE_PATH.'/php/common/database.php';
 
 $sql = "SELECT key, value FROM configuration";
 $CFG = array();
-if($query = $db->query($sql)){
+if($query = $DB->query($sql)){
 	while($config = $query->fetch(PDO::FETCH_OBJ)){
 		if(in_array($config->key, array('ip_local', 'ip_service', 'admin_users', 'admin_mails'))){
 			 $CFG[$config->key] = json_decode($config->value);
@@ -48,7 +48,7 @@ require PRIVATE_PATH.'/php/common/authentification.php';
 
 $sql = "SELECT idState, name, title, alt, src FROM states";
 $flags = array();
-if($query = $db->query($sql)){
+if($query = $DB->query($sql)){
 	while($flag = $query->fetch(PDO::FETCH_OBJ)){
 		$flags[] = $flag;
 	}
@@ -85,7 +85,7 @@ $current_page->selected = TRUE;
 if($current_page->public === '1'){
 	$sql = "SELECT message FROM annonce WHERE afficher = 1 AND message != ''";
 	$annonce = '';
-	if($annonce = $db->query($sql)){
+	if($annonce = $DB->query($sql)){
 		$annonce = $annonce->fetch();
 		if(isset($annonce[0]) && !empty($annonce[0])){
 			$annonce = '<p id="annonce">'.nl2br(stripslashes($annonce[0])).'</p>';
@@ -163,6 +163,6 @@ $smarty->display($template);
 $smarty->display('common/html_body_footer.tpl');
 
 // close pdo connection
-$db = null;
+$DB = null;
 
 ?>

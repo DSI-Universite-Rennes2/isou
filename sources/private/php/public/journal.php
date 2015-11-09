@@ -50,7 +50,7 @@ if($_SESSION['hide'] === 1 || $IS_ADMIN === FALSE){
 	$sql .= ") AND E.typeEvent != 1";
 
 $events = array();
-$service_records = $db->prepare($sql);
+$service_records = $DB->prepare($sql);
 if($service_records->execute($param)){
 	while($service_record = $service_records->fetchObject()){
 		if($service_record->endDate === NULL){
@@ -69,7 +69,7 @@ if($service_records->execute($param)){
 		if($service_record->typeEvent === '2'){
 			// message informatif
 			$sql = "SELECT idEvent, shortText, longText FROM events_info WHERE idEvent = :0";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			$query->execute(array($service_record->idEvent));
 			if($event = $query->fetchObject()){
 				$event->typeEvent = 2;
@@ -90,7 +90,7 @@ if($service_records->execute($param)){
 					" WHERE S.idService = EI.idService".
 					" AND EI.idEventDescription = D.idEventDescription".
 					" AND EI.idEvent = :0";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			$query->execute(array($service_record->idEvent));
 
 			if($event = $query->fetchObject()){
@@ -122,7 +122,7 @@ if($service_records->execute($param)){
 							" AND E.beginDate >= ?".
 							" AND (E.endDate <= ?".
 							" OR E.endDate IS NULL)";
-					$query = $db->prepare($sql);
+					$query = $DB->prepare($sql);
 					$query->execute(array($event->idService, $event->beginDate, $event->endDate));
 					if($state = $query->fetch(PDO::FETCH_NUM)){
 						$event->state = $state[0];

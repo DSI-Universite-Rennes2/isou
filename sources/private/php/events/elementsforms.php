@@ -30,7 +30,7 @@
 			" WHERE S.name = 'Service final'".
 			" AND S.enable = 1".
 			" ORDER BY UPPER(S.nameForUsers)";
-	$services = $db->query($sql);
+	$services = $DB->query($sql);
 	$optionNameForUsers = array();
 	while($service = $services->fetch(PDO::FETCH_NUM)){
 		$optionNameForUsers[$service[0]] = $service[1];

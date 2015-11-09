@@ -48,7 +48,7 @@ if($version <= 0.95){
 if($version <= 0.96){
 	// création de la table configuration
 	$sql = "CREATE TABLE configuration (key VARCHAR(64) PRIMARY KEY, value VARCHAR(256))";
-	if($db->exec($sql) === FALSE){
+	if($DB->exec($sql) === FALSE){
 		echo "La création de la table 'configuration' a échoué.\n";
 		echo "\033[0;31mÉchec de l'installation\033[0m\n";
 		exit(1);
@@ -60,7 +60,7 @@ if($version <= 0.96){
 	// insertion des écritures dans la table configuration
 	$sql = "INSERT INTO configuration(key, value) VALUES('tolerance','".TOLERANCE."')";
 	$display = '   Insertion de la clé "tolérance" dans la table configuration'; 
-	if($db->exec($sql) === FALSE){
+	if($DB->exec($sql) === FALSE){
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
@@ -68,7 +68,7 @@ if($version <= 0.96){
 
 	$sql = "INSERT INTO configuration(key, value) VALUES('ip_local','".json_encode($IP_INTERNE)."')";
 	$display = '   Insertion de la clé "ip_local" dans la table configuration'; 
-	if($db->exec($sql) === FALSE){
+	if($DB->exec($sql) === FALSE){
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
@@ -76,7 +76,7 @@ if($version <= 0.96){
 
 	$sql = "INSERT INTO configuration(key, value) VALUES('ip_service','".json_encode($IP_CRI)."')";
 	$display = '   Insertion de la clé "ip_service" dans la table configuration'; 
-	if($db->exec($sql) === FALSE){
+	if($DB->exec($sql) === FALSE){
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
@@ -84,7 +84,7 @@ if($version <= 0.96){
 
 	$sql = "INSERT INTO configuration(key, value) VALUES('admin_users', '".json_encode($ADMIN_USERS)."')";
 	$display = '   Insertion de la clé "admin_users" dans la table configuration'; 
-	if($db->exec($sql) === FALSE){
+	if($DB->exec($sql) === FALSE){
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
@@ -92,7 +92,7 @@ if($version <= 0.96){
 
 	$sql = "INSERT INTO configuration(key, value) VALUES('admin_mails', '".json_encode($ADMIN_MAILS)."')";
 	$display = '   Insertion de la clé "admin_mails" dans la table configuration'; 
-	if($db->exec($sql) === FALSE){
+	if($DB->exec($sql) === FALSE){
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
@@ -100,7 +100,7 @@ if($version <= 0.96){
 
 	$sql = "INSERT INTO configuration(key, value) VALUES('version', '".VERSION."')";
 	$display = '   Insertion de la clé "version" dans la table configuration'; 
-	if($db->exec($sql) === FALSE){
+	if($DB->exec($sql) === FALSE){
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
@@ -108,7 +108,7 @@ if($version <= 0.96){
 
 	$sql = "INSERT INTO configuration(key, value) VALUES('last_update', '".TIME."')";
 	$display = '   Insertion de la clé "last_update" dans la table configuration'; 
-	if($db->exec($sql) === FALSE){
+	if($DB->exec($sql) === FALSE){
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
@@ -116,7 +116,7 @@ if($version <= 0.96){
 
 	$sql = "INSERT INTO configuration(key, value) VALUES('last_check_update', '".TIME."')";
 	$display = '   Insertion de la clé "last_check_update" dans la table configuration'; 
-	if($db->exec($sql) === FALSE){
+	if($DB->exec($sql) === FALSE){
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
@@ -124,7 +124,7 @@ if($version <= 0.96){
 
 	$sql = "INSERT INTO configuration(key, value) VALUES('last_cron_update', '0')";
 	$display = '   Insertion de la clé "last_cron_update" dans la table configuration'; 
-	if($db->exec($sql) === FALSE){
+	if($DB->exec($sql) === FALSE){
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
@@ -132,7 +132,7 @@ if($version <= 0.96){
 
 	$sql = "INSERT INTO configuration(key, value) VALUES('last_daily_cron_update', '0')";
 	$display = '   Insertion de la clé "last_daily_cron_update" dans la table configuration'; 
-	if($db->exec($sql) === FALSE){
+	if($DB->exec($sql) === FALSE){
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
@@ -140,7 +140,7 @@ if($version <= 0.96){
 
 	$sql = "INSERT INTO configuration(key, value) VALUES('daily_cron_hour', '06:00')";
 	$display = '   Insertion de la clé "daily_cron_hour" dans la table configuration'; 
-	if($db->exec($sql) === FALSE){
+	if($DB->exec($sql) === FALSE){
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
@@ -148,7 +148,7 @@ if($version <= 0.96){
 
 	$sql = "INSERT INTO configuration(key, value) VALUES('last_weekly_cron_update', '".TIME."')";
 	$display = '   Insertion de la clé "last_weekly_cron_update" dans la table configuration'; 
-	if($db->exec($sql) === FALSE){
+	if($DB->exec($sql) === FALSE){
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
@@ -156,7 +156,7 @@ if($version <= 0.96){
 
 	$sql = "INSERT INTO configuration(key, value) VALUES('last_yearly_cron_update', '".TIME."')";
 	$display = '   Insertion de la clé "last_yearly_cron_update" dans la table configuration'; 
-	if($db->exec($sql) === FALSE){
+	if($DB->exec($sql) === FALSE){
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
@@ -164,7 +164,7 @@ if($version <= 0.96){
 
 	$sql = "INSERT INTO configuration(key, value) VALUES('local_password', '')";
 	$display = '   Insertion de la clé "local_password" dans la table configuration'; 
-	if($db->exec($sql) === FALSE){
+	if($DB->exec($sql) === FALSE){
 		echo $display.niceDot($display)." \033[0;31merreur\033[0m\n";
 	}else{
 		echo $display.niceDot($display)." \033[0;32mok\033[0m\n";
@@ -174,7 +174,7 @@ if($version <= 0.96){
 			" WHERE E.idEvent=EI.idEvent".
 			" AND EI.isScheduled=3".
 			" GROUP BY EI.idService";
-	$query = $db->prepare($sql);
+	$query = $DB->prepare($sql);
 	$query->execute();
 	while($service = $query->fetchObject()){
 		if($service->total > 1){
@@ -182,16 +182,16 @@ if($version <= 0.96){
 					" WHERE E.idEvent=EI.idEvent".
 					" AND EI.isScheduled=3".
 					" ORDER BY E.beginDate DESC";
-			$events = $db->prepare($sql);
+			$events = $DB->prepare($sql);
 			$events->execute();
 			// skip first
 			$event = $events->fetchObject();
 			while($event = $events->fetchObject()){
 				$sql = "DELETE FROM events WHERE idEvent=?";
-				$delete = $db->prepare($sql);
+				$delete = $DB->prepare($sql);
 				$delete->execute(array($event->idEvent));
 				$sql = "DELETE FROM events_isou WHERE idEventIsou=?";
-				$delete = $db->prepare($sql);
+				$delete = $DB->prepare($sql);
 				$delete->execute(array($event->idEventIsou));
 			}
 			$display = 'Suppression des évènements de fermeture de service (doublons uniquement)';

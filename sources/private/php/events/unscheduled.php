@@ -25,7 +25,7 @@
 			" AND EI.isScheduled = 0".
 			" ORDER BY E.beginDate DESC".
 			" LIMIT 0, 50";
-	$events = $db->prepare($sql);
+	$events = $DB->prepare($sql);
 	$events->execute(array($firstDay, $lastDay, $firstDay, $lastDay));
 
 	$lastIdEvent = NULL;

@@ -22,7 +22,7 @@ if(isset($_GET['key'])){
 }
 
 try{
-	$db = new PDO(DB_PATH, '', '');
+	$DB = new PDO(DB_PATH, '', '');
 }catch(PDOException $e){
 	add_log(LOG_FILE, 'ISOU', 'ERROR_DB', $e->getMessage());
 	exit();
@@ -45,7 +45,7 @@ $sql = "SELECT S.nameForUsers as name, S.state as state, strftime('%s', E.beginD
 $services = array();
 $json = array("fisou" => $services);
 
-if($events = $db->query($sql)){
+if($events = $DB->query($sql)){
 	while($service = $events->fetch(PDO::FETCH_ASSOC)){
 		// remove html tags
 		$service['description'] = preg_replace('/<([a-zA-Z]+).*>(.*)<\/\1>/U', '\2', $service['description']);

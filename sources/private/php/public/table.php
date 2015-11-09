@@ -24,7 +24,7 @@
 			" AND S.enable = 1".
 			" AND S.visible = 1".
 			" ORDER BY C.position, UPPER(S.nameForUsers)";
-	if($service_records = $db->query($sql)){
+	if($service_records = $DB->query($sql)){
 		$categoryName = '';
 		$i = 0;
 		while($service = $service_records->fetchObject('IsouService')){

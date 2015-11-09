@@ -20,7 +20,7 @@ if(isset($_GET['version'])){
 				$_POST['error']['localmail']['error_localmail'] = 'L\'adresse mail saisie n\'est pas valide';
 			}else{
 				$sql = "UPDATE configuration SET value=? WHERE key=?";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				if($query->execute(array($_POST['localmail'], 'local_mail')) === FALSE){
 					$_POST['error']['localmail']['error_localmail'] = 'La clé "local_mail" n\'a pas pu être insérée';
 				}
@@ -34,7 +34,7 @@ if(isset($_GET['version'])){
 				$_POST['autobackup'] = 0;
 			}
 			$sql = "UPDATE configuration SET value=? WHERE key=?";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			if($query->execute(array($_POST['autobackup'], 'auto_backup')) === FALSE){
 				$_POST['error']['autobackup']['error_autobackup'] = 'La clé "auto_backup" n\'a pas pu être insérée';
 			}
@@ -54,7 +54,7 @@ if(isset($_GET['version'])){
 		}
 
 		$sql = "UPDATE configuration SET value=? WHERE key='version'";
-		$version = $db->prepare($sql);
+		$version = $DB->prepare($sql);
 		$version->execute(array(CURRENT_VERSION));
 
 		header('Location: '.URL.'/index.php/configuration?type=changelog#'.CURRENT_VERSION);
@@ -76,7 +76,7 @@ if(isset($_GET['version'])){
 			}
 
 			$sql = "UPDATE configuration SET value=? WHERE key='version'";
-			$version = $db->prepare($sql);
+			$version = $DB->prepare($sql);
 			$version->execute(array(CURRENT_VERSION));
 
 			$_POST['success'] = 'La mise à jour est maintenant terminée';

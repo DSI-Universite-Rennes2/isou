@@ -5,7 +5,7 @@ if(isset($_GET['mask'])){
 		" SET visible = 0".
 		" WHERE idService = ?".
 		" AND name = 'Service final'";
-	$query = $db->prepare($sql);
+	$query = $DB->prepare($sql);
 	if($query->execute(array($_GET['mask']))){
 		add_log(LOG_FILE, NULL, 'UPDATE', 'Service #'.$_GET['mask'].' a été masqué');
 	}
@@ -16,7 +16,7 @@ if(isset($_GET['show'])){
 		" SET visible = 1".
 		" WHERE idService = ?".
 		" AND name = 'Service final'";
-	$query = $db->prepare($sql);
+	$query = $DB->prepare($sql);
 	if($query->execute(array($_GET['show']))){
 		add_log(LOG_FILE, NULL, 'UPDATE', 'Service #'.$_GET['mask'].' est visible');
 	}
@@ -68,7 +68,7 @@ if(isset($_POST['cancel'])){
 			$enable = 1;
 			$visible = 1;
 			$sql = "SELECT rssKey FROM services WHERE rssKey IS NOT NULL ORDER BY rssKey DESC";
-			$rssKey = $db->query($sql);
+			$rssKey = $DB->query($sql);
 			$rssKey = $rssKey->fetch();
 			$rssKey = $rssKey[0]+1;
 		}
@@ -78,10 +78,10 @@ if(isset($_POST['cancel'])){
 
 		$sql = "INSERT INTO services (name, nameForUsers, url, state, comment, enable, visible, readonly, rssKey, idCategory)".
 			" VALUES(?, ?, ?, 0, ?, ?, ?, 0, ?, ?)";
-		$query = $db->prepare($sql);
+		$query = $DB->prepare($sql);
 		if($query->execute(array($name,$nameForUsers,$url,$comment,$enable,$visible,$rssKey,$category))){
 			$error = 'Le service '.$nameForUsers.' a été ajouté à la base';
-			add_log(LOG_FILE, NULL, 'INSERT', 'Service #'.$db->lastInsertId().' : VALUES('.$name.', '.$nameForUsers.', 0, '.$comment.', '.$enable.', '.$visible.', 0, '.$rssKey.', '.$category.')');
+			add_log(LOG_FILE, NULL, 'INSERT', 'Service #'.$DB->lastInsertId().' : VALUES('.$name.', '.$nameForUsers.', 0, '.$comment.', '.$enable.', '.$visible.', 0, '.$rssKey.', '.$category.')');
 		}else{
 			$error = 'Le service '.stripslashes($nameForUsers).' n\'a pas pu être ajouté à la base';
 		}
@@ -96,7 +96,7 @@ if(isset($_POST['cancel'])){
 			$sql = "SELECT name, nameForUsers".
 				" FROM services".
 				" WHERE idService = ?";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			$query->execute(array($_GET['delete']));
 			if($del_service = $query->fetch()){
 				if(empty($del_service[1])){
@@ -113,32 +113,32 @@ if(isset($_POST['cancel'])){
 	if(isset($_POST['delete'])){
 		$commit = FALSE;
 		$idService = intval($_POST['idDelService']);
-		if($db->beginTransaction()){
+		if($DB->beginTransaction()){
 			$sql = "DELETE FROM services WHERE idService = ?";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			if($query->execute(array($idService))){
 				if(isset($_GET['service'])){
 					if($_GET['service'] === 'isou'){
 						$sql = "DELETE FROM events WHERE idEvent = (SELECT idEvent FROM events_isou WHERE idService = ?)";
-						$query = $db->prepare($sql);
+						$query = $DB->prepare($sql);
 						if($query->execute(array($idService))){
 							$sql = "DELETE FROM events_isou WHERE idService = ?";
-							$query = $db->prepare($sql);
+							$query = $DB->prepare($sql);
 							$flagDel = 1;
 						}
 					}elseif($_GET['service'] === 'nagios'){
 						$sql = "DELETE FROM events WHERE idEvent = (SELECT idEvent FROM events_nagios WHERE idService = ?)";
-						$query = $db->prepare($sql);
+						$query = $DB->prepare($sql);
 						if($query->execute(array($idService))){
 							$sql = "DELETE FROM events_nagios WHERE idService = ?";
-							$query = $db->prepare($sql);
+							$query = $DB->prepare($sql);
 							$flagDel = 1;
 						}
 					}
 
 					if(isset($flagDel) && $query->execute(array($idService))){
 						$sql = "DELETE FROM dependencies WHERE idService = ? OR idServiceParent = ?";
-						$query = $db->prepare($sql);
+						$query = $DB->prepare($sql);
 						if($query->execute(array($idService,$idService))){
 							$commit = TRUE;
 						}
@@ -153,11 +153,11 @@ if(isset($_POST['cancel'])){
 		}
 
 		if($commit === TRUE){
-			$db->commit();
+			$DB->commit();
 			$error = 'Le service '.$_POST['name'].' est maintenant supprimé dans la base, ainsi que ses évènements et dépendances liées';
 			add_log(LOG_FILE, NULL, 'DELETE', 'Service #'.$idService);
 		}else{
-			$db->rollBack();
+			$DB->rollBack();
 			$error = 'Le service '.$_POST['name'].' n\'a pas pu être supprimé dans la base';
 		}
 	}
@@ -204,7 +204,7 @@ if(isset($_POST['cancel'])){
 				$sql = "UPDATE services".
 					" SET nameForUsers = ?, url = ?, comment = ?, enable = 1, idCategory = ?".
 					" WHERE idService = ?";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				if($query->execute(array($_POST['nameForUsers'],$_POST['url'],$comment,$_POST['category'],$_POST['idService']))){
 					$error = 'Le service '.stripslashes($_POST['nameForUsers']).' a été modifié dans la base';
 					add_log(LOG_FILE, NULL, 'UPDATE', 'Service #'.$_POST['idService'].' : SET nameForUsers = '.$_POST['nameForUsers'].', comment = '.$comment.', enable = 1, idCategory = '.$_POST['category']);
@@ -217,7 +217,7 @@ if(isset($_POST['cancel'])){
 				$sql = "UPDATE services".
 					" SET name = ?, nameForUsers = NULL, comment = ?, enable = 0, visible = 0, idCategory = NULL".
 					" WHERE idService = ?";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				if($query->execute(array($_POST['name'], $comment, $_POST['idService']))){
 					$error = 'Le service '.stripslashes($_POST['name']).' remplace le service précédemment sélectionné';
 					add_log(LOG_FILE, NULL, 'UPDATE', 'Service #'.$_POST['idService'].' : SET nameForUsers = NULL, comment = '.$comment.', enable = 0, visible = 0, idCategory = '.$_POST['category']);

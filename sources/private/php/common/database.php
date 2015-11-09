@@ -4,7 +4,7 @@ try{
 	if(!is_file(substr(DB_PATH, 7))){
 		throw new PDOException(DB_PATH.' n\'existe pas.');
 	}
-	$db = new PDO(DB_PATH, '', '');
+	$DB = new PDO(DB_PATH, '', '');
 }catch(PDOException $e){
 	$menuId = null;
 
@@ -32,7 +32,7 @@ try{
 	add_log(LOG_FILE, 'ISOU', 'ERROR_DB', $e->getMessage());
 
 	// close pdo connection
-	$db = null;
+	$DB = null;
 
 	exit(0);
 }

@@ -14,7 +14,7 @@ if(isset($_POST['submit'])){
 	(isset($_POST['afficher']))?$afficher=1:$afficher=0;
 
 	$sql = "UPDATE annonce SET message = ?, afficher = ?";
-	$query = $db->prepare($sql);
+	$query = $DB->prepare($sql);
 	if($query->execute(array($message, $afficher))){
 		if($afficher === 1){
 			$error = 'L\'annonce a bien été enregistrée.';
@@ -32,7 +32,7 @@ if(isset($_POST['submit'])){
 }else{
 
 	$sql = "SELECT * FROM annonce";
-	if($annonce = $db->query($sql)){
+	if($annonce = $DB->query($sql)){
 		$annonce = $annonce->fetch();
 		($annonce[1] == 1)?$afficher = ' checked=checked':$afficher = '';
 		$message = stripslashes($annonce[0]);

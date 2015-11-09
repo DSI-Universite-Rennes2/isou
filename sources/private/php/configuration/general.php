@@ -26,7 +26,7 @@ if(isset($_POST['generalsubmit'])){
 		$_POST['tolerance'] = intval($_POST['tolerance']);
 		if($_POST['tolerance'] % 60 === 0){
 			$sql = "UPDATE configuration SET value=? WHERE key='tolerance'";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			if($query->execute(array($_POST['tolerance'])) === FALSE){
 				$_POST['error']['general']['error_tolerance'] = 'La clé "tolerance" n\'a pas pu être mise à jour';
 			}
@@ -43,7 +43,7 @@ if(isset($_POST['generalsubmit'])){
 
 			if($dailycronhour[0] <= 23 && $dailycronhour[1] <= 59){
 				$sql = "UPDATE configuration SET value=? WHERE key='daily_cron_hour'";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				if($query->execute(array($_POST['dailycronhour'])) === FALSE){
 					$_POST['error']['general']['error_dailycronhour'] = 'La clé "daily_cron_hour" n\'a pas pu être mise à jour';
 				}
@@ -55,7 +55,7 @@ if(isset($_POST['generalsubmit'])){
 		// local_password
 		$_POST['localpassword'] = trim($_POST['localpassword']);
 		$sql = "UPDATE configuration SET value=? WHERE key='local_password'";
-		$query = $db->prepare($sql);
+		$query = $DB->prepare($sql);
 		if($query->execute(array($_POST['localpassword'])) === FALSE){
 			$_POST['error']['general']['error_localpassword'] = 'La clé "local_password" n\'a pas pu être mise à jour';
 		}
@@ -108,7 +108,7 @@ if(isset($_POST['menusubmit'])){
 		if(!isset($CFG['default_menu']) || $_POST['default_menu'] !== $CFG['default_menu']){
 			if(isset($active_menu_options[$_POST['default_menu']])){
 				$sql = "UPDATE configuration SET value=? WHERE key='default_menu'";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				if($query->execute(array($_POST['default_menu'])) === FALSE){
 					$_POST['error']['menu']['error_menulocalpassword'] = 'La clé "local_password" n\'a pas pu être mise à jour';
 				}else{
@@ -136,7 +136,7 @@ if(isset($_GET['action'], $_GET['key'])){
 		if(in_array($_GET['key'], array('last_cron_update', 'last_daily_cron_update', 'last_weekly_cron_update', 'last_yearly_cron_update')) === TRUE){
 			$_POST['error'][$_GET['key']] = array();
 			$sql = "UPDATE configuration SET value=NULL WHERE key=?";
-			$query = $db->prepare($sql);
+			$query = $DB->prepare($sql);
 			if($query->execute(array($_GET['key'])) === FALSE){
 				$_POST['error'][$_GET['key']]['error_db'] = 'La clé "'.$_GET['key'].'" n\'a pas pu être mise à jour';
 			}else{
@@ -152,7 +152,7 @@ if(isset($_GET['action'], $_GET['key'])){
 				// re-order index keys
 				$CFG[$_GET['key']] = array_merge($CFG[$_GET['key']]);
 				$sql = "UPDATE configuration SET value=? WHERE key=?";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				if($query->execute(array(json_encode($CFG[$_GET['key']]), $_GET['key'])) === FALSE){
 					$_POST['error'][$_GET['key']]['error_db'] = 'La valeur n\'a pas pu être supprimée de la clé "'.$_GET['key'].'".';
 				}else{

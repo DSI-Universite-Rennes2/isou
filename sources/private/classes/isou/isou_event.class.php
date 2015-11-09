@@ -220,7 +220,7 @@ class IsouEvent {
 	*   @return		array of IsouEvent()
 	*/
 	private function getNagiosEvents_recursive($idService){
-		global $db, $CFG;
+		global $DB, $CFG;
 
 		$nagiosEvents = array();
 		$tolerance = $CFG['tolerance'].' seconds';
@@ -235,7 +235,7 @@ class IsouEvent {
 				" AND d.idService = ?".
 				" AND e.beginDate >= strftime('%Y-%m-%dT%H:%M', ?, ?)".
 				" AND e.endDate <= strftime('%Y-%m-%dT%H:%M', ?, ?)";
-		$nagios_records = $db->prepare($sql);
+		$nagios_records = $DB->prepare($sql);
 		if($nagios_records->execute(array($idService, $this->beginDate, '-'.$tolerance, $this->endDate, '+'.$tolerance))){
 			$j = 0;
 			while($nagios_record = $nagios_records->fetchObject()){
@@ -260,7 +260,7 @@ class IsouEvent {
 				" AND d.idService = ".$idService.
 				" AND s.nameForUsers IS NOT NULL";
 		// echo $sql;
-		$dep_records = $db->prepare($sql);
+		$dep_records = $DB->prepare($sql);
 		if($dep_records->execute(array())){
 			while($dep = $dep_records->fetchObject()){
 				$nagiosEvents[] = array($dep->nameForUsers, $this->getNagiosEvents_recursive($dep->idServiceParent));

@@ -61,7 +61,7 @@ require PRIVATE_PATH.'/php/common/database.php';
 
 // load CFG
 $sql = "SELECT key, value FROM configuration WHERE key='version'";
-if($query = $db->query($sql)){
+if($query = $DB->query($sql)){
 	$query = $query->fetch(PDO::FETCH_OBJ);
 	$CFG = array();
 	$CFG['version'] = $query->value;
@@ -137,12 +137,12 @@ if(strlen($CFG['version']) < 12){
 if($intVersion < 201202161){
 	// insertion de la variable 'local_mail'
 	$sql = "INSERT INTO configuration(key, value) VALUES (?,?)";
-	$query = $db->prepare($sql);
+	$query = $DB->prepare($sql);
 	$query->execute(array('local_mail', ''));
 
 	// insertion de la variable 'auto_backup'
 	$sql = "INSERT INTO configuration(key, value) VALUES (?,?)";
-	$query = $db->prepare($sql);
+	$query = $DB->prepare($sql);
 	$query->execute(array('auto_backup', '1'));
 
 	require PRIVATE_PATH.'/upgrade/scripts/update_2012.1.php';
@@ -158,11 +158,11 @@ if($intVersion < 201300001){
 unlink(PRIVATE_PATH.'/upgrade/LOCK_UPDATE');
 
 $sql = "UPDATE configuration SET value=? WHERE key='version'";
-$version = $db->prepare($sql);
+$version = $DB->prepare($sql);
 $version->execute(array(CURRENT_VERSION));
 
 $sql = "UPDATE configuration SET value=? WHERE key='last_update'";
-$version = $db->prepare($sql);
+$version = $DB->prepare($sql);
 $version->execute(array(TIME));
 
 // URL n'est pas calculée en CLI
@@ -170,6 +170,6 @@ $version->execute(array(TIME));
 echo "\n\033[0;32mMise à jour terminée !\033[0m\n\n";
 
 // close pdo connection
-$db = null;
+$DB = null;
 
 ?>

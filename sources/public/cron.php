@@ -14,7 +14,7 @@ require PRIVATE_PATH.'/php/common_database.php';
 // load CFG
 $sql = "SELECT key, value FROM configuration";
 $CFG = array();
-if($query = $db->query($sql)){
+if($query = $DB->query($sql)){
 	while($config = $query->fetch(PDO::FETCH_OBJ)){
 		if(in_array($config->key, array('ip_local', 'ip_service', 'admin_users', 'admin_mails'))){
 			 $CFG[$config->key] = json_decode($config->value);
@@ -81,7 +81,7 @@ if($log instanceof Exception){
 }
 
 $sql = "UPDATE configuration SET value=? WHERE key=?";
-$query = $db->prepare($sql);
+$query = $DB->prepare($sql);
 $query->execute(array(TIME, 'last_cron_update'));
 
 $daily_cron_time = explode(':', $CFG['daily_cron_hour']);
@@ -91,14 +91,14 @@ if(strftime('%d', TIME) != strftime('%d', $CFG['last_daily_cron_update']) && TIM
 	// si on n'est pas le même jour que $CFG['last_daily_cron_update']
 	require PRIVATE_PATH.'/cron/cron_daily.php';
 	$sql = "UPDATE configuration SET value=? WHERE key=?";
-	$query = $db->prepare($sql);
+	$query = $DB->prepare($sql);
 	$query->execute(array(TIME, 'last_daily_cron_update'));
 
 	if(strftime('%Y', TIME) !== strftime('%Y', $CFG['last_yearly_cron_update'])){
 		// on n'est pas à la même année que $CFG['last_yearly_cron_update']
 		require PRIVATE_PATH.'/cron/cron_yearly.php';
 		$sql = "UPDATE configuration SET value=? WHERE key=?";
-		$query = $db->prepare($sql);
+		$query = $DB->prepare($sql);
 		$query->execute(array(TIME, 'last_yearly_cron_update'));
 	}
 }

@@ -20,9 +20,9 @@
 			" AND S.enable = 1".
 			" AND S.visible = 1".
 			" ORDER BY C.position, UPPER(S.nameForUsers)";
-	if($service_records = $db->query($sql)){
+	if($service_records = $DB->query($sql)){
 		$service_records = $service_records->fetchAll();
-		function getDependencies($idService, $date, $events, $db){
+		function getDependencies($idService, $date, $events, $DB){
 			$sql = "SELECT E.beginDate, E.endDate, 4 AS state, (E.endDate-E.beginDate) AS total, EI.idService".
 					" FROM events E, events_isou EI".
 					" WHERE EI.idService = :0".
@@ -31,7 +31,7 @@
 					" AND ((E.endDate >= :1".
 					" AND E.beginDate <= :2)".
 					" OR E.endDate IS NULL)";
-			$parents = $db->prepare($sql);
+			$parents = $DB->prepare($sql);
 			$parents->execute(array($idService));
 			if($parent = $parents->fetch(PDO::FETCH_OBJ)){
 				return array($parent);
@@ -40,10 +40,10 @@
 			$sql = "SELECT idServiceParent".
 					" FROM dependencies".
 					" WHERE idService = :0";
-			$parents = $db->prepare($sql);
+			$parents = $DB->prepare($sql);
 			$parents->execute(array($idService));
 			while($parent = $parents->fetch(PDO::FETCH_OBJ)){
-				$events = getDependencies($parent->idServiceParent, $date, $events, $db);
+				$events = getDependencies($parent->idServiceParent, $date, $events, $DB);
 				$sql = "SELECT E.beginDate, E.endDate, EN.state, (E.endDate-E.beginDate) AS total, EN.idService".
 						" FROM events E, events_nagios EN".
 						" WHERE EN.idService = :0".
@@ -51,7 +51,7 @@
 						" AND ((E.endDate >= :1".
 						" AND E.beginDate <= :2)".
 						" OR E.endDate IS NULL)";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 				$query->execute(array($parent->idServiceParent, $date, $date+(24*60*60)));
 				while($event = $query->fetch(PDO::FETCH_OBJ)){
 
@@ -124,7 +124,7 @@
 						" AND ((E.endDate >= :1".
 						" AND E.beginDate <= :2 AND E.endDate-E.beginDate > 10*60)".
 						" OR E.endDate IS NULL)";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 
 				$query->execute(array($service_records[$i][0], $today, ($today+(24*60*60))));
 
@@ -143,7 +143,7 @@
 						" AND ((E.endDate >= :1".
 						" AND E.beginDate <= :2)".
 						" OR E.endDate IS NULL)";
-				$query = $db->prepare($sql);
+				$query = $DB->prepare($sql);
 
 				$query->execute(array($service_records[$i][0], $today, ($today+(24*60*60))));
 				if($closed = $query->fetch(PDO::FETCH_OBJ)){

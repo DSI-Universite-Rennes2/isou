@@ -10,7 +10,7 @@
 			" AND ((E.endDate IS NOT NULL AND E.endDate > :0) OR".
 			" (E.endDate IS NULL))".
 			" ORDER BY E.beginDate";
-	$events = $db->prepare($sql);
+	$events = $DB->prepare($sql);
 	$events->execute(array(TIME));
 	$messages = array();
 	while($event = $events->fetchObject()){

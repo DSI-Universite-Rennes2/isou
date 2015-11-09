@@ -42,7 +42,7 @@ $sql = "SELECT S.idService, S.name, S.nameForUsers, S.url, S.state, S.comment, C
 
 $i=0;
 $services = array();
-if($service_records = $db->query($sql)){
+if($service_records = $DB->query($sql)){
 	while($service = $service_records->fetchObject('IsouService')){
 		$service->setEvents($service->getScheduledEvents($TOLERANCE, -1, $beginDate, $endDate));
 		if($service->hasEvents() === TRUE){

@@ -21,9 +21,9 @@ function is_summer_time($timestamp){
 	}
 }
 
-function convert_timestamp_to_gmt($db, $year){
+function convert_timestamp_to_gmt($DB, $year){
 	$sql = "SELECT idEvent, beginDate, endDate FROM events";
-	$query = $db->prepare($sql);
+	$query = $DB->prepare($sql);
 	$query->execute();
 	$dates = $query->fetchAll(PDO::FETCH_OBJ);
 	foreach($dates as $date){
@@ -55,7 +55,7 @@ function convert_timestamp_to_gmt($db, $year){
 
 		// mise à jour des nouvelles valeurs
 		$sql = "UPDATE events SET beginDate=?, endDate=? WHERE idEvent=?";
-		$query = $db->prepare($sql);
+		$query = $DB->prepare($sql);
 		$query->execute(array(strftime('%Y-%m-%dT%H:%M', $date->beginDate), strftime('%Y-%m-%dT%H:%M', $date->endDate), $date->idEvent));
 	}
 }
@@ -86,7 +86,7 @@ for($y=2009;$y<$current_year;$y++){
 // conversion de la base de données courantes
 $display = 'Conversion des dates pour la base "isou.sqlite3"';
 echo $display.niceDot($display);
-convert_timestamp_to_gmt($db, $current_year);
+convert_timestamp_to_gmt($DB, $current_year);
 echo " \033[0;32mok\033[0m\n\n";
 
 // afficher le changelog

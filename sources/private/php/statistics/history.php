@@ -5,7 +5,7 @@
 			" WHERE S.nameForUsers IS NOT NULL".
 			" ORDER BY S.nameForUsers";
 	$serviceSelect = array();
-	if($services = $db->query($sql)){
+	if($services = $DB->query($sql)){
 		$serviceSelect['all'] = 'Tous les services';
 		while($service = $services->fetch()){
 			$serviceSelect[$service[0]] = $service[1];
@@ -121,7 +121,7 @@ if(isset($_GET['serviceSelect'])){
 
 	if($_GET['yearSelect'] !== 0){
 		if($_GET['yearSelect'] == date('Y')){
-			$db_stat = $db;
+			$db_stat = $DB;
 		}else{
 			try{
 				$db_name = substr(str_replace('isou.sqlite3', 'isou-'.$_GET['yearSelect'].'.sqlite3', DB_PATH), 7);
