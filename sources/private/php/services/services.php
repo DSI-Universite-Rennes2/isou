@@ -2,8 +2,6 @@
 
 	$TITLE = NAME.' - Administration des Services ISOU et NAGIOS';
 
-	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/services.css');
-
 	$update = '';
 
 	require PRIVATE_PATH.'/php/services/formsprocess.php';

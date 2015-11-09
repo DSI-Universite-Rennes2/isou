@@ -2,8 +2,6 @@
 
 	$TITLE = NAME.' - Tableau';
 
-	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/board.css');
-
 	// 2 jours avant
 	$BEFORE = mktime(0,0,0)-(48*60*60);
 

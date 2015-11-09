@@ -5,8 +5,6 @@
 	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery-min.js');
 	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery_dependencies.js');
 
-	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/dependencies.css');
-
 	$update = '';
 
 	require PRIVATE_PATH.'/php/dependencies/formsprocess.php';

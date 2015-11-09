@@ -41,8 +41,6 @@ if(class_exists('IsouService') === FALSE){
 	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery-min.js');
 	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery_news.js');
 
-	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/news.css');
-
 	// 2 jours avant
 	$BEFORE = mktime(0,0,0)-(48*60*60);
 	// 2 jours apres

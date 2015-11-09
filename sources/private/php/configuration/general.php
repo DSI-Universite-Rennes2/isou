@@ -59,6 +59,21 @@ if(isset($_POST['generalsubmit'])){
 		if($query->execute(array($_POST['localpassword'])) === FALSE){
 			$_POST['error']['general']['error_localpassword'] = 'La clé "local_password" n\'a pas pu être mise à jour';
 		}
+
+		// theme
+		if($_POST['theme'] !== $CFG['theme']){
+			if(is_file(PUBLIC_PATH.'/styles/'.$_POST['theme'].'/theme.php')){
+				$sql = "UPDATE configuration SET value=? WHERE key='theme'";
+				$query = $DB->prepare($sql);
+				if($query->execute(array($_POST['theme'])) === FALSE){
+					$_POST['error']['general']['error_theme'] = 'La clé "theme" n\'a pas pu être mise à jour';
+				}else{
+					$CFG['theme'] = $_POST['theme'];
+				}
+			}else{
+				$_POST['errors'][] = 'Le thème n\'est pas valide.';
+			}
+		}
 	}else{
 		$_POST['error']['general']['empty_fields'] = 'Tous les champs doivent être remplis';
 	}
@@ -167,5 +182,17 @@ if(isset($_GET['action'], $_GET['key'])){
 
 $smarty->assign('CFG', $CFG);
 $smarty->assign('error', $_POST['error']);
+
+$themes = array();
+if($handle = opendir(PUBLIC_PATH.'/styles')){
+	while(($entry = readdir($handle)) !== FALSE){
+		if(ctype_alnum($entry)){ // test is_dir() ?
+			$themes[$entry] = $entry;
+		}
+	}
+	closedir($handle);
+}
+$smarty->assign('themes', $themes);
+
 
 ?>

@@ -2,8 +2,6 @@
 
 $TITLE = NAME.' - Annonce';
 
-$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/annonce.css');
-
 $error = '';
 
 if(isset($_POST['submit'])){

@@ -18,15 +18,11 @@ $TITLE = NAME;
 
 // load scripts
 require PRIVATE_PATH.'/classes/helpers/script.php';
-
 $SCRIPTS = array();
 
 // load styles
 require PRIVATE_PATH.'/classes/helpers/style.php';
-
 $STYLES = array();
-$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/common.css');
-$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/menu.css');
 
 require PRIVATE_PATH.'/upgrade/version.php';
 require PRIVATE_PATH.'/php/common/database.php';
@@ -89,18 +85,18 @@ if(isset($MENU[$current_page->url])){
 	}
 }
 
-if(count($_GET)>0){
-	$connexion_url = get_base_url('full', HTTPS).'&amp;';
-}else{
-	$connexion_url = get_base_url('full', HTTPS).'?';
-}
-
 if(CURRENT_VERSION === $CFG['version']){
 	require PRIVATE_PATH.$current_page->model;
 }else{
 	// maintenance page
 	$template = 'public_update';
 }
+
+if(!is_file(PUBLIC_PATH.'/styles/'.$CFG['theme'].'/theme.php')){
+	$CFG['theme'] = 'bootstrap';
+}
+
+require PUBLIC_PATH.'/styles/'.$CFG['theme'].'/theme.php';
 
 $smarty->assign('TITLE', $TITLE);
 $smarty->assign('SCRIPTS', $SCRIPTS);
@@ -112,7 +108,6 @@ if(isset($ADMINISTRATION_MENU)){
 	$smarty->assign('ADMINISTRATION_MENU', $ADMINISTRATION_MENU);
 }
 $smarty->assign('CFG', $CFG);
-$smarty->assign('connexion_url', $connexion_url);
 if(isset($annonce)){
 	$smarty->assign('annonce', $annonce);
 }

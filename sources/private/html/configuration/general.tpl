@@ -34,6 +34,12 @@
 	</p>
 
 	<p>
+		<span class="label"><label for="theme">Thème</label></span><br />
+		<span class="input">{html_options id=theme name=theme options=$themes selected=$smarty.post.theme|default:$CFG.theme}</span><br />
+		<span class="key">theme</span>
+	</p>
+
+	<p>
 		<input type="submit" name="generalsubmit" />
 	</p>
 </form>

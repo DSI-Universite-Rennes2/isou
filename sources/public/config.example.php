@@ -20,6 +20,8 @@ define('NAME', 'Isou');
 define('HEADER', 'ISOU : État des services numériques offerts par l\'Université');
 
 // chemin d'installation de l'application
+define('PUBLIC_PATH', __DIR__);
+
 define('PRIVATE_PATH', '/var/www');
 
 require_once PRIVATE_PATH.'/common/functions.php';

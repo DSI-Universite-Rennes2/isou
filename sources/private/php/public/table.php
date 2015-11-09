@@ -5,9 +5,6 @@
 	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery-min.js');
 	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery_table.js');
 
-	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/table.css');
-	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/contact.css');
-
 	// 2 jours avant
 	$BEFORE = strftime('%Y-%m-%dT%H:%M', mktime(0,0,0)-(48*60*60));
 

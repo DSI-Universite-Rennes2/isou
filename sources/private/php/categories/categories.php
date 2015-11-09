@@ -2,8 +2,6 @@
 
 	$TITLE = NAME.' - Administration des Catégories';
 
-	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/categories.css');
-
 	/* * * * * * * * * * * * * * * * * *
 		Traitement d'un ajout
 	* * * * * * * * * * * * * * * * * */

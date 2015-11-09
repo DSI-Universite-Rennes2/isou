@@ -5,8 +5,6 @@
 	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery-min.js');
 	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery_record.js');
 
-	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/record.css');
-
 	// 2 jours avant
 	$BEFORE = strftime('%Y-%m-%dT%H:%M', mktime(0,0,0)-(48*60*60));
 	// 2 jours apres

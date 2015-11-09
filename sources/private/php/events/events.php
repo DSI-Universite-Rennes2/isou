@@ -7,9 +7,6 @@
 	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery.dynDateTime-fr.min.js');
 	$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery_events.js');
 
-	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/events.css');
-	$STYLES[] = new Isou\Helpers\Style(URL.'/styles/classic/private_events_calendar.css', 'all');
-
 	$p=0;
 	$date = getdate();
 
