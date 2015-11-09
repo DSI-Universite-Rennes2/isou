@@ -82,7 +82,7 @@ if(isset($MENU[$PAGE_NAME[0]])){
 $current_page->selected = TRUE;
 
 // load announcement
-if($current_page->public === '1'){
+if(isset($MENU[$current_page->url])){
 	$sql = "SELECT message FROM annonce WHERE afficher = 1 AND message != ''";
 	$annonce = '';
 	if($annonce = $DB->query($sql)){
