@@ -54,10 +54,6 @@ if($query = $DB->query($sql)){
 	}
 }
 
-if(isset($_GET['hide'])){
-	$_SESSION['hide'] = intval($_GET['hide']);
-}
-
 $PAGE_NAME = explode('/', get_page_name('index.php', TRUE));
 
 // load menu
@@ -93,42 +89,10 @@ if(isset($MENU[$current_page->url])){
 	}
 }
 
-if($IS_ADMIN){
-	if(!isset($_SESSION['hide'])){
-		$_SESSION['hide'] = 1;
-	}else{
-		if(isset($_GET['hide'])){
-			$_SESSION['hide'] = intval($_GET['hide']);
-		}
-	}
-
-	if(isset($_GET['refresh'])){
-		require PRIVATE_PATH.'/classes/isou/parser.function.php';
-		require PRIVATE_PATH.'/classes/isou/update.functions.php';
-
-		if(is_a(update_nagios_to_db(),'Exception')){
-			$refresh = FALSE;
-		}else{
-			$refresh = TRUE;
-		}
-		$refresh_url = get_base_url('full', HTTPS);
-	}else{
-		(strpos(get_base_url('full', HTTPS), '?') === false)?$refresh_url = get_base_url('full', HTTPS).'?refresh=1':$refresh_url = get_base_url('full', HTTPS).'&amp;refresh=1';
-	}
-}else{
-	$_SESSION['hide'] = 1;
-}
-
 if(count($_GET)>0){
 	$connexion_url = get_base_url('full', HTTPS).'&amp;';
 }else{
 	$connexion_url = get_base_url('full', HTTPS).'?';
-}
-
-if($_SESSION['hide'] === 1){
-	$TOLERANCE = $CFG['tolerance'];
-}else{
-	$TOLERANCE = 0;
 }
 
 if(CURRENT_VERSION === $CFG['version']){
@@ -138,7 +102,6 @@ if(CURRENT_VERSION === $CFG['version']){
 	$template = 'public_update';
 }
 
-$smarty->assign('FULLURL', get_base_url('full', HTTPS));
 $smarty->assign('TITLE', $TITLE);
 $smarty->assign('SCRIPTS', $SCRIPTS);
 $smarty->assign('STYLES', $STYLES);
@@ -152,9 +115,6 @@ $smarty->assign('CFG', $CFG);
 $smarty->assign('connexion_url', $connexion_url);
 if(isset($annonce)){
 	$smarty->assign('annonce', $annonce);
-}
-if(isset($refresh_url)){
-	$smarty->assign('refresh_url',  $refresh_url);
 }
 
 $smarty->display('common/html_head.tpl');

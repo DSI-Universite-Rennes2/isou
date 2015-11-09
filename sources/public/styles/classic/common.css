@@ -227,15 +227,6 @@ input, select, textarea{
 	height: 1em;
 }
 
-#refresh{
-	background-color: orange;
-	border: .3em red solid;
-	margin: .8em 0em;
-	padding: .5em;
-	text-align: center;
-	font-weight: bold;
-}
-
 a, a:visited, a:hover, a:link, a:active, a:focus{
 	color: blue;
 	text-decoration: underline;

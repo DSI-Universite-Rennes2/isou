@@ -90,9 +90,9 @@ if($service_records = $DB->query($sql)){
 	while($service = $service_records->fetchObject('IsouService')){
 
 		if(isset($calendar)){
-			$service->setEvents($service->getScheduledEvents($TOLERANCE, -1, $BEFORE, $AFTER));
+			$service->setEvents($service->getScheduledEvents($CFG['tolerance'], -1, $BEFORE, $AFTER));
 		}else{
-			$service->setEvents($service->getAllEvents($TOLERANCE, 10, $BEFORE, $AFTER));
+			$service->setEvents($service->getAllEvents($CFG['tolerance'], 10, $BEFORE, $AFTER));
 		}
 
 		if($service->hasEvents() === TRUE){

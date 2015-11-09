@@ -40,14 +40,10 @@ function cmp($a, $b) {
 $sql = "SELECT E.idEvent, strftime('%s', E.beginDate) AS beginDate, strftime('%s', E.endDate) AS endDate, E.typeEvent".
 		" FROM events E".
 		" WHERE E.endDate IS NULL".
-		" OR (E.endDate > :0";
-if($_SESSION['hide'] === 1 || $IS_ADMIN === FALSE){
-	$sql .= " AND strftime('%s', E.endDate)-strftime('%s', E.beginDate) > ".$CFG['tolerance'];
-	$param = array($BEFORE);
-}else{
-	$param = array($BEFORE);
-}
-	$sql .= ") AND E.typeEvent != 1";
+		" OR (E.endDate > :0".
+		" AND strftime('%s', E.endDate)-strftime('%s', E.beginDate) > ".$CFG['tolerance'].
+		" ) AND E.typeEvent != 1";
+$param = array($BEFORE);
 
 $events = array();
 $service_records = $DB->prepare($sql);

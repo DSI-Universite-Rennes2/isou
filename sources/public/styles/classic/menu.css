@@ -66,27 +66,3 @@
 	display: inline;
 }
 
-#menu-admin-preference-ul{
-	background-color: #FFA07A;
-	font-size: .6em;
-	font-weight: bold;
-	margin: .7em 0;
-	padding: 0 2em;
-	text-align: right;
-}
-
-.menu-admin-preference-li{
-	display: inline;
-	margin-right: .6em;
-}
-
-.menu-admin-preference-li:before{
-	color: #000000;
-	content: '[ ';
-}
-
-.menu-admin-preference-li:after{
-	color: #000000;
-	content: ' ]';
-}
-

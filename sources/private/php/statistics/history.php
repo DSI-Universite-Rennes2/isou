@@ -152,10 +152,6 @@ if(isset($_GET['serviceSelect'])){
 		$params[] = $end;
 	}
 
-	if ($_SESSION['hide'] === 1){
-		$filter .= " AND (E.endDate IS NULL OR (strftime('%s', E.endDate) - strftime('%s', E.beginDate) > ".$CFG['tolerance']."))";
-	}
-
 	($_GET['beginSort'] === 1)?$_GET['beginSort'] = ' DESC':$_GET['beginSort'] = '';
 	($_GET['endSort'] === 1)?$_GET['endSort'] = ' DESC':$_GET['endSort'] = '';
 

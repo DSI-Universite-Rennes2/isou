@@ -87,26 +87,8 @@
 			</ul>
 		</div>
 	</div>
-
-	<ul id="menu-admin-preference-ul" class="menu-admin">
-		{if $smarty.session.hide === 0}
-		<li class="menu-admin-preference-li"><a href="{$FULLURL}?hide=1">masquer les interruptions de moins de {$CFG.tolerance/60} minutes</a></li>
-		{else}
-		<li class="menu-admin-preference-li"><a href="{$FULLURL}?hide=0">afficher les interruptions de moins de {$CFG.tolerance/60} minutes</a></li>
-		{/if}
-		<li class="menu-admin-preference-li"><a href="{$refresh_url}" title="Réactuliser les données">rafraîchir les données</a></li>
-	</ul>
-
 	{/if}
 </nav>
-{/if}
-
-{if isset($refresh)}
-	{if $refresh === TRUE}
-		<p id="refresh">Les données Nagios ont été synchronisées avec ISOU</p>
-	{else}
-		<p id="refresh">Les données Nagios n'ont pas pu être synchronisées avec ISOU</p>
-	{/if}
 {/if}
 
 {if isset($annonce)}

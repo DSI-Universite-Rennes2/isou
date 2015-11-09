@@ -13,13 +13,8 @@
 			" AND D.idEventDescription = EI.idEventDescription".
 			" AND E.typeEvent = 0".
 			" AND (((E.beginDate BETWEEN :0 AND :1".
-			" OR E.endDate BETWEEN :2 AND :3)";
-			if ($_SESSION['hide'] === 1){
-				$sql .= " AND (strftime('%s',E.endDate)-strftime('%s',E.beginDate) > ".$CFG['tolerance']."))";
-			}else{
-				$sql .= ")";
-			}
-			$sql .= " OR E.endDate IS NULL)".
+			" OR E.endDate BETWEEN :2 AND :3))";
+			" OR E.endDate IS NULL)".
 			" AND S.name = 'Service final'".
 			" AND S.enable = 1".
 			" AND EI.isScheduled = 0".

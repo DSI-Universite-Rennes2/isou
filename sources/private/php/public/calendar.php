@@ -44,7 +44,7 @@ $i=0;
 $services = array();
 if($service_records = $DB->query($sql)){
 	while($service = $service_records->fetchObject('IsouService')){
-		$service->setEvents($service->getScheduledEvents($TOLERANCE, -1, $beginDate, $endDate));
+		$service->setEvents($service->getScheduledEvents($CFG['tolerance'], -1, $beginDate, $endDate));
 		if($service->hasEvents() === TRUE){
 			$services[$i] = $service;
 			$i++;
