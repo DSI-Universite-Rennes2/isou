@@ -89,7 +89,7 @@ if(CURRENT_VERSION === $CFG['version']){
 	require PRIVATE_PATH.$current_page->model;
 }else{
 	// maintenance page
-	$template = 'public_update';
+	$TEMPLATE = 'public_update';
 }
 
 if(!is_file(PUBLIC_PATH.'/styles/'.$CFG['theme'].'/theme.php')){
@@ -114,7 +114,7 @@ if(isset($annonce)){
 
 $smarty->display('common/html_head.tpl');
 $smarty->display('common/html_body_header.tpl');
-$smarty->display($template);
+$smarty->display($TEMPLATE);
 $smarty->display('common/html_body_footer.tpl');
 
 // close pdo connection
