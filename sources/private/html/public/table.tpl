@@ -23,13 +23,13 @@
 			<th colspan="10">{$categories[i]->name}</th>
 		</tr>
 		{section name=j loop=$categories[i]->services}
-		<tr class="tr-status-{$flags.{$categories[i]->services[j]->getState()}->name}">
+		<tr class="tr-status-{$STATES.{$categories[i]->services[j]->getState()}->name}">
 			{if $categories[i]->services[j]->getUrl() === NULL}
 			<td headers="lth1" class="left">{$categories[i]->services[j]->getNameForUsers()}</td>
 			{else}
 			<td headers="lth1" class="left"><a href="{$categories[i]->services[j]->getUrl()}" title="Accéder à la page du service {$categories[i]->services[j]->getNameForUsers()}">{$categories[i]->services[j]->getNameForUsers()}</a></td>
 			{/if}
-			<td headers="lth2"><img src="{$smarty.const.URL}/images/{$flags.{$categories[i]->services[j]->getState()}->src}" alt="{$flags.{$categories[i]->services[j]->getState()}->alt}" /></td>
+			<td headers="lth2"><img src="{$smarty.const.URL}/images/{$STATES.{$categories[i]->services[j]->getState()}->src}" alt="{$STATES.{$categories[i]->services[j]->getState()}->alt}" /></td>
 			{if $categories[i]->services[j]->isClosed() === TRUE}
 			<td headers="lth4" colspan="5">
 				{if $categories[i]->services[j]->closedEvent->getDescription() !== NULL}

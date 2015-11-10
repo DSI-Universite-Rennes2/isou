@@ -15,7 +15,7 @@ Liste des services Nagios supprimés
 Liste des services actuellement forcés
 ---------------------------------------
 {foreach $forcedservices as $forcedservice}
-- {$forcedservice->nameForUsers} : {$flags.{$forcedservice->state}->alt}
+- {$forcedservice->nameForUsers} : {$STATES.{$forcedservice->state}->alt}
 {/foreach}
 {/if}
 

@@ -24,29 +24,29 @@
 		<tr class="status{$categories->services[j]->trClass}">
 			<td headers="lth1" class="left">{$categories[i]->services[j]->name}</td>
 			<td headers="lth2">
-				<img src="{$smarty.const.URL}/images/{$flags.{$categories[i]->services[j]->days[6]->state}->src}" alt="{$flags.{$categories[i]->services[j]->days[6]->state}->alt}" />
+				<img src="{$smarty.const.URL}/images/{$STATES.{$categories[i]->services[j]->days[6]->state}->src}" alt="{$STATES.{$categories[i]->services[j]->days[6]->state}->alt}" />
 			</td>
 			<td headers="lth2">
-				<img src="{$smarty.const.URL}/images/{$flags.{$categories[i]->services[j]->days[5]->state}->src}" alt="{$flags.{$categories[i]->services[j]->days[5]->state}->alt}" />
+				<img src="{$smarty.const.URL}/images/{$STATES.{$categories[i]->services[j]->days[5]->state}->src}" alt="{$STATES.{$categories[i]->services[j]->days[5]->state}->alt}" />
 			</td>
 			<td headers="lth3">
-				<img src="{$smarty.const.URL}/images/{$flags.{$categories[i]->services[j]->days[4]->state}->src}" alt="{$flags.{$categories[i]->services[j]->days[4]->state}->alt}" />
+				<img src="{$smarty.const.URL}/images/{$STATES.{$categories[i]->services[j]->days[4]->state}->src}" alt="{$STATES.{$categories[i]->services[j]->days[4]->state}->alt}" />
 			</td>
 			<td headers="lth4">
-				<img src="{$smarty.const.URL}/images/{$flags.{$categories[i]->services[j]->days[3]->state}->src}" alt="{$flags.{$categories[i]->services[j]->days[3]->state}->alt}" />
+				<img src="{$smarty.const.URL}/images/{$STATES.{$categories[i]->services[j]->days[3]->state}->src}" alt="{$STATES.{$categories[i]->services[j]->days[3]->state}->alt}" />
 			</td>
 			<td headers="lth4">
-				<img src="{$smarty.const.URL}/images/{$flags.{$categories[i]->services[j]->days[2]->state}->src}" alt="{$flags.{$categories[i]->services[j]->days[2]->state}->alt}" />
+				<img src="{$smarty.const.URL}/images/{$STATES.{$categories[i]->services[j]->days[2]->state}->src}" alt="{$STATES.{$categories[i]->services[j]->days[2]->state}->alt}" />
 			</td>
 			<td headers="lth4">
-				<img src="{$smarty.const.URL}/images/{$flags.{$categories[i]->services[j]->days[1]->state}->src}" alt="{$flags.{$categories[i]->services[j]->days[1]->state}->alt}" />
+				<img src="{$smarty.const.URL}/images/{$STATES.{$categories[i]->services[j]->days[1]->state}->src}" alt="{$STATES.{$categories[i]->services[j]->days[1]->state}->alt}" />
 
 			</td>
 			<td headers="lth5">
-				<img src="{$smarty.const.URL}/images/{$flags.{$categories[i]->services[j]->days[0]->state}->src}" alt="{$flags.{$categories[i]->services[j]->days[0]->state}->alt}" />
+				<img src="{$smarty.const.URL}/images/{$STATES.{$categories[i]->services[j]->days[0]->state}->src}" alt="{$STATES.{$categories[i]->services[j]->days[0]->state}->alt}" />
 			</td>
 			<td headers="lth6">
-				<img src="{$smarty.const.URL}/images/{$flags.{$categories[i]->services[j]->now}->src}" alt="{$flags.{$categories[i]->services[j]->now}->alt}" />
+				<img src="{$smarty.const.URL}/images/{$STATES.{$categories[i]->services[j]->now}->src}" alt="{$STATES.{$categories[i]->services[j]->now}->alt}" />
 			</td>
 		</tr>
 		{/section}

@@ -67,7 +67,7 @@
 					<br />URL : {$service->url}
 				{/if}
 			</td>
-			<td headers="head-state-{$smarty.foreach.cat.index}">{$flags.{$service->state}->alt}</td>
+			<td headers="head-state-{$smarty.foreach.cat.index}">{$STATES.{$service->state}->alt}</td>
 			<td class="action" headers="head-action-{$smarty.foreach.cat.index}">
 				{if $service->visible === "1"}
 				<a href="{$smarty.const.URL}/index.php/services?service=isou&amp;mask={$service->idService}#service-{$service->idService}" title="masquer">

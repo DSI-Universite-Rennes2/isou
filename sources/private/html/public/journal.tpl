@@ -37,7 +37,7 @@
 				{/if}
 			</td>
 			{else}
-			<td>{if isset($event->state)}<img src="{$smarty.const.URL}/images/{$flags.{$event->state}->src}" alt="{$smarty.const.URL}/images/{$flags.{$event->state}->alt}" />{/if}</td>
+			<td>{if isset($event->state)}<img src="{$smarty.const.URL}/images/{$STATES.{$event->state}->src}" alt="{$smarty.const.URL}/images/{$STATES.{$event->state}->alt}" />{/if}</td>
 			<td>
 				{$event->nameForUsers}
 				{if $smarty.const.DEBUG === TRUE || $is_admin === TRUE}

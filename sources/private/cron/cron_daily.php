@@ -161,16 +161,12 @@ $services->execute();
 
 $forcedservices = $services->fetchAll(PDO::FETCH_OBJ);
 
-$sql = "SELECT idState, name, title, alt, src FROM states";
-$flags = array();
-if($query = $DB->query($sql)){
-	while($flag = $query->fetch(PDO::FETCH_OBJ)){
-		$flags[] = $flag;
-	}
-}
+// load states
+require PRIVATE_PATH.'/libs/states.php';
+$STATES = get_states();
 
 $smarty->assign('forcedservices', $forcedservices);
-$smarty->assign('flags', $flags);
+$smarty->assign('STATES', $STATES);
 
 $subject = 'Rapport ISOU du '.strftime('%A %e %B', $beginDateYesterday);
 $message = $smarty->fetch('mail_cron_daily_text.tpl');

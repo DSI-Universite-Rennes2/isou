@@ -5,8 +5,8 @@
 	 * * * * * * * */
 	$optionForced = array();
 	$optionForced[-1] = 'État par défaut';
-	foreach($flags as $flag){
-		$optionForced[$flag->idState] = $flag->title;
+	foreach($STATES as $STATE){
+		$optionForced[$STATE->id] = $STATE->title;
 	}
 	$smarty->assign('optionForced', $optionForced);
 

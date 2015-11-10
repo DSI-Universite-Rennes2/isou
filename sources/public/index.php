@@ -42,15 +42,11 @@ if($query = $DB->query($sql)){
 
 require PRIVATE_PATH.'/php/common/authentification.php';
 
-$sql = "SELECT idState, name, title, alt, src FROM states";
-$flags = array();
-if($query = $DB->query($sql)){
-	while($flag = $query->fetch(PDO::FETCH_OBJ)){
-		$flags[] = $flag;
-	}
-}
 
-$PAGE_NAME = explode('/', get_page_name('index.php', TRUE));
+// load states
+require PRIVATE_PATH.'/libs/states.php';
+$STATES = get_states();
+
 
 // load menu
 require PRIVATE_PATH.'/libs/menu.php';
@@ -60,6 +56,9 @@ if($IS_ADMIN === TRUE){
 	$ADMINISTRATION_MENU = get_administration_menu();
 }
 
+
+// routing
+$PAGE_NAME = explode('/', get_page_name('index.php', TRUE));
 if(isset($MENU[$PAGE_NAME[0]])){
 	$current_page = $MENU[$PAGE_NAME[0]];
 }elseif(isset($ADMINISTRATION_MENU[$PAGE_NAME[0]])){
@@ -72,6 +71,7 @@ if(isset($MENU[$PAGE_NAME[0]])){
 	}
 }
 $current_page->selected = TRUE;
+
 
 // load announcement
 if(isset($MENU[$current_page->url])){
@@ -102,7 +102,7 @@ $smarty->assign('TITLE', $TITLE);
 $smarty->assign('SCRIPTS', $SCRIPTS);
 $smarty->assign('STYLES', $STYLES);
 $smarty->assign('is_admin', $IS_ADMIN);
-$smarty->assign('flags', $flags);
+$smarty->assign('STATES', $STATES);
 $smarty->assign('MENU', $MENU);
 if(isset($ADMINISTRATION_MENU)){
 	$smarty->assign('ADMINISTRATION_MENU', $ADMINISTRATION_MENU);

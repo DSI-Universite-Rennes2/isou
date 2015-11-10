@@ -11,10 +11,10 @@
 	<div id="legend">
 		<h2>Légende :</h2>
 		<dl>
-		{foreach name=i item=flag from=$flags}
+		{foreach name=i item=STATE from=$STATES}
 			<div class="legend-container">
-				<dt><img src="{$smarty.const.URL}/images/{$flag->src}" alt="{$flag->alt}" /></dt>
-				<dd>{$flag->title}</dd>
+				<dt><img src="{$smarty.const.URL}/images/{$STATE->src}" alt="{$STATE->alt}" /></dt>
+				<dd>{$STATE->title}</dd>
 			</div>
 		{/foreach}
 		</dl>
@@ -45,7 +45,7 @@
 	<ul class="service">
 	{section name=j loop=$categories[i]->services}
 		<li>
-			<img src="{$smarty.const.URL}/images/{$flags.{$categories[i]->services[j]->getState()}->src}" alt="{$flags.{$categories[i]->services[j]->getState()}->alt}" />&nbsp;
+			<img src="{$smarty.const.URL}/images/{$STATES.{$categories[i]->services[j]->getState()}->src}" alt="{$STATES.{$categories[i]->services[j]->getState()}->alt}" />&nbsp;
 			<a name="{$categories[i]->services[j]->stripName}"></a>
 			{if $categories[i]->services[j]->getUrl() === NULL}
 			<span class="state-{$categories[i]->services[j]->getState()}">

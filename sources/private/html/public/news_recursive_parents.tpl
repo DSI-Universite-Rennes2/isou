@@ -1,7 +1,7 @@
 <ul class="listParent">
 {foreach item=parent from=$parents}
 	<li>
-		<img src="{$smarty.const.URL}/images/{$flags.{$parent->state}->src}" alt="{$flags.{$parent->state}->alt}" />
+		<img src="{$smarty.const.URL}/images/{$STATES.{$parent->state}->src}" alt="{$STATES.{$parent->state}->alt}" />
 		{if empty($parent->nameForUsers)}
 			{$parent->name}
 		{else}

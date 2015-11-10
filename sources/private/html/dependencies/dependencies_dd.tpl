@@ -4,7 +4,7 @@
 			<form method="post" action="{$smarty.const.URL}/index.php/dependances#{$smarty.get.S}">
 			<p>
 				<img src="{$smarty.const.URL}/images/arrow_tree_up.png" alt="lorsque" />
-				<img src="{$smarty.const.URL}/images/{$flags.{$dependency->stateOfParent}->src}" alt="{$flags.{$dependency->stateOfParent}->alt}" />
+				<img src="{$smarty.const.URL}/images/{$STATES.{$dependency->stateOfParent}->src}" alt="{$STATES.{$dependency->stateOfParent}->alt}" />
 				<span>{$dependency->name}</span>
 				<a class="hidden" href="{$smarty.const.URL}/index.php/dependances?modify={$dependency->idDependence}#S{$i}" title="modifier">
 					<img src="{$smarty.const.URL}/images/edit.png" alt="modifier">
@@ -33,7 +33,7 @@
 
 			<p>
 				<img src="{$smarty.const.URL}/images/arrow_tree_up.png" alt="lorsque" />
-				<img src="{$smarty.const.URL}/images/{$flags.{$dependency->stateOfParent}->src}" alt="{$flags.{$dependency->stateOfParent}->alt}" />
+				<img src="{$smarty.const.URL}/images/{$STATES.{$dependency->stateOfParent}->src}" alt="{$STATES.{$dependency->stateOfParent}->alt}" />
 				<span>{$dependency->name}</span>
 				<a href="{$smarty.const.URL}/index.php/dependances?modify={$dependency->idDependence}#S{$i}" title="modifier">
 					<img src="{$smarty.const.URL}/images/edit.png" alt="modifier">
