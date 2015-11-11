@@ -1,5 +1,8 @@
 <?php
 
+session_name('isou');
+session_start();
+
 if(!is_file(__DIR__.'/config.php')){
 	echo 'L\'application ne semble pas être installée.'.
 		' Merci d\'exécuter en ligne de commande le script install.php qui se trouve dans ./sources/private/upgrade.';
@@ -119,5 +122,7 @@ $smarty->display('common/html_body_footer.tpl');
 
 // close pdo connection
 $DB = null;
+
+unset($_SESSION['messages']);
 
 ?>
