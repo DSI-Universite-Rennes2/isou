@@ -1,8 +1,63 @@
 <?php
 
-use UniversiteRennes2\Isou;
-
 require_once PRIVATE_PATH.'/classes/isou/service.php';
+
+function get_service($id, $type=NULL){
+	global $DB;
+
+	if($type === NULL){
+		$sql_condition = '';
+		$params = array($id);
+	}else{
+		$sql_condition = " AND s.idtype=?";
+		$params = array($id, $type);
+	}
+
+	$sql = "SELECT s.idservice, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
+			" FROM services s".
+			" WHERE s.idservice=?".$sql_condition;
+	$query = $DB->prepare($sql);
+	$query->execute($params);
+
+	$query->setFetchMode(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Service');
+
+	return $query->fetch();
+}
+
+function get_services($type=NULL){
+	global $DB;
+
+	if($type === NULL){
+		$sql_condition = '';
+		$params = array();
+	}else{
+		$sql_condition = " WHERE s.idtype=?";
+		$params = array($type);
+	}
+
+	$sql = "SELECT s.idservice, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
+			" FROM services s".$sql_condition.
+			" ORDER BY UPPER(s.name)";
+	$query = $DB->prepare($sql);
+	$query->execute($params);
+
+	return $query->fetchAll(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Service');
+}
+
+function get_services_sorted_by_id($type=NULL){
+	global $DB;
+
+	if($type === NULL){
+		$sql = "SELECT idservice, name FROM services ORDER BY UPPER(name)";
+		$params = array();
+	}else{
+		$sql = "SELECT idservice, name FROM services WHERE idtype=? ORDER BY UPPER(name)";
+		$params = array($type);
+	}
+	$query = $DB->prepare($sql);
+	$query->execute($params);
+	return $query->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE);
+}
 
 function get_services_by_category($idcategory){
 	global $DB;

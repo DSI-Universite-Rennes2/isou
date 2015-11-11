@@ -42,8 +42,11 @@ class Service{
 			$this->category = '';
 		}
 
-		$this->is_closed = ($this->state === State::STATE_CLOSE);
+		$this->is_closed = ($this->state === State::CLOSE);
 		$this->is_forced = ($this->locked === '1');
+
+		$this->dependencies = NULL;
+		$this->reverse_dependencies = NULL;
 	}
 
 	function check_data($categories=array()){
@@ -58,6 +61,10 @@ class Service{
 			$errors[] = 'Le type de service choisi est invalide.';
 		}
 
+		if(!in_array($this->visible, array(0, 1))){
+			$errors[] = 'La visibilité choisi est invalide.';
+		}
+
 		if($this->idtype === self::TYPE_ISOU){
 			if($this->url === ''){
 				$this->url = NULL;
@@ -68,7 +75,7 @@ class Service{
 
 				$sql = "SELECT rsskey FROM services WHERE rsskey IS NOT NULL ORDER BY rsskey DESC";
 				$query = $DB->query($sql);
-				if($key = $query->fetch(PDO::FETCH_OBJ)){
+				if($key = $query->fetch(\PDO::FETCH_OBJ)){
 					$this->rsskey = ++$key->rsskey;
 				}else{
 					$this->rsskey = 1;
@@ -221,6 +228,27 @@ class Service{
 			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] Error sql: ".__METHOD__."() in ".__FILE__." file\n\t".implode(', ', $sql_error)."\n", FILE_APPEND);
 			return FALSE;
 		}
+
+	}
+
+	public function get_dependencies(){
+		if($this->dependencies === NULL){
+			require_once PRIVATE_PATH.'/libs/dependencies.php';
+
+			$this->dependencies = get_service_dependency_groups($this->id);
+		}
+
+		return $this->dependencies;
+	}
+
+	public function get_reverse_dependencies(){
+		if($this->reverse_dependencies === NULL){
+			require_once PRIVATE_PATH.'/libs/dependencies.php';
+
+			$this->reverse_dependencies = get_service_reverse_dependency_groups($this->id);
+		}
+
+		return $this->reverse_dependencies;
 	}
 
 	public function __toString(){
