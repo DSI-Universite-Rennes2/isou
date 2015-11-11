@@ -40,7 +40,7 @@ class State{
 	}
 
 	public function get_flag_html_renderer(){
-		return '<img src="'.URL.'/images/'.$this->image.'" alt="'.$this->alternate_text.'" />';
+		return '<img src="'.URL.'/images/'.$this->image.'" alt="'.$this->alternate_text.'" width="16px" height="16px" />';
 	}
 }
 
