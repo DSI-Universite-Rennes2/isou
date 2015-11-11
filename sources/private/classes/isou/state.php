@@ -9,20 +9,20 @@ class State{
 	public $alternate_text;
 	public $image;
 
-	const STATE_OK = '0';
-	const STATE_GREEN = '0';
+	const OK = '0';
+	const GREEN = '0';
 
-	const STATE_WARNING = '1';
-	const STATE_ORANGE = '1';
+	const WARNING = '1';
+	const ORANGE = '1';
 
-	const STATE_CRITICAL = '2';
-	const STATE_RED = '2';
+	const CRITICAL = '2';
+	const RED = '2';
 
-	const STATE_UNKNOWN = '3';
-	const STATE_BLUE = '3';
+	const UNKNOWN = '3';
+	const BLUE = '3';
 
-	const STATE_CLOSE = '4';
-	const STATE_WHITE = '4';
+	const CLOSE = '4';
+	const WHITE = '4';
 
 	public function __construct(){
 		if(isset($this->idstate)){
