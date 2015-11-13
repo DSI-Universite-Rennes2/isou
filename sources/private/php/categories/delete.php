@@ -9,7 +9,7 @@ if(isset($PAGE_NAME[2]) && ctype_digit($PAGE_NAME[2])){
 }
 
 if($category === FALSE){
-	$_SESSION['messages'] = array('errors' => 'Cette catégorie n\'existe pas.');
+	$_SESSION['messages'] = array('errors' => array('Cette catégorie n\'existe pas.'));
 
 	header('Location: '.URL.'/index.php/categories');
 	exit(0);
