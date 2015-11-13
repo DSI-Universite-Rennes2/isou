@@ -59,6 +59,43 @@ function get_services_sorted_by_id($type=NULL){
 	return $query->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE);
 }
 
+function get_services_sorted_by_idtype(){
+	global $CFG, $DB;
+
+	$sql = "SELECT s.idservice, s.name, s.idtype".
+		" FROM services s".
+		" ORDER BY UPPER(s.name)";
+	$query = $DB->prepare($sql);
+	$query->execute();
+
+	$services = array();
+	if($CFG['nagios_statusdat_enable'] === '1'){
+		$services['Services Nagios'] = array();
+	}
+
+	if($CFG['shinken_thruk_enable'] === '1'){
+		$services['Services Shinken'] = array();
+	}
+
+	$services['Services ISOU'] = array();
+
+	while($service = $query->fetch(PDO::FETCH_OBJ)){
+		if($service->idtype === UniversiteRennes2\Isou\Service::TYPE_NAGIOS_STATUSDAT){
+			if(isset($services['Services Nagios'])){
+				$services['Services Nagios'][$service->idservice] = $service->name;
+			}
+		}elseif($service->idtype === UniversiteRennes2\Isou\Service::TYPE_SHINKEN_THRUK){
+			if(isset($services['Services Shinken'])){
+				$services['Services Shinken'][$service->idservice] = $service->name;
+			}
+		}else{
+			$services['Services ISOU'][$service->idservice] = $service->name;
+		}
+	}
+
+	return $services;
+}
+
 function get_services_by_category($idcategory){
 	global $DB;
 
@@ -70,5 +107,20 @@ function get_services_by_category($idcategory){
 
 	return $query->fetchAll(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Service');
 }
+
+function get_services_by_dependencies_group($idgroup){
+	global $DB;
+
+	$sql = "SELECT s.idservice, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory, dgc.servicestate".
+			" FROM services s, dependencies_groups_content dgc".
+			" WHERE s.idservice=dgc.idservice".
+			" AND dgc.idgroup=?".
+			" ORDER BY UPPER(s.name)";
+	$query = $DB->prepare($sql);
+	$query->execute(array($idgroup));
+
+	return $query->fetchAll(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Service');
+}
+
 
 ?>

@@ -12,7 +12,7 @@ class Dependency_Group{
 	public $idmessage;
 	public $message;
 
-	function __construct(){
+	public function __construct(){
 		if(isset($this->idgroup)){
 			// instance PDO
 			$this->id = $this->idgroup;
@@ -22,11 +22,237 @@ class Dependency_Group{
 			$this->id = 0;
 			$this->name = 'Groupe non redondé';
 			$this->redundant = 0;
-			$this->groupstate = UniversiteRennes2\Isou\State::WARNING;
+			$this->groupstate = State::WARNING;
 			$this->idservice = 1;
 			$this->service = '';
 			$this->idmessage = 1;
 			$this->message = NULL;
+		}
+	}
+
+	public function check_data($redundants, $states, $services){
+		$errors = array();
+
+		$this->name = htmlentities($this->name, ENT_NOQUOTES, 'UTF-8');
+		if($this->name === ''){
+			$errors[] = 'Le nom du groupe ne peut pas être vide.';
+		}
+
+		if(!isset($redundants[$this->redundant])){
+			$errors[] = 'La valeur "redondée" choisie est invalide.';
+		}
+
+		if(!isset($states[$this->groupstate])){
+			$errors[] = 'L\'état choisi est invalide.';
+		}
+
+		if(!isset($services[$this->idservice])){
+			$errors[] = 'Le service choisi est invalide.';
+		}
+
+		$this->message = trim($this->message);
+		$this->idmessage = $this->get_message();
+		if($this->idmessage === FALSE){
+			$this->idmessage = $this->set_message();
+			if($this->idmessage === FALSE){
+				$errors[] = 'Le message n\'a pas pu être inséré en base de données.';
+			}
+		}
+
+		return $errors;
+	}
+
+	public function get_message(){
+		global $DB;
+
+		$sql = "SELECT idmessage FROM dependencies_messages WHERE message=?";
+		$query = $DB->prepare($sql);
+		$query->execute(array($this->message));
+		if($message = $query->fetch(\PDO::FETCH_OBJ)){
+			return $message->idmessage;
+		}else{
+			return FALSE;
+		}
+	}
+
+	public function set_message(){
+		global $DB;
+
+		$sql = "INSERT INTO dependencies_messages(message) VALUES(?)";
+		$query = $DB->prepare($sql);
+		if($query->execute(array($this->message))){
+			return $DB->lastInsertId();
+		}else{
+			// log db errors
+			$sql_error = $query->errorInfo();
+			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] ".implode(', ', $sql_error)."\n", FILE_APPEND);
+
+			return FALSE;
+		}
+	}
+
+	public function save(){
+		global $DB;
+
+		$results = array('successes' => array(), 'errors' => array());
+		$params = array($this->name, $this->redundant, $this->groupstate, $this->idservice, $this->idmessage);
+
+		if($this->id === 0){
+			$sql = "INSERT INTO dependencies_groups(name, redundant, groupstate, idservice, idmessage) VALUES(?,?,?,?,?)";
+		}else{
+			$sql = "UPDATE dependencies_groups SET name=?, redundant=?, groupstate=?, idservice=?, idmessage=? WHERE idgroup=?";
+			$params[] = $this->id;
+		}
+		$query = $DB->prepare($sql);
+
+		if($query->execute($params)){
+			if($this->id === 0){
+				$this->id = $DB->lastInsertId();
+			}
+			$results['successes'] = array('Les données ont été correctement enregistrées.');
+		}else{
+			// log db errors
+			$sql_error = $query->errorInfo();
+			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] ".implode(', ', $sql_error)."\n", FILE_APPEND);
+
+			$results['errors'] = array('Une erreur est survenue lors de l\'enregistrement des données.');
+		}
+
+		return $results;
+	}
+
+	public function duplicate(){
+		global $DB;
+
+		$contents = get_dependency_group_contents($this->id);
+
+		// create new group
+		$this->id = 0;
+
+		if($this->groupstate === State::WARNING){
+			$this->groupstate = State::CRITICAL;
+		}else{
+			$this->groupstate = State::WARNING;
+		}
+
+		$results = $this->save();
+
+		// toggle group contents
+		foreach($contents as $content){
+			$content->idgroup = $this->id;
+			if($this->groupstate === State::CRITICAL){
+				$content->servicestate = State::CRITICAL;
+			}else{
+				$content->servicestate = State::WARNING;
+			}
+
+			$content->save();
+		}
+
+		return $results;
+	}
+
+	public function delete(){
+		global $DB;
+
+		$results = array('successes' => array(), 'errors' => array());
+		$commit = 1;
+
+		$DB->beginTransaction();
+
+		$queries = array();
+		$queries[] = "DELETE FROM dependencies_groups WHERE idgroup=?";
+		$queries[] = "DELETE FROM dependencies_groups_content WHERE idgroup=?";
+
+		foreach($queries as $sql){
+			$query = $DB->prepare($sql);
+			$commit &= $query->execute(array($this->id));
+		}
+
+		if($commit === 1){
+			$DB->commit();
+			$results['successes'] = array('Les données ont été correctement supprimées.');
+		}else{
+			// log db errors
+			$sql_error = $query->errorInfo();
+			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] ".implode(', ', $sql_error)."\n", FILE_APPEND);
+
+			$DB->rollBack();
+			$results['errors'] = array('Une erreur est survenue lors de la suppression des données.');
+		}
+
+		return $results;
+	}
+
+	public function get_services(){
+		global $DB;
+
+		$sql = "SELECT s.idservice, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
+			" FROM services s, dependencies_groups dg".
+			" WHERE s.idservice=dg.idservice".
+			" AND dg.idgroup=?";
+		$query = $DB->prepare($sql);
+		$query->execute(array($this->id));
+
+		$this->services = $query->fetchAll(\PDO::FETCH_CLASS, 'Service');
+	}
+
+	public function get_content_services_sorted_by_id(){
+		global $DB;
+
+		$sql = "SELECT s.idservice, s.name".
+			" FROM services s, dependencies_groups_content dgc".
+			" WHERE s.idservice=dgc.idservice".
+			" AND dgc.idgroup=?";
+		$query = $DB->prepare($sql);
+		$query->execute(array($this->id));
+
+		$this->services = $query->fetchAll(\PDO::FETCH_COLUMN|\PDO::FETCH_UNIQUE);
+	}
+
+	public function get_content_services(){
+		global $DB;
+
+		$sql = "SELECT s.idservice, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
+			" FROM services s, dependencies_groups_content dgc".
+			" WHERE s.idservice=dgc.idservice".
+			" AND dgc.idgroup=?";
+		$query = $DB->prepare($sql);
+		$query->execute(array($this->id));
+
+		$this->services = $query->fetchAll(\PDO::FETCH_CLASS, 'Service');
+	}
+
+	public function is_up(){
+		global $DB;
+
+		$this->get_content_services();
+
+		foreach($this->services as $service){
+			$sql = "SELECT idgroup, idservice, servicestate".
+				" FROM dependencies_groups_content dgc".
+				" WHERE idgroup=?".
+				" AND idservice=?".
+				" AND servicestate=?";
+			$query = $DB->prepare($sql);
+			$query->execute(array($this->id, $service->id, $service->state));
+			$status = $query->fetch(\PDO::FETCH_OBJ);
+
+			if($status !== false && $this->redundant === '0'){
+				// there is at least one service down :(
+				return FALSE;
+			}elseif($status === false && $this->redundant === '1'){
+				// there is at least one service up !
+				return TRUE;
+			}
+		}
+
+		if($this->redundant === '0'){
+			// there is no service down !
+			return TRUE;
+		}else{
+			// there is no service up :(
+			return FALSE;
 		}
 	}
 }
