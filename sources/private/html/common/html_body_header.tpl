@@ -98,7 +98,10 @@
 	</nav>
 	{/if}
 
-	{if isset($annonce)}
-	<aside class="alert alert-warning text-center"><h1 class="sr-only">Annonce</h1>{$annonce}</aside>
+	{if isset($ANNOUNCEMENT)}
+	<aside class="alert alert-warning text-center">
+		<h1 class="sr-only">Annonce</h1>
+		{$ANNOUNCEMENT->message}
+	</aside>
 	{/if}
 

@@ -78,14 +78,9 @@ $current_page->selected = TRUE;
 
 // load announcement
 if(isset($MENU[$current_page->url])){
-	$sql = "SELECT message FROM annonce WHERE afficher = 1 AND message != ''";
-	$annonce = '';
-	if($annonce = $DB->query($sql)){
-		$annonce = $annonce->fetch();
-		if(isset($annonce[0]) && !empty($annonce[0])){
-			$annonce = '<p id="annonce">'.nl2br(stripslashes($annonce[0])).'</p>';
-		}
-	}
+	require PRIVATE_PATH.'/libs/announcements.php';
+
+	$ANNOUNCEMENT = get_visible_announcement();
 }
 
 if(CURRENT_VERSION === $CFG['version']){
@@ -105,14 +100,16 @@ $smarty->assign('TITLE', $TITLE);
 $smarty->assign('SCRIPTS', $SCRIPTS);
 $smarty->assign('STYLES', $STYLES);
 $smarty->assign('is_admin', $IS_ADMIN);
+$smarty->assign('CFG', $CFG);
 $smarty->assign('STATES', $STATES);
 $smarty->assign('MENU', $MENU);
+
+if(isset($ANNOUNCEMENT) && $ANNOUNCEMENT !== FALSE){
+	$smarty->assign('ANNOUNCEMENT', $ANNOUNCEMENT);
+}
+
 if(isset($ADMINISTRATION_MENU)){
 	$smarty->assign('ADMINISTRATION_MENU', $ADMINISTRATION_MENU);
-}
-$smarty->assign('CFG', $CFG);
-if(isset($annonce)){
-	$smarty->assign('annonce', $annonce);
 }
 
 $smarty->display('common/html_head.tpl');
