@@ -7,9 +7,9 @@
 }
 
 .form-topics-dt{
-	border-bottom: 0.1em dotted #A0A0A0;
+	border-bottom: .1em dotted #A0A0A0;
 	display: inline-block;
-	margin: 0px 1.5em 0px 0px;
+	margin: 0 1.5em 0 0;
 	vertical-align: top;
 	width: 24em;
 }
@@ -19,8 +19,31 @@
 	vertical-align: top;
 }
 
+.form-fieldset{
+	border: .1em dotted #A0A0A0;
+	padding: 1em;
+	margin: 1em;
+}
+
+.form-legend{
+	border: none;
+	font-size: 1em;
+	font-weight: 700;
+	margin: auto;
+	padding: 0 .25em;
+	width: auto;
+}
+
+.form-fieldset label{
+	font-weight: 100;
+}
+
+label > input[type=checkbox], label > input[type=radio]{
+	margin-right: .5em;
+}
+
 .form-submit-buttons-ul{
-	margin-top: 1em;
+	margin: 1em .5em;
 }
 
 .nav-tabs{

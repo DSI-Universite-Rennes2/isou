@@ -96,6 +96,19 @@ function get_services_sorted_by_idtype(){
 	return $services;
 }
 
+function get_isou_services_sorted_by_idtype(){
+	global $DB;
+
+	$sql = "SELECT s.idservice, s.name".
+		" FROM services s".
+		" WHERE s.idtype=?".
+		" ORDER BY UPPER(s.name)";
+	$query = $DB->prepare($sql);
+	$query->execute(array(UniversiteRennes2\Isou\Service::TYPE_ISOU));
+
+	return $query->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE);
+}
+
 function get_services_by_category($idcategory){
 	global $DB;
 
