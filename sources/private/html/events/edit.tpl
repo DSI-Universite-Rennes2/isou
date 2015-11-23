@@ -1,84 +1,80 @@
-			<form id="form-edit" action="{$smarty.const.URL}/index.php/evenements/{if $smarty.get.type == 0}nonprevus{elseif $smarty.get.type == 2}reguliers{elseif $smarty.get.type == 3}fermes{else}prevus{/if}{if isset($smarty.get.f)}?f=1{elseif isset($smarty.get.p)}?p=1{/if}#form-edit" method="post">
-			<fieldset>
-			<legend>Modifier un évènement</legend>
-				<p>
-					<label for="name" class="label">Service :</label>
-					{html_options id=name name=name options=$optionNameForUsers selected=$smarty.post.name|default:$currentEdit->idService}
-				</p>
-				{if isset($smarty.get.f)}
-				<p id="pedit-forced">
-					<label for="forced" class="label">
-						Forcer l'état du service
-						<span class="info">(seulement si c'est une opération non-prévue)</span>
-						<span id="warning-forced"><br />Attention ! Sélectionner l'option 'État par défaut' pour un retour au <span lang="en">monitoring</span> automatique</span>
-					</label>
-					{if $currentEdit->readonly == 1}
-					{html_options id=forced name=forced options=$optionForced selected=$smarty.post.forced|default:$currentEdit->state}
-					{else}
-					{html_options id=forced name=forced options=$optionForced selected=$smarty.post.forced|default:-1}
-					{/if}
-				</p>
-				{/if}
+<form action="{$smarty.const.URL}/index.php/evenements/edit/{$event->id}" method="post">
 
-				<p>
-					<label for="beginDateUpd" class="label">
-						{if $smarty.get.type == 0}
-							Date de début
-						{elseif $smarty.get.type == 2}
-							Date de la prochaine opération régulière
-						{elseif $smarty.get.type == 3}
-							Date de la prochaine fermeture
-						{else}
-							Date de la prochaine maintenance
-						{/if}
-						<span class="required" title="champs obligatoire">*</span>
-						<a href="#formatDate3" class="help" title="lire l'aide pour le champs date de début">?</a>
-					</label>
-					<input type="text" name="beginDate" id="beginDateUpd" title="Format : Jour/Mois/Annee H:M" maxlength="16" value="{$currentEdit->beginDate|date_format:'%d/%m/%Y %H:%M'}" />
-				</p>
+	{if $event->id == 0}
+	<h2>Ajouter un évènement</h2>
+	{else}
+	<h2>Mettre à jour un évènement</h2>
+	{/if}
 
-				<p>
-					<label for="endDateUpd" class="label">
-						{if $smarty.get.type == 0}
-							Date de fin de l'interruption (optionnel)
-						{elseif $smarty.get.type == 2}
-							Date de fin de la prochaine opération régulière
-							<span class="required" title="champs obligatoire">*</span>
-						{elseif $smarty.get.type == 3}
-							Date de réouverture (optionnel)
-						{else}
-							Date de fin de la maintenance
-						{/if}
-						<a href="#formatDate3" class="help" title="lire l'aide pour le champs date de début">?</a>
-					</label>
-					<input type="text" name="endDate" id="endDateUpd" title="Format : Jour Mois Annee H:M" maxlength="16" value="{$currentEdit->endDate|date_format:'%d/%m/%Y %H:%M'}" />
-				</p>
+	{include file="common/messages_form.tpl"}
 
-				{if isset($smarty.get.p)}
-				<p>
-					<span class="label">Périodicité <span class="info">(seulement si c'est une opération régulière)</span></span>
-					{html_radios name='period' options=$period selected={$smarty.post.period|default:$currentEdit->strperiod}}
-				</p>
-				{/if}
+	<dl>
+		<div class="form-information-dl-div">
+			<dt class="form-topics-dt">
+				<label for="type">Type d'évènement</label>
+			</dt>
+			<dd class="form-values-dd">
+				{html_options id="type" name="type" options=$options_types selected=$event->type}
+			</dd>
+		</div>
+		<div class="form-information-dl-div">
+			<dt class="form-topics-dt">
+				<label for="service">Nom du service</label>
+			</dt>
+			<dd class="form-values-dd">
+				{html_options id="service" name="service" options=$options_services selected=$event->idservice}
+			</dd>
+		</div>
+		<div class="form-information-dl-div">
+			<dt class="form-topics-dt">
+				<label for="state">État du service</label>
+			</dt>
+			<dd class="form-values-dd">
+				{html_options id="state" name="state" options=$options_states selected=$event->state}
+			</dd>
+		</div>
+		<div class="form-information-dl-div">
+			<dt class="form-topics-dt">
+				<label for="begindate">Date de début</label>
+			</dt>
+			<dd class="form-values-dd">
+				<input type="text" name="begindate" id="begindate" title="Format : Jour/Mois/Annee H:M" maxlength="16" value="{$event->begindate|date_format:'%d/%m/%Y %H:%M'}" required="1" />
+			</dd>
+		</div>
+		<div class="form-information-dl-div">
+			<dt class="form-topics-dt">
+				<label for="enddate">Date de fin</label>
+			</dt>
+			<dd class="form-values-dd">
+				<input type="text" name="enddate" id="enddate" title="Format : Jour Mois Annee H:M" maxlength="16" value="{$event->enddate|date_format:'%d/%m/%Y %H:%M'}" />
+			</dd>
+		</div>
+		<div class="form-information-dl-div">
+			<dt class="form-topics-dt">Périodicité</dt>
+			<dd class="form-values-dd">
+				{html_radios name='period' options=$options_periods selected=$event->period}
+			</dd>
+		</div>
+		<div class="form-information-dl-div">
+			<dt class="form-topics-dt">
+				<label for="description">Raison de l'interruption (html autorisé)</label>
+			</dt>
+			<dd class="form-values-dd">
+				<textarea id="description" name="description" cols="40" rows="6">{$event->description}</textarea>
+			</dd>
+		</div>
+	</dl>
 
-				<p>
-					<label for="descriptionUpd" class="label">Raison de l'interruption (html autorisé)</label>
-					<textarea id="description" name="descriptionUpd" cols="40" rows="6">{$smarty.post.descriptionUpd|default:$currentEdit->description}</textarea>
-				</p>
-				<p class="info-date-format">
-					<a name="formatDate3"></a>
-					Le format de date demandé est de type "DD/MM/YYYY hh:mm".<br />
-					Exemple :<br />
-					Pour le {$smarty.now|date_format:'%A %d %B %Y à %H heures et %M minutes'}, la valeur attendue est {$smarty.now|date_format:'%d/%m/%Y %H:%M'}.<br /><br />
-					<a class="quickaccess-form" href="#form-edit" title="revenir au formulaire">Revenir au formulaire.</a>
-				</p>
-				<p>
-					<input class="hidden" type="hidden" name="idEvent" value="{$currentEdit->idEvent}" />
-					<input class="hidden" type="hidden" name="idEventDescription" value="{$currentEdit->idEventDescription}" />
-					<input class="hidden" type="hidden" name="scheduled" value="{$currentEdit->isScheduled}" />
-					<input type="submit" name="modify" value="Enregistrer" />
-					<input type="submit" name="cancel" value="Annuler" />
-				</p>
-			</fieldset>
-			</form>
+	<p class="well">Le format de date demandé est de type "DD/MM/YYYY hh:mm".<br />
+Exemple :<br />Pour le {$smarty.now|date_format:'%A %d %B %Y à %H heures et %M minutes'}, la valeur attendue est {$smarty.now|date_format:'%d/%m/%Y %H:00'}.
+	</p>
 
+	<ul class="list-inline">
+		<li>
+			<input class="btn btn-primary" type="submit" value="enregistrer" />
+		</li>
+		<li>
+			<a class="btn btn-default" href="{$smarty.const.URL}/index.php/evenements">annuler</a>
+		</li>
+	</ul>
+</form>
