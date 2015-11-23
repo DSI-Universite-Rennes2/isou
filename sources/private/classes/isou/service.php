@@ -3,6 +3,10 @@
 namespace UniversiteRennes2\Isou;
 
 class Service{
+	const TYPE_ISOU = '1';
+	const TYPE_NAGIOS_STATUSDAT = '2';
+	const TYPE_SHINKEN_THRUK = '3';
+
 	public $id;
 	public $name;
 	public $url;
@@ -15,10 +19,6 @@ class Service{
 	public $idtype;
 	public $idcategory;
 	public $category;
-
-	const TYPE_ISOU = '1';
-	const TYPE_NAGIOS_STATUSDAT = '2';
-	const TYPE_SHINKEN_THRUK = '3';
 
 	public static $TYPES = array(self::TYPE_ISOU, self::TYPE_NAGIOS_STATUSDAT, self::TYPE_SHINKEN_THRUK);
 
@@ -42,7 +42,7 @@ class Service{
 			$this->category = '';
 		}
 
-		$this->is_closed = ($this->state === State::CLOSE);
+		$this->is_closed = ($this->state === State::CLOSED);
 		$this->is_forced = ($this->locked === '1');
 
 		$this->dependencies = NULL;

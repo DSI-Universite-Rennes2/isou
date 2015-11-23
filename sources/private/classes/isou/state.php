@@ -3,12 +3,6 @@
 namespace UniversiteRennes2\Isou;
 
 class State{
-	public $id;
-	public $name;
-	public $title;
-	public $alternate_text;
-	public $image;
-
 	const OK = '0';
 	const GREEN = '0';
 
@@ -21,8 +15,22 @@ class State{
 	const UNKNOWN = '3';
 	const BLUE = '3';
 
-	const CLOSE = '4';
+	const CLOSED = '4';
 	const WHITE = '4';
+
+	public $id;
+	public $name;
+	public $title;
+	public $alternate_text;
+	public $image;
+
+	public static $STATES = array(
+		self::OK => 'Fonctionne',
+		self::WARNING => 'Instable',
+		self::CRITICAL => 'Indisponible',
+		self::UNKNOWN => 'Indéterminé',
+		self::CLOSED => 'Fermé'
+		);
 
 	public function __construct(){
 		if(isset($this->idstate)){
