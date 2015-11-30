@@ -155,7 +155,7 @@ if(isset($_POST['services'], $_POST['event_type'], $_POST['year'], $_POST['month
 
 	$events = array();
 	$sql = "SELECT s.name, e.begindate, e.enddate, ed.description, e.type".
-		" FROM events e, events_description ed, services s".
+		" FROM events e, events_descriptions ed, services s".
 		" WHERE s.idservice = e.idservice".
 		" AND ed.ideventdescription = e.ideventdescription".
 		$sql_services.
@@ -169,7 +169,7 @@ if(isset($_POST['services'], $_POST['event_type'], $_POST['year'], $_POST['month
 
 		$count_events = 0;
 		$sql_count = "SELECT COUNT(e.idevent)".
-			" FROM events e, events_description ed, services s".
+			" FROM events e, events_descriptions ed, services s".
 			" WHERE s.idservice = e.idservice".
 			" AND ed.ideventdescription = e.ideventdescription".
 			$sql_services.
@@ -210,7 +210,7 @@ if(isset($_POST['services'], $_POST['event_type'], $_POST['year'], $_POST['month
 					$event->total_minutes = round(($event->enddate->getTimestamp()-$event->begindate->getTimestamp())/60);
 				}else{
 					$diff = $event->begindate->diff(new DateTime());
-					$event->total_minutes = round(($event->enddate->getTimestamp()-$event->begindate->getTimestamp())/60);
+					$event->total_minutes = round((TIME-$event->begindate->getTimestamp())/60);
 				}
 
 				list($days, $hours, $minutes) = explode(';', $diff->format('%a;%h;%i'));

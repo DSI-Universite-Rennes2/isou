@@ -18,7 +18,7 @@ function get_event($id){
 }
 
 function get_events($begindate_before=NULL, $begindate_after=NULL, $enddate_before=NULL, $enddate_after=NULL, $tolerance=TRUE){
-	global $DB;
+	global $CFG, $DB;
 
 	$params = $conditions = array();
 
@@ -73,7 +73,7 @@ function get_events($begindate_before=NULL, $begindate_after=NULL, $enddate_befo
 }
 
 function get_isou_events($begindate_before=NULL, $begindate_after=NULL, $enddate_before=NULL, $enddate_after=NULL, $tolerance=TRUE){
-	global $DB;
+	global $CFG, $DB;
 
 	$params = $conditions = array();
 
@@ -81,11 +81,11 @@ function get_isou_events($begindate_before=NULL, $begindate_after=NULL, $enddate
 			" FROM events e, services s".
 			" WHERE s.idservice = e.idservice".
 			" AND s.idtype = ?";
-	$params[] = Service::SERVICETYPE_ISOU;
+	$params[] = UniversiteRennes2\Isou\Service::TYPE_ISOU;
 
-	if($tolerance === TRUE && isset($_SESSION['tolerance'])){
+	if($tolerance === TRUE && isset($CFG['tolerance'])){
 		$tolerance_condition = " AND strftime('%s', e.endDate)-strftime('%s', e.beginDate) > ?";
-		$params[] = $_SESSION['tolerance'];
+		$params[] = $CFG['tolerance'];
 	}else{
 		$tolerance_condition = '';
 	}
@@ -125,9 +125,9 @@ function get_isou_events($begindate_before=NULL, $begindate_after=NULL, $enddate
 	}
 
 	if(isset($end_conditions[0], $begin_conditions[0])){
-		$sql .= " WHERE (e.enddate IS NULL OR (($begin_conditions AND $end_conditions) $tolerance_condition))";
+		$sql .= " AND (e.enddate IS NULL OR (($begin_conditions AND $end_conditions) $tolerance_condition))";
 	}elseif(isset($begin_conditions[0])){
-		$sql .= " WHERE $begin_condition $tolerance_condition";
+		$sql .= " AND $begin_condition $tolerance_condition";
 	}else{
 		$sql .= str_replace('AND', 'WHERE', $tolerance_condition);
 	}

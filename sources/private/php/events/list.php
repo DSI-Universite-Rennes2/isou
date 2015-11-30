@@ -14,7 +14,8 @@ switch($PAGE_NAME[1]){
 	default:
 		$submenu['prevus']->selected = TRUE;
 		$since = strftime('%Y-%m-%dT%H:%M', mktime(0,0,0)-35*24*60*60);
-		$events = get_events_by_type($since, UniversiteRennes2\Isou\Event::TYPE_SCHEDULED, UniversiteRennes2\Isou\Service::TYPE_ISOU);
+		$events = get_events_by_type(NULL, UniversiteRennes2\Isou\Event::TYPE_SCHEDULED, UniversiteRennes2\Isou\Service::TYPE_ISOU);
+
 }
 
 $smarty->assign('events', $events);

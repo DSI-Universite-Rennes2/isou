@@ -25,10 +25,14 @@ class Event{
 			$this->id = $this->idevent;
 			unset($this->idevent);
 
-			$this->begindate = new \DateTime($this->begindate);
-
-			if($this->enddate !== NULL){
-				$this->enddate = new \DateTime($this->enddate);
+			try{
+				$this->begindate = new \DateTime($this->begindate);
+				if($this->enddate !== NULL){
+					$this->enddate = new \DateTime($this->enddate);
+				}
+			}catch(Exception $exception){
+				$this->begindate = new \DateTime();
+				$this->enddate = new \DateTime();
 			}
 
 			if(empty($this->period)){
@@ -246,7 +250,7 @@ class Event{
 		$description = get_description_by_content($this->description);
 
 		if($description === FALSE){
-			$sql = "INSERT INTO events_description(description, autogen) VALUES(?,?)";
+			$sql = "INSERT INTO events_descriptions(description, autogen) VALUES(?,?)";
 			$query = $DB->prepare($sql);
 			if($query->execute(array($this->description, $autogen))){
 				$this->ideventdescription = $DB->lastInsertId();
