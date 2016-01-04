@@ -1,119 +1,136 @@
 <?php
 
+require_once PRIVATE_PATH.'/libs/events.php';
+require_once PRIVATE_PATH.'/libs/services.php';
+
 $TITLE = NAME.' - Calendrier';
 
-$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery-min.js');
-$SCRIPTS[] = new Isou\Helpers\Script(URL.'/scripts/jquery_calendar.js');
-
-require PRIVATE_PATH.'/classes/isou/isou_service.class.php';
-require PRIVATE_PATH.'/classes/isou/isou_event.class.php';
-
-$date = getdate();
-if(isset($_GET['p'])){
-	$page = intval($_GET['p']);
-}else{
-	$page = 0;
+$_GET['page'] = 1;
+if(isset($PAGE_NAME[1]) && ctype_digit($PAGE_NAME[1])){
+	if($PAGE_NAME[1] === '0'){
+		$_GET['page'] = 1;
+	}elseif($PAGE_NAME[1] > 5){
+		$_GET['page'] = 5;
+	}else{
+		$_GET['page'] = $PAGE_NAME[1];
+	}
 }
 
-// $CALENDAR_STEP = 'WEEKLY';
+$date = getdate();
+
+// $CALENDAR_STEP = 'WEEKLY'; // TODO: faire une option
 $CALENDAR_STEP = 'MONTHLY';
 
 if($CALENDAR_STEP === 'WEEKLY'){
-	$time = mktime(0,0,0)-((6+$date["wday"]-($page*7)))*24*60*60;
+	$time = mktime(0,0,0)-((6+$date['wday']-(($_GET['page']-1)*7)))*24*60*60;
 }else{
-	$first_months_day = mktime(0,0,0,$date['mon']+$page,1);
+	$first_months_day = mktime(0,0,0,$date['mon']+$_GET['page']-1,1);
 	$time = $first_months_day-((intval(strftime('%u', $first_months_day))-1)*24*60*60);
 }
 
-$beginDate = strftime('%Y-%m-%dT%H:%M', $time);
-$endDate = strftime('%Y-%m-%dT%H:%M', $time+35*24*60*60);
+$begincalendar = strftime('%Y-%m-%dT%H:%M', $time);
+$endcalendar = strftime('%Y-%m-%dT%H:%M', $time+35*24*60*60);
 
-// recupere tous les services dans la bdd
-$sql = "SELECT S.idService, S.name, S.nameForUsers, S.url, S.state, S.comment, C.name AS category".
-		" FROM services S, categories C".
-		" WHERE S.idCategory = C.idCategory".
-		" AND S.nameForUsers IS NOT NULL".
-		" AND S.enable = 1".
-		" AND S.visible = 1".
-		" ORDER BY C.position, UPPER(S.nameForUsers)";
+$one_day = new DateInterval('P1D');
+$calendar = array();
+$calendar_day = new stdClass();
+$calendar_day->datetime = $time;
+$calendar_day->services = array();
+for($i=0;$i<5;$i++){
+	for($j=0;$j<7;$j++){
+		if($i === 0){
+			if(strftime('%d', $calendar_day->datetime) === '01'){
+				if(strftime('%m', $calendar_day->datetime) === '01'){
+					$calendar_day->strftime = '1er %B %Y';
+				}else{
+					$calendar_day->strftime = '1er %B';
+				}
+			}else{
+				$calendar_day->strftime = '%d %B';
+			}
+		}else{
+			$calendar_day->strftime = '%d';
+		}
 
-$i=0;
-$services = array();
-if($service_records = $DB->query($sql)){
-	while($service = $service_records->fetchObject('IsouService')){
-		$service->setEvents($service->getScheduledEvents($CFG['tolerance'], -1, $beginDate, $endDate));
-		if($service->hasEvents() === TRUE){
-			$services[$i] = $service;
+		$calendar[$i][$j] = clone($calendar_day);
+		$calendar_day->datetime += 24*60*60;
+	}
+}
+
+$begincalendar = new DateTime($begincalendar);
+$endcalendar = new DateTime($endcalendar);
+
+$options = array();
+$options['tolerance'] = $CFG['tolerance'];
+$options['service_type'] = UniversiteRennes2\Isou\Service::TYPE_ISOU;
+$options['type'] = UniversiteRennes2\Isou\Event::TYPE_SCHEDULED;
+$options['since'] = $begincalendar;
+
+$events = get_events($options);
+foreach($events as $i => $event){
+	$service = get_service($event->idservice);
+
+	if($event->state === UniversiteRennes2\Isou\State::CLOSED){
+		unset($events[$i]);
+		continue;
+	}
+
+	if($event->enddate === NULL){
+		if($_GET['page'] != 1){
+			unset($events[$i]);
+			continue;
+		}
+	}elseif(!($event->begindate >= $begincalendar && $event->enddate <= $endcalendar)){
+		unset($events[$i]);
+		continue;
+	}
+
+	$event->service = $service->name;
+	$service->idevent = $event->id;
+
+	$begindate = clone $event->begindate;
+	$begindate->setTime(0,0,0);
+	$interval = $begincalendar->diff($begindate);
+
+	if($interval->invert === 1){
+		$begindate = clone $begincalendar;
+		$i = 0;
+		$j = 0;
+	}else{
+		$i = round($interval->d/5, 0)-1;
+		if($i < 0){
+			$i = 0;
+		}
+		$j = $interval->d%7;
+	}
+
+	if($event->enddate === NULL){
+		$enddate = new DateTime();
+	}else{
+		$enddate = clone $event->enddate;
+	}
+
+	while($begindate < $enddate){
+		if(!isset($calendar[$i][$j])){
+			break;
+		}
+
+		$calendar[$i][$j]->services[] = $service;
+		$begindate->add($one_day);
+
+		$j++;
+		if($j > 6){
+			$j=0;
 			$i++;
 		}
 	}
 }
 
-if($page === 1){
-	$smarty->assign('previousWeekLink', '');
-}else{
-	if($IS_ADMIN){
-		$smarty->assign('previousWeekLink', '?p='.($page-1));
-	}elseif($page>1){
-		$smarty->assign('previousWeekLink', '?p='.($page-1));
-	}
-}
-$smarty->assign('nextWeekLink', '?p='.($page+1));
-
-$array_events = IsouEvent::$array_events;
-
-$calendar = array();
-$rows = array();
-
-for($row=0;$row<5;$row++){
-	$cols = array();
-	for($col=0;$col<7;$col++){
-		$day = new stdClass();
-		$day->time = $time;
-
-		if($row === 0){
-			if(strftime('%d', $time) === '01'){
-				if(strftime('%m', $time) === '01'){
-					$day->strftime = '1er %B %Y';
-				}else{
-					$day->strftime = '1er %B';
-				}
-			}else{
-				$day->strftime = '%d %B';
-			}
-		}else{
-			$day->strftime = '%d';
-		}
-
-		$events = array();
-
-		if(isset($array_events[strftime('%Y-%m-%d',$time)]) && is_array($array_events[strftime('%Y-%m-%d',$time)])){
-			$i=0;
-			while(isset($array_events[strftime('%Y-%m-%d',$time)][$i])){
-				$nameForUsers = $array_events[strftime('%Y-%m-%d',$time)][$i];
-				$event = new stdClass();
-				$event->stripName = strip_accents(substr($nameForUsers,0,-3));
-				$event->name = substr($nameForUsers,0,-3);
-				$events[] = $event;
-				$i++;
-			}
-		}
-		if(count($events) > 0){
-			$day->events = $events;
-		}
-		
-		$cols[] = $day;
-		$time = $time+(24*60*60);
-	}
-	$rows[] = $cols;
-}
-
-$smarty->assign('calendar', $rows);
+$smarty->assign('calendar', $calendar);
+$smarty->assign('events', $events);
 $smarty->assign('now', mktime(0,0,0));
 
-require PRIVATE_PATH.'/php/public/news.php';
-
-$template = 'public/calendar.tpl';
+$TEMPLATE = 'public/calendar.tpl';
 
 ?>
 

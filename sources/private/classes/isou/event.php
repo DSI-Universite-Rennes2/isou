@@ -269,6 +269,65 @@ class Event{
 
 		return TRUE;
 	}
+
+	public function __toString(){
+		$str = '';
+
+		if($this->state === State::CLOSED){
+			$str = 'Service fermé depuis le '.strftime('%A %d %B %Y', $this->begindate->getTimestamp()).'.';
+			if($this->enddate !== NULL){
+				$str .= ' Réouverture le '.strftime('%A %d %B %Y', $this->enddate->getTimestamp()).'.';
+			}
+		}elseif(!empty($this->period)){
+			if($this->period === 86400){
+				$period = ' quotidienne';
+			}elseif($this->period === 604800){
+				$period = ' hebdomadaire';
+			}else{
+				$period = '';
+			}
+
+			if(TIME > $this->begindate->getTimestamp()){
+				$str = 'Le service est en maintenance'.$period.' de '.strftime('%Hh%M', $this->begindate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
+			}else{
+				$str = 'Le service sera en maintenance'.$period.' de '.strftime('%Hh%M', $this->begindate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
+			}
+		}else{
+			if($this->begindate->getTimestamp() > TIME){
+				// évènement futur
+				if($this->enddate === NULL){
+					$str = 'Le service sera perturbé le '.strftime('%A %d %B à partir de %Hh%M', $this->begindate->getTimestamp()).'.';
+				}else{
+					$str = 'Le service sera perturbé du '.strftime('%A %d %B %Hh%M', $this->begindate->getTimestamp()).' au '.strftime('%A %d %B %Hh%M', $this->enddate->getTimestamp()).'.';
+				}
+			}elseif($this->enddate !== NULL && $this->enddate->getTimestamp() < TIME){
+				// évènement passé
+				if(strftime('%A%d%B', $this->begindate->getTimestamp()) === strftime('%A%d%B', $this->enddate->getTimestamp())){
+					// évènement qui s'est déroulé sur une journée
+					$str = 'Le service a été perturbé le '.strftime('%A %d %B', $this->begindate->getTimestamp()).' de '.strftime('%Hh%M', $this->begindate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
+				}else{
+					// évènement qui s'est déroulé sur plusieurs journées
+					$str = 'Le service a été perturbé du '.strftime('%A %d %B %Hh%M', $this->begindate->getTimestamp()).' au '.strftime('%A %d %B %Hh%M', $this->enddate->getTimestamp()).'.';
+				}
+			}else{
+				// évènement en cours
+				if(strftime('%A%d%B', $this->begindate->getTimestamp()) === strftime('%A%d%B')){
+					$str = 'Le service est actuellement perturbé depuis '.strftime('%Hh%M', $this->begindate->getTimestamp()).'.';
+				}else{
+					$str = 'Le service est actuellement perturbé depuis le '.strftime('%A %d %B %Hh%M', $this->begindate->getTimestamp()).'.';
+				}
+			}
+		}
+
+		return $str;
+	}
+
+	/**
+	*	@desc	Destruct instance
+	*/
+	public function __destruct() {
+		// object destructed
+	}
 }
 
 ?>

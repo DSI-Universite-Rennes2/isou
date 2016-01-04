@@ -17,128 +17,119 @@ function get_event($id){
 	return $query->fetch();
 }
 
-function get_events($begindate_before=NULL, $begindate_after=NULL, $enddate_before=NULL, $enddate_after=NULL, $tolerance=TRUE){
-	global $CFG, $DB;
 
-	$params = $conditions = array();
+/**
+* @param array $options Array in format:
+*	after			=> DateTime
+*	before			=> DateTime
+*	idservice		=> int
+*	regular			=> bool
+*	service_type	=> int : index key from UniversiteRennes2\Isou\Service::$TYPES
+*	since			=> DateTime
+*	state			=> int : index key from UniversiteRennes2\Isou\State::$STATES
+*	tolerance		=> int : seconds
+*	type			=> int : index key from UniversiteRennes2\Isou\Event::$TYPES
+*	sort			=> Array of strings
+*
+* @return array of UniversiteRennes2\Isou\Events
+*/
 
-	$sql = "SELECT idevent, begindate, enddate, state, type, period, ideventdescription, idservice".
-			" FROM events";
+function get_events($options = array()){
+	global $DB;
 
-	if($tolerance === TRUE){
-		$tolerance_condition = " AND strftime('%s', endDate)-strftime('%s', beginDate) > ?";
-		$params[] = $CFG['tolerance'];
+	$params = array();
+	$conditions = array();
+
+	$sql = "SELECT e.idevent, e.begindate, e.enddate, e.state, e.type, e.period, e.ideventdescription, ed.description, e.idservice, s.name AS service_name".
+			" FROM events e, events_descriptions ed, services s".
+			" WHERE s.idservice=e.idservice".
+			" AND ed.ideventdescription=e.ideventdescription";
+
+	// after options
+	if(isset($options['after']) && $options['after'] instanceof DateTime){
+		$sql .= " AND e.begindate >= ?";
+		$params[] = $options['after']->format('Y-m-d\TH:i');
+	}
+
+	// before options
+	if(isset($options['before']) && $options['before'] instanceof DateTime){
+		$sql .= " AND e.begindate < ?";
+		$params[] = $options['before']->format('Y-m-d\TH:i');
+	}
+
+	// idservice options
+	if(isset($options['idservice']) && ctype_digit($options['idservice'])){
+		$sql .= " AND s.idservice = ?";
+		$params[] = $options['idservice'];
+	}
+
+	// regular options
+	if(isset($options['regular'])){
+		if($options['regular'] === TRUE){
+			$sql .= " AND e.period IS NOT NULL";
+		}else{
+			$sql .= " AND e.period IS NULL";
+		}
+	}
+
+	// service_type options
+	if(isset($options['service_type'], UniversiteRennes2\Isou\Service::$TYPES[$options['service_type']])){
+		$sql .= " AND s.idtype=?";
+		$params[] = $options['service_type'];
+	}
+
+	// since options
+	if(isset($options['since']) && $options['since'] instanceof DateTime){
+		$sql .= " AND (e.enddate IS NULL OR e.begindate >= ?)";
+		$params[] = $options['since']->format('Y-m-d\TH:i');
+	}
+
+	// state options
+	if(isset($options['state'], UniversiteRennes2\Isou\State::$STATES[$options['state']])){
+		$sql .= " AND e.state=?";
+		$params[] = $options['state'];
+	}
+
+	// tolerance options
+	if(isset($options['tolerance']) && ctype_digit($options['tolerance']) && $options['tolerance'] > 0){
+		$sql .= " AND".
+			" (".
+			" (e.enddate IS NULL AND (strftime('%s', '".STR_TIME."') - strftime('%s', e.begindate)) > ".$options['tolerance'].")".
+			" OR".
+			" ((strftime('%s', e.enddate) - strftime('%s', e.begindate)) > ".$options['tolerance'].")".
+			" )";
+	}
+
+	// type options
+	if(isset($options['type'], UniversiteRennes2\Isou\Event::$TYPES[$options['type']])){
+		$sql .= " AND e.type=?";
+		$params[] = $options['type'];
+	}
+
+	// sort options
+	if(isset($options['sort']) && is_array($options['sort'])){
+		$sql .= " ORDER BY ".implode(', ', $options['sort']);
 	}else{
-		$tolerance_condition = '';
+		$sql .= " ORDER BY e.begindate, e.enddate";
 	}
-
-	if($begindate_before !== NULL){
-		$begin_conditions[] = " begindate <= ?";
-		$params[] = $begindate_before;
-	}
-
-	if($begindate_after !== NULL){
-		$begin_conditions[] = " begindate >= ?";
-		$params[] = $begindate_after;
-	}
-	$begin_conditions = implode(' AND', $begin_conditions);
-
-	if($enddate_before !== NULL){
-		$end_conditions[] = " enddate <= ?";
-		$params[] = $enddate_before;
-	}
-
-	if($enddate_after !== NULL){
-		$end_conditions[] = " enddate >= ?";
-		$params[] = $enddate_after;
-	}
-	$end_conditions = implode(' AND', $end_conditions);
-
-	if(isset($end_conditions[0])){
-		$sql .= " WHERE (enddate IS NULL OR (($begin_conditions AND $end_conditions) $tolerance_condition))";
-	}elseif(isset($begin_conditions[0])){
-		$sql .= " WHERE $begin_condition $tolerance_condition";
-	}else{
-		$sql .= str_replace('AND', 'WHERE', $tolerance_condition);
-	}
-
-	$sql .= " ORDER BY begindate, enddate";
 
 	$query = $DB->prepare($sql);
 	$query->execute($params);
 
 	$query->setFetchMode(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Event');
 
+	if(isset($options['one_record'])){
+		$events = $query->fetchAll();
+		if(isset($events[0])){
+			return $events[0];
+		}else{
+			return FALSE;
+		}
+	}
+
 	return $query->fetchAll();
 }
 
-function get_isou_events($begindate_before=NULL, $begindate_after=NULL, $enddate_before=NULL, $enddate_after=NULL, $tolerance=TRUE){
-	global $CFG, $DB;
-
-	$params = $conditions = array();
-
-	$sql = "SELECT e.idevent, e.begindate, e.enddate, e.state, e.type, e.period, e.ideventdescription, e.idservice".
-			" FROM events e, services s".
-			" WHERE s.idservice = e.idservice".
-			" AND s.idtype = ?";
-	$params[] = UniversiteRennes2\Isou\Service::TYPE_ISOU;
-
-	if($tolerance === TRUE && isset($CFG['tolerance'])){
-		$tolerance_condition = " AND strftime('%s', e.endDate)-strftime('%s', e.beginDate) > ?";
-		$params[] = $CFG['tolerance'];
-	}else{
-		$tolerance_condition = '';
-	}
-
-	// $begindate_before
-	if($begindate_before !== NULL){
-		$begin_conditions[] = " e.begindate <= ?";
-		$params[] = $begindate_before;
-	}
-
-	if($begindate_after !== NULL){
-		$begin_conditions[] = " e.begindate >= ?";
-		$params[] = $begindate_after;
-	}
-
-	if(isset($begin_conditions[0])){
-		$begin_conditions = implode(' AND', $begin_conditions);
-	}else{
-		$begin_conditions = '';
-	}
-
-	// $enddate_before
-	if($enddate_before !== NULL){
-		$end_conditions[] = " e.enddate <= ?";
-		$params[] = $enddate_before;
-	}
-
-	if($enddate_after !== NULL){
-		$end_conditions[] = " e.enddate >= ?";
-		$params[] = $enddate_after;
-	}
-
-	if(isset($end_conditions[0])){
-		$end_conditions = implode(' AND', $end_conditions);
-	}else{
-		$end_conditions = '';
-	}
-
-	if(isset($end_conditions[0], $begin_conditions[0])){
-		$sql .= " AND (e.enddate IS NULL OR (($begin_conditions AND $end_conditions) $tolerance_condition))";
-	}elseif(isset($begin_conditions[0])){
-		$sql .= " AND $begin_condition $tolerance_condition";
-	}else{
-		$sql .= str_replace('AND', 'WHERE', $tolerance_condition);
-	}
-
-	$sql .= " ORDER BY e.begindate, e.enddate";
-
-	$query = $DB->prepare($sql);
-	$query->execute($params);
-
-	return $query->fetchAll(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Event');
-}
 
 function get_events_by_type($since=NULL, $type=NULL, $servicetype=NULL, $tolerance=TRUE){
 	global $CFG, $DB;

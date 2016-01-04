@@ -20,12 +20,13 @@ class Service{
 	public $idcategory;
 	public $category;
 
-	public static $TYPES = array(self::TYPE_ISOU, self::TYPE_NAGIOS_STATUSDAT, self::TYPE_SHINKEN_THRUK);
+	public static $TYPES = array(self::TYPE_ISOU => 'Isou', self::TYPE_NAGIOS_STATUSDAT => 'Nagios (status.dat)', self::TYPE_SHINKEN_THRUK => 'Shinken (Thruk)');
 
 	public function __construct(){
 		if(isset($this->idservice)){
 			// PDO instance
 			$this->id = $this->idservice;
+			unset($this->idservice);
 		}else{
 			// manual instance
 			$this->id = 0;
@@ -57,7 +58,7 @@ class Service{
 			$errors[] = 'Le nom du service ne peut pas être vide.';
 		}
 
-		if(!in_array($this->idtype, self::$TYPES)){
+		if(!isset(self::$TYPES[$this->idtype])){
 			$errors[] = 'Le type de service choisi est invalide.';
 		}
 
@@ -249,6 +250,42 @@ class Service{
 		}
 
 		return $this->reverse_dependencies;
+	}
+
+	public function get_next_scheduled_events($options = array()){
+		$options['idservice'] = $this->id;
+		$options['type'] = Event::TYPE_SCHEDULED;
+		$options['after'] = new \DateTime();
+		$options['regular'] = FALSE;
+
+		return get_events($options);
+	}
+
+	public function get_last_events($options = array()){
+		$options['idservice'] = $this->id;
+		$options['before'] = new \DateTime();
+
+		return get_events($options);
+	}
+
+	public function get_all_events($options = array()){
+		$options['idservice'] = $this->id;
+
+		return get_events($options);
+	}
+
+	public function get_closed_event($options = array()){
+		$options['idservice'] = $this->id;
+		$options['one_record'] = TRUE;
+
+		return get_events($options);
+	}
+
+	public function get_regular_events($options = array()){
+		$options['idservice'] = $this->id;
+		$options['regular'] = TRUE;
+
+		return get_events($options);
 	}
 
 	public function __toString(){

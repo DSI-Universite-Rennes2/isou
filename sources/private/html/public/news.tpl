@@ -1,145 +1,72 @@
-{if !isset($calendar)}
-{* <!-- partie non requise lors de l'affichage du calendrier --> *}
-<div id="content">
-	<a name="content"></a>
+<main role="main">
+<article id="content">
 
-	<p id="summary">Liste des interruptions passées ou à venir dans un délai de 48h.</p>
+<h1 class="sr-only">Actualité</h1>
 
-	{if count($messages) === 0 && count($categories) === 0}
-		<p id="no-event">Aucun évènement à signaler</p>
-	{else}
-	<div id="legend">
-		<h2>Légende :</h2>
-		<dl>
-		{foreach name=i item=STATE from=$STATES}
-			<div class="legend-container">
-				<dt><img src="{$smarty.const.URL}/images/{$STATE->src}" alt="{$STATE->alt}" /></dt>
-				<dd>{$STATE->title}</dd>
-			</div>
-		{/foreach}
-		</dl>
-	</div>
-	{/if}
-{/if}
+<p class="well">Liste des interruptions passées ou à venir dans un délai de 48h.</p>
 
+{if count($categories) === 0}
+	<p class="alert alert-info">Aucun évènement à signaler</p>
+{else}
+<aside id="isou-news-legend-aside">
+	<h1 id="isou-news-legend-h1">Légende</h1>
+	<dl id="isou-news-legend-dl">
+	{foreach $STATES as $STATE}
+		<div>
+			<dt class="isou-news-legend-dt">{$STATE->get_flag_html_renderer()}</dt>
+			<dd class="isou-news-legend-dd">{$STATE->title}</dd>
+		</div>
+	{/foreach}
+	</dl>
+</aside>
 
-{if count($messages) > 0}
-	<h2>Informations :</h2>
-	<ul class="service">
-		{foreach name=i item=message from=$messages}
-		<li>{$message->shortText|nl2br}</li>
-		{/foreach}
-	</ul>
-	<p>
-		<a class="top" href="#top" title="allez en haut de la page">
-			<img src="{$smarty.const.URL}/images/page_up.gif" alt="" width="16px" height="16px" />
-			Revenir en haut de la page
-		</a>
-	</p>
-{/if}
+{foreach $categories as $category}
+	<h2 class="isou-news-categories">{$category->name}</h2>
 
-{if count($categories) > 0}
-{section name=i loop=$categories}
-	<h2>{$categories[i]->name} :</h2>
-
-	<ul class="service">
-	{section name=j loop=$categories[i]->services}
-		<li>
-			<img src="{$smarty.const.URL}/images/{$STATES.{$categories[i]->services[j]->getState()}->src}" alt="{$STATES.{$categories[i]->services[j]->getState()}->alt}" />&nbsp;
-			<a name="{$categories[i]->services[j]->stripName}"></a>
-			{if $categories[i]->services[j]->getUrl() === NULL}
-			<span class="state-{$categories[i]->services[j]->getState()}">
-				{$categories[i]->services[j]->getNameForUsers()}
-			</span>
+	<ul class="services-ul">
+	{foreach $category->services as $service}
+		<li class="services-li" id="service-{$service->id}">
+			{$STATES[$service->state]->get_flag_html_renderer()}&nbsp;
+			{if $service->url === NULL}
+			<span class="state-{$service->state}">{$service->name}</span>
 			{else}
-			<a class="state-{$categories[i]->services[j]->getState()}" href="{$categories[i]->services[j]->getUrl()}" title="Accéder à la page du service {$categories[i]->services[j]->getNameForUsers()}">{$categories[i]->services[j]->getNameForUsers()}</a>
-			{/if}
-
-			{* <!-- affichage des services parents (dépendances) --> *}
-			{if $smarty.const.DEBUG === TRUE || $is_admin === TRUE}
-			{if count($categories[i]->services[j]->parents) > 0}
-			<div class="parentsList">
-				{include file="public_news_recursive_parents.tpl" parents=$categories[i]->services[j]->parents}
-			</div>
-			{/if}
+			<a class="state-{$service->state}" href="{$service->url}" title="Accéder à la page du service {$service->name}">{$service->name}</a>
 			{/if}
 
 			{* <!-- affichage des interruptions --> *}
-			{if $categories[i]->services[j]->hasEvents()}
-				<ul class="alert">
-				{foreach from=$categories[i]->services[j]->getEvents() item=event}
-					{* <!-- affichage des messages du type "le service a été arrêté..." --> *}
-					<li>
-					{if $event->getScheduled() === 3}
-						{if $event->getEndDate() === NULL}
-							Service fermé depuis le {$event->getBeginDate()|date_format:"%A %d %B %Y"}.
-						{else}
-							Service fermé depuis le {$event->getBeginDate()|date_format:"%A %d %B %Y"}. Réouverture le {$event->getEndDate()|date_format:"%A %d %B %Y"}.
-						{/if}
-					{else if $event->getScheduled() === 2}
-						{if $event->getPeriod() === 86400}
-							Le service est en maintenance quotidienne de {$event->getBeginDate()|date_format:"%H:%M"} à {$event->getEndDate()|date_format:"%H:%M"}.
-						{else if $event->getPeriod() === 604800}
-							Le service est en maintenance hebdomadaire de {$event->getBeginDate()|date_format:"%H:%M"} à {$event->getEndDate()|date_format:"%H:%M"}.
-						{else}
-							Le service est en maintenance de {$event->getBeginDate()|date_format:"%H:%M"} à {$event->getEndDate()|date_format:"%H:%M"}.
-						{/if}
+			<ul class="services-events-ul">
+			{foreach $service->events as $event}
+				{* <!-- affichage des messages du type "le service a été arrêté..." --> *}
+				<li class="services-event-li">
+
+					<p class="events-date-p">
+					{if !empty($event->period) || $event->state === "UniversiteRennes2\Isou\State::CLOSED|constant"}
+						<span class="events-maintenance-span">{$event}</span>
 					{else}
-						{if $event->getEndDate() === NULL}
-							<span class="current-event">Le service est actuellement perturbé depuis le {$event->getBeginDate()|date_format:"%A %d %B %Y %H:%M"}.</span>
+						{if $event->begindate->getTimestamp() > $smarty.const.TIME}
+						<span class="events-futur-span">{$event}</span>
+						{elseif $event->enddate !== NULL && $event->enddate->getTimestamp() < $smarty.const.TIME}
+						<span class="events-past-span">{$event}</span>
 						{else}
-							{if $event->getEndDate() !== NULL && $event->getEndDate() < $smarty.const.TIME|date_format:"%Y-%m-%dT%H:%M"}
-								{if {$event->getBeginDate()|date_format:"%A%d%B"} === {$event->getEndDate()|date_format:"%A%d%B"}}
-									<span class="previous-event">Le service a été perturbé le {$event->getBeginDate()|date_format:"%A %d %B %Y"} de {$event->getBeginDate()|date_format:"%H:%M"} à {$event->getEndDate()|date_format:"%H:%M"}.</span>
-								{else}
-									<span class="previous-event">Le service a été perturbé du {$event->getBeginDate()|date_format:"%A %d %B %Y %H:%M"} au {$event->getEndDate()|date_format:"%A %d %B %Y %H:%M"}.</span>
-								{/if}
-							{else}
-								<span class="next-event">Le service sera perturbé du {$event->getBeginDate()|date_format:"%A %d %B %Y %H:%M"} au {$event->getEndDate()|date_format:"%A %d %B %Y %H:%M"}.</span>
-							{/if}
+						<span class="events-now-span">{$event}</span>
 						{/if}
 					{/if}
+					</p>
 
+					{if !empty($event->description)}
 					{* <!-- affichage d'une description de l'interruption ; ex: mise à jour en version 2.x" --> *}
-					{if $event->getDescription() !== NULL}
-						<p class="reason"><span class="bold">Raison :</span> {$event->getDescription()|nl2br}</p>
+					<p class="events-description-p">{$event->description}</p>
 					{/if}
-
-					{* <!-- affichage des états des services parents (dépendances) lors de l'interruption --> *}
-					{if $smarty.const.DEBUG === TRUE || $is_admin === TRUE}
-					{if count($event->getNagiosEvents($categories[i]->services[j]->getId())) > 0}
-						{include file="public_news_recursive_nagios.tpl" parents=$event->getNagiosEvents($categories[i]->services[j]->getId())}
-					{/if}
-					{/if}
-					</li>
-				{/foreach}
-				</ul>
-			{/if}
+				</li>
+			{/foreach}
+			</ul>
 		</li>
-	{/section}
+	{/foreach}
 	</ul>
 
-	<p>
-		<a class="top" href="#top" title="allez en haut de la page">
-			<img src="{$smarty.const.URL}/images/page_up.gif" alt="" width="16px" height="16px" />
-			Revenir en haut de la page
-		</a>
-	</p>
-{/section}
+	<p class="sr-only escape"><a class="quickaccess-page-up-a" href="#top">retourner en haut de la page</a></p>
+{/foreach}
 {/if}
 
-
-{if !isset($calendar)}
-{* <!-- partie non requise lors de l'affichage du calendrier --> *}
-</div>
-
-{literal}
-<!--[if lt IE 8]>
-<style type="text/css">
-	#legend{
-		display: block;
-	}
-</script>
-<![endif]-->
-{/literal}
-{/if}
+</article>
+</main>

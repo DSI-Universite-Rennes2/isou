@@ -99,7 +99,7 @@ require PUBLIC_PATH.'/styles/'.$CFG['theme'].'/theme.php';
 $smarty->assign('TITLE', $TITLE);
 $smarty->assign('SCRIPTS', $SCRIPTS);
 $smarty->assign('STYLES', $STYLES);
-$smarty->assign('is_admin', $IS_ADMIN);
+$smarty->assign('IS_ADMIN', $IS_ADMIN);
 $smarty->assign('CFG', $CFG);
 $smarty->assign('STATES', $STATES);
 $smarty->assign('MENU', $MENU);
