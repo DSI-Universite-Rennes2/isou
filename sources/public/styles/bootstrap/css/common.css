@@ -46,6 +46,23 @@ label > input[type=checkbox], label > input[type=radio]{
 	margin: 1em .5em;
 }
 
+.label-large, .input-large{
+	width: 24em;
+}
+
+.textarea-large{
+	height: 10em;
+	width: 24em;
+}
+
+.label-extra-large, .input-extra-large{
+	width: 32em;
+}
+
+.label-maximize, .input-maximize{
+	width: 100%;
+}
+
 .nav-tabs{
 	margin-bottom: 1em;
 }
