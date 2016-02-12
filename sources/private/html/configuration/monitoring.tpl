@@ -11,7 +11,7 @@
 					<label for="nagios-statusdat-enable">Activer</label>
 				</dt>
 				<dd class="form-values-dd">
-					{html_radios id="nagios-statusdat-enable" name="nagios_statusdat_enable" options="{$options_yes_no}" selected="{$CFG.nagios_statusdat_enable}"}
+					{html_radios id="nagios-statusdat-enable" name="nagios_statusdat_enable" options=$options_yes_no selected=$CFG.nagios_statusdat_enable}
 				</dd>
 			</div>
 
@@ -37,7 +37,7 @@
 					<label for="shinken-thruk-enable">Activer</label>
 				</dt>
 				<dd class="form-values-dd">
-					{html_radios id="shinken-thruk-enable" name="shinken_thruk_enable" options="{$options_yes_no}" selected="{$CFG.shinken_thruk_enable}"}
+					{html_radios id="shinken-thruk-enable" name="shinken_thruk_enable" options=$options_yes_no selected=$CFG.shinken_thruk_enable}
 				</dd>
 			</div>
 

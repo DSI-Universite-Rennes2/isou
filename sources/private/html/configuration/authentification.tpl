@@ -10,7 +10,7 @@
 					<label for="authentification-cas-enabled">Activer l'authentification CAS</label>
 				</dt>
 				<dd class="form-values-dd">
-					{html_radios id="authentification-cas-enabled" name="authentification_cas_enabled" options="{$options_yes_no}" selected="{$CFG.authentification_cas_enabled}"}
+					{html_radios id="authentification-cas-enabled" name="authentification_cas_enabled" options=$options_yes_no selected=$CFG.authentification_cas_enabled}
 				</dd>
 			</div>
 			<div class="form-information-dl-div">
@@ -32,7 +32,7 @@
 					<label for="authentification-manual-enabled">Activer l'authentification manuelle</label>
 				</dt>
 				<dd class="form-values-dd">
-					{html_radios id="authentification-manual-enabled" name="authentification_manual_enabled" options="{$options_yes_no}" selected="{$CFG.authentification_manual_enabled}"}
+					{html_radios id="authentification-manual-enabled" name="authentification_manual_enabled" options=$options_yes_no selected=$CFG.authentification_manual_enabled}
 				</dd>
 			</div>
 			<div class="form-information-dl-div">

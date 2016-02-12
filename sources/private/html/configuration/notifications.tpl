@@ -8,7 +8,7 @@
 				<label for="notification-enabled">Activer les notifications</label>
 			</dt>
 			<dd class="form-values-dd">
-				{html_radios id="notification-enabled" name="notification_enabled" options="{$options_yes_no}" selected="{$CFG.notification_enabled}"}
+				{html_radios id="notification-enabled" name="notification_enabled" options=$options_yes_no selected=$CFG.notification_enabled}
 			</dd>
 		</div>
 
