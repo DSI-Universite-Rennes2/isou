@@ -42,11 +42,9 @@ try{
 	exit(0);
 }
 
-require PRIVATE_PATH.'/classes/smarty/Smarty.class.php';
-
 $smarty = new Smarty();
-$smarty->template_dir = PRIVATE_PATH.'/html/';
-$smarty->compile_dir = PRIVATE_PATH.'/classes/smarty/compile/';
+$smarty->setTemplateDir(PRIVATE_PATH.'/html/');
+$smarty->setCompileDir(PRIVATE_PATH.'/cache/smarty/');
 
 // load configuration
 $sql = "SELECT key, value FROM configuration";

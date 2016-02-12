@@ -15,8 +15,11 @@ CVS
 /.cache
 
 # fichiers ISOU
+sources/composer.lock
+sources/composer.phar
 sources/private/backup/*
 sources/private/classes/smarty/compile/*
+sources/private/cache
 sources/private/cron/LOCK_CRON
 sources/private/database/*.sqlite3
 sources/private/log/*
@@ -26,5 +29,6 @@ sources/public/config.php
 sources/public/isou.json
 sources/public/xpi/*.xpi
 sources/public/xpi/update.rdf
+sources/vendor
 fisou/build
 units/units.sqlite3

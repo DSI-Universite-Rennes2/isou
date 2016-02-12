@@ -10,7 +10,6 @@ $contact = $query->fetch(PDO::FETCH_OBJ);
 if($IS_ADMIN === TRUE && isset($PAGE_NAME[1]) && $PAGE_NAME[1] === 'edit'){
 	$_GET['edit'] = TRUE;
 	if(isset($_POST['message'])){
-		require PRIVATE_PATH.'/classes/htmlpurifier/library/HTMLPurifier.auto.php';
 		$HTMLPurifier = new HTMLPurifier();
 		$contact->message = $HTMLPurifier->purify($_POST['message']);
 

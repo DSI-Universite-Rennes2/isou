@@ -19,7 +19,6 @@ class Announcement{
 	public function check_data($options_visible){
 		$errors = array();
 
-		require_once PRIVATE_PATH.'/classes/htmlpurifier/library/HTMLPurifier.auto.php';
 		$HTMLPurifier = new \HTMLPurifier();
 		$this->message = $HTMLPurifier->purify($this->message);
 

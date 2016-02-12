@@ -10,11 +10,10 @@ if(!is_file(__DIR__.'/config.php')){
 }
 
 require __DIR__.'/config.php';
-require PRIVATE_PATH.'/classes/smarty/Smarty.class.php';
 
 $smarty = new Smarty();
-$smarty->template_dir = PRIVATE_PATH.'/html/';
-$smarty->compile_dir = PRIVATE_PATH.'/classes/smarty/compile/';
+$smarty->setTemplateDir(PRIVATE_PATH.'/html/');
+$smarty->setCompileDir(PRIVATE_PATH.'/cache/smarty/');
 
 // set title
 $TITLE = NAME;
