@@ -3,14 +3,17 @@
 
 <h1 class="sr-only">Historique</h1>
 
-<form action="{$smarty.const.URL}/index.php/historique#resultat" method="post">
-
-	<fieldset class="form-fieldset">
-		<legend class="form-legend">Services</legend>
-		{html_checkboxes name="services" options=$options_services selected=$smarty.post.services|default:array()}
-	</fieldset>
+<form action="{$smarty.const.URL}/index.php/statistiques#resultat" method="post">
 
 	<dl>
+		<div class="form-information-dl-div">
+			<dt class="form-topics-dt">
+				<label for="event-services">Services</label>
+			</dt>
+			<dd class="form-values-dd">
+				{html_options id="event-services" name="services[]" multiple="true" options=$options_services selected=$smarty.post.services|default:array()}
+			</dd>
+		</div>
 		<div class="form-information-dl-div">
 			<dt class="form-topics-dt">
 				<label for="event-type">Type d'interruptions</label>

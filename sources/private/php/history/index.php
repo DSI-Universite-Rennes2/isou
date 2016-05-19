@@ -83,11 +83,13 @@ if(isset($_POST['services'], $_POST['event_type'], $_POST['year'], $_POST['month
 				$sql_services[] = $service;
 			}
 		}
+	}else{
+		$_POST['services'] = array();
 	}
 
 	if(isset($sql_services[0])){
 		$params = $sql_services;
-		$sql_services = " AND s.idservice IN(".str_repeat('?', count($params)).")";
+		$sql_services = " AND s.id IN(?".str_repeat(',?', count($params)-1).")";
 	}else{
 		$sql_services = '';
 	}
@@ -156,8 +158,8 @@ if(isset($_POST['services'], $_POST['event_type'], $_POST['year'], $_POST['month
 	$events = array();
 	$sql = "SELECT s.name, e.begindate, e.enddate, ed.description, e.type".
 		" FROM events e, events_descriptions ed, services s".
-		" WHERE s.idservice = e.idservice".
-		" AND ed.ideventdescription = e.ideventdescription".
+		" WHERE s.id = e.idservice".
+		" AND ed.id = e.ideventdescription".
 		$sql_services.
 		$sql_events.
 		$sql_months.
@@ -168,10 +170,10 @@ if(isset($_POST['services'], $_POST['event_type'], $_POST['year'], $_POST['month
 		$sql .= $sql_limit;
 
 		$count_events = 0;
-		$sql_count = "SELECT COUNT(e.idevent)".
+		$sql_count = "SELECT COUNT(e.id)".
 			" FROM events e, events_descriptions ed, services s".
-			" WHERE s.idservice = e.idservice".
-			" AND ed.ideventdescription = e.ideventdescription".
+			" WHERE s.id = e.idservice".
+			" AND ed.id = e.ideventdescription".
 			$sql_services.
 			$sql_events.
 			$sql_months.
@@ -287,7 +289,7 @@ if(isset($_POST['services'], $_POST['event_type'], $_POST['year'], $_POST['month
 	$pagination = array();
 	for($i=1;$i<=$count_pages;$i++){
 		$selected = ($page == $i);
-		$url = URL.'/index.php/historique/page/'.$i.'/filter/'.$options_filter.'#resultat';
+		$url = URL.'/index.php/statistiques/page/'.$i.'/filter/'.$options_filter.'#resultat';
 		$pagination[] = new Isou\Helpers\SimpleMenu($i, 'Page '.$i, $url, $selected);
 	}
 

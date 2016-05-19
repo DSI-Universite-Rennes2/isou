@@ -81,3 +81,7 @@ label > input[type=checkbox], label > input[type=radio]{
 	padding: 1em 2em;
 }
 
+#event-services {
+	height: 200px;
+}
+
