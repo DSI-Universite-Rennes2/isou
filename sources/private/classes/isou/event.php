@@ -20,11 +20,8 @@ class Event{
 	public static $PERIODS = array('0' => 'Aucune', '86400' => 'Tous les jours', '604800' => 'Toutes les semaines');
 
 	public function __construct(){
-		if(isset($this->idevent)){
+		if(isset($this->id)){
 			// PDO instance
-			$this->id = $this->idevent;
-			unset($this->idevent);
-
 			try{
 				$this->begindate = new \DateTime($this->begindate);
 				if($this->enddate !== NULL){

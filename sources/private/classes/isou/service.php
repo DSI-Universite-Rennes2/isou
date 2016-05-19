@@ -23,11 +23,7 @@ class Service{
 	public static $TYPES = array(self::TYPE_ISOU => 'Isou', self::TYPE_NAGIOS_STATUSDAT => 'Nagios (status.dat)', self::TYPE_SHINKEN_THRUK => 'Shinken (Thruk)');
 
 	public function __construct(){
-		if(isset($this->idservice)){
-			// PDO instance
-			$this->id = $this->idservice;
-			unset($this->idservice);
-		}else{
+		if(!isset($this->id)){
 			// manual instance
 			$this->id = 0;
 			$this->name = '';

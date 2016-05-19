@@ -7,8 +7,8 @@ function get_menu(){
 
 	$menu = array();
 
-	$sql = "SELECT idmenu, label, title, url, active, model, position".
-			" FROM menu".
+	$sql = "SELECT id, label, title, url, active, model, position".
+			" FROM menus".
 			" ORDER BY position";
 	$query = $DB->prepare($sql);
 	$query->execute();
@@ -29,7 +29,7 @@ function get_menu_sorted_by_url(){
 	$menu = array();
 
 	$sql = "SELECT url, label".
-			" FROM menu".
+			" FROM menus".
 			" ORDER BY position";
 	$query = $DB->prepare($sql);
 	$query->execute();
@@ -42,8 +42,8 @@ function get_active_menu(){
 
 	$menu = array();
 
-	$sql = "SELECT idmenu, label, title, url, active, model, position".
-			" FROM menu".
+	$sql = "SELECT id, label, title, url, active, model, position".
+			" FROM menus".
 			" WHERE active=1".
 			" ORDER BY position";
 	$query = $DB->prepare($sql);
@@ -65,7 +65,7 @@ function get_active_menu_sorted_by_url(){
 	$menu = array();
 
 	$sql = "SELECT url, label".
-			" FROM menu".
+			" FROM menus".
 			" WHERE active=1".
 			" ORDER BY position";
 	$query = $DB->prepare($sql);
@@ -75,23 +75,66 @@ function get_active_menu_sorted_by_url(){
 }
 
 function get_administration_menu(){
-	global $DB;
+	$menu = array(
+		'Générale' => array(),
+		'Avancée' => array(),
+	);
 
-	$menu = array();
+	$menu['Générale']['evenements'] = (object) array(
+		'url' => 'evenements',
+		'title' => 'ajouter un évenement',
+		'label' => 'évènements',
+		'model' => '/php/events/index.php',
+	);
 
-	$sql = "SELECT menu.idmenu, menu.label, menu.title, menu.url, menu.model, menu.position, submenu.idsubmenu, submenu.label AS submenu".
-			" FROM administration_menu menu, administration_submenu submenu".
-			" WHERE submenu.idsubmenu=menu.idsubmenu".
-			" ORDER BY submenu.position, menu.position";
-	$query = $DB->prepare($sql);
-	$query->execute();
+	$menu['Générale']['annonce'] = (object) array(
+		'url' => 'annonce',
+		'title' => 'ajouter une annonce',
+		'label' => 'annonce',
+		'model' => '/php/announcement/index.php',
+	);
 
-	$query->setFetchMode(PDO::FETCH_CLASS, 'Isou\Helpers\Menu');
+	$menu['Générale']['statistiques'] = (object) array(
+		'url' => 'statistiques',
+		'title' => 'afficher les statistiques',
+		'label' => 'statistiques',
+		'model' => '/php/history/index.php',
+	);
 
-	while($item = $query->fetch()){
-		$item->selected = FALSE;
-		$menu[$item->url] = $item;
-	}
+	$menu['Avancée']['services'] = (object) array(
+		'url' => 'services',
+		'title' => 'ajouter un service',
+		'label' => 'services',
+		'model' => '/php/services/index.php',
+	);
+
+	$menu['Avancée']['dependances'] = (object) array(
+		'url' => 'dependances',
+		'title' => 'ajouter une dépendance',
+		'label' => 'dépendances',
+		'model' => '/php/dependencies/index.php',
+	);
+
+	$menu['Avancée']['categories'] = (object) array(
+		'url' => 'categories',
+		'title' => 'ajouter une catégorie',
+		'label' => 'catégories',
+		'model' => '/php/categories/index.php',
+	);
+
+	$menu['Avancée']['configuration'] = (object) array(
+		'url' => 'configuration',
+		'title' => 'configurer l\'application',
+		'label' => 'configuration',
+		'model' => '/php/configuration/index.php',
+	);
+
+	$menu['Avancée']['aide'] = (object) array(
+		'url' => 'aide',
+		'title' => 'afficher l\'aide',
+		'label' => 'aide',
+		'model' => '/php/help/index.php',
+	);
 
 	return $menu;
 }

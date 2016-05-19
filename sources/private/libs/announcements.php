@@ -5,7 +5,7 @@ require PRIVATE_PATH.'/classes/isou/announcement.php';
 function get_announcement(){
 	global $DB;
 
-	$sql = "SELECT message, visible, autor, last_modification".
+	$sql = "SELECT message, visible, author, last_modification".
 		" FROM announcement";
 	$query = $DB->prepare($sql);
 	$query->execute();
@@ -18,7 +18,7 @@ function get_announcement(){
 function get_visible_announcement(){
 	global $DB;
 
-	$sql = "SELECT message, visible, autor, last_modification".
+	$sql = "SELECT message, visible, author, last_modification".
 		" FROM announcement".
 		" WHERE visible = 1".
 		" AND message != ''";

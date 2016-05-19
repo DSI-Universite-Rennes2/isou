@@ -13,11 +13,7 @@ class Dependency_Group{
 	public $message;
 
 	public function __construct(){
-		if(isset($this->idgroup)){
-			// instance PDO
-			$this->id = $this->idgroup;
-			unset($this->idgroup);
-		}else{
+		if(!isset($this->id)){
 			// instance manuelle
 			$this->id = 0;
 			$this->name = 'Groupe non redondé';
@@ -65,7 +61,7 @@ class Dependency_Group{
 	public function get_message(){
 		global $DB;
 
-		$sql = "SELECT idmessage FROM dependencies_messages WHERE message=?";
+		$sql = "SELECT id FROM dependencies_messages WHERE message=?";
 		$query = $DB->prepare($sql);
 		$query->execute(array($this->message));
 		if($message = $query->fetch(\PDO::FETCH_OBJ)){
@@ -100,7 +96,7 @@ class Dependency_Group{
 		if($this->id === 0){
 			$sql = "INSERT INTO dependencies_groups(name, redundant, groupstate, idservice, idmessage) VALUES(?,?,?,?,?)";
 		}else{
-			$sql = "UPDATE dependencies_groups SET name=?, redundant=?, groupstate=?, idservice=?, idmessage=? WHERE idgroup=?";
+			$sql = "UPDATE dependencies_groups SET name=?, redundant=?, groupstate=?, idservice=?, idmessage=? WHERE id=?";
 			$params[] = $this->id;
 		}
 		$query = $DB->prepare($sql);

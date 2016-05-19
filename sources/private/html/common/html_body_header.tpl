@@ -61,36 +61,20 @@
 				</div>
 
 				<ul class="nav navbar-nav menu-ul">
+				{foreach $ADMINISTRATION_MENU as $submenu => $menus}
 				<li class="menu-ul-items">
-					{* ADMINISTRATION GENERALE *}
 					<div class="navbar-header menu-title">
-						<span class="navbar-brand">Générale</span>
+						<span class="navbar-brand">{$submenu}</span>
 					</div>
 					<ul class="nav navbar-nav menu-ul">
-					{foreach $ADMINISTRATION_MENU as $menu}
-						{if $menu->idsubmenu === '1'}
-						<li class="menu-ul-items{if $menu->selected === TRUE} active{/if}">
+					{foreach $menus as $menu}
+						<li class="menu-ul-items{if isset($menu->selected)} active{/if}">
 							<a class="menu-entries" href="{$smarty.const.URL}/index.php/{$menu->url}" title="{$menu->title}">{$menu->label}</a>
 						</li>
-						{/if}
 					{/foreach}
 					</ul>
 				</li>
-				<li class="menu-ul-items">
-					{* ADMINISTRATION AVANCEE *}
-					<div class="navbar-header menu-title">
-						<span class="navbar-brand">Avancée</span>
-					</div>
-					<ul class="nav navbar-nav menu-ul">
-					{foreach $ADMINISTRATION_MENU as $menu}
-						{if $menu->idsubmenu === '2'}
-						<li class="menu-ul-items{if $menu->selected === TRUE} active{/if}">
-							<a class="menu-entries" href="{$smarty.const.URL}/index.php/{$menu->url}" title="{$menu->title}">{$menu->label}</a>
-						</li>
-						{/if}
-					{/foreach}
-					</ul>
-				</li>
+				{/foreach}
 				</ul>
 			</div>
 		</div>

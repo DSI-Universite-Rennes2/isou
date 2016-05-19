@@ -1,0 +1,11 @@
+paths:
+    migrations: %%PHINX_CONFIG_DIR%%/private/upgrade/database
+environments:
+    default_migration_table: phinxlog
+    default_database: testing
+    production:
+        adapter: sqlite
+        name: %%PHINX_CONFIG_DIR%%/private/database/isou.sqlite3
+    testing:
+        adapter: sqlite
+        name: %%PHINX_CONFIG_DIR%%/private/database/testing.sqlite3

@@ -6,11 +6,11 @@ require_once PRIVATE_PATH.'/classes/isou/dependency_group_content.php';
 function get_dependency_group($id){
 	global $DB;
 
-	$sql = "SELECT dg.idgroup, dg.name, dg.redundant, dg.groupstate, dg.idservice, s.name AS service, dg.idmessage, dm.message".
+	$sql = "SELECT dg.id, dg.name, dg.redundant, dg.groupstate, dg.idservice, s.name AS service, dg.idmessage, dm.message".
 			" FROM dependencies_groups dg, dependencies_messages dm, services s".
-			" WHERE dm.idmessage=dg.idmessage".
-			" AND s.idservice=dg.idservice".
-			" AND dg.idgroup=?";
+			" WHERE dm.id=dg.idmessage".
+			" AND s.id=dg.idservice".
+			" AND dg.id=?";
 	$query = $DB->prepare($sql);
 	$query->execute(array($id));
 
@@ -22,9 +22,9 @@ function get_dependency_group($id){
 function get_service_dependency_groups($idservice){
 	global $DB;
 
-	$sql = "SELECT dg.idgroup, dg.name, dg.redundant, dg.groupstate, dg.idservice, dg.idmessage, dm.message".
+	$sql = "SELECT dg.id, dg.name, dg.redundant, dg.groupstate, dg.idservice, dg.idmessage, dm.message".
 			" FROM dependencies_groups dg, dependencies_messages dm".
-			" WHERE dm.idmessage=dg.idmessage".
+			" WHERE dm.id=dg.idmessage".
 			" AND dg.idservice=?".
 			" ORDER BY dg.groupstate, dg.redundant DESC, dg.name";
 	$query = $DB->prepare($sql);
@@ -36,9 +36,9 @@ function get_service_dependency_groups($idservice){
 function get_service_reverse_dependency_groups($idservice){
 	global $DB;
 
-	$sql = "SELECT dg.idgroup, dg.name, dg.redundant, dg.groupstate, dg.idservice, dg.idmessage".
+	$sql = "SELECT dg.id, dg.name, dg.redundant, dg.groupstate, dg.idservice, dg.idmessage".
 		" FROM dependencies_groups dg, dependencies_groups_content dgc".
-		" WHERE dg.idgroup = dgc.idgroup".
+		" WHERE dg.id = dgc.idgroup".
 		" AND dgc.idservice=?".
 		" ORDER BY dg.groupstate, dg.redundant DESC, dg.name";
 	$query = $DB->prepare($sql);
@@ -50,7 +50,7 @@ function get_service_reverse_dependency_groups($idservice){
 function get_dependency_groups_sorted_by_id(){
 	global $DB, $FLAGS;
 
-	$sql = "SELECT dg.idgroup, dg.name, dg.groupstate".
+	$sql = "SELECT dg.id, dg.name, dg.groupstate".
 		" FROM dependencies_groups dg".
 		" WHERE dg.idservice=?".
 		" ORDER BY dg.groupstate, UPPER(dg.name)";
@@ -98,14 +98,13 @@ function get_dependencies_groups_and_groups_contents_by_service_sorted_by_flags(
 
 	$groups = array();
 
-	$sql = "SELECT dg.idgroup, dg.name, dg.redundant, dg.groupstate, dg.idservice, dg.idmessage, dm.message".
+	$sql = "SELECT dg.id, dg.name, dg.redundant, dg.groupstate, dg.idservice, dg.idmessage, dm.message".
 			" FROM dependencies_groups dg, dependencies_messages dm".
-			" WHERE dm.idmessage=dg.idmessage".
+			" WHERE dm.id=dg.idmessage".
 			" AND dg.idservice=?".
 			" ORDER BY dg.groupstate, dg.redundant DESC, dg.name";
 	$query = $DB->prepare($sql);
 	$query->execute(array($idservice));
-
 	$query->setFetchMode(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Dependency_Group');
 
 	while($group = $query->fetch()){
@@ -114,9 +113,9 @@ function get_dependencies_groups_and_groups_contents_by_service_sorted_by_flags(
 		}
 
 		// load content
-		$sql = "SELECT dgc.idgroup, s.idservice, s.name, dgc.servicestate".
+		$sql = "SELECT dgc.idgroup, s.id, s.name, dgc.servicestate".
 			" FROM dependencies_groups_content dgc, services s".
-			" WHERE s.idservice=dgc.idservice".
+			" WHERE s.id=dgc.idservice".
 			" AND dgc.idgroup=?".
 			" ORDER BY dgc.servicestate DESC, s.name";
 		$contents = $DB->prepare($sql);

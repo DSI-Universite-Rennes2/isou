@@ -5,10 +5,10 @@ require_once PRIVATE_PATH.'/classes/isou/event.php';
 function get_event($id){
 	global $DB;
 
-	$sql = "SELECT e.idevent, e.begindate, e.enddate, e.state, e.type, e.period, ed.ideventdescription, ed.description, e.idservice".
+	$sql = "SELECT e.id, e.begindate, e.enddate, e.state, e.type, e.period, e.ideventdescription, ed.description, e.idservice".
 			" FROM events e, events_descriptions ed".
-			" WHERE ed.ideventdescription = e.ideventdescription".
-			" AND e.idevent=?";
+			" WHERE e.ideventdescription = e.ideventdescription".
+			" AND e.id=?";
 	$query = $DB->prepare($sql);
 	$query->execute(array($id));
 
@@ -40,10 +40,10 @@ function get_events($options = array()){
 	$params = array();
 	$conditions = array();
 
-	$sql = "SELECT e.idevent, e.begindate, e.enddate, e.state, e.type, e.period, e.ideventdescription, ed.description, e.idservice, s.name AS service_name".
+	$sql = "SELECT e.id, e.begindate, e.enddate, e.state, e.type, e.period, e.ideventdescription, ed.description, e.idservice, s.name AS service_name".
 			" FROM events e, events_descriptions ed, services s".
-			" WHERE s.idservice=e.idservice".
-			" AND ed.ideventdescription=e.ideventdescription";
+			" WHERE s.id=e.idservice".
+			" AND ed.id=e.ideventdescription";
 
 	// after options
 	if(isset($options['after']) && $options['after'] instanceof DateTime){
@@ -59,7 +59,7 @@ function get_events($options = array()){
 
 	// idservice options
 	if(isset($options['idservice']) && ctype_digit($options['idservice'])){
-		$sql .= " AND s.idservice = ?";
+		$sql .= " AND s.id = ?";
 		$params[] = $options['idservice'];
 	}
 
@@ -162,10 +162,10 @@ function get_events_by_type($since=NULL, $type=NULL, $servicetype=NULL, $toleran
 		}
 	}
 
-	$sql = "SELECT e.idevent, e.begindate, e.enddate, e.state, e.type, e.period, ed.ideventdescription, ed.description, s.idservice, s.name".
+	$sql = "SELECT e.id, e.begindate, e.enddate, e.state, e.type, e.period, e.ideventdescription, ed.description, s.id, s.name".
 		" FROM events e, services s, events_descriptions ed".
-		" WHERE s.idservice = e.idservice".
-		" AND ed.ideventdescription = e.ideventdescription".
+		" WHERE s.id = e.idservice".
+		" AND ed.id = e.ideventdescription".
 		" AND s.enable = 1".$sql_type.$sql_servicetype.$sql_tolerance.
 		" ORDER BY e.beginDate DESC";
 	$query = $DB->prepare($sql);

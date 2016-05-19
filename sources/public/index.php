@@ -58,13 +58,14 @@ if($IS_ADMIN === TRUE){
 	$ADMINISTRATION_MENU = get_administration_menu();
 }
 
-
 // routing
 $PAGE_NAME = explode('/', get_page_name('index.php', TRUE));
 if(isset($MENU[$PAGE_NAME[0]])){
 	$current_page = $MENU[$PAGE_NAME[0]];
-}elseif(isset($ADMINISTRATION_MENU[$PAGE_NAME[0]])){
-	$current_page = $ADMINISTRATION_MENU[$PAGE_NAME[0]];
+}elseif(isset($ADMINISTRATION_MENU['Générale'][$PAGE_NAME[0]])){
+	$current_page = $ADMINISTRATION_MENU['Générale'][$PAGE_NAME[0]];
+}elseif(isset($ADMINISTRATION_MENU['Avancée'][$PAGE_NAME[0]])){
+	$current_page = $ADMINISTRATION_MENU['Avancée'][$PAGE_NAME[0]];
 }else{
 	if(isset($CFG['default_menu'], $MENU[$CFG['default_menu']])){
 		$current_page = $MENU[$CFG['default_menu']];

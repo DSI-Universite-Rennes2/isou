@@ -9,11 +9,7 @@ class Category{
 	public $services;
 
 	public function __construct(){
-		if(isset($this->idcategory)){
-			// instance PDO
-			$this->id = $this->idcategory;
-			unset($this->idcategory);
-		}else{
+		if(!isset($this->id)){
 			// instance manuelle
 			$this->id = 0;
 			$this->name = '';

@@ -12,9 +12,8 @@ class Menu{
 	public $selected;
 
 	public function __construct(){
-		if(isset($this->idmenu)){
+		if(isset($this->id)){
 			// instance PDO
-			$this->id = $this->idmenu;
 		}else{
 			// instance manuelle
 			$this->id = 0;

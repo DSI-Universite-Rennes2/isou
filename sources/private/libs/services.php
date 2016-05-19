@@ -13,9 +13,9 @@ function get_service($id, $type=NULL){
 		$params = array($id, $type);
 	}
 
-	$sql = "SELECT s.idservice, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
+	$sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
 			" FROM services s".
-			" WHERE s.idservice=?".$sql_condition;
+			" WHERE s.id=?".$sql_condition;
 	$query = $DB->prepare($sql);
 	$query->execute($params);
 
@@ -35,7 +35,7 @@ function get_services($type=NULL){
 		$params = array($type);
 	}
 
-	$sql = "SELECT s.idservice, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
+	$sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
 			" FROM services s".$sql_condition.
 			" ORDER BY UPPER(s.name)";
 	$query = $DB->prepare($sql);
@@ -48,10 +48,10 @@ function get_services_sorted_by_id($type=NULL){
 	global $DB;
 
 	if($type === NULL){
-		$sql = "SELECT idservice, name FROM services ORDER BY UPPER(name)";
+		$sql = "SELECT id, name FROM services ORDER BY UPPER(name)";
 		$params = array();
 	}else{
-		$sql = "SELECT idservice, name FROM services WHERE idtype=? ORDER BY UPPER(name)";
+		$sql = "SELECT id, name FROM services WHERE idtype=? ORDER BY UPPER(name)";
 		$params = array($type);
 	}
 	$query = $DB->prepare($sql);
@@ -62,7 +62,7 @@ function get_services_sorted_by_id($type=NULL){
 function get_services_sorted_by_idtype(){
 	global $CFG, $DB;
 
-	$sql = "SELECT s.idservice, s.name, s.idtype".
+	$sql = "SELECT s.id, s.name, s.idtype".
 		" FROM services s".
 		" ORDER BY UPPER(s.name)";
 	$query = $DB->prepare($sql);
@@ -99,7 +99,7 @@ function get_services_sorted_by_idtype(){
 function get_isou_services_sorted_by_idtype(){
 	global $DB;
 
-	$sql = "SELECT s.idservice, s.name".
+	$sql = "SELECT s.id, s.name".
 		" FROM services s".
 		" WHERE s.idtype=?".
 		" ORDER BY UPPER(s.name)";
@@ -112,7 +112,7 @@ function get_isou_services_sorted_by_idtype(){
 function get_services_by_category($idcategory){
 	global $DB;
 
-	$sql = "SELECT s.idservice, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
+	$sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
 			" FROM services s".
 			" WHERE s.idcategory=?";
 	$query = $DB->prepare($sql);
@@ -124,9 +124,9 @@ function get_services_by_category($idcategory){
 function get_services_by_dependencies_group($idgroup){
 	global $DB;
 
-	$sql = "SELECT s.idservice, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory, dgc.servicestate".
+	$sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory, dgc.servicestate".
 			" FROM services s, dependencies_groups_content dgc".
-			" WHERE s.idservice=dgc.idservice".
+			" WHERE s.id=dgc.idservice".
 			" AND dgc.idgroup=?".
 			" ORDER BY UPPER(s.name)";
 	$query = $DB->prepare($sql);

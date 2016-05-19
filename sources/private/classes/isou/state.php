@@ -33,11 +33,7 @@ class State{
 		);
 
 	public function __construct(){
-		if(isset($this->idstate)){
-			// instance PDO
-			$this->id = $this->idstate;
-			unset($this->idstate);
-		}else{
+		if(!isset($this->id)){
 			// instance manuelle
 			$this->id = 0;
 			$this->name = '';

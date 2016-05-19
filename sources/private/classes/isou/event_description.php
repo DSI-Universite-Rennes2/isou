@@ -8,11 +8,7 @@ class EventDescription{
 	public $autogen;
 
 	public function __construct(){
-		if(isset($this->ideventdescription)){
-			// PDO instance
-			$this->id = $this->ideventdescription;
-			unset($this->ideventdescription);
-		}else{
+		if(!isset($this->id)){
 			$this->id = 0;
 			$this->description = '';
 			$this->autogen = 0;
