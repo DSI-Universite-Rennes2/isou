@@ -1,3 +1,7 @@
+.alert a{
+	text-decoration: underline;
+}
+
 .isou-top-aside-p{
 	margin: 0;
 }
