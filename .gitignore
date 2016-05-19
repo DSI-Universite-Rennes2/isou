@@ -15,20 +15,20 @@ CVS
 /.cache
 
 # fichiers ISOU
-sources/composer.lock
-sources/composer.phar
-sources/private/backup/*
-sources/private/classes/smarty/compile/*
-sources/private/cache
-sources/private/cron/LOCK_CRON
-sources/private/database/*.sqlite3
-sources/private/log/*
-sources/private/upgrade/LOCK_UPDATE
-sources/private/status.dat
-sources/public/config.php
-sources/public/isou.json
-sources/public/xpi/*.xpi
-sources/public/xpi/update.rdf
-sources/vendor
+composer.lock
+composer.phar
+backup/*
+classes/smarty/compile/*
+cache
+cron/LOCK_CRON
+database/*.sqlite3
+log/*
+upgrade/LOCK_UPDATE
+status.dat
+www/config.php
+www/isou.json
+www/xpi/*.xpi
+www/xpi/update.rdf
+vendor
 fisou/build
 units/units.sqlite3

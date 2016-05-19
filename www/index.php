@@ -3,13 +3,13 @@
 session_name('isou');
 session_start();
 
-if(!is_file(__DIR__.'/config.php')){
+if(!is_file(__DIR__.'/../config.php')){
 	echo 'L\'application ne semble pas être installée.'.
 		' Merci d\'exécuter en ligne de commande le script install.php qui se trouve dans ./sources/private/upgrade.';
 	exit(1);
 }
 
-require __DIR__.'/config.php';
+require __DIR__.'/../config.php';
 
 $smarty = new Smarty();
 $smarty->setTemplateDir(PRIVATE_PATH.'/html/');
@@ -87,7 +87,7 @@ if(CURRENT_VERSION === $CFG['version']){
 	require PRIVATE_PATH.$current_page->model;
 }else{
 	// maintenance page
-	$TEMPLATE = 'public_update';
+	$TEMPLATE = 'public/update.tpl';
 }
 
 if(!is_file(PUBLIC_PATH.'/styles/'.$CFG['theme'].'/theme.php')){

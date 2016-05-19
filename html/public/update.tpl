@@ -11,6 +11,7 @@
 <p style="margin:0.5em;">Note : la mise à jour peut prendre quelques minutes</p>
 </form>
 {else}
-<p id="update">Site en cours de mise à jour...<br />
-Merci de patienter quelques minutes.</p>
+<div class="alert alert-warning text-center">
+	<p>Site en cours de mise à jour... Merci de patienter quelques minutes.</p>
+</div>
 {/if}
