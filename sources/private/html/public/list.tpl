@@ -2,7 +2,7 @@
 <article id="content">
 
 {if count($categories) === 0}
-	<p id="alert alert-info">Aucun service disponible pour le moment.</p>
+	<p class="alert alert-info">Aucun service disponible pour le moment.</p>
 {else}
 
 <div class="sr-only">
