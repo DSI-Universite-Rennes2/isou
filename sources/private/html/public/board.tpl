@@ -29,7 +29,13 @@
 			<td headers="lth1" class="left">{$service->name}</td>
 			<td headers="lth2">{$STATES[$service->state]->get_flag_html_renderer()}</td>
 			{foreach $service->availabilities as $availability}
-			<td headers="lth2">{$availability}%</td>
+			{if $availability > 89}
+			<td headers="lth2" class="success">{$availability}%</td>
+			{elseif $availability > 69}
+			<td headers="lth2" class="warning">{$availability}%</td>
+			{else}
+			<td headers="lth2" class="danger">{$availability}%</td>
+			{/if}
 			{/foreach}
 			</td>
 			<td>{$service->availabilities_total}%</td>
