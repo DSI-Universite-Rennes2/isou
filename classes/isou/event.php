@@ -165,7 +165,7 @@ class Event{
 	}
 
 	public function save(){
-		global $DB;
+		global $DB, $LOGGER;
 
 		if($this->enddate === NULL){
 			$enddate = NULL;
@@ -189,30 +189,28 @@ class Event{
 			}
 		}else{
 			// log db errors
-			$sql_error = $query->errorInfo();
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] Error sql: ".__METHOD__."() in ".__FILE__." file\n\t".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 			throw new \Exception('Une erreur est survenue lors de l\'enregistrement de l\'évènement.');
 		}
 	}
 
 	public function delete(){
-		global $DB;
+		global $DB, $LOGGER;
 
 		$sql = "DELETE FROM events WHERE idevent=?";
 		$query = $DB->prepare($sql);
 
 		if($query->execute(array($this->id)) === FALSE){
 			// log db errors
-			$sql_error = $query->errorInfo();
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] Error sql: ".__METHOD__."() in ".__FILE__." file\n\t".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 			throw new \Exception('Une erreur est survenue lors de la suppression de l\'évènement.');
 		}
 	}
 
 	public function close(){
-		global $DB;
+		global $DB, $LOGGER;
 
 		$sql = "UPDATE events SET enddate=? WHERE idevent=?";
 		$query = $DB->prepare($sql);
@@ -220,26 +218,26 @@ class Event{
 			$this->enddate = new \DateTime(STR_TIME);
 			return TRUE;
 		}else{
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] Error sql: ".__METHOD__."() in ".__FILE__." file\n\t".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 			return FALSE;
 		}
 	}
 
 	public function close_all_other_events(){
-		global $DB;
+		global $DB, $LOGGER;
 
 		$sql = "UPDATE events SET enddate=? WHERE idevent!=? AND idservice=? AND begindate <= ? AND (enddate IS NULL OR enddate >= ?)";
 		$query = $DB->prepare($sql);
 		if($query->execute(array(STR_TIME, $this->id, $this->idservice, STR_TIME, STR_TIME))){
 			return TRUE;
 		}else{
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] Error sql: ".__METHOD__."() in ".__FILE__." file\n\t".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 			return FALSE;
 		}
 	}
 
 	public function set_description($description=NULL, $autogen=0){
-		global $DB;
+		global $DB, $LOGGER;
 
 		if($description !== NULL){
 			$this->description = $description;
@@ -254,9 +252,7 @@ class Event{
 				$this->description = $description;
 			}else{
 				// log db errors
-				$sql_error = $query->errorInfo();
-				file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] Error sql: ".__METHOD__."() in ".__FILE__." file\n\t".implode(', ', $sql_error)."\n", FILE_APPEND);
-
+				$LOGGER->addError(implode(', ', $query->errorInfo()));
 				return FALSE;
 			}
 		}else{

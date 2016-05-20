@@ -72,7 +72,7 @@ class Dependency_Group{
 	}
 
 	public function set_message(){
-		global $DB;
+		global $DB, $LOGGER;
 
 		$sql = "INSERT INTO dependencies_messages(message) VALUES(?)";
 		$query = $DB->prepare($sql);
@@ -80,15 +80,14 @@ class Dependency_Group{
 			return $DB->lastInsertId();
 		}else{
 			// log db errors
-			$sql_error = $query->errorInfo();
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] ".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 			return FALSE;
 		}
 	}
 
 	public function save(){
-		global $DB;
+		global $DB, $LOGGER;
 
 		$results = array('successes' => array(), 'errors' => array());
 		$params = array($this->name, $this->redundant, $this->groupstate, $this->idservice, $this->idmessage);
@@ -108,8 +107,7 @@ class Dependency_Group{
 			$results['successes'] = array('Les données ont été correctement enregistrées.');
 		}else{
 			// log db errors
-			$sql_error = $query->errorInfo();
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] ".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 			$results['errors'] = array('Une erreur est survenue lors de l\'enregistrement des données.');
 		}
@@ -149,7 +147,7 @@ class Dependency_Group{
 	}
 
 	public function delete(){
-		global $DB;
+		global $DB, $LOGGER;
 
 		$results = array('successes' => array(), 'errors' => array());
 		$commit = 1;
@@ -170,8 +168,7 @@ class Dependency_Group{
 			$results['successes'] = array('Les données ont été correctement supprimées.');
 		}else{
 			// log db errors
-			$sql_error = $query->errorInfo();
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] ".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 			$DB->rollBack();
 			$results['errors'] = array('Une erreur est survenue lors de la suppression des données.');

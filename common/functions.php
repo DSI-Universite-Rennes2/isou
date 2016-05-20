@@ -165,34 +165,6 @@ function strip_accents($str, $utf8 = true) {
 }
 
 /*
- * 
- * Format du log:
- * [YY/MM/DD HH:MM:SS] [username] [type] [MESSAGE]
- * 
- * 
- */
-function add_log($file, $user = 'ISOU', $type, $message, $level = 1){
-	if($user !== 'ISOU'){
-		if(class_exists('phpCAS')){
-			$user = phpCAS::getUser();
-		}else{
-			$user = 'dev_user';
-		}
-	}
-
-	if(LOG_LEVEL >= $level){
-		$log = strftime('[%y-%m-%d %H:%M:%S]',TIME).' ['.$user.'] ['.$type.'] '.$message;
-		if($handle = fopen($file, "ab")){
-			fwrite($handle, $log."\n");
-		}else{
-			if(defined('SUPPORT_ISOU')){
-				isoumail(SUPPORT_ISOU, 'Impossible d\'écrire dans les logs d\'ISOU', $log);
-			}
-		}
-	}
-}
-
-/*
    Convert seconds to human readable
 */
 function secondstohuman($seconds){

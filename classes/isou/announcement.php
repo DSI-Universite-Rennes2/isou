@@ -32,7 +32,7 @@ class Announcement{
 	}
 
 	public function save(){
-		global $DB;
+		global $DB, $LOGGER;
 
 		$results = array('successes' => array(), 'errors' => array());
 
@@ -46,11 +46,11 @@ class Announcement{
 			}else{
 				$results['successes'][] = 'L\'annonce a bien été retirée.';
 			}
-			add_log(LOG_FILE, $_SESSION['phpCAS']['user'], 'UPDATE', 'Modification de l\'annonce ');
+
+			$LOGGER->addInfo('Modification de l\'annonce', array('author' => $_SESSION['phpCAS']['user']));
 		}else{
 			// log db errors
-			$sql_error = $query->errorInfo();
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] ".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 			$results['errors'][] = 'La modification n\'a pas été enregistrée !';
 		}

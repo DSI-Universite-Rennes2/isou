@@ -95,7 +95,7 @@ class Service{
 	}
 
 	function save(){
-		global $DB;
+		global $DB, $LOGGER;
 
 		$results = array('successes' => array(), 'errors' => array());
 		$params = array($this->name, $this->url, $this->state, $this->comment, $this->enable, $this->visible, $this->locked, $this->rsskey, $this->idtype, $this->idcategory);
@@ -115,8 +115,7 @@ class Service{
 			$results['successes'] = array('Les données ont été correctement enregistrées.');
 		}else{
 			// log db errors
-			$sql_error = $query->errorInfo();
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] ".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 			$results['errors'] = array('Une erreur est survenue lors de l\'enregistrement des données.');
 		}
@@ -125,7 +124,7 @@ class Service{
 	}
 
 	function delete(){
-		global $DB;
+		global $DB, $LOGGER;
 
 		$results = array('successes' => array(), 'errors' => array());
 		$commit = 1;
@@ -158,8 +157,7 @@ class Service{
 			$results['successes'] = array('Les données ont été correctement supprimées.');
 		}else{
 			// log db errors
-			$sql_error = $query->errorInfo();
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] ".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 			if(!$previous_transaction){
 				$DB->rollBack();
@@ -171,7 +169,7 @@ class Service{
 	}
 
 	public function hide(){
-		global $DB;
+		global $DB, $LOGGER;
 
 		$sql = "UPDATE services SET visible=0 WHERE idservice=?";
 		$query = $DB->prepare($sql);
@@ -179,13 +177,13 @@ class Service{
 			$this->visible = '0';
 			return TRUE;
 		}else{
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] Error sql: ".__METHOD__."() in ".__FILE__." file\n\t".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 			return FALSE;
 		}
 	}
 
 	public function visible(){
-		global $DB;
+		global $DB, $LOGGER;
 
 		$sql = "UPDATE services SET visible=1 WHERE idservice=?";
 		$query = $DB->prepare($sql);
@@ -193,13 +191,13 @@ class Service{
 			$this->visible = '1';
 			return TRUE;
 		}else{
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] Error sql: ".__METHOD__."() in ".__FILE__." file\n\t".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 			return FALSE;
 		}
 	}
 
 	public function lock($state){
-		global $DB;
+		global $DB, $LOGGER;
 
 		$sql = "UPDATE services SET state=?, locked=1 WHERE idservice = ?";
 		$query = $DB->prepare($sql);
@@ -208,13 +206,13 @@ class Service{
 			$this->locked = '1';
 			return TRUE;
 		}else{
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] Error sql: ".__METHOD__."() in ".__FILE__." file\n\t".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 			return FALSE;
 		}
 	}
 
 	public function unlock(){
-		global $DB;
+		global $DB, $LOGGER;
 
 		$sql = "UPDATE services SET locked=0 WHERE idservice = ?";
 		$query = $DB->prepare($sql);
@@ -222,7 +220,7 @@ class Service{
 			$this->locked = '0';
 			return TRUE;
 		}else{
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] Error sql: ".__METHOD__."() in ".__FILE__." file\n\t".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 			return FALSE;
 		}
 

@@ -16,7 +16,6 @@ define('BASE', realpath(dirname(__FILE__).'/../sources/private'));
 define('DB_PATH', 'sqlite:'.dirname(__FILE__).'/units.sqlite3');
 define('UNITS', TRUE);
 define('TIME', time());
-define('LOG_FILE', '');
 define('LOG_LEVEL', 0);
 
 $TOLERANCE = 0;
@@ -144,6 +143,8 @@ $query->execute(array(STATE_ORANGE, STATE_ORANGE, 8, 2)); // state service isou,
 update_nagios_to_db();
 
 function get_parents($idChild){
+	global $LOGGER;
+
 	$parents = array();
 
 	try {
@@ -165,7 +166,7 @@ function get_parents($idChild){
 		}
 
 	} catch (PDOException $e) {
-		add_log(LOG_FILE, phpCAS::getUser(), 'ERROR_DB', $e->getMessage());
+		$LOGGER->addError($e->getMessage());
 	}
 
 	// close pdo connection

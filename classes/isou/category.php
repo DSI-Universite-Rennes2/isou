@@ -49,7 +49,7 @@ class Category{
 
 
 	public function save(){
-		global $DB;
+		global $DB, $LOGGER;
 
 		$results = array('successes' => array(), 'errors' => array());
 		$params = array($this->name, $this->position);
@@ -69,8 +69,7 @@ class Category{
 			$results['successes'] = array('Les données ont été correctement enregistrées.');
 		}else{
 			// log db errors
-			$sql_error = $query->errorInfo();
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] ".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 			$results['errors'] = array('Une erreur est survenue lors de l\'enregistrement des données.');
 		}
@@ -79,7 +78,7 @@ class Category{
 	}
 
 	public function delete(){
-		global $DB;
+		global $DB, $LOGGER;
 
 		require_once PRIVATE_PATH.'/libs/services.php';
 
@@ -112,8 +111,7 @@ class Category{
 			$results['successes'] = array('Les données ont été correctement supprimées.');
 		}else{
 			// log db errors
-			$sql_error = $query->errorInfo();
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] ".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 			$DB->rollBack();
 			$results['errors'] = array('Une erreur est survenue lors de la suppression des données.');
@@ -123,7 +121,7 @@ class Category{
 	}
 
 	public function up(){
-		global $DB;
+		global $DB, $LOGGER;
 
 		$results = array('successes' => array(), 'errors' => array());
 
@@ -149,8 +147,7 @@ class Category{
 				$results['successes'] = array('Les données ont été correctement enregistrées.');
 			}else{
 				// log db errors
-				$sql_error = $query->errorInfo();
-				file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] ".implode(', ', $sql_error)."\n", FILE_APPEND);
+				$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 				$DB->rollBack();
 				$results['errors'] = array('Une erreur est survenue lors de l\'enregistrement des données.');
@@ -161,7 +158,7 @@ class Category{
 	}
 
 	public function down($limit=NULL){
-		global $DB;
+		global $DB, $LOGGER;
 
 		$results = array('successes' => array(), 'errors' => array());
 
@@ -191,8 +188,7 @@ class Category{
 				$results['successes'] = array('Les données ont été correctement enregistrées.');
 			}else{
 				// log db errors
-				$sql_error = $query->errorInfo();
-				file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] ".implode(', ', $sql_error)."\n", FILE_APPEND);
+				$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 				$DB->rollBack();
 				$results['errors'] = array('Une erreur est survenue lors de l\'enregistrement des données.');

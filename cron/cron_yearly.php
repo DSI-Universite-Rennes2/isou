@@ -28,7 +28,7 @@ if(!is_file(PRIVATE_PATH.'/database/isou-'.($year-1).'.sqlite3')){
 		$query = $DB->prepare($sql);
 		$query->execute(array($newyear, $newyear));
 	}else{
-		add_log(LOG_FILE, 'ISOU', 'ERROR_DB', 'Les bases n\'ont pas pu être dupliquées.');
+		$LOGGER->addError('Les bases n\'ont pas pu être dupliquées.');
 	}
 }
 

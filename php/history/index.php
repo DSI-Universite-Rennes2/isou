@@ -239,7 +239,7 @@ if(isset($_POST['services'], $_POST['event_type'], $_POST['year'], $_POST['month
 
 				$event->total = implode(', ', $event->total);
 			}catch(Exception $exception){
-				add_log($exception->getMessage(), LOG_DEBUGGING);
+				$LOGGER->addError($exception->getMessage());
 				continue;
 			}
 

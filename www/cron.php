@@ -77,7 +77,7 @@ require PRIVATE_PATH.'/classes/isou/parser.function.php';
 $log = update_nagios_to_db();
 
 if($log instanceof Exception){
-	add_log(LOG_FILE, 'ISOU', 'error', $log->getMessage());
+	$LOGGER->addError($log->getMessage());
 }
 
 $sql = "UPDATE configuration SET value=? WHERE key=?";

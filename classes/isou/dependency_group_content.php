@@ -59,8 +59,7 @@ class Dependency_Group_Content{
 			$results['successes'] = array('Les données ont été correctement enregistrées.');
 		}else{
 			// log db errors
-			$sql_error = $query->errorInfo();
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] ".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 			$results['errors'] = array('Une erreur est survenue lors de l\'enregistrement des données.');
 		}
@@ -81,8 +80,7 @@ class Dependency_Group_Content{
 			$results['successes'] = array('Les données ont été correctement enregistrées.');
 		}else{
 			// log db errors
-			$sql_error = $query->errorInfo();
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] ".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 			$results['errors'] = array('Une erreur est survenue lors de l\'enregistrement des données.');
 		}
@@ -101,8 +99,7 @@ class Dependency_Group_Content{
 			$results['successes'] = array('Les données ont été correctement supprimées.');
 		}else{
 			// log db errors
-			$sql_error = $query->errorInfo();
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] ".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 			$results['errors'] = array('Une erreur est survenue lors de la suppression des données.');
 		}

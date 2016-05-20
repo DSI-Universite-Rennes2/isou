@@ -70,8 +70,11 @@ define('ISOU_URL', URL.'/index.php');
 // répertoire des logs
 define('LOG_PATH', PRIVATE_PATH.'/log/');
 
-// format du nom de fichier des logs
-define('LOG_FILE', LOG_PATH.'/'.strftime('%y-%m-%d',TIME).'.log');
+$LOGGER = new Logger('isou');
+if (!defined('CRON_CLI')) {
+	$LOGGER->pushHandler(new StreamHandler(LOGS_PATH.'/isou.log'));
+	$LOGGER->pushHandler(new StreamHandler(LOGS_PATH.'/error.log', Logger::ERROR));
+}
 
 // connecteur pdo de la base de données
 define('DB_PATH', 'sqlite:'.PRIVATE_PATH.'/database/isou.sqlite3');

@@ -35,8 +35,7 @@ class EventDescription{
 			}
 		}else{
 			// log db errors
-			$sql_error = $query->errorInfo();
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] Error sql: ".__METHOD__."() in ".__FILE__." file\n\t".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 			throw new \Exception('Une erreur est survenue lors de l\'enregistrement de la description de l\'évènement.');
 		}
@@ -50,8 +49,7 @@ class EventDescription{
 
 		if($query->execute(array($this->id)) === FALSE){
 			// log db errors
-			$sql_error = $query->errorInfo();
-			file_put_contents(LOG_FILE, "[".strftime('%Y-%m-%d %H:%M', TIME)."] Error sql: ".__METHOD__."() in ".__FILE__." file\n\t".implode(', ', $sql_error)."\n", FILE_APPEND);
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
 
 			throw new \Exception('Une erreur est survenue lors de la suppression de la description d\'évènement.');
 		}

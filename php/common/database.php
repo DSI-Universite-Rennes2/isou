@@ -29,7 +29,7 @@ try{
 	$smarty->display('html_body_header.tpl');
 	$smarty->display('html_body_footer.tpl');
 
-	add_log(LOG_FILE, 'ISOU', 'ERROR_DB', $e->getMessage());
+	$LOGGER->addError($e->getMessage());
 
 	// close pdo connection
 	$DB = null;
