@@ -22,15 +22,19 @@ if(!isset($PAGE_NAME[2])){
 	$PAGE_NAME[2] = '';
 }
 
-switch($PAGE_NAME[2]){
-	case 'edit':
-		require PRIVATE_PATH.'/php/services/backend_edit.php';
-		break;
-	case 'delete':
-		require PRIVATE_PATH.'/php/services/backend_delete.php';
-		break;
-	default:
-		require PRIVATE_PATH.'/php/services/backend_list.php';
+if ($backend->enabled) {
+	switch($PAGE_NAME[2]){
+		case 'edit':
+			require PRIVATE_PATH.'/php/services/backend_edit.php';
+			break;
+		case 'delete':
+			require PRIVATE_PATH.'/php/services/backend_delete.php';
+			break;
+		default:
+			require PRIVATE_PATH.'/php/services/backend_list.php';
+	}
+} else {
+	require PRIVATE_PATH.'/php/services/backend_list.php';
 }
 
 $smarty->assign('backend', $backend);
