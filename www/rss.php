@@ -4,7 +4,7 @@ header('content-type: application/xml');
 
 define('MAXFEED', 100);
 
-require __DIR__.'/config.php';
+require __DIR__.'/../config.php';
 
 // find filter on rss url
 if(isset($_GET['key'])){
