@@ -35,6 +35,14 @@
 		</div>
 		<div class="form-information-dl-div">
 			<dt class="form-topics-dt">
+				<label for="locked">Verrouiller le service</label>
+			</dt>
+			<dd class="form-values-dd">
+				{html_options id="locked" name="locked" options=$options_yesno selected=$event->locked}
+			</dd>
+		</div>
+		<div class="form-information-dl-div">
+			<dt class="form-topics-dt">
 				<label for="begindate">Date de début</label>
 			</dt>
 			<dd class="form-values-dd">

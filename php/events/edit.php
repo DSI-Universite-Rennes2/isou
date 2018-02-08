@@ -89,6 +89,16 @@ if(isset($_POST['type'], $_POST['service'], $_POST['begindate'], $_POST['enddate
 
 			$event->save();
 
+			if (isset($_POST['locked'])) {
+				$service = get_service(array('id' => $event->idservice, 'type' => Service::TYPE_ISOU));
+
+				if ($_POST['locked'] === '1') {
+					$service->lock($event->state);
+				} else {
+					$service->unlock();
+				}
+			}
+
 			$DB->commit();
 		}catch(Exception $exception){
 			$DB->rollBack();
@@ -112,6 +122,7 @@ $smarty->assign('options_states', $options_states);
 $smarty->assign('options_periods', $options_periods);
 $smarty->assign('options_services', $options_services);
 $smarty->assign('options_types', $options_types);
+$smarty->assign('options_yesno', $options_yesno);
 
 $smarty->assign('event', $event);
 
