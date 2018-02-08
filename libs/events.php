@@ -23,9 +23,11 @@ function get_event($id){
 *	after			=> DateTime
 *	before			=> DateTime
 *	idservice		=> int
+*	one_record		=> bool
 *	regular			=> bool
 *	service_type	=> int : index key from UniversiteRennes2\Isou\Service::$TYPES
 *	since			=> DateTime
+*	finished		=> bool
 *	state			=> int : index key from UniversiteRennes2\Isou\State::$STATES
 *	tolerance		=> int : seconds
 *	type			=> int : index key from UniversiteRennes2\Isou\Event::$TYPES
@@ -84,6 +86,15 @@ function get_events($options = array()){
 		$params[] = $options['since']->format('Y-m-d\TH:i');
 	}
 
+	// closed option
+	if(isset($options['finished'])){
+		if ($options['finished'] === true) {
+			$sql .= " AND e.enddate IS NOT NULL";
+		} else {
+			$sql .= " AND e.enddate IS NULL";
+		}
+	}
+
 	// state options
 	if(isset($options['state'], UniversiteRennes2\Isou\State::$STATES[$options['state']])){
 		$sql .= " AND e.state=?";
@@ -94,7 +105,7 @@ function get_events($options = array()){
 	if(isset($options['tolerance']) && ctype_digit($options['tolerance']) && $options['tolerance'] > 0){
 		$sql .= " AND".
 			" (".
-			" (e.enddate IS NULL AND (strftime('%s', '".STR_TIME."') - strftime('%s', e.begindate)) > ".$options['tolerance'].")".
+			" (e.enddate IS NULL)".// AND (strftime('%s', '".STR_TIME."') - strftime('%s', e.begindate)) > ".$options['tolerance'].")".
 			" OR".
 			" ((strftime('%s', e.enddate) - strftime('%s', e.begindate)) > ".$options['tolerance'].")".
 			" )";
