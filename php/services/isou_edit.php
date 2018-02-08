@@ -1,14 +1,16 @@
 <?php
 
+use UniversiteRennes2\Isou\Service;
+
 if(isset($PAGE_NAME[3]) && ctype_digit($PAGE_NAME[3])){
-	$service = get_service($PAGE_NAME[3], UniversiteRennes2\Isou\Service::TYPE_ISOU);
+	$service = get_service(array('id' => $PAGE_NAME[3], 'type' => Service::TYPE_ISOU));
 }else{
 	$service = FALSE;
 }
 
 if($service === FALSE){
-	$service = new UniversiteRennes2\Isou\Service();
-	$service->idtype = UniversiteRennes2\Isou\Service::TYPE_ISOU;
+	$service = new Service();
+	$service->idtype = Service::TYPE_ISOU;
 }
 
 require_once PRIVATE_PATH.'/libs/categories.php';

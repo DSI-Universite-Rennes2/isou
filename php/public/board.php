@@ -1,5 +1,7 @@
 <?php
 
+use UniversiteRennes2\Isou\Service;
+
 require_once PRIVATE_PATH.'/libs/events.php';
 require_once PRIVATE_PATH.'/libs/services.php';
 require_once PRIVATE_PATH.'/libs/categories.php';
@@ -17,7 +19,7 @@ for($i=0;$i<7;$i++){
 	$options = array();
 	$options['since'] = clone $days[$i]->setTime(0, 0, 0);
 	$options['before'] = clone $days[$i]->setTime(23, 59, 60);
-	$options['service_type'] = UniversiteRennes2\Isou\Service::TYPE_ISOU;
+	$options['service_type'] = Service::TYPE_ISOU;
 
 	$events = get_events($options);
 	foreach($events as $event){
@@ -45,7 +47,7 @@ for($i=0;$i<7;$i++){
 	}
 }
 
-$services = get_services(UniversiteRennes2\Isou\Service::TYPE_ISOU);
+$services = get_services(array('type' => Service::TYPE_ISOU));
 foreach($services as $service){
 	if($service->enable === '0' || $service->visible === '0'){
 		continue;

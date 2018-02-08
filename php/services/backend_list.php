@@ -1,6 +1,6 @@
 <?php
 
-$services = get_services($backend->type);
+$services = get_services(array('type' => $backend->type));
 
 foreach($services as $service){
 	$service->notes = array();

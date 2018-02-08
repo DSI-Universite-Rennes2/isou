@@ -1,10 +1,12 @@
 <?php
 
+use Universiterennes2\Isou\Service;
+
 function get_updated_nagios_statusdat_services(){
 	$updated_services = array();
 
 	$statusdat = get_nagios_services_from_statusdat_sorted_by_name();
-	$services = get_services(SERVICETYPE_NAGIOS_STATUSDAT);
+	$services = get_services(array('type' => Service::TYPE_NAGIOS_STATUSDAT));
 	foreach($services as $service){
 		if(isset($statusdat[$service->name]) && $service->state !== $statusdat[$service->name]->current_state){
 			// si le statut du service Nagios dans le fichier status.dat et dans la base de données ne sont pas identiques...
@@ -106,7 +108,7 @@ function get_nagios_services_from_statusdat(){
 		$handle = @fopen($CFG['nagios_statusdat_path'], 'r');
 		if($handle){
 			$registred_services = array();
-			foreach(get_services(SERVICETYPE_NAGIOS_STATUSDAT) as $service){
+			foreach(get_services(array('type' => Service::TYPE_NAGIOS_STATUSDAT)) as $service){
 				$registred_services[$service->name] = $service->name;
 			}
 

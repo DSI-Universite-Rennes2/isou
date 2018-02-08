@@ -1,22 +1,34 @@
 <?php
 
+use UniversiteRennes2\Isou\Service;
+use UniversiteRennes2\Isou\State;
+
 function get_updated_shinken_thruk_services(){
-	global $CFG;
+	global $CFG, $LOGGER;
 
 	$updated_services = array();
 
 	$statusdat = get_shinken_services_from_thruk($CFG['shinken_thruk_path'], $CFG['shinken_thruk_username'], $CFG['shinken_thruk_password']);
-	$services = get_services(Service::SERVICETYPE_SHINKEN_THRUK);
+	$services = get_services(array('enable' => true, 'type' => Service::TYPE_SHINKEN_THRUK));
+
 	foreach($services as $service){
 		if (isset($statusdat[$service->name])) {
-			if ($service->state !== $statusdat[$service->name]->current_state) {
+			$LOGGER->addInfo('Check '.$service->name.' state: '.$service->state.' (current) | '.$statusdat[$service->name]['current_state'].' (new)');
+			if ($service->state != $statusdat[$service->name]['current_state']) {
+				$LOGGER->addInfo('Mise à jour de l\'état du service '.$service->name.' (état #'.$service->state.')');
+
 				// si le statut du service dans Shinken n'est pas identique à celui renseigné dans la base de données...
-				$service->change_state($statusdat[$service->name]->current_state);
+				$service->change_state($statusdat[$service->name]['current_state']);
 				$updated_services[] = $service;
 			}
-		} elseif($service->state !== STATE_OK ) {
-			$service->change_state(STATE_OK);
+		} else {
+			// le service n'est plus présent dans Shinken.
+			$service->disable();
+			$LOGGER->addInfo('Le service '.$service->name.' n\'est plus présent dans Shinken.');
 		}
+
+		$service->change_state(Isou\State::CRITICAL);
+		$updated_services[] = $service;
 	}
 
 	return $updated_services;
@@ -34,9 +46,9 @@ function get_shinken_services_from_thruk($url, $username='', $password=''){
 			// query shinken only if cache older than 5 min
 			if($now->sub(new DateInterval('PT5M')) < $last_cache_update){
 				// use cache
-				$services = json_decode(file_get_contents($cache_file));
+				$services = json_decode(file_get_contents($cache_file), true);
 
-				if (!empty($cache)) {
+				if (!empty($services)) {
 					return $services;
 				}
 			}
@@ -83,7 +95,7 @@ function get_shinken_services_from_thruk($url, $username='', $password=''){
 		}
 	}
 
-	usort($services, function($a, $b){
+	uasort($services, function($a, $b){
 			if ($a->name == $b->name) {
 				return 0;
 			}

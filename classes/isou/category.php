@@ -23,7 +23,7 @@ class Category{
 		if($this->services === NULL){
 			require_once PRIVATE_PATH.'/libs/services.php';
 
-			$this->services = get_services_by_category($this->id);
+			$this->services = get_services(array('category' => $this->id));
 		}
 
 		return $this->services;
@@ -87,7 +87,7 @@ class Category{
 
 		$DB->beginTransaction();
 
-		$services = get_services_by_category($this->id);
+		$services = get_services(array('category' => $this->id));
 		foreach($services as $service){
 			$results = array_merge($results, $service->delete());
 			$commit &= !isset($results['errors'][0]);

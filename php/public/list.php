@@ -1,5 +1,7 @@
 <?php
 
+use UniversiteRennes2\Isou\Service;
+
 require_once PRIVATE_PATH.'/libs/events.php';
 require_once PRIVATE_PATH.'/libs/services.php';
 require_once PRIVATE_PATH.'/libs/categories.php';
@@ -11,7 +13,7 @@ $since->sub(new DateInterval('P2D')); // TODO: create CFG variable
 
 $categories = array();
 
-$services = get_services(UniversiteRennes2\Isou\Service::TYPE_ISOU);
+$services = get_services(array('type' => Service::TYPE_ISOU));
 
 foreach($services as $service){
 	if($service->enable === '0' || $service->visible === '0'){

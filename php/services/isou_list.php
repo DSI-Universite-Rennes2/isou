@@ -1,5 +1,7 @@
 <?php
 
+use UniversiteRennes2\Isou\Service;
+
 require_once PRIVATE_PATH.'/libs/categories.php';
 
 $categories = get_categories_sorted_by_id();
@@ -10,7 +12,7 @@ foreach($categories as $idcategory => $category_name){
 	$categories[$idcategory]->services = array();
 }
 
-$services = get_services(UniversiteRennes2\Isou\Service::TYPE_ISOU);
+$services = get_services(array('type' => Service::TYPE_ISOU));
 foreach($services as $service){
 	$service->notes = array();
 

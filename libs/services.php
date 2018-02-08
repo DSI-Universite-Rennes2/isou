@@ -2,46 +2,116 @@
 
 require_once PRIVATE_PATH.'/classes/isou/service.php';
 
-function get_service($id, $type=NULL){
-	global $DB;
+/**
+  * @param array $options Array in format:
+  *		@see function get_services()
+  * Note : one_record param is always set at true
+  *
+  * @return array of UniversiteRennes2\Isou\Events
+  */
+function get_service($options = array()) {
+	$options['one_record'] = true;
 
-	if($type === NULL){
-		$sql_condition = '';
-		$params = array($id);
-	}else{
-		$sql_condition = " AND s.idtype=?";
-		$params = array($id, $type);
+	return get_services($options);
+}
+
+/**
+* @param array $options Array in format:
+*	category		=> int : category id
+*	enable			=> bool
+*	id				=> int : service id
+*	locked			=> bool
+*	one_record		=> bool
+*	visible			=> bool
+*	type			=> int : index key from UniversiteRennes2\Isou\Service::$TYPES
+*
+* @return array of UniversiteRennes2\Isou\Events
+*/
+function get_services($options=array()){
+	global $DB, $LOGGER;
+
+	$params = array();
+	$conditions = array();
+
+	if (isset($options['category'])) {
+		if (ctype_digit($options['category'])) {
+			$conditions[] = 's.idcategory = ?';
+			$params[] = $options['category'];
+		} else {
+			$LOGGER->addInfo('L\'option \'category\' doit être un entier.', array('value', $options['category']));
+		}
 	}
 
-	$sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
-			" FROM services s".
-			" WHERE s.id=?".$sql_condition;
+	if (isset($options['enable'])) {
+		if (is_bool($options['enable'])) {
+			$conditions[] = 's.enable = ?';
+			$params[] = intval($options['enable']);
+		} else {
+			$LOGGER->addInfo('L\'option \'enable\' doit être un booléan.', array('value', $options['enable']));
+		}
+	}
+
+	if (isset($options['id'])) {
+		if (ctype_digit($options['id'])) {
+			$conditions[] = 's.id = ?';
+			$params[] = $options['id'];
+		} else {
+			$LOGGER->addInfo('L\'option \'id\' doit être un entier.', array('value', $options['id']));
+		}
+	}
+
+	if (isset($options['locked'])) {
+		if (is_bool($options['locked'])) {
+			$conditions[] = 's.locked = ?';
+			$params[] = intval($options['locked']);
+		} else {
+			$LOGGER->addInfo('L\'option \'locked\' doit être un booléan.', array('value', $options['locked']));
+		}
+	}
+
+	if (isset($options['visible'])) {
+		if (is_bool($options['visible'])) {
+			$conditions[] = 's.visible = ?';
+			$params[] = intval($options['visible']);
+		} else {
+			$LOGGER->addInfo('L\'option \'visible\' doit être un booléan.', array('value', $options['visible']));
+		}
+	}
+
+	if(isset($options['type'])) {
+		if (isset(UniversiteRennes2\Isou\Service::$TYPES[$options['type']])) {
+			$conditions[] = 's.idtype = ?';
+			$params[] = $options['type'];
+		} else {
+			$LOGGER->addInfo('L\'option \'type\' n\'a pas une valeur valide.', array('value', $options['type']));
+		}
+	}
+
+	if(isset($conditions[0])) {
+		$sql_condition = ' WHERE '.implode(' AND ', $conditions);
+	}else{
+		$sql_condition = '';
+	}
+
+	$sql = 'SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory'.
+			' FROM services s'.
+			' '.$sql_condition.
+			' ORDER BY UPPER(s.name)';
 	$query = $DB->prepare($sql);
 	$query->execute($params);
 
 	$query->setFetchMode(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Service');
 
-	return $query->fetch();
-}
-
-function get_services($type=NULL){
-	global $DB;
-
-	if($type === NULL){
-		$sql_condition = '';
-		$params = array();
-	}else{
-		$sql_condition = " WHERE s.idtype=?";
-		$params = array($type);
+	if(isset($options['one_record'])){
+		$services = $query->fetchAll();
+		if(isset($services[0])){
+			return $services[0];
+		}else{
+			return FALSE;
+		}
 	}
 
-	$sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
-			" FROM services s".$sql_condition.
-			" ORDER BY UPPER(s.name)";
-	$query = $DB->prepare($sql);
-	$query->execute($params);
-
-	return $query->fetchAll(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Service');
+	return $query->fetchAll();
 }
 
 function get_services_sorted_by_id($type=NULL){
@@ -82,14 +152,14 @@ function get_services_sorted_by_idtype(){
 	while($service = $query->fetch(PDO::FETCH_OBJ)){
 		if($service->idtype === UniversiteRennes2\Isou\Service::TYPE_NAGIOS_STATUSDAT){
 			if(isset($services['Services Nagios'])){
-				$services['Services Nagios'][$service->idservice] = $service->name;
+				$services['Services Nagios'][$service->id] = $service->name;
 			}
 		}elseif($service->idtype === UniversiteRennes2\Isou\Service::TYPE_SHINKEN_THRUK){
 			if(isset($services['Services Shinken'])){
-				$services['Services Shinken'][$service->idservice] = $service->name;
+				$services['Services Shinken'][$service->id] = $service->name;
 			}
 		}else{
-			$services['Services ISOU'][$service->idservice] = $service->name;
+			$services['Services ISOU'][$service->id] = $service->name;
 		}
 	}
 
@@ -107,18 +177,6 @@ function get_isou_services_sorted_by_idtype(){
 	$query->execute(array(UniversiteRennes2\Isou\Service::TYPE_ISOU));
 
 	return $query->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE);
-}
-
-function get_services_by_category($idcategory){
-	global $DB;
-
-	$sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
-			" FROM services s".
-			" WHERE s.idcategory=?";
-	$query = $DB->prepare($sql);
-	$query->execute(array($idcategory));
-
-	return $query->fetchAll(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Service');
 }
 
 function get_services_by_dependencies_group($idgroup){

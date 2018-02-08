@@ -1,5 +1,8 @@
 <?php
 
+use UniversiteRennes2\Isou\Service;
+use UniversiteRennes2\Isou\State;
+
 require_once PRIVATE_PATH.'/libs/events.php';
 require_once PRIVATE_PATH.'/libs/services.php';
 require_once PRIVATE_PATH.'/libs/categories.php';
@@ -13,7 +16,7 @@ $idcategories = get_categories_sorted_by_id();
 
 $options = array();
 $options['tolerance'] = $CFG['tolerance'];
-$options['service_type'] = UniversiteRennes2\Isou\Service::TYPE_ISOU;
+$options['service_type'] = Service::TYPE_ISOU;
 $options['since'] = new DateTime();
 $options['since']->sub(new DateInterval('P2D')); // TODO: create CFG variable
 
@@ -22,7 +25,7 @@ foreach($events as $event){
 	if(isset($services[$event->idservice])){
 		$service = $services[$event->idservice];
 	}else{
-		$service = get_service($event->idservice);
+		$service = get_service(array('id' => $event->idservice, 'visible' => true, 'type' => Service::TYPE_ISOU));
 		if($service === FALSE){
 			continue;
 		}else{
@@ -31,7 +34,7 @@ foreach($events as $event){
 	}
 
 	// on ne garde que les services ISOU non fermés
-	if($service->idtype !== UniversiteRennes2\Isou\Service::TYPE_ISOU || $service->state === UniversiteRennes2\Isou\State::CLOSED){
+	if($service->state === State::CLOSED){
 		continue;
 	}
 

@@ -1,5 +1,10 @@
 <?php
 
+use UniversiteRennes2\Isou\Event;
+use UniversiteRennes2\Isou\EventDescription;
+use UniversiteRennes2\Isou\Service;
+use UniversiteRennes2\Isou\State;
+
 if(isset($PAGE_NAME[2]) && ctype_digit($PAGE_NAME[2])){
 	$event = get_event($PAGE_NAME[2]);
 }else{
@@ -7,16 +12,25 @@ if(isset($PAGE_NAME[2]) && ctype_digit($PAGE_NAME[2])){
 }
 
 if($event === FALSE){
-	$event = new UniversiteRennes2\Isou\Event();
+	$event = new Event();
 }
 
-$options_states = UniversiteRennes2\Isou\State::$STATES;
+if ($event->idservice !== 0) {
+	$service = get_service(array('id' => $event->idservice, 'type' => Service::TYPE_ISOU));
+	$event->locked = $service->locked;
+} else {
+	$event->locked = 0;
+}
 
-$options_periods = UniversiteRennes2\Isou\Event::$PERIODS;
+$options_states = State::$STATES;
+
+$options_periods = Event::$PERIODS;
 
 $options_services = get_isou_services_sorted_by_idtype();
 
-$options_types = UniversiteRennes2\Isou\Event::$TYPES;
+$options_types = Event::$TYPES;
+
+$options_yesno = array('1' => 'Oui', '0' => 'Non');
 
 if(isset($_POST['type'], $_POST['service'], $_POST['begindate'], $_POST['enddate'], $_POST['period'], $_POST['description'])){
 	$_POST['errors'] = array();
@@ -59,7 +73,7 @@ if(isset($_POST['type'], $_POST['service'], $_POST['begindate'], $_POST['enddate
 
 	$event_description = get_event_description_by_content($_POST['description']);
 	if($event_description === FALSE){
-		$event_description = new UniversiteRennes2\Isou\EventDescription();
+		$event_description = new EventDescription();
 		$event_description->description = $_POST['description'];
 		$event_description->autogen = 0;
 	}
@@ -84,7 +98,7 @@ if(isset($_POST['type'], $_POST['service'], $_POST['begindate'], $_POST['enddate
 		if(!isset($_POST['errors'][0])){
 			$_SESSION['messages'] = array('successes' => 'L\'évènement a été enregistré.');
 
-			if($event->type === UniversiteRennes2\Isou\Event::TYPE_UNSCHEDULED){
+			if($event->type === Event::TYPE_UNSCHEDULED){
 				header('Location: '.URL.'/index.php/evenements/imprevus');
 			}else{
 				header('Location: '.URL.'/index.php/evenements/prevus');

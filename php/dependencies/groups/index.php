@@ -1,7 +1,9 @@
 <?php
 
+use UniversiteRennes2\Isou\Service;
+
 if(isset($PAGE_NAME[2]) && ctype_digit($PAGE_NAME[2])){
-	$service = get_service($PAGE_NAME[2], UniversiteRennes2\Isou\Service::TYPE_ISOU);
+	$service = get_service(array('id' => $PAGE_NAME[2], 'type' => Service::TYPE_ISOU));
 }else{
 	$service = FALSE;
 }
