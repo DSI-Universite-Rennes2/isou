@@ -268,6 +268,14 @@ class Service{
 		return get_events($options);
 	}
 
+	public function get_current_event($options = array()){
+		$options['idservice'] = $this->id;
+		$options['finished'] = false;
+		$options['one_record'] = TRUE;
+
+		return get_events($options);
+	}
+
 	public function get_closed_event($options = array()){
 		$options['idservice'] = $this->id;
 		$options['one_record'] = TRUE;

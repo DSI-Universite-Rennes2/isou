@@ -36,7 +36,7 @@
 <tbody>
 {foreach $events as $event}
 <tr>
-	<td>{$event->name}</td>
+	<td>{$services[$event->idservice]}</td>
 	<td>{$event->begindate|date_format:"%d %B %Y %H:%M"}</td>
 	<td{if $event->enddate === NULL} class="danger">en cours{else}>{$event->enddate|date_format:"%d %B %Y %H:%M"}{/if}</td>
 	<td>{$STATES[$event->state]->get_flag_html_renderer()}</td>
