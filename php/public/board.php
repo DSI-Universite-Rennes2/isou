@@ -47,7 +47,7 @@ for($i=0;$i<7;$i++){
 	}
 }
 
-$services = get_services(array('type' => Service::TYPE_ISOU));
+$services = get_services(array('type' => Service::TYPE_ISOU, 'visible' => true));
 foreach($services as $service){
 	if($service->enable === '0' || $service->visible === '0'){
 		continue;
@@ -97,5 +97,3 @@ $smarty->assign('days', $days);
 $smarty->assign('categories', $categories);
 
 $TEMPLATE = 'public/board.tpl';
-
-?>

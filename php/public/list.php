@@ -13,7 +13,7 @@ $since->sub(new DateInterval('P2D')); // TODO: create CFG variable
 
 $categories = array();
 
-$services = get_services(array('type' => Service::TYPE_ISOU));
+$services = get_services(array('type' => Service::TYPE_ISOU, 'visible' => true));
 
 foreach($services as $service){
 	if($service->enable === '0' || $service->visible === '0'){
@@ -46,5 +46,3 @@ foreach($services as $service){
 $smarty->assign('categories', $categories);
 
 $TEMPLATE = 'public/list.tpl';
-
-?>

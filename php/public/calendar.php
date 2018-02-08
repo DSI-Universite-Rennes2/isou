@@ -1,5 +1,9 @@
 <?php
 
+use UniversiteRennes2\Isou\Event;
+use UniversiteRennes2\Isou\Service;
+use UniversiteRennes2\Isou\State;
+
 require_once PRIVATE_PATH.'/libs/events.php';
 require_once PRIVATE_PATH.'/libs/services.php';
 
@@ -62,15 +66,20 @@ $endcalendar = new DateTime($endcalendar);
 
 $options = array();
 $options['tolerance'] = $CFG['tolerance'];
-$options['service_type'] = UniversiteRennes2\Isou\Service::TYPE_ISOU;
-$options['type'] = UniversiteRennes2\Isou\Event::TYPE_SCHEDULED;
+$options['service_type'] = Service::TYPE_ISOU;
+$options['type'] = Event::TYPE_SCHEDULED;
 $options['since'] = $begincalendar;
 
 $events = get_events($options);
 foreach($events as $i => $event){
-	$service = get_service($event->idservice);
+	$service = get_service(array('id' => $event->idservice, 'visible' => true));
 
-	if($event->state === UniversiteRennes2\Isou\State::CLOSED){
+	if ($service === false) {
+		unset($events[$i]);
+		continue;
+	}
+
+	if($event->state === State::CLOSED){
 		unset($events[$i]);
 		continue;
 	}
@@ -131,6 +140,3 @@ $smarty->assign('events', $events);
 $smarty->assign('now', mktime(0,0,0));
 
 $TEMPLATE = 'public/calendar.tpl';
-
-?>
-

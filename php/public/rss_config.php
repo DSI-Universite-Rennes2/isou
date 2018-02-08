@@ -10,7 +10,7 @@ require_once PRIVATE_PATH.'/libs/categories.php';
 $key = 0;
 $categories = array();
 
-$services = get_services(array('type' => Service::TYPE_ISOU));
+$services = get_services(array('type' => Service::TYPE_ISOU, 'visible' => true));
 
 foreach($services as $service){
 	if($service->enable === '0' || $service->visible === '0'){
@@ -48,5 +48,3 @@ $smarty->assign('categories', $categories);
 $smarty->assign('rss_url', $rss_url);
 
 $TEMPLATE = 'public/rss_config.tpl';
-
-?>
