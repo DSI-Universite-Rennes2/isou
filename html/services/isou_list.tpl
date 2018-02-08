@@ -35,8 +35,9 @@
 		</td>
 		<td headers="head-action-{$i}">
 		<ul class="list-inline">
-			<li><a href="{$smarty.const.URL}/index.php/services/isou/edit/{$service->id}" title="modifier"><img src="{$smarty.const.URL}/images/edit.png" alt="modifier" width="16px" height="16px" /></a></li>
-			<li><a href="{$smarty.const.URL}/index.php/services/isou/delete/{$service->id}" title="supprimer"><img src="{$smarty.const.URL}/images/drop.png" alt="supprimer" width="16px" height="16px" /></a></li>
+			<li><a href="{$smarty.const.URL}/index.php/services/isou/inspect/{$service->id}" title="inspecter"><img src="{$smarty.const.URL}/styles/{$CFG.theme}/images/inspect.gif" alt="inspecter" width="16px" height="16px" /></a></li>
+			<li><a href="{$smarty.const.URL}/index.php/services/isou/edit/{$service->id}" title="modifier"><img src="{$smarty.const.URL}/styles/{$CFG.theme}/images/edit.gif" alt="modifier" width="16px" height="16px" /></a></li>
+			<li><a href="{$smarty.const.URL}/index.php/services/isou/delete/{$service->id}" title="supprimer"><img src="{$smarty.const.URL}/styles/{$CFG.theme}/images/delete.gif" alt="supprimer" width="16px" height="16px" /></a></li>
 		</ul>
 		</td>
 		<td headers="head-note-{$i}">
