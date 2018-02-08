@@ -13,22 +13,17 @@ CVS
 /.project
 /.buildpath
 /.cache
+/composer.phar
 
 # fichiers ISOU
-composer.lock
-composer.phar
 backup/*
-classes/smarty/compile/*
-cache
-cron/LOCK_CRON
+cache/
+config.php
+cron.pid
 database/*.sqlite3
 log/*
 upgrade/LOCK_UPDATE
 status.dat
-www/config.php
 www/isou.json
-www/xpi/*.xpi
-www/xpi/update.rdf
-vendor
-fisou/build
+vendor/
 units/units.sqlite3
