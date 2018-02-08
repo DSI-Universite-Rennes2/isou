@@ -64,9 +64,9 @@ class Event{
 		if(!isset($options_services[$this->idservice])){
 			throw new \Exception('Le service mis en maintenance n\'est pas valide.');
 		}else{
-			$sql = "SELECT COUNT(E.idevent) AS total".
+			$sql = "SELECT COUNT(E.id) AS total".
 					" FROM events E".
-				" WHERE E.idevent != ?".
+				" WHERE E.id != ?".
 				" AND E.idservice = ?".
 				" AND (E.enddate IS NULL OR (E.enddate >= ? AND E.begindate <= ?))";
 			$query = $DB->prepare($sql);
@@ -178,7 +178,7 @@ class Event{
 		if($this->id === 0){
 			$sql = "INSERT INTO events(begindate, enddate, state, type, period, ideventdescription, idservice) VALUES(?,?,?,?,?,?,?)";
 		}else{
-			$sql = "UPDATE events SET begindate=?, enddate=?, state=?, type=?, period=?, ideventdescription=?, idservice=? WHERE idevent=?";
+			$sql = "UPDATE events SET begindate=?, enddate=?, state=?, type=?, period=?, ideventdescription=?, idservice=? WHERE id=?";
 			$params[] = $this->id;
 		}
 		$query = $DB->prepare($sql);

@@ -139,14 +139,14 @@ class Service{
 		$queries[] = "DELETE FROM events WHERE idservice=?";
 		$queries[] = "DELETE FROM dependencies_groups_content WHERE idservice=?";
 		$queries[] = "DELETE FROM dependencies_groups WHERE idservice=?";
-		$queries[] = "DELETE FROM services WHERE idservice=?";
+		$queries[] = "DELETE FROM services WHERE id=?";
 		foreach($queries as $sql){
 			$query = $DB->prepare($sql);
 			$commit &= $query->execute(array($this->id));
 		}
 
 		// suppression des groupes sans contenu
-		$sql = "DELETE FROM dependencies_groups WHERE idgroup NOT IN (SELECT DISTINCT idgroup FROM dependencies_groups_content)";
+		$sql = "DELETE FROM dependencies_groups WHERE id NOT IN (SELECT DISTINCT idgroup FROM dependencies_groups_content)";
 		$query = $DB->prepare($sql);
 		$commit &= $query->execute();
 
@@ -168,13 +168,14 @@ class Service{
 		return $results;
 	}
 
-	public function hide(){
+	public function change_state($state){
 		global $DB, $LOGGER;
 
-		$sql = "UPDATE services SET visible=0 WHERE idservice=?";
+		$sql = "UPDATE services SET state=? WHERE id=?";
 		$query = $DB->prepare($sql);
-		if($query->execute(array($this->id))){
-			$this->visible = '0';
+		if($query->execute(array($state, $this->id))){
+			// $LOGGER->addInfo('Le service "'.$this->name.'" est passé de l\'état '.$this->state.' à l\'état '.$state.'.');
+			$this->state = $state;
 			return TRUE;
 		}else{
 			$LOGGER->addError(implode(', ', $query->errorInfo()));
@@ -182,12 +183,30 @@ class Service{
 		}
 	}
 
-	public function visible(){
+	public function enable($enable = '1') {
 		global $DB, $LOGGER;
 
-		$sql = "UPDATE services SET visible=1 WHERE idservice=?";
+		$sql = "UPDATE services SET state=?, enable=? WHERE id=?";
 		$query = $DB->prepare($sql);
-		if($query->execute(array($this->id))){
+		if($query->execute(array(State::OK, $enable, $this->id))){
+			$this->enable = $enable;
+			return TRUE;
+		}else{
+			$LOGGER->addError(implode(', ', $query->errorInfo()));
+			return FALSE;
+		}
+	}
+
+	public function disable() {
+		return $this->enable('0');
+	}
+
+	public function visible($visible = '1') {
+		global $DB, $LOGGER;
+
+		$sql = "UPDATE services SET visible=? WHERE id=?";
+		$query = $DB->prepare($sql);
+		if($query->execute(array($visible, $this->id))){
 			$this->visible = '1';
 			return TRUE;
 		}else{
@@ -196,10 +215,14 @@ class Service{
 		}
 	}
 
+	public function hide() {
+		return $this->visible('0');
+	}
+
 	public function lock($state){
 		global $DB, $LOGGER;
 
-		$sql = "UPDATE services SET state=?, locked=1 WHERE idservice = ?";
+		$sql = "UPDATE services SET state=?, locked=1 WHERE id = ?";
 		$query = $DB->prepare($sql);
 		if($query->execute(array($state, $this->id))){
 			$this->state = $state;
@@ -214,7 +237,7 @@ class Service{
 	public function unlock(){
 		global $DB, $LOGGER;
 
-		$sql = "UPDATE services SET locked=0 WHERE idservice = ?";
+		$sql = "UPDATE services SET locked=0 WHERE id = ?";
 		$query = $DB->prepare($sql);
 		if($query->execute(array($this->id))){
 			$this->locked = '0';
@@ -236,14 +259,18 @@ class Service{
 		return $this->dependencies;
 	}
 
-	public function get_reverse_dependencies(){
+	public function get_reverse_dependencies($state = null){
 		if($this->reverse_dependencies === NULL){
 			require_once PRIVATE_PATH.'/libs/dependencies.php';
 
-			$this->reverse_dependencies = get_service_reverse_dependency_groups($this->id);
+			$this->reverse_dependencies = get_service_reverse_dependency_groups($this->id, $state);
 		}
 
 		return $this->reverse_dependencies;
+	}
+
+	public function set_reverse_dependencies($state = null){
+		$this->reverse_dependencies = $this->get_reverse_dependencies($state);
 	}
 
 	public function get_next_scheduled_events($options = array()){

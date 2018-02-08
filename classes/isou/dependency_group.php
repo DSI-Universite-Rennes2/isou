@@ -61,7 +61,7 @@ class Dependency_Group{
 	public function get_message(){
 		global $DB;
 
-		$sql = "SELECT id FROM dependencies_messages WHERE message=?";
+		$sql = "SELECT id FROM dependencies_messages WHERE message = ?";
 		$query = $DB->prepare($sql);
 		$query->execute(array($this->message));
 		if($message = $query->fetch(\PDO::FETCH_OBJ)){
@@ -155,8 +155,8 @@ class Dependency_Group{
 		$DB->beginTransaction();
 
 		$queries = array();
-		$queries[] = "DELETE FROM dependencies_groups WHERE idgroup=?";
-		$queries[] = "DELETE FROM dependencies_groups_content WHERE idgroup=?";
+		$queries[] = "DELETE FROM dependencies_groups WHERE idgroup = ?";
+		$queries[] = "DELETE FROM dependencies_groups_content WHERE idgroup = ?";
 
 		foreach($queries as $sql){
 			$query = $DB->prepare($sql);
@@ -180,23 +180,23 @@ class Dependency_Group{
 	public function get_services(){
 		global $DB;
 
-		$sql = "SELECT s.idservice, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
-			" FROM services s, dependencies_groups dg".
-			" WHERE s.idservice=dg.idservice".
-			" AND dg.idgroup=?";
+		$sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
+			" FROM services s".
+			" JOIN dependencies_groups dg ON s.id = dg.idservice".
+			" WHERE dg.id = ?";
 		$query = $DB->prepare($sql);
 		$query->execute(array($this->id));
 
-		$this->services = $query->fetchAll(\PDO::FETCH_CLASS, 'Service');
+		$this->services = $query->fetchAll(\PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Service');
 	}
 
 	public function get_content_services_sorted_by_id(){
 		global $DB;
 
-		$sql = "SELECT s.idservice, s.name".
-			" FROM services s, dependencies_groups_content dgc".
-			" WHERE s.idservice=dgc.idservice".
-			" AND dgc.idgroup=?";
+		$sql = "SELECT s.id, s.name".
+			" FROM services s".
+			" JOIN dependencies_groups_content dgc ON s.id = dgc.idservice".
+			" WHERE dgc.idgroup = ?";
 		$query = $DB->prepare($sql);
 		$query->execute(array($this->id));
 
@@ -206,14 +206,14 @@ class Dependency_Group{
 	public function get_content_services(){
 		global $DB;
 
-		$sql = "SELECT s.idservice, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
-			" FROM services s, dependencies_groups_content dgc".
-			" WHERE s.idservice=dgc.idservice".
-			" AND dgc.idgroup=?";
+		$sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
+			" FROM services s".
+			" JOIN dependencies_groups_content dgc ON s.id = dgc.idservice".
+			" WHERE dgc.idgroup = ?";
 		$query = $DB->prepare($sql);
 		$query->execute(array($this->id));
 
-		$this->services = $query->fetchAll(\PDO::FETCH_CLASS, 'Service');
+		$this->services = $query->fetchAll(\PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Service');
 	}
 
 	public function is_up(){
@@ -224,11 +224,11 @@ class Dependency_Group{
 		foreach($this->services as $service){
 			$sql = "SELECT idgroup, idservice, servicestate".
 				" FROM dependencies_groups_content dgc".
-				" WHERE idgroup=?".
-				" AND idservice=?".
-				" AND servicestate=?";
+				" WHERE idgroup = :idgroup".
+				" AND idservice = :idservice".
+				" AND servicestate = :servicestate";
 			$query = $DB->prepare($sql);
-			$query->execute(array($this->id, $service->id, $service->state));
+			$query->execute(array(':idgroup' => $this->id, ':idservice' => $service->id, ':servicestate' => $service->state));
 			$status = $query->fetch(\PDO::FETCH_OBJ);
 
 			if($status !== false && $this->redundant === '0'){
@@ -249,5 +249,3 @@ class Dependency_Group{
 		}
 	}
 }
-
-?>

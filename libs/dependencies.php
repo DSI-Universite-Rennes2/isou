@@ -33,16 +33,25 @@ function get_service_dependency_groups($idservice){
 	return $query->fetchAll(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Dependency_Group');
 }
 
-function get_service_reverse_dependency_groups($idservice){
+function get_service_reverse_dependency_groups($idservice, $state=null){
 	global $DB;
+
+	$params = array($idservice);
+	$sql_conditions = '';
+
+	if ($state !== null) {
+		$params[] = $state;
+		$sql_conditions = " AND dgc.servicestate = ?";
+	}
 
 	$sql = "SELECT dg.id, dg.name, dg.redundant, dg.groupstate, dg.idservice, dg.idmessage".
 		" FROM dependencies_groups dg, dependencies_groups_content dgc".
 		" WHERE dg.id = dgc.idgroup".
 		" AND dgc.idservice=?".
+		$sql_conditions.
 		" ORDER BY dg.groupstate, dg.redundant DESC, dg.name";
 	$query = $DB->prepare($sql);
-	$query->execute(array($idservice));
+	$query->execute($params);
 
 	return $query->fetchAll(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Dependency_Group');
 }
@@ -113,7 +122,7 @@ function get_dependencies_groups_and_groups_contents_by_service_sorted_by_flags(
 		}
 
 		// load content
-		$sql = "SELECT dgc.idgroup, s.id, s.name, dgc.servicestate".
+		$sql = "SELECT dgc.idgroup, dgc.idservice, s.name, dgc.servicestate".
 			" FROM dependencies_groups_content dgc, services s".
 			" WHERE s.id=dgc.idservice".
 			" AND dgc.idgroup=?".
@@ -131,9 +140,9 @@ function get_dependencies_groups_and_groups_contents_by_service_sorted_by_flags(
 function get_dependency_message($id){
 	global $DB;
 
-	$sql = "SELECT idmessage, message".
+	$sql = "SELECT id, message".
 			" FROM dependencies_messages".
-			" WHERE idmessage=?";
+			" WHERE id=?";
 	$query = $DB->prepare($sql);
 	$query->execute(array($id));
 
