@@ -26,7 +26,6 @@ $SCRIPTS = array();
 require PRIVATE_PATH.'/classes/helpers/style.php';
 $STYLES = array();
 
-require PRIVATE_PATH.'/upgrade/version.php';
 require PRIVATE_PATH.'/php/common/database.php';
 
 $sql = "SELECT key, value FROM configuration";
@@ -41,56 +40,57 @@ if($query = $DB->query($sql)){
 	}
 }
 
-
-require PRIVATE_PATH.'/php/common/authentification.php';
-
-
-// load states
-require PRIVATE_PATH.'/libs/states.php';
-$STATES = get_states();
-
-
-// load menu
-require PRIVATE_PATH.'/libs/menu.php';
-
-$MENU = get_active_menu();
-if($IS_ADMIN === TRUE){
-	$ADMINISTRATION_MENU = get_administration_menu();
-}
-
-// routing
-$PAGE_NAME = explode('/', get_page_name('index.php', TRUE));
-if(isset($MENU[$PAGE_NAME[0]])){
-	$current_page = $MENU[$PAGE_NAME[0]];
-}elseif(isset($ADMINISTRATION_MENU['Générale'][$PAGE_NAME[0]])){
-	$current_page = $ADMINISTRATION_MENU['Générale'][$PAGE_NAME[0]];
-}elseif(isset($ADMINISTRATION_MENU['Avancée'][$PAGE_NAME[0]])){
-	$current_page = $ADMINISTRATION_MENU['Avancée'][$PAGE_NAME[0]];
-}else{
-	if(isset($CFG['default_menu'], $MENU[$CFG['default_menu']])){
-		$current_page = $MENU[$CFG['default_menu']];
-	}else{
-		$current_page = current($MENU);
-	}
-}
-$current_page->selected = TRUE;
-
-
-// load announcement
-if(isset($MENU[$current_page->url])){
-	require PRIVATE_PATH.'/libs/announcements.php';
-
-	$ANNOUNCEMENT = get_visible_announcement();
-}
-
-if(CURRENT_VERSION === $CFG['version']){
-	require PRIVATE_PATH.$current_page->model;
-}else{
-	// maintenance page
+if (CURRENT_VERSION !== $CFG['version']) {
+	// Display maintenance page.
 	$TEMPLATE = 'public/update.tpl';
+
+	$IS_ADMIN = false;
+	$MENU = array();
+	$STATES = array();
+} else {
+	// Display default pages.
+	require PRIVATE_PATH.'/php/common/authentification.php';
+
+	// load states
+	require PRIVATE_PATH.'/libs/states.php';
+	$STATES = get_states();
+
+	// load menu
+	require PRIVATE_PATH.'/libs/menu.php';
+
+	$MENU = get_active_menu();
+	if($IS_ADMIN === TRUE){
+		$ADMINISTRATION_MENU = get_administration_menu();
+	}
+
+	// routing
+	$PAGE_NAME = explode('/', get_page_name('index.php', TRUE));
+	if(isset($MENU[$PAGE_NAME[0]])){
+		$current_page = $MENU[$PAGE_NAME[0]];
+	}elseif(isset($ADMINISTRATION_MENU['Générale'][$PAGE_NAME[0]])){
+		$current_page = $ADMINISTRATION_MENU['Générale'][$PAGE_NAME[0]];
+	}elseif(isset($ADMINISTRATION_MENU['Avancée'][$PAGE_NAME[0]])){
+		$current_page = $ADMINISTRATION_MENU['Avancée'][$PAGE_NAME[0]];
+	}else{
+		if(isset($CFG['default_menu'], $MENU[$CFG['default_menu']])){
+			$current_page = $MENU[$CFG['default_menu']];
+		}else{
+			$current_page = current($MENU);
+		}
+	}
+	$current_page->selected = TRUE;
+
+	// load announcement
+	if(isset($MENU[$current_page->url])){
+		require PRIVATE_PATH.'/libs/announcements.php';
+
+		$ANNOUNCEMENT = get_visible_announcement();
+	}
+
+	require PRIVATE_PATH.$current_page->model;
 }
 
-if(!is_file(PUBLIC_PATH.'/styles/'.$CFG['theme'].'/theme.php')){
+if (isset($CFG['theme']) === false || is_file(PUBLIC_PATH.'/styles/'.$CFG['theme'].'/theme.php') === false) {
 	$CFG['theme'] = 'bootstrap';
 }
 

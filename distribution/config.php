@@ -45,8 +45,9 @@ define('LOGS_PATH', PRIVATE_PATH.'/logs');
 define('DB_PATH', 'sqlite:'.PRIVATE_PATH.'/database/isou.sqlite3');
 
 // Charge les fonctions et bibliothèques tierces.
-require_once PRIVATE_PATH.'/common/functions.php';
+require PRIVATE_PATH.'/common/functions.php';
 require PRIVATE_PATH.'/vendor/autoload.php';
+require PRIVATE_PATH.'/version.php';
 
 // Définis le logger.
 $LOGGER = new Logger('isou');
