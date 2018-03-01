@@ -1,346 +1,347 @@
 <?php
 
+/**
+ * Migre le schéma de données d'Isou en version 2.0.0.
+ */
+
 use Phinx\Migration\AbstractMigration;
 
-class Upgrade200 extends AbstractMigration
-{
-	/**
-	* Migrate Up.
-	*/
-	public function up()
-	{
-		$now = strftime('%FT%T');
+/**
+ * Classe de migration pour Phinx
+ */
+class Upgrade200 extends AbstractMigration {
+    /**
+     * Modifie la structure du schéma de la base de données.
+     *
+     * @throws Exception if any errors occur.
+     *
+     * @return void
+     */
+    public function change() {
+        echo PHP_EOL.' #';
+        echo PHP_EOL.' ## Migration du schéma en version 2.0.0.'.PHP_EOL;
 
+        // Configuration table.
+        $this->setup_configuration();
 
-		// Announcement table.
-		if ($this->hasTable('annonce')) {
-			echo ' ==  Announcement table...'.PHP_EOL;
+        // Announcement table.
+        $this->setup_announcement();
 
-			echo ' ==   - Delete "announcement" data.'.PHP_EOL;
-			$this->execute('DELETE FROM announcement');
+        // Categories table.
+        $this->setup_categories();
 
-			echo ' ==   - Migrate "announcement" data.'.PHP_EOL;
-			$table = $this->table('announcement');
-			$rows = $this->query('SELECT * FROM annonce');
-			foreach ($rows as $row) {
-				$data = [
-					'message' => $row['message'],
-					'visible' => $row['afficher'],
-					'author' => '',
-					'last_modification' => $now
-				];
-				$table->insert($data);
-			}
-			$table->saveData();
+        // Services table.
+        $this->setup_services();
 
-			echo ' ==   - Drop old "announcement" table.'.PHP_EOL;
-			$this->dropTable('annonce');
-		}
+        // Events table.
+        $this->setup_events();
 
+        // Dependencies table.
+        $this->setup_dependencies();
 
-		// Categories table.
-		if ($this->hasTable('categories_old')) {
-			echo ' ==  Categories table...'.PHP_EOL;
+        // Statistics table.
+        $this->setup_statistics();
+    }
 
-			echo ' ==   - Migrate "categories" data.'.PHP_EOL;
-			$table = $this->table('categories');
-			$rows = $this->query('SELECT * FROM categories_old');
-			foreach ($rows as $row) {
-				$data = [
-					'id' => $row['idCategory'],
-					'name' => $row['name'],
-					'position' => $row['position']
-				];
-				$table->insert($data);
-			}
-			$table->saveData();
+    public function setup_announcement() {
+        if ($this->hasTable('annonce') === true) {
+            echo PHP_EOL.' **  Table des annonces...'.PHP_EOL;
 
-			echo ' ==   - Drop old "categories" table.'.PHP_EOL;
-			$this->dropTable('categories_old');
-		}
+            echo ' ==   - Supprime les données de la table "announcement".'.PHP_EOL;
+            $this->execute('DELETE FROM announcement');
 
+            echo ' ==   - Migre les données dans la table "announcement".'.PHP_EOL;
+            $table = $this->table('announcement');
+            $rows = $this->query('SELECT * FROM annonce');
+            foreach ($rows as $row) {
+                $data = array(
+                    'message' => $row['message'],
+                    'visible' => $row['afficher'],
+                    'author' => '',
+                    'last_modification' => strftime('%FT%T'),
+                    );
+                $table->insert($data);
+            }
+            $table->saveData();
 
-		// Configuration table.
-		if ($this->hasTable('configuration_old')) {
-			echo ' ==  Configuration table...'.PHP_EOL;
+            echo ' ==   - Supprime l\'ancienne table "annonce".'.PHP_EOL;
+            $this->dropTable('annonce');
+        }
+    }
 
-			echo ' ==   - Migrate "configuration" data.'.PHP_EOL;
-			$rows = $this->query('SELECT * FROM configuration_old');
-			foreach ($rows as $row) {
-				$data = array('key' => $row['key'], 'value' => $row['value']);
+    public function setup_categories() {
+        if ($this->hasTable('categories_old') === true) {
+            echo PHP_EOL.' **  Table des catégories des services...'.PHP_EOL;
 
-				switch($row['key']){
-					case 'admin_mails':
-						$data['key'] = 'notification_receivers';
+            echo ' ==   - Migre les données dans la table "categories".'.PHP_EOL;
+            $table = $this->table('categories');
+            $rows = $this->query('SELECT * FROM categories_old');
+            foreach ($rows as $row) {
+                $data = array(
+                    'id' => $row['idCategory'],
+                    'name' => $row['name'],
+                    'position' => $row['position']
+                    );
+                $table->insert($data);
+            }
+            $table->saveData();
 
-						break;
-					case 'admin_users':
-						$data['key'] = 'authentification_cas_admin_usernames';
-						break;
-					case 'daily_cron_hour':
-						$data['key'] = 'notification_hour';
-						break;
-					case 'local_mail':
-						$data['key'] = 'notification_sender';
-						break;
-					case 'local_password':
-						$data['key'] = 'authentification_manual_password';
-						break;
-					case 'version':
-						$data['value'] = '2.0.0 alpha';
-						break;
-					case 'auto_backup';
-					case 'ip_local';
-					case 'ip_service';
-						continue 2;
-				}
+            echo ' ==   - Supprime l\'ancienne table "categories_old".'.PHP_EOL;
+            $this->dropTable('categories_old');
+        }
+    }
 
-				$this->execute('UPDATE configuration SET '.$row['key'].'="'.$row['value'].'" WHERE key="'.$row['key'].'"');
-			}
+    public function setup_configuration() {
+        if ($this->hasTable('configuration_old') === true) {
+            echo PHP_EOL.' **  Table de configuration...'.PHP_EOL;
 
-			echo ' ==   - Drop old "configuration" table.'.PHP_EOL;
-			$this->dropTable('configuration_old');
-		}
+            echo ' ==   - Migre les données dans la table "configuration".'.PHP_EOL;
+            $connection = $this->getAdapter()->getConnection();
+            $statement = $connection->prepare('UPDATE configuration SET value = :value WHERE key = :key');
 
+            $rows = $this->query('SELECT * FROM configuration_old');
+            foreach ($rows as $row) {
+                $data = array(':key' => $row['key'], ':value' => $row['value']);
 
-		// Dependencies_groups table.
-		if ($this->hasTable('dependencies')) {
-			echo ' ==  Dependencies table...'.PHP_EOL;
+                switch ($row['key']) {
+                    case 'admin_mails':
+                        $data[':key'] = 'notification_receivers';
+                        break;
+                    case 'admin_users':
+                        $data[':key'] = 'authentification_cas_admin_usernames';
+                        break;
+                    case 'daily_cron_hour':
+                        $data[':key'] = 'notification_hour';
+                        break;
+                    case 'local_mail':
+                        $data[':key'] = 'notification_sender';
+                        break;
+                    case 'local_password':
+                        $data[':key'] = 'authentification_manual_password';
+                        break;
+                    case 'version':
+                        $data[':value'] = '2.0.0';
+                        break;
+                    case 'auto_backup';
+                    case 'ip_local';
+                    case 'ip_service';
+                        continue 2;
+                }
 
-			// Migrate "dependencies" data.
-			echo ' ==   - Migrate "dependencies" data.'.PHP_EOL;
-			$dependencies_groups = array();
-			$dependencies_groups_content = array();
-			$dependencies_messages = array();
+                $statement->execute($data);
+            }
 
-			$rows = $this->query('SELECT * FROM dependencies');
-			foreach($rows as $row){
-				$idmessage = array_search($row['message'], $dependencies_messages);
-				if ($idmessage === false ){
-					$idmessage = count($dependencies_messages);
-					$dependencies_messages[$idmessage] = array('message' => $row['message']);
-				}
+            // Force l'utilisation de Nagios.
+            $data = array('key' => 'nagios_statusdat_enable', 'value' => 1);
+            $statement->execute($data);
+            $data = array('key' => 'nagios_statusdat_path', 'value' => '/var/share/nagios/status.dat');
+            $statement->execute($data);
 
-				$group_key = $row['idService'].'-'.$row['newStateForChild'];
-				if(!isset($dependencies_groups[$group_key])){
-					$dependencies_groups[$group_key] = [
-						'id' => count($dependencies_groups)+1,
-						'name' => 'Groupe non redondé',
-						'redundant' => 0,
-						'groupstate' => $row['newStateForChild'],
-						'idservice' => $row['idService'],
-						'idmessage' => $idmessage+1,
-					];
-				}
+            echo ' ==   - Supprime l\'ancienne table "configuration_old".'.PHP_EOL;
+            $this->dropTable('configuration_old');
+        }
+    }
 
-				$key = $dependencies_groups[$group_key]['id'].'-'.$row['idServiceParent'].'-'.$row['stateOfParent'];
-				$dependencies_groups_content[$key] = [
-					'idgroup' => $dependencies_groups[$group_key]['id'],
-					'idservice' => $row['idServiceParent'],
-					'servicestate' => $row['stateOfParent'],
-				];
-			}
+    public function setup_dependencies() {
+        if ($this->hasTable('dependencies') === true) {
+            echo PHP_EOL.' **  Tables des dépendances...'.PHP_EOL;
 
-			// Migrate "dependencies_groups" data.
-			echo ' ==   - Migrate "dependencies_groups" data.'.PHP_EOL;
-			$table = $this->table('dependencies_groups');
-			foreach ($dependencies_groups as $data){
-				$table->insert($data);
-			}
-			$table->saveData();
+            // Migrate "dependencies" data.
+            echo ' ==   - Migre les données dans la table "dependencies".'.PHP_EOL;
+            $dependencies_groups = array();
+            $dependencies_groups_contents = array();
+            $dependencies_messages = array();
 
-			// Migrate "dependencies_groups_content" data.
-			echo ' ==   - Migrate "dependencies_groups_content" data.'.PHP_EOL;
-			$table = $this->table('dependencies_groups_content', array('id' => false, 'primary_key' => array('idgroup', 'idservice', 'servicestate')));
-			foreach ($dependencies_groups_content as $data){
-				$table->insert($data);
-			}
-			$table->saveData();
+            $rows = $this->query('SELECT * FROM dependencies');
+            foreach($rows as $row){
+                $idmessage = array_search($row['message'], $dependencies_messages);
+                if ($idmessage === false) {
+                    $idmessage = count($dependencies_messages);
+                    $dependencies_messages[$idmessage] = array('message' => $row['message']);
+                }
 
-			// Migrate "dependencies_messages" data.
-			echo ' ==   - Migrate "dependencies_messages" data.'.PHP_EOL;
-			$table = $this->table('dependencies_messages');
-			foreach ($dependencies_messages as $data){
-				$table->insert($data);
-			}
-			$table->saveData();
+                $group_key = $row['idService'].'-'.$row['newStateForChild'];
+                if (isset($dependencies_groups[$group_key]) === false) {
+                    $dependencies_groups[$group_key] = [
+                        'id' => count($dependencies_groups) + 1,
+                        'name' => 'Groupe non redondé',
+                        'redundant' => 0,
+                        'groupstate' => $row['newStateForChild'],
+                        'idservice' => $row['idService'],
+                        'idmessage' => $idmessage + 1,
+                    ];
+                }
 
-			// Drop old "dependencies" table.
-			echo ' ==   - Drop old "dependencies" table.'.PHP_EOL;
-			$this->dropTable('dependencies');
-		}
+                $key = $dependencies_groups[$group_key]['id'].'-'.$row['idServiceParent'].'-'.$row['stateOfParent'];
+                $dependencies_groups_contents[$key] = array(
+                    'idgroup' => $dependencies_groups[$group_key]['id'],
+                    'idservice' => $row['idServiceParent'],
+                    'servicestate' => $row['stateOfParent'],
+                    );
+            }
 
+            // Migrate "dependencies_groups" data.
+            echo ' ==   - Migre les données dans la table "dependencies_groups".'.PHP_EOL;
+            $table = $this->table('dependencies_groups');
+            $table->insert(array_values($dependencies_groups));
+            $table->saveData();
 
-		// Events table.
-		if ($this->hasTable('events_old')) {
-			echo ' ==  Events table...'.PHP_EOL;
+            // Migrate "dependencies_groups_content" data.
+            echo ' ==   - Migre les données dans la table "dependencies_groups_content".'.PHP_EOL;
+            $table = $this->table('dependencies_groups_content');
+            $table->insert(array_values($dependencies_groups_contents));
+            $table->saveData();
 
-			// Migrate "events" data.
-			echo ' ==   - Migrate "events" data.'.PHP_EOL;
-			$table = $this->table('events');
-			$rows = $this->query('SELECT * FROM events_old eo, events_isou_old eio WHERE eo.idEvent=eio.idEvent');
-			foreach ($rows as $row) {
-				// TypeEvent values : 0 = Isou, 1 = Nagios, 2 = Message.
-				// IsScheduled values : 0 = unscheduled events, 1 = scheduled, 2 = regular, 3 = closed.
-				$period = null;
-				switch ($row['isScheduled']) {
-					case '0':
-						$state = 1;
-						$type = 0;
-						break;
-					case '1':
-						$state = 1;
-						$type = 1;
-						break;
-					case '2':
-						$period = $row['period'];
-						$state = 4;
-						$type = 1;
-						break;
-					case '3':
-						$state = 4;
-						$type = 1;
-						break;
-				}
+            // Migrate "dependencies_messages" data.
+            echo ' ==   - Migre les données dans la table "dependencies_messages".'.PHP_EOL;
+            $table = $this->table('dependencies_messages');
+            $table->insert(array_values($dependencies_messages));
+            $table->saveData();
 
-				$data = [
-					// 'id' => $row['idEvent'],
-					'begindate' => $row['beginDate'],
-					'enddate' => $row['endDate'],
-					'state' => $state,
-					'type' => $type,
-					'period' => $period,
-					'ideventdescription' => $row['idEventDescription'],
-					'idservice' => $row['idService'],
-				];
-				$table->insert($data);
-			}
+            // Drop old "dependencies" table.
+            echo ' ==   - Supprime l\'ancienne table "dependencies".'.PHP_EOL;
+            $this->dropTable('dependencies');
+        }
+    }
 
-			$rows = $this->query('SELECT * FROM events_old eo, events_nagios_old eno WHERE eo.idEvent=eno.idEvent');
-			foreach ($rows as $row) {
-				$data = [
-					// 'id' => $row['idEvent'],
-					'begindate' => $row['beginDate'],
-					'enddate' => $row['endDate'],
-					'state' => $row['state'],
-					'type' => 0,
-					'period' => null,
-					'ideventdescription' => 0,
-					'idservice' => $row['idService'],
-				];
-				$table->insert($data);
-			}
-			$table->saveData();
+    public function setup_events() {
+        if ($this->hasTable('events_old') === true) {
+            echo PHP_EOL.' **  Table des évènements...'.PHP_EOL;
 
-			// Drop old "events_old" table.
-			echo ' ==   - Drop old "events_old" table.'.PHP_EOL;
-			$this->dropTable('events_old');
+            // Migrate "events" data.
+            echo ' ==   - Migre les données dans la table "events".'.PHP_EOL;
+            $table = $this->table('events');
+            $rows = $this->query('SELECT * FROM events_old eo JOIN events_isou_old eio ON eo.idEvent = eio.idEvent WHERE eo.typeEvent = 0');
+            foreach ($rows as $row) {
+                if ($row['isScheduled'] === '2') {
+                    $period = $row['period'];
+                } else {
+                    $period = null;
+                }
 
-			// Drop old "events_isou_old" table.
-			echo ' ==   - Drop old "events_isou_old" table.'.PHP_EOL;
-			$this->dropTable('events_isou_old');
+                if ($row['isScheduled'] === '3') {
+                    $state = 4;
+                } else {
+                    $state = 2;
+                }
 
-			// Drop old "events_nagios_old" table.
-			echo ' ==   - Drop old "events_nagios_old" table.'.PHP_EOL;
-			$this->dropTable('events_nagios_old');
-		}
+                $data = array(
+                    'begindate' => $row['beginDate'],
+                    'enddate' => $row['endDate'],
+                    'state' => $state,
+                    'type' => $row['isScheduled'], // 0 = unscheduled events, 1 = scheduled, 2 = regular, 3 = closed.
+                    'period' => $period,
+                    'ideventdescription' => $row['idEventDescription'],
+                    'idservice' => $row['idService'],
+                    );
+                $table->insert($data);
+            }
 
+            $rows = $this->query('SELECT * FROM events_old eo JOIN events_nagios_old eno ON eo.idEvent = eno.idEvent WHERE eo.typeEvent = 1');
+            foreach ($rows as $row) {
+                $data = array(
+                    'begindate' => $row['beginDate'],
+                    'enddate' => $row['endDate'],
+                    'state' => $row['state'],
+                    'type' => 0, // 0 = unscheduled events.
+                    'period' => null,
+                    'ideventdescription' => 0,
+                    'idservice' => $row['idService'],
+                    );
+                $table->insert($data);
+            }
+            $table->saveData();
 
-		// Events_descriptions table.
-		if ($this->hasTable('events_description_old')) {
-			echo ' ==  Events_descriptions table...'.PHP_EOL;
+            // Migrate "events_descriptions" data.
+            echo ' ==   - Migre les données dans la table "events_descriptions".'.PHP_EOL;
+            $table = $this->table('events_descriptions');
+            $rows = $this->query('SELECT * FROM events_description_old');
+            foreach ($rows as $row) {
+                $data = array(
+                    'id' => $row['idEventDescription'],
+                    'description' => $row['description'],
+                    'autogen' => $row['autogen'],
+                    );
+                $table->insert($data);
+            }
+            $table->saveData();
 
-			// Migrate "events_descriptions" data.
-			echo ' ==   - Migrate "events_descriptions" data.'.PHP_EOL;
-			$table = $this->table('events_descriptions');
-			$rows = $this->query('SELECT * FROM events_description_old');
-			foreach ($rows as $row) {
-				$data = [
-					'id' => $row['idEventDescription'],
-					'description' => $row['description'],
-					'autogen' => $row['autogen'],
-				];
-				$table->insert($data);
-			}
-			$table->saveData();
+            // Drop old "events_old" table.
+            echo ' ==   - Supprime l\'ancienne table "events_old".'.PHP_EOL;
+            $this->dropTable('events_old');
 
-			// Drop old "events_description_old" table.
-			echo ' ==   - Drop old "events_description_old" table.'.PHP_EOL;
-			$this->dropTable('events_description_old');
-		}
+            // Drop old "events_isou_old" table.
+            echo ' ==   - Supprime l\'ancienne table "events_isou_old".'.PHP_EOL;
+            $this->dropTable('events_isou_old');
 
+            // Drop old "events_nagios_old" table.
+            echo ' ==   - Supprime l\'ancienne table "events_nagios_old".'.PHP_EOL;
+            $this->dropTable('events_nagios_old');
 
-		// Services table.
-		if ($this->hasTable('services')) {
-			echo ' ==  Services table...'.PHP_EOL;
+            // Drop old "events_description_old" table.
+            echo ' ==   - Supprime l\'ancienne table "events_description_old".'.PHP_EOL;
+            $this->dropTable('events_description_old');
 
-			// Migrate "services" data.
-			echo ' ==   - Migrate "services" data.'.PHP_EOL;
-			$table = $this->table('services');
-			$rows = $this->query('SELECT * FROM services_old');
-			foreach ($rows as $row) {
-				if (empty($row['nameForUsers'])) {
-					$idtype = 2; // Type Nagios.
-				} else {
-					$idtype = 1; // Type Isou.
-					$row['name'] = $row['nameForUsers'];
-				}
+            // Drop old "events_info" table.
+            echo ' ==   - Supprime l\'ancienne table "events_info".'.PHP_EOL;
+            $this->dropTable('events_info');
+        }
+    }
 
-				if (empty($row['url'])) {
-					$row['url'] = null;
-				}
+    public function setup_services() {
+        if ($this->hasTable('services_old') === true) {
+            echo PHP_EOL.' **  Table des services...'.PHP_EOL;
 
-				if (empty($row['comment'])) {
-					$row['comment'] = null;
-				}
+            // Migrate "services" data.
+            echo ' ==   - Migre les données dans la table "services".'.PHP_EOL;
+            $table = $this->table('services');
+            $rows = $this->query('SELECT * FROM services_old');
+            foreach ($rows as $row) {
+                if (empty($row['nameForUsers']) === true) {
+                    $idtype = 2; // Type Nagios.
+                } else {
+                    $idtype = 1; // Type Isou.
+                    $row['name'] = $row['nameForUsers'];
+                }
 
-				$data = [
-					'id' => $row['idService'],
-					'name' => $row['name'],
-					'url' => $row['url'],
-					'state' => $row['state'],
-					'comment' => $row['comment'],
-					'enable' => $row['enable'],
-					'visible' => $row['visible'],
-					'locked' => $row['readonly'],
-					'rsskey' => $row['rssKey'],
-					'idtype' => $idtype,
-					'idcategory' => $row['idCategory']
-				];
-				$table->insert($data);
-			}
-			$table->saveData();
+                if (empty($row['url']) === true) {
+                    $row['url'] = null;
+                }
 
-			// Drop old "services_old" table.
-			echo ' ==   - Drop old "services_old" table.'.PHP_EOL;
-			$this->dropTable('services_old');
-		}
+                if (empty($row['comment']) === true) {
+                    $row['comment'] = null;
+                }
 
+                $data = array(
+                    'id' => $row['idService'],
+                    'name' => $row['name'],
+                    'url' => $row['url'],
+                    'state' => $row['state'],
+                    'comment' => $row['comment'],
+                    'enable' => $row['enable'],
+                    'visible' => $row['visible'],
+                    'locked' => $row['readonly'],
+                    'rsskey' => $row['rssKey'],
+                    'idtype' => $idtype,
+                    'idcategory' => $row['idCategory'],
+                    );
+                $table->insert($data);
+            }
+            $table->saveData();
 
-		// Events_info table.
-		if ($this->hasTable('events_info')) {
-			echo ' ==  Events_info table...'.PHP_EOL;
+            // Drop old "services_old" table.
+            echo ' ==   - Supprime l\'ancienne table "services_old".'.PHP_EOL;
+            $this->dropTable('services_old');
+        }
+    }
 
-			// Drop old "events_info" table.
-			echo ' ==   - Drop old "events_info" table.'.PHP_EOL;
-			$this->dropTable('events_info');
-		}
+    public function setup_statistics() {
+        if ($this->hasTable('statistics') === true) {
+            echo PHP_EOL.' **  Tables des statistiques...'.PHP_EOL;
 
-		// Statistics table.
-		if ($this->hasTable('statistics')) {
-			echo ' ==  Statistics table...'.PHP_EOL;
-
-			// Drop old "statistics" table.
-			echo ' ==   - Drop old "statistics" table.'.PHP_EOL;
-			$this->dropTable('statistics');
-		}
-	}
-
-	/**
-	* Migrate Down.
-	*/
-	public function down()
-	{
-
-	}
+            // Drop old "statistics" table.
+            echo ' ==   - Supprime l\'ancienne table "statistics".'.PHP_EOL;
+            $this->dropTable('statistics');
+        }
+    }
 }
