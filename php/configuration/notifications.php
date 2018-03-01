@@ -1,6 +1,6 @@
 <?php
 
-$TITLE = NAME.' - Configuration de l\'authentification';
+$TITLE .= ' - Configuration de l\'authentification';
 
 $options_yes_no = array(1 => 'yes', 0 => 'no');
 

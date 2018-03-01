@@ -15,9 +15,6 @@ $smarty = new Smarty();
 $smarty->setTemplateDir(PRIVATE_PATH.'/html/');
 $smarty->setCompileDir(PRIVATE_PATH.'/cache/smarty/');
 
-// set title
-$TITLE = NAME;
-
 // load scripts
 require PRIVATE_PATH.'/classes/helpers/script.php';
 $SCRIPTS = array();
@@ -38,6 +35,13 @@ if($query = $DB->query($sql)){
 			$CFG[$config->key] = $config->value;
 		}
 	}
+}
+
+// set title
+if (isset($CFG['site_name']) === true) {
+    $TITLE = $CFG['site_name'];
+} else {
+    $TITLE = 'Isou';
 }
 
 if (CURRENT_VERSION !== $CFG['version']) {

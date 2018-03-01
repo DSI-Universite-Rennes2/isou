@@ -31,7 +31,7 @@
 
 <div class="container">
 	<header class="page-header" role="banner">
-		<h1 id="isou-header">{$smarty.const.HEADER}</h1>
+		<h1 id="isou-header">{$CFG.site_header}</h1>
 	</header>
 
 	{if count($MENU) > 1 || isset($ADMINISTRATION_MENU)}

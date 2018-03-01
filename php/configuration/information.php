@@ -1,6 +1,6 @@
 <?php
 
-$TITLE = NAME.' - Affichage d\'informations';
+$TITLE .= ' - Affichage d\'informations';
 
 $HTMLPurifier = new HTMLPurifier();
 $smarty->assign('HTMLPurifierVersion', $HTMLPurifier->version);

@@ -1,6 +1,6 @@
 <?php
 
-$TITLE = NAME.' - Changelog';
+$TITLE .= ' - Changelog';
 
 $_POST['error'] = array();
 $newversion = array();

@@ -1,6 +1,6 @@
 <?php
 
-$TITLE = NAME.' - Configuration de l\'authentification';
+$TITLE .= ' - Configuration de l\'authentification';
 
 $cas_admin_usernames = implode(PHP_EOL, $CFG['authentification_cas_admin_usernames']);
 

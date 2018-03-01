@@ -4,7 +4,7 @@ require_once PRIVATE_PATH.'/libs/events.php';
 require_once PRIVATE_PATH.'/libs/services.php';
 require_once PRIVATE_PATH.'/classes/helpers/simple_menu.php';
 
-$TITLE = NAME.' - Historique des évènements';
+$TITLE .= ' - Historique des évènements';
 
 if(isset($PAGE_NAME[2]) && ctype_digit($PAGE_NAME[2])){
 	$page = $PAGE_NAME[2];

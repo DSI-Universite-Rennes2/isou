@@ -5,7 +5,7 @@ use UniversiteRennes2\Isou\Service;
 require_once PRIVATE_PATH.'/libs/events.php';
 require_once PRIVATE_PATH.'/libs/services.php';
 
-$TITLE = NAME.' - Journal';
+$TITLE .= ' - Journal';
 
 foreach (get_services(array('type' => Service::TYPE_ISOU, 'visible' => true)) as $service) {
 	$services[$service->id] = $service->name;

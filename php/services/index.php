@@ -3,7 +3,7 @@
 require_once PRIVATE_PATH.'/libs/services.php';
 require_once PRIVATE_PATH.'/classes/helpers/simple_menu.php';
 
-$TITLE = NAME.' - Administration des services';
+$TITLE .= ' - Administration des services';
 
 if(!isset($PAGE_NAME[1])){
 	$PAGE_NAME[1] = '';

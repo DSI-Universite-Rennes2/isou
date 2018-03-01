@@ -1,6 +1,6 @@
 <?php
 
-$TITLE = NAME.' - Configuration de logiciels de monitoring utilisés en arrière-plan d\'isou';
+$TITLE .= ' - Configuration de logiciels de monitoring utilisés en arrière-plan d\'isou';
 
 $options_yes_no = array(1 => 'yes', 0 => 'no');
 

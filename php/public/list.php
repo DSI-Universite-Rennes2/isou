@@ -6,7 +6,7 @@ require_once PRIVATE_PATH.'/libs/events.php';
 require_once PRIVATE_PATH.'/libs/services.php';
 require_once PRIVATE_PATH.'/libs/categories.php';
 
-$TITLE = NAME.' - Liste';
+$TITLE .= ' - Liste';
 
 $since = new DateTime();
 $since->sub(new DateInterval('P2D')); // TODO: create CFG variable

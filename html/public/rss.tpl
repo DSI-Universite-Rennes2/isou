@@ -2,7 +2,7 @@
 
 <rss version="2.0">
 	<channel>
-		<title><![CDATA[{$smarty.const.HEADER}]]></title>
+		<title><![CDATA[{$site_header|unescape:"htmlall"}]]></title>
 		<description>Liste des interruptions des services informatiques de l'université</description>
 		<language>fr</language>
 		<lastBuildDate>{$last_build_date} GMT</lastBuildDate>

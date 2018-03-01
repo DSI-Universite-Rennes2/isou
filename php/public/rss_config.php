@@ -2,7 +2,7 @@
 
 use UniversiteRennes2\Isou\Service;
 
-$TITLE = NAME.' - Configuration Flux RSS';
+$TITLE .= ' - Configuration Flux RSS';
 
 require_once PRIVATE_PATH.'/libs/services.php';
 require_once PRIVATE_PATH.'/libs/categories.php';

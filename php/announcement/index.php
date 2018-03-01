@@ -2,7 +2,7 @@
 
 require PRIVATE_PATH.'/libs/announcements.php';
 
-$TITLE = NAME.' - Annonce';
+$TITLE .= ' - Annonce';
 
 $announcement = get_announcement();
 

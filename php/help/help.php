@@ -1,7 +1,5 @@
 <?php
 
-	$TITLE = NAME.' - Aide';
+$TITLE .= ' - Aide';
 
-	$template = 'help/help.tpl';
-
-?>
+$template = 'help/help.tpl';

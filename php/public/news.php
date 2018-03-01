@@ -7,7 +7,7 @@ require_once PRIVATE_PATH.'/libs/events.php';
 require_once PRIVATE_PATH.'/libs/services.php';
 require_once PRIVATE_PATH.'/libs/categories.php';
 
-$TITLE = NAME.' - Actualité';
+$TITLE .= ' - Actualité';
 
 $services = array();
 $categories = array();

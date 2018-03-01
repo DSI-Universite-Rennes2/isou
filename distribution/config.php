@@ -12,12 +12,6 @@ define('DEBUG', false);
 // Définis si l'application est en mode developpement (désactive la phase d'authentification).
 define('DEV', false);
 
-// Définis le nom du service, notamment utilisé dans l'onglet du navigateur.
-define('NAME', 'Isou');
-
-// Définis le titre utilisé en entête sur toutes les pages.
-define('HEADER', 'ISOU : État des services numériques offerts par l\'Université');
-
 // Définis le nom de domaine du serveur CAS (sans protocole le https://).
 define('CAS_URL', '');
 

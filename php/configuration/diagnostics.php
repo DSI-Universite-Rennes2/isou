@@ -1,6 +1,6 @@
 <?php
 
-$TITLE = NAME.' - Configuration de l\'authentification';
+$TITLE .= ' - Configuration de l\'authentification';
 
 $errors = array();
 $errors['Fichier config.php'] = array();

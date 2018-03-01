@@ -1,6 +1,6 @@
 <?php
 
-$TITLE = NAME.' - Contact';
+$TITLE .= ' - Contact';
 
 $sql = "SELECT message FROM contact";
 $query = $DB->prepare($sql);

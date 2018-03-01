@@ -7,7 +7,7 @@ use UniversiteRennes2\Isou\State;
 require_once PRIVATE_PATH.'/libs/events.php';
 require_once PRIVATE_PATH.'/libs/services.php';
 
-$TITLE = NAME.' - Calendrier';
+$TITLE .= ' - Calendrier';
 
 $_GET['page'] = 1;
 if(isset($PAGE_NAME[1]) && ctype_digit($PAGE_NAME[1])){

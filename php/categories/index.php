@@ -2,7 +2,7 @@
 
 require PRIVATE_PATH.'/libs/categories.php';
 
-$TITLE = NAME.' - Administration des catégories';
+$TITLE .= ' - Administration des catégories';
 
 if(!isset($PAGE_NAME[1])){
 	$PAGE_NAME[1] = '';

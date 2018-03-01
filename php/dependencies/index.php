@@ -3,7 +3,7 @@
 require_once PRIVATE_PATH.'/libs/dependencies.php';
 require_once PRIVATE_PATH.'/libs/services.php';
 
-$TITLE = NAME.' - Administration des dépendances';
+$TITLE .= ' - Administration des dépendances';
 
 if(!isset($PAGE_NAME[1])){
 	$PAGE_NAME[1] = '';

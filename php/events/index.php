@@ -5,7 +5,7 @@ require_once PRIVATE_PATH.'/libs/events_descriptions.php';
 require_once PRIVATE_PATH.'/libs/services.php';
 require_once PRIVATE_PATH.'/classes/helpers/simple_menu.php';
 
-$TITLE = NAME.' - Administration des évènements';
+$TITLE .= ' - Administration des évènements';
 
 if(!isset($PAGE_NAME[1])){
 	$PAGE_NAME[1] = 'prevus';
