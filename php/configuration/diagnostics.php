@@ -26,6 +26,10 @@ if(preg_match('/define\(.DB_STAT_PATH/', $config) === 1){
 	$errors['Fichier config.php'][] = 'La constante <code>DB_STAT_PATH</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
 }
 
+if(preg_match('/define\(.VERSION/', $config) === 1){
+	$errors['Fichier config.php'][] = 'La constante <code>VERSION</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
+}
+
 if (is_file(PUBLIC_PATH.'/config.php') === true) {
     $errors['Fichier config.php'][] = 'Le fichier <code>'.PUBLIC_PATH.'/config.php</code> n\'est plus utilisé. Vous pouvez le supprimer.';
 }
@@ -43,4 +47,3 @@ if (isset($CFG['last_cron_update']) === false || empty($CFG['last_cron_update'])
 $smarty->assign('errors', $errors);
 
 $SUBTEMPLATE = 'configuration/diagnostics.tpl';
-

@@ -73,6 +73,3 @@ if (DEBUG === true) {
 }else{
 	ini_set('display_errors', 'Off');
 }
-
-// Définis le numero de version de l'application.
-define('VERSION', '0.9.5');
