@@ -26,11 +26,6 @@
 	</div>
 
 	<div class="form-information-dl-div">
-		<dt class="form-topics-dt">jQuery</dt>
-		<dd class="form-values-dd" id="jquery-version">Non définie</dd>
-	</div>
-
-	<div class="form-information-dl-div">
 		<dt class="form-topics-dt">phpCAS</dt>
 		<dd class="form-values-dd">{$phpCASVersion}</dt>
 	</div>
