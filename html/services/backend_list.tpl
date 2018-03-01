@@ -10,7 +10,7 @@
 	{if count($services) === 0}
 		<p>Aucun service {$backend->name} utilisé</p>
 	{else}
-	<table class="table" summary="liste des services {$backend->name}">
+	<table class="table table-condensed" summary="liste des services {$backend->name}">
 		<caption>{count($services)} services {$backend->name} gérés dans Isou</caption>
 		<thead>
 		<tr>

@@ -1,7 +1,7 @@
 <main role="main">
 <article id="content">
 
-<table id="list" class="table table-bordered" summary="Tableau des perturbations et interruptions de services Rennes 2">
+<table id="list" class="table table-bordered table-condensed" summary="Tableau des perturbations et interruptions de services Rennes 2">
 	<caption class="text-center">Tableau des services monitorés</caption>
 	<thead>
 		<tr class="header">
@@ -10,10 +10,10 @@
 			{foreach $days as $i => $day}
 				{if $i === 0}
 				<th id="lth3" class="thWide">Aujourd'hui</th>
-				{elseif $i=== 1}
+				{elseif $i === 1}
 				<th id="lth3" class="thWide">Hier</th>
 				{else}
-				<th id="lth3" class="thWide">{$day|date_format:"%A"}</th>
+				<th id="lth3" class="thWide">{$day|date_format:"%A&nbsp;%e"}</th>
 				{/if}
 			{/foreach}
 			<th id="lth2">Taux de disponibilité</th>

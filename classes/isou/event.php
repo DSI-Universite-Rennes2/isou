@@ -41,7 +41,7 @@ class Event{
 			$this->id = 0;
 			$this->begindate = new \DateTime();
 			$this->enddate = NULL;
-			$this->state = State::WARNING;
+			$this->state = State::CRITICAL;
 			$this->type = self::TYPE_SCHEDULED;
 			$this->period = '0';
 			$this->ideventdescription = 1;

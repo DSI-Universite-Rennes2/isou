@@ -11,7 +11,7 @@
 	<p>Aucune catégorie.</p>
 {else}
 
-<table class="table table-bordered" summary="liste des categories">
+<table class="table table-bordered table-condensed" summary="liste des categories">
 <caption class="text-center">Liste des catégories</caption>
 <thead>
 	<tr class="categories-tr">

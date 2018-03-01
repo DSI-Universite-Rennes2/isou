@@ -67,6 +67,15 @@ function get_services($options=array()){
 		} else {
 			$LOGGER->addInfo('L\'option \'locked\' doit être un booléan.', array('value', $options['locked']));
 		}
+    }
+
+	if (isset($options['state'])) {
+		if (ctype_digit($options['state'])) {
+			$conditions[] = 's.state = ?';
+			$params[] = $options['state'];
+		} else {
+			$LOGGER->addInfo('L\'option \'state\' doit être un entier.', array('value', $options['state']));
+		}
 	}
 
 	if (isset($options['visible'])) {

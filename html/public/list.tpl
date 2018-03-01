@@ -14,7 +14,7 @@
 	</ul>
 </div>
 
-<table class="table table-bordered" summary="Tableau des perturbations et interruptions de services">
+<table class="table table-bordered table-condensed" summary="Tableau des perturbations et interruptions de services">
 	<caption class="text-center">Tableau des services monitorés</caption>
 	<thead>
 		<tr>

@@ -72,7 +72,7 @@
 	<p id="resultat" class="alert alert-info">Aucun résultat</p>
 	{else}
 
-	<table class="table table-bordered" id="resultat" summary="Historique des interruptions">
+	<table class="table table-bordered table-condensed" id="resultat" summary="Historique des interruptions">
 	<caption class="text-center">Historique des interruptions : {$count_events} {if $count_events > 1}évènements trouvés{else}évènement trouvé{/if}.</caption>
 	<thead>
 		<tr>

@@ -13,7 +13,7 @@
 {if !isset($category->services[0])}
 <p class="alert alert-info">Cette catégorie ne contient aucun service Isou</p>
 {else}
-<table class="table" summary="liste des services ISOU de la catégorie {$category->name}">
+<table class="table table-condensed" summary="liste des services ISOU de la catégorie {$category->name}">
 {* <!-- <caption class="services-caption"></caption> --> *}
 <thead>
 	<tr>

@@ -16,9 +16,12 @@ $days = array();
 for($i=0;$i<7;$i++){
 	$days[$i] = new DateTime(strftime('%Y-%m-%d', TIME-($i*24*60*60)));
 
+	$since = clone $days[$i];
+	$before = clone $days[$i];
+
 	$options = array();
-	$options['since'] = clone $days[$i]->setTime(0, 0, 0);
-	$options['before'] = clone $days[$i]->setTime(23, 59, 60);
+	$options['since'] = $since->setTime(0, 0, 0);
+	$options['before'] = $before->setTime(23, 59, 59);
 	$options['service_type'] = Service::TYPE_ISOU;
 
 	$events = get_events($options);
