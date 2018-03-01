@@ -5,6 +5,8 @@ namespace UniversiteRennes2\Isou;
 class Event{
 	const TYPE_UNSCHEDULED = '0';
 	const TYPE_SCHEDULED = '1';
+	const TYPE_REGULAR = '2';
+	const TYPE_CLOSED = '3';
 
 	public $id;
 	public $begindate;
@@ -16,8 +18,17 @@ class Event{
 	public $description;
 	public $idservice;
 
-	public static $TYPES = array(self::TYPE_SCHEDULED => 'Évènement prévu', self::TYPE_UNSCHEDULED => 'Évènement imprévu');
-	public static $PERIODS = array('0' => 'Aucune', '86400' => 'Tous les jours', '604800' => 'Toutes les semaines');
+	public static $TYPES = array(
+		self::TYPE_SCHEDULED => 'Évènement prévu',
+		self::TYPE_UNSCHEDULED => 'Évènement imprévu',
+		self::TYPE_REGULAR => 'Évènement régulier',
+		self::TYPE_CLOSED => 'Service fermé',
+		);
+	public static $PERIODS = array(
+		'0' => 'Aucune',
+		'86400' => 'Tous les jours',
+		'604800' => 'Toutes les semaines',
+		);
 
 	public function __construct(){
 		if(isset($this->id)){
@@ -242,7 +253,7 @@ class Event{
 		if($description !== NULL){
 			$this->description = $description;
 		}
-		$description = get_description_by_content($this->description);
+		$description = get_event_description_by_content($this->description);
 
 		if($description === FALSE){
 			$sql = "INSERT INTO events_descriptions(description, autogen) VALUES(?,?)";
