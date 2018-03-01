@@ -25,18 +25,24 @@ foreach(array('site_name', 'site_header', 'tolerance', 'menu_default', 'theme') 
 }
 
 if(isset($_POST['menus_active']) && is_array($_POST['menus_active'])){
-	$sql = "UPDATE menu SET active=0";
+	$sql = "UPDATE menus SET active=0";
 	$query = $DB->prepare($sql);
 	$query->execute();
 
-	$active_menus = array();
+	$active = array();
 
 	foreach($_POST['menus_active'] as $menu_active){
-		$sql = "UPDATE menu SET active=1 WHERE url=?";
+		$sql = "UPDATE menus SET active=1 WHERE url=?";
 		$query = $DB->prepare($sql);
 		$query->execute(array($menu_active));
 
-		$menus_active[] = $menu_active;
+		$active[] = $menu_active;
+	}
+
+	if ($active !== $menus_active) {
+		$menus_active = $active;
+
+		$_POST['successes'][] = 'Mise à jour des menus';
 	}
 
 	$MENU = get_active_menu();
