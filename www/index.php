@@ -94,11 +94,11 @@ if (CURRENT_VERSION !== $CFG['version']) {
 	require PRIVATE_PATH.$current_page->model;
 }
 
-if (isset($CFG['theme']) === false || is_file(PUBLIC_PATH.'/styles/'.$CFG['theme'].'/theme.php') === false) {
+if (isset($CFG['theme']) === false || is_file(PUBLIC_PATH.'/themes/'.$CFG['theme'].'/theme.php') === false) {
 	$CFG['theme'] = 'bootstrap';
 }
 
-require PUBLIC_PATH.'/styles/'.$CFG['theme'].'/theme.php';
+require PUBLIC_PATH.'/themes/'.$CFG['theme'].'/theme.php';
 
 $smarty->assign('TITLE', $TITLE);
 $smarty->assign('SCRIPTS', $SCRIPTS);
@@ -125,5 +125,3 @@ $smarty->display('common/html_body_footer.tpl');
 $DB = null;
 
 unset($_SESSION['messages']);
-
-?>

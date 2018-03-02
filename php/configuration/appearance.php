@@ -6,9 +6,10 @@ $menus = get_menu_sorted_by_url();
 $menus_active = array_keys(get_active_menu_sorted_by_url());
 
 $themes = array();
-if($handle = opendir(PUBLIC_PATH.'/styles')){
+$themes_path = PUBLIC_PATH.'/themes';
+if($handle = opendir($themes_path)){
 	while(($entry = readdir($handle)) !== FALSE){
-		if(ctype_alnum($entry) && is_dir(PUBLIC_PATH.'/styles/'.$entry)){
+		if (ctype_alnum($entry) === true && is_dir($themes_path.'/'.$entry) === true) {
 			$themes[$entry] = $entry;
 		}
 	}
@@ -55,4 +56,3 @@ $smarty->assign('themes', $themes);
 $smarty->assign('menus_active', $menus_active);
 
 $SUBTEMPLATE = 'configuration/appearance.tpl';
-

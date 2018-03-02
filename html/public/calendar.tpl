@@ -7,11 +7,11 @@
 	{* <!-- titre du calendrier --> *}
 	<caption class="text-center">
 	{if $smarty.get.page > 1}
-		<a title="Semaine précédente" href="{$smarty.const.URL}/index.php/calendrier/{$smarty.get.page-1}"><img src="{$smarty.const.URL}/images/action_back.gif" alt="précédent" width="16px" height="16px" /></a>
+		<a class="btn btn-xs btn-success" href="{$smarty.const.URL}/index.php/calendrier/{$smarty.get.page-1}">Page précédente</a>
 	{/if}
 		&nbsp;Calendrier des interventions &nbsp;
 	{if $smarty.get.page < 5}
-		<a href="{$smarty.const.URL}/index.php/calendrier/{$smarty.get.page+1}" title="Semaine suivante"><img src="{$smarty.const.URL}/images/action_forward.gif" alt="suivant" width="16px" height="16px" /></a>
+		<a class="btn btn-xs btn-success" href="{$smarty.const.URL}/index.php/calendrier/{$smarty.get.page+1}">Page suivante</a>
 	{/if}
 	</caption>
 

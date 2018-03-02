@@ -14,21 +14,21 @@
 		<caption>{count($services)} services {$backend->name} gérés dans Isou</caption>
 		<thead>
 		<tr>
-			<th class="col-md-2" id="head-state">État actuel du service</th>
-			<th class="col-md-3" id="head-name">Nom informatique du service</th>
-			<th class="col-md-1" id="head-action">Actions</th>
-			<th class="col-md-5" id="head-note">Note</th>
+			<th class="col-md-2" id="head-state">État actuel</th>
+			<th class="col-md-4" id="head-name">Nom du service</th>
+			<th class="col-md-2" id="head-action">Actions</th>
+			<th class="col-md-4" id="head-note">Notes</th>
 		</tr>
 		</thead>
 		<tbody>
 		{foreach $services as $service}
 		<tr>
-			<td headers="head-state">{$STATES[{$service->state}]->get_flag_html_renderer()}</td>
+			<td headers="head-state">{$STATES[{$service->state}]}</td>
 			<td headers="head-name">{$service->name}</td>
 			<td headers="head-action">
 				<ul class="list-inline">
-					<li><a href="{$smarty.const.URL}/index.php/services/{$backend->url}/edit/{$service->id}"><img src="{$smarty.const.URL}/images/edit.png" alt="modifier" width="16px" height="16px" /></a></li>
-					<li><a href="{$smarty.const.URL}/index.php/services/{$backend->url}/delete/{$service->id}"><img src="{$smarty.const.URL}/images/drop.png" alt="supprimer" width="16px" height="16px" /></a></li>
+					<li><a class="btn btn-xs btn-primary" href="{$smarty.const.URL}/index.php/services/{$backend->url}/edit/{$service->id}">modifier</a></li>
+					<li><a class="btn btn-xs btn-danger" href="{$smarty.const.URL}/index.php/services/{$backend->url}/delete/{$service->id}">supprimer</a></li>
 				</ul>
 			</td>
 			<td headers="head-note">

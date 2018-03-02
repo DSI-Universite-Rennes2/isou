@@ -45,7 +45,7 @@
 			{else}
 			<td headers="lth1" class="text-left"><a href="{$service->url}" title="Accéder à la page du service {$service->name|escape:'html':'UTF-8'}">{$service->name}</a></td>
 			{/if}
-			<td headers="lth2">{$STATES[$service->state]->get_flag_html_renderer()}</td>
+			<td headers="lth2">{$STATES[$service->state]}</td>
 			{if $service->is_closed === TRUE}
 			{* service fermé *}
 			<td headers="lth4" colspan="5" class="text-center">

@@ -1,3 +1,12 @@
+details {
+    background: #F5F5F5;
+}
+
+summary {
+    background: #FFFFFF;
+    display: list-item;
+}
+
 .alert a{
 	text-decoration: underline;
 }
@@ -84,4 +93,3 @@ label > input[type=checkbox], label > input[type=radio]{
 #event-services {
 	height: 200px;
 }
-

@@ -7,7 +7,7 @@
 
 	<title>{$TITLE}</title>
 
-	<link rel="shortcut icon" type="image/png" href="{$smarty.const.URL}/styles/{$CFG.theme}/favicon.png" />
+	<link rel="shortcut icon" type="image/png" href="{$smarty.const.URL}/themes/{$CFG.theme}/favicon.png" />
 
 	{foreach $STYLES as $STYLE}
 	<link href="{$STYLE->url}" type="text/css" media="{$STYLE->media}" rel="{$STYLE->rel}" />

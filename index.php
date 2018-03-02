@@ -9,9 +9,9 @@
 
 	<title>ISOU - Problème de configuration</title>
 
-	<link rel="shortcut icon" type="image/png" href="www/styles/bootstrap/favicon.png" />
+	<link rel="shortcut icon" type="image/png" href="www/themes/bootstrap/favicon.png" />
 
-	<link href="www/styles/bootstrap/css/bootstrap.min.css" type="text/css" media="screen" rel="stylesheet" />
+	<link href="www/themes/bootstrap/css/bootstrap.min.css" type="text/css" media="screen" rel="stylesheet" />
 </head>
 <body role="document">
 

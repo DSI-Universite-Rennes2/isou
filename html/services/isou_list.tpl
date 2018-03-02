@@ -8,17 +8,18 @@
 
 {foreach $categories as $i => $category}
 
-<h2>{$category->name}</h2>
-
 {if !isset($category->services[0])}
 <p class="alert alert-info">Cette catégorie ne contient aucun service Isou</p>
 {else}
+<details open>
+<summary>{$category->name}</summary>
+
 <table class="table table-condensed" summary="liste des services ISOU de la catégorie {$category->name}">
 {* <!-- <caption class="services-caption"></caption> --> *}
 <thead>
 	<tr>
-		<th class="col-md-2" id="head-state-{$i}">État service du service</th>
-		<th class="col-md-4" id="head-name-{$i}">Nom du service pour les usagers</th>
+		<th class="col-md-2" id="head-state-{$i}">État actuel</th>
+		<th class="col-md-4" id="head-name-{$i}">Nom du service</th>
 		<th class="col-md-2" id="head-action-{$i}">Actions</th>
 		<th class="col-md-4" id="head-note-{$i}">Notes</th>
 	</tr>
@@ -26,7 +27,7 @@
 <tbody>
 	{foreach $category->services as $service}
 	<tr{if !empty($service->css)} class="{$service->css}"{/if}>
-		<td headers="head-state-{$i}">{$STATES[{$service->state}]->get_flag_html_renderer()}</td>
+		<td headers="head-state-{$i}">{$STATES[{$service->state}]}</td>
 		<td id="service-{$service->id}" headers="head-name-{$i}">
 			{$service->name}
 			{if $service->url !== NULL}
@@ -35,9 +36,9 @@
 		</td>
 		<td headers="head-action-{$i}">
 		<ul class="list-inline">
-			<li><a href="{$smarty.const.URL}/index.php/services/isou/inspect/{$service->id}" title="inspecter"><img src="{$smarty.const.URL}/styles/{$CFG.theme}/images/inspect.gif" alt="inspecter" width="16px" height="16px" /></a></li>
-			<li><a href="{$smarty.const.URL}/index.php/services/isou/edit/{$service->id}" title="modifier"><img src="{$smarty.const.URL}/styles/{$CFG.theme}/images/edit.gif" alt="modifier" width="16px" height="16px" /></a></li>
-			<li><a href="{$smarty.const.URL}/index.php/services/isou/delete/{$service->id}" title="supprimer"><img src="{$smarty.const.URL}/styles/{$CFG.theme}/images/delete.gif" alt="supprimer" width="16px" height="16px" /></a></li>
+			<!-- <li><a class="btn btn-xs btn-default" href="{$smarty.const.URL}/index.php/services/isou/inspect/{$service->id}">inspecter</a></li> -->
+			<li><a class="btn btn-xs btn-primary" href="{$smarty.const.URL}/index.php/services/isou/edit/{$service->id}">modifier</a></li>
+			<li><a class="btn btn-xs btn-danger" href="{$smarty.const.URL}/index.php/services/isou/delete/{$service->id}">supprimer</a></li>
 		</ul>
 		</td>
 		<td headers="head-note-{$i}">
@@ -54,6 +55,8 @@
 	{/foreach}
 </tbody>
 </table>
+
+</details>
 {/if}
 {/foreach}
 {/if}

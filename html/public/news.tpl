@@ -13,7 +13,7 @@
 	<dl id="isou-news-legend-dl">
 	{foreach $STATES as $STATE}
 		<div>
-			<dt class="isou-news-legend-dt">{$STATE->get_flag_html_renderer()}</dt>
+			<dt class="isou-news-legend-dt">{$STATE}</dt>
 			<dd class="isou-news-legend-dd">{$STATE->title}</dd>
 		</div>
 	{/foreach}
@@ -26,7 +26,7 @@
 	<ul class="services-ul">
 	{foreach $category->services as $service}
 		<li class="services-li" id="service-{$service->id}">
-			{$STATES[$service->state]->get_flag_html_renderer()}&nbsp;
+			{$STATES[$service->state]}&nbsp;
 			{if $service->url === NULL}
 			<span class="state-{$service->state}">{$service->name}</span>
 			{else}

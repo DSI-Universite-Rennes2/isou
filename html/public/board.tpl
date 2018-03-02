@@ -27,7 +27,7 @@
 		{foreach $category->services as $service}
 		<tr>
 			<td headers="lth1" class="left">{$service->name}</td>
-			<td headers="lth2">{$STATES[$service->state]->get_flag_html_renderer()}</td>
+			<td headers="lth2">{$STATES[$service->state]}</td>
 			{foreach $service->availabilities as $availability}
 			{if $availability > 89}
 			<td headers="lth2" class="success">{$availability}%</td>

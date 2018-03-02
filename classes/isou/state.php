@@ -43,9 +43,13 @@ class State{
 		}
 	}
 
-	public function get_flag_html_renderer(){
-		return '<img src="'.URL.'/images/'.$this->image.'" alt="'.$this->alternate_text.'" width="16px" height="16px" />';
+	public function __tostring() {
+		return $this->get_flag_html_renderer();
+	}
+
+	public function get_flag_html_renderer() {
+		global $CFG;
+
+		return '<img src="'.URL.'/themes/'.$CFG['theme'].'/images/'.$this->image.'" alt="'.$this->alternate_text.'" width="16px" height="16px" />';
 	}
 }
-
-?>

@@ -17,7 +17,7 @@
 
 {if !isset($events[0])}
 
-<p class="alert alert-info">Aucune interruption enregistrée</p>
+<p class="alert alert-info">Aucune interruption enregistrée.</p>
 
 {else}
 

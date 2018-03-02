@@ -22,7 +22,7 @@
 		{else}
 		{foreach $day->events as $event}
 			<tr>
-				<td>{$STATES[$event->state]->get_flag_html_renderer()}</td>
+				<td>{$STATES[$event->state]}</td>
 				<td>{$event->service}</td>
 				<td>{$event->begindate|date_format:"%a %e %b %Hh%M"}</td>
 				{if $event->enddate === null}

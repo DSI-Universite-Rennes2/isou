@@ -16,52 +16,47 @@
 	<div class="clearfix">
 	{foreach $groups as $state => $grps}
 	<div class="pull-left col-md-6">
-	<h1 class="isou-dependencies-h1">{$STATES[$state]->get_flag_html_renderer()} {$STATES[$state]->alternate_text}</h1>
 	<ul class="list-unstyled">
 	{foreach $grps as $group}
 	<li class="well">
-		<div class="clearfix isou-dependencies-group-header-div"><!-- {if $group->redundant === "1"}bg-success isou-redounded{else}bg-danger isou-not-redounded{/if}"> -->
-			<div class="pull-left">
-				<h2 class="isou-dependencies-group-h2">{$group->name}</h2>
-				<p class="small">groupe de services {if $group->redundant === "0"}non-{/if}redondé</p>
-			</div>
-
-			<ul class="pull-right list-inline">
-				<li><a href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/add/group/{$group->id}/content/0"><img src="{$smarty.const.URL}/images/add.png" alt="ajouter du contenu" /></a></li>
-				<li><a href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/edit/group/{$group->id}"><img src="{$smarty.const.URL}/images/edit.png" alt="éditer" /></a></li>
-				<li><a href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/delete/group/{$group->id}"><img src="{$smarty.const.URL}/images/drop.png" alt="supprimer" /></a></li>
-				<li><a href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/duplicate/group/{$group->id}"><img src="{$smarty.const.URL}/images/duplicate.png" alt="dupliquer" /></a></li>
-			</p>
-		</div>
-
-		{if count($group->contents) === 0}
-		<p class="alert alert-info">Groupe vide</p>
+		<h2 class="isou-dependencies-group-h2">{$STATES[$state]} {$group->name}</h2>
+		{if $group->redundant === "0"}
+		<p class="small isou-non-redundant-groups">groupe de services non-redondé</p>
 		{else}
-		<ul class="list-unstyled isou-dependencies-content-ul">
+		<p class="small isou-redundant-groups">groupe de services redondé</p>
+		{/if}
+
+		<h3 class="isou-dependencies-group-h3">Contenu du groupe</h3>
+		{if count($group->contents) === 0}
+		<p class="alert alert-info">Groupe vide.</p>
+		{else}
+		<ul class="alert list-unstyled isou-dependencies-content-ul">
 		{foreach $group->contents as $content}
 			<li>
-			{$STATES[$content->servicestate]->get_flag_html_renderer()} {$content->name}
+			{$STATES[$content->servicestate]} {$content->name}
 			<ul class="pull-right list-inline">
-				<li><a href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/edit/group/{$group->id}/content/{$content->idservice}"><img src="{$smarty.const.URL}/images/edit.png" alt="éditer" /></a></li>
-				<li><a href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/delete/group/{$group->id}/content/{$content->idservice}"><img src="{$smarty.const.URL}/images/drop.png" alt="supprimer" /></a></li>
+				<li><a class="btn btn-xs btn-primary" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/edit/group/{$group->id}/content/{$content->idservice}">modifier</a></li>
+				<li><a class="btn btn-xs btn-danger" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/delete/group/{$group->id}/content/{$content->idservice}">supprimer</a></li>
 			</ul>
 			</li>
 		{/foreach}
 		</ul>
 		{/if}
 
-		<!--
-		<p class="text-right">
-			<a class="btn btn-primary" title="ajouter un service au groupe '{$group->name}'" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/edit/group/{$group->id}/content/0">ajouter un service</a>
-		</p>
-		-->
-
-		{if $group->message !== ''}
-		<dl class="isou-dependencies-message-dl">
-			<dt>Message associé en cas d'erreur</dt>
-			<dd>{$group->message}</dd>
-		</dl>
+		<h3 class="isou-dependencies-group-h3">Message affiché en cas d'erreur</h3>
+		{if $group->message === ''}
+			<p class="alert alert-info">Aucun message défini.</p>
+		{else}
+			<div class="alert isou-dependencies-group-message">{$group->message}</div>
 		{/if}
+
+		<h3 class="isou-dependencies-group-h3">Actions sur le groupe</h3>
+		<ul class="list-inline">
+			<li><a class="btn btn-xs btn-primary" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/add/group/{$group->id}/content/0">ajouter du contenu</a></li>
+			<li><a class="btn btn-xs btn-primary" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/duplicate/group/{$group->id}">dupliquer le groupe</a></li>
+			<li><a class="btn btn-xs btn-primary" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/edit/group/{$group->id}">modifier</a></li>
+			<li><a class="btn btn-xs btn-danger" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/delete/group/{$group->id}">supprimer</a></li>
+		</ul>
 	</li>
 	{/foreach}
 	</ul>
@@ -69,11 +64,6 @@
 	{/foreach}
 	</div>
 {/if}
-
-<ul class="list-inline well text-center">
-	<li><img src="{$smarty.const.URL}/images/flag_orange.gif" alt="Drapeau orange" aria-describedby="orange_flag"> <span id="orange_flag">Etat 1 est équivalent à état perturbé</span></li>
-	<li><img src="{$smarty.const.URL}/images/flag_red.gif" alt="Drapeau rouge" aria-describedby="red_flag"> <span id="red_flag">Etat 2 est équivalent à état critique</span></li>
-</ul>
 
 </article>
 </main>
