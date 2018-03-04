@@ -46,7 +46,15 @@
 				<label for="begindate">Date de début</label>
 			</dt>
 			<dd class="form-values-dd">
-				<input type="text" name="begindate" id="begindate" title="Format : Jour/Mois/Annee H:M" maxlength="16" value="{$event->begindate|date_format:'%d/%m/%Y %H:%M'}" required="1" />
+				<input type="date" name="begindate" id="begindate" maxlength="10" placeholder="aaaa-mm-jj" value="{$event->begindate|date_format:'%Y-%m-%d'}" required="1" />
+			</dd>
+		</div>
+		<div class="form-information-dl-div">
+			<dt class="form-topics-dt">
+				<label for="begintime">Heure de début</label>
+			</dt>
+			<dd class="form-values-dd">
+				<input type="time" name="begintime" id="begintime" maxlength="5" placeholder="hh:mm" value="{$event->begindate|date_format:'%H:%M'}" required="1" />
 			</dd>
 		</div>
 		<div class="form-information-dl-div">
@@ -54,7 +62,23 @@
 				<label for="enddate">Date de fin</label>
 			</dt>
 			<dd class="form-values-dd">
-				<input type="text" name="enddate" id="enddate" title="Format : Jour Mois Annee H:M" maxlength="16" value="{$event->enddate|date_format:'%d/%m/%Y %H:%M'}" />
+				{if $event->enddate === null}
+				<input type="date" name="enddate" id="enddate" maxlength="10" placeholder="aaaa-mm-jj" value="" />
+				{else}
+				<input type="date" name="enddate" id="enddate" maxlength="10" placeholder="aaaa-mm-jj" value="{$event->enddate|date_format:'%Y-%m-%d'}" />
+				{/if}
+			</dd>
+		</div>
+		<div class="form-information-dl-div">
+			<dt class="form-topics-dt">
+				<label for="endtime">Heure de fin</label>
+			</dt>
+			<dd class="form-values-dd">
+				{if $event->enddate === null}
+				<input type="time" name="endtime" id="endtime" maxlength="5" placeholder="hh:mm" value="" />
+				{else}
+				<input type="time" name="endtime" id="endtime" maxlength="5" placeholder="hh:mm" value="{$event->enddate|date_format:'%H:%M'}" />
+				{/if}
 			</dd>
 		</div>
 		<div class="form-information-dl-div">

@@ -123,41 +123,45 @@ class Event{
 		}
 	}
 
-	public function set_begindate($begindate){
-		try{
-			if(preg_match('#^\d{2}/\d{2}/\d{4} \d{2}:\d{2}$#', $begindate)){
-				$begindate = substr($begindate, 6, 4).'-'.substr($begindate, 3, 2).'-'.substr($begindate, 0, 2).'T'.substr($begindate, 11, 2).':'.substr($begindate, 14, 2);
-			}else{
+	public function set_begindate($date, $time) {
+		try {
+			$preg_match_date = preg_match('#^(?P<year>\d{4}).(?P<month>\d{2}).(?P<day>\d{2})$#', $date);
+			$preg_match_time = preg_match('#^(?P<hour>\d{2}).(?P<minute>\d{2})$#', $time);
+
+			if ($preg_match_date === 1 && $preg_match_time === 1) {
+				$begindate = sprintf('%sT%s:00', $date, $time);
+			} else {
 				throw new \Exception();
 			}
 
-			$this->begindate = new \DateTime($begindate);
-		}catch(Exception $exception){
-			$this->begindate = new \DateTime();
-
-			throw new \Exception('La date de début d\'interruption doit être au format JJ/MM/AAAA HH:MM.');
+			$datetime = new \DateTime($begindate);
+			$this->begindate = $datetime;
+		} catch(\Exception $exception) {
+			throw new \Exception('La date de début d\'interruption doit être au format AAAA-MM-JJ HH:MM.');
 		}
 	}
 
-	public function set_enddate($enddate){
-		if(empty($enddate)){
+	public function set_enddate($date, $time) {
+		if (empty($date) === true || empty($time) === true) {
 			$this->enddate = NULL;
-		}else{
-			try{
-				if(preg_match('#^\d{2}/\d{2}/\d{4} \d{2}:\d{2}$#', $enddate)){
-					$enddate = substr($enddate, 6, 4).'-'.substr($enddate, 3, 2).'-'.substr($enddate, 0, 2).'T'.substr($enddate, 11, 2).':'.substr($enddate, 14, 2);
-				}else{
+		} else {
+			try {
+				$preg_match_date = preg_match('#^(?P<year>\d{4}).(?P<month>\d{2}).(?P<day>\d{2})$#', $date);
+				$preg_match_time = preg_match('#^(?P<hour>\d{2}).(?P<minute>\d{2})$#', $time);
+
+				if ($preg_match_date === 1 && $preg_match_time === 1) {
+					$enddate = sprintf('%sT%s:00', $date, $time);
+				} else {
 					throw new \Exception();
 				}
 
-				$this->enddate = new \DateTime($enddate);
-			}catch(Exception $exception){
-				$this->enddate = new \DateTime();
-
-				throw new \Exception('La date de fin d\'interruption doit être au format JJ/MM/AAAA HH:MM.');
+				$datetime = new \DateTime($enddate);
+				$this->enddate = $datetime;
+			} catch(\Exception $exception) {
+				throw new \Exception('La date de fin d\'interruption doit être au format AAAA-MM-JJ HH:MM.');
 			}
 
-			if(($this->begindate < $this->enddate) === FALSE){
+			if (($this->begindate < $this->enddate) === false) {
 				throw new \Exception('La date de début doit être inférieure à la date de fin.');
 			}
 		}
@@ -181,10 +185,10 @@ class Event{
 		if($this->enddate === NULL){
 			$enddate = NULL;
 		}else{
-			$enddate = $this->enddate->format('Y-m-d\TH:i');
+			$enddate = $this->enddate->format('Y-m-d\TH:i:s');
 		}
 
-		$params = array($this->begindate->format('Y-m-d\TH:i'), $enddate, $this->state, $this->type, $this->period, $this->ideventdescription, $this->idservice);
+		$params = array($this->begindate->format('Y-m-d\TH:i:s'), $enddate, $this->state, $this->type, $this->period, $this->ideventdescription, $this->idservice);
 
 		if($this->id === 0){
 			$sql = "INSERT INTO events(begindate, enddate, state, type, period, ideventdescription, idservice) VALUES(?,?,?,?,?,?,?)";
