@@ -389,7 +389,7 @@ class Initialisation extends AbstractMigration {
         $table = $this->table('states');
         $table->addColumn('name', 'string')
             ->addColumn('title', 'string')
-            ->addColumn('alternative_text', 'string')
+            ->addColumn('alternate_text', 'string')
             ->addColumn('image', 'string')
             ->create();
 
@@ -400,35 +400,35 @@ class Initialisation extends AbstractMigration {
                     'id' => 0,
                     'name' => 'ok',
                     'title' => 'Service en fonctionnement',
-                    'alternative_text' => 'Service en fonctionnement',
+                    'alternate_text' => 'Service en fonctionnement',
                     'image' => 'flag_green.gif',
                 ),
                 array(
                     'id' => 1,
                     'name' => 'warning',
                     'title' => 'Service instable ou indisponible',
-                    'alternative_text' => 'Service instable ou indisponible',
+                    'alternate_text' => 'Service instable ou indisponible',
                     'image' => 'flag_orange.gif',
                 ),
                 array(
                     'id' => 2,
                     'name' => 'critical',
                     'title' => 'Service indisponible',
-                    'alternative_text' => 'Service indisponible',
+                    'alternate_text' => 'Service indisponible',
                     'image' => 'flag_red.gif',
                 ),
                 array(
                     'id' => 3,
                     'name' => 'unknown',
                     'title' => 'Etat du service non connu',
-                    'alternative_text' => 'Etat du service non connu',
+                    'alternate_text' => 'Etat du service non connu',
                     'image' => 'flag_blue.gif',
                 ),
                 array(
                     'id' => 4,
                     'name' => 'closed',
                     'title' => 'Service fermé',
-                    'alternative_text' => 'Service fermé',
+                    'alternate_text' => 'Service fermé',
                     'image' => 'flag_white.gif',
                 ),
             );
