@@ -3,6 +3,10 @@
 namespace UniversiteRennes2\Isou;
 
 class Event{
+	const PERIOD_NONE = '0';
+	const PERIOD_DAILY = '86400';
+	const PERIOD_WEEKLY = '604800';
+
 	const TYPE_UNSCHEDULED = '0';
 	const TYPE_SCHEDULED = '1';
 	const TYPE_REGULAR = '2';
@@ -25,9 +29,9 @@ class Event{
 		self::TYPE_CLOSED => 'Service fermé',
 		);
 	public static $PERIODS = array(
-		'0' => 'Aucune',
-		'86400' => 'Tous les jours',
-		'604800' => 'Toutes les semaines',
+		self::PERIOD_NONE => 'Aucune',
+		self::PERIOD_DAILY => 'Tous les jours',
+		self::PERIOD_WEEKLY => 'Toutes les semaines',
 		);
 
 	public function __construct(){
@@ -44,7 +48,7 @@ class Event{
 			}
 
 			if(empty($this->period)){
-				$this->period = '0';
+				$this->period = self::PERIOD_NONE;
 			}
 
 		}else{
@@ -93,14 +97,14 @@ class Event{
 		$this->period = $period;
 
 		if(empty($this->period)){
-			$this->period = NULL;
+			$this->period = self::PERIOD_NONE;
 		}else{
 			if(!isset(self::$PERIODS[$this->period])){
 				throw new \Exception('La périodicité n\'est pas valide.');
 			}
 
-			if($this->type === self::TYPE_UNSCHEDULED){
-				throw new \Exception('Un évènement imprévu ne peut pas avoir de périodicité.');
+			if($this->type !== self::TYPE_REGULAR){
+				throw new \Exception('Seuls les évènements de type régulier peuvent avoir une périodicité.');
 			}
 
 			if($this->enddate === NULL){
