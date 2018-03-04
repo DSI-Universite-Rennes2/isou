@@ -1,0 +1,188 @@
+{
+    "name": "Scenario 3",
+    "description": "Contexte du service :\n- 1 serveur web\n- 1 serveur db",
+    "cases": [
+        {
+            "name": "Case 1",
+            "description": "Le service \"serveur db (Scenario3)\" est instable. Le service final doit devenir instable.",
+            "inputs": [
+                {
+                    "id": "32",
+                    "state": "1"
+                },
+                {
+                    "id": "33",
+                    "state": "0"
+                },
+                {
+                    "id": "34",
+                    "state": "0"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "31",
+                    "state": "1"
+                }
+            ]
+        },
+        {
+            "name": "Case 2",
+            "description": "Les services \"serveur web 1 (Scenario3)\", \"serveur web 2 (Scenario3)\" et \"serveur db (Scenario3)\" fonctionnent. Le service final doit fonctionner.",
+            "inputs": [
+                {
+                    "id": "32",
+                    "state": "0"
+                },
+                {
+                    "id": "33",
+                    "state": "0"
+                },
+                {
+                    "id": "34",
+                    "state": "0"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "31",
+                    "state": "0"
+                }
+            ]
+        },
+        {
+            "name": "Case 3",
+            "description": "Le service \"serveur web 2 (Scenario3)\" ne fonctionne pas. Le service final doit fonctionner.",
+            "inputs": [
+                {
+                    "id": "32",
+                    "state": "0"
+                },
+                {
+                    "id": "33",
+                    "state": "0"
+                },
+                {
+                    "id": "34",
+                    "state": "2"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "31",
+                    "state": "0"
+                }
+            ]
+        },
+        {
+            "name": "Case 4",
+            "description": "Le service \"serveur web 1 (Scenario3)\" est instable et le service \"serveur web 2 (Scenario3)\" ne fonctionnent pas. Le service final doit être instable.",
+            "inputs": [
+                {
+                    "id": "32",
+                    "state": "0"
+                },
+                {
+                    "id": "33",
+                    "state": "1"
+                },
+                {
+                    "id": "34",
+                    "state": "2"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "31",
+                    "state": "1"
+                }
+            ]
+        },
+        {
+            "name": "Case 5",
+            "description": "Le service \"serveur web 1 (Scenario3)\" et le service \"serveur web 2 (Scenario3)\" ne fonctionnent pas. Le service final ne doit pas fonctionner.",
+            "inputs": [
+                {
+                    "id": "32",
+                    "state": "0"
+                },
+                {
+                    "id": "33",
+                    "state": "2"
+                },
+                {
+                    "id": "34",
+                    "state": "2"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "31",
+                    "state": "2"
+                }
+            ]
+        },
+        {
+            "name": "Case 6",
+            "description": "Le service \"serveur web 1 (Scenario3)\" et le service \"serveur web 2 (Scenario3)\" ne fonctionne pas et le service \"serveur db (Scenario3)\" est instable. Le service final ne doit pas fonctionner.",
+            "inputs": [
+                {
+                    "id": "32",
+                    "state": "1"
+                },
+                {
+                    "id": "33",
+                    "state": "2"
+                },
+                {
+                    "id": "34",
+                    "state": "2"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "31",
+                    "state": "2"
+                }
+            ]
+        },
+        {
+            "name": "Case 7",
+            "description": "Le service \"serveur web 1 (Scenario3)\" et le service \"serveur web 2 (Scenario3)\" sont instables et le service \"serveur db (Scenario3)\" ne fonctionne pas. Le service final ne doit pas fonctionner.",
+            "inputs": [
+                {
+                    "id": "32",
+                    "state": "2"
+                },
+                {
+                    "id": "33",
+                    "state": "1"
+                },
+                {
+                    "id": "34",
+                    "state": "1"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "31",
+                    "state": "2"
+                }
+            ]
+        }
+    ],
+    "reset" : [
+        {
+            "id": "32",
+            "state": "0"
+        },
+        {
+            "id": "33",
+            "state": "0"
+        },
+        {
+            "id": "34",
+            "state": "0"
+        }
+    ]
+}

@@ -3,10 +3,10 @@ paths:
     seeds: "%%PHINX_CONFIG_DIR%%/database/seeds"
 environments:
     default_migration_table: "phinx"
-    default_database: "testing"
+    default_database: "production"
     production:
         adapter: "sqlite"
         name: "%%PHINX_CONFIG_DIR%%/database/isou.sqlite3"
-    testing:
+    tests:
         adapter: sqlite
-        name: "%%PHINX_CONFIG_DIR%%/database/testing.sqlite3"
+        name: "%%PHINX_CONFIG_DIR%%/database/tests.sqlite3"

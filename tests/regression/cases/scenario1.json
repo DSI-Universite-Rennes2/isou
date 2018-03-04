@@ -1,0 +1,44 @@
+{
+    "name": "Scenario 1",
+    "description": "Contexte du service :\n- 1 serveur web",
+    "cases": [
+        {
+            "name": "Case 1",
+            "description": "Le service \"serveur web (Scenario1)\" est instable. Le service final doit devenir instable.",
+            "inputs": [
+                {
+                    "id": "12",
+                    "state": "1"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "11",
+                    "state": "1"
+                }
+            ]
+        },
+        {
+            "name": "Case 2",
+            "description": "Le service \"serveur web (Scenario1)\" fonctionne. Le service final doit fonctionner.",
+            "inputs": [
+                {
+                    "id": "12",
+                    "state": "0"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "11",
+                    "state": "0"
+                }
+            ]
+        }
+    ],
+    "reset" : [
+        {
+            "id": "12",
+            "state": "0"
+        }
+    ]
+}
