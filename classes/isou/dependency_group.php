@@ -226,7 +226,8 @@ class Dependency_Group{
 				" FROM dependencies_groups_content dgc".
 				" WHERE idgroup = :idgroup".
 				" AND idservice = :idservice".
-				" AND servicestate = :servicestate";
+				" AND servicestate <= :servicestate";
+
 			$query = $DB->prepare($sql);
 			$query->execute(array(':idgroup' => $this->id, ':idservice' => $service->id, ':servicestate' => $service->state));
 			$status = $query->fetch(\PDO::FETCH_OBJ);

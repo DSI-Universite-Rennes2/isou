@@ -11,8 +11,10 @@ use UniversiteRennes2\Isou\State;
 // - comment faire revenir les services en vert ? (voir ligne 26)
 
 // mets à jour Isou en fonction des changements d'état des services backend, des évènements prévues, fermés, etc...
-function update_services_tree($services){
+function update_services_tree() {
 	global $LOGGER;
+
+	$services = get_services();
 
 	$LOGGER->addInfo('Mise à jour de l\'arbre des dépendances');
 
@@ -56,8 +58,8 @@ function update_services_tree($services){
 
 			$LOGGER->addInfo('   Analyse du groupe "'.$dependencies_group->name.'" (id #'.$dependencies_group->id.') attaché au service "'.$child_service->name.'" (id #'.$child_service->id.')');
 
-			if($dependencies_group->redundant === '0' || $dependencies_group->is_up() === FALSE){
-
+			if ($dependencies_group->redundant === '0') {
+				// Groupe de services non-redondés.
 				if($child_service->state <= $dependencies_group->groupstate){
 					// change service state.
 					if($child_service->state !== $dependencies_group->groupstate){
@@ -70,7 +72,9 @@ function update_services_tree($services){
 				} else {
 					continue;
 				}
-			}elseif($dependencies_group->redundant === '1'){
+			} else {
+				// Groupe de services redondés.
+
 				// TODO: add array to don't check X times the same redundant group
 
 				// look other group members
@@ -89,9 +93,9 @@ function update_services_tree($services){
 				}
 
 				// update service
-				if($child_service->state < $dependencies_group->groupstate){
+				if ($child_service->state < $state) {
 					$LOGGER->addInfo('   Le service "'.$child_service->name.'" (id #'.$child_service->id.') passe de l\'état '.$child_service->state.' à '.$dependencies_group->groupstate.'.');
-					$child_service->change_state($dependencies_group->groupstate);
+					$child_service->change_state($state);
 					// update_services_tree(array($child_service));
 					// array_unshift($services, $child_service);
 					// $child_service->state = $dependencies_group->groupstate;
@@ -149,6 +153,7 @@ function update_services_tree($services){
 			if ($service !== false) {
 				$LOGGER->addInfo('   L\'évènement du service "'.$service->name.'" (id #'.$event->id.') a été fermé.');
 				$service->change_state(State::OK);
+				$event->close();
 			}
 		}
 	}

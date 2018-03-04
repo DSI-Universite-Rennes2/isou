@@ -21,9 +21,9 @@
 	<li class="well">
 		<h2 class="isou-dependencies-group-h2">{$STATES[$state]} {$group->name}</h2>
 		{if $group->redundant === "0"}
-		<p class="small isou-non-redundant-groups">groupe de services non-redondé</p>
+		<p class="small isou-non-redundant-groups">groupe de services non-redondés</p>
 		{else}
-		<p class="small isou-redundant-groups">groupe de services redondé</p>
+		<p class="small isou-redundant-groups">groupe de services redondés</p>
 		{/if}
 
 		<h3 class="isou-dependencies-group-h3">Contenu du groupe</h3>

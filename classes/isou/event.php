@@ -217,7 +217,7 @@ class Event{
 	public function delete(){
 		global $DB, $LOGGER;
 
-		$sql = "DELETE FROM events WHERE idevent=?";
+		$sql = "DELETE FROM events WHERE id=?";
 		$query = $DB->prepare($sql);
 
 		if($query->execute(array($this->id)) === FALSE){
@@ -231,7 +231,7 @@ class Event{
 	public function close(){
 		global $DB, $LOGGER;
 
-		$sql = "UPDATE events SET enddate=? WHERE idevent=?";
+		$sql = "UPDATE events SET enddate=? WHERE id=?";
 		$query = $DB->prepare($sql);
 		if($query->execute(array(STR_TIME, $this->id))){
 			$this->enddate = new \DateTime(STR_TIME);
@@ -245,7 +245,7 @@ class Event{
 	public function close_all_other_events(){
 		global $DB, $LOGGER;
 
-		$sql = "UPDATE events SET enddate=? WHERE idevent!=? AND idservice=? AND begindate <= ? AND (enddate IS NULL OR enddate >= ?)";
+		$sql = "UPDATE events SET enddate=? WHERE id != ? AND idservice=? AND begindate <= ? AND (enddate IS NULL OR enddate >= ?)";
 		$query = $DB->prepare($sql);
 		if($query->execute(array(STR_TIME, $this->id, $this->idservice, STR_TIME, STR_TIME))){
 			return TRUE;
