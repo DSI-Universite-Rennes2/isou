@@ -1,7 +1,6 @@
 <?php
 
 require_once PRIVATE_PATH.'/libs/services.php';
-require_once PRIVATE_PATH.'/libs/configuration.php';
 require_once PRIVATE_PATH.'/classes/helpers/simple_menu.php';
 
 $TITLE .= ' - Administration des services';

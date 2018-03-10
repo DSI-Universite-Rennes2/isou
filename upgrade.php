@@ -20,20 +20,10 @@ if (is_file($db_file_path) === false) {
 }
 
 require PRIVATE_PATH.'/php/common/database.php';
-require PRIVATE_PATH.'/libs/configuration.php';
 
 // Charge la configuration.
-$sql = "SELECT key, value FROM configuration";
-$CFG = array();
-if($query = $DB->query($sql)){
-    while($config = $query->fetch(PDO::FETCH_OBJ)){
-        if(in_array($config->key, array('authentification_cas_admin_usernames', 'notification_receivers'))){
-             $CFG[$config->key] = json_decode($config->value);
-        }else{
-            $CFG[$config->key] = $config->value;
-        }
-    }
-}
+require PRIVATE_PATH.'/libs/configuration.php';
+$CFG = get_configurations();
 
 if (isset($CFG['version']) === false) {
     $CFG['version'] = '';

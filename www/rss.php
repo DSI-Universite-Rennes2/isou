@@ -46,18 +46,9 @@ $smarty = new Smarty();
 $smarty->setTemplateDir(PRIVATE_PATH.'/html/');
 $smarty->setCompileDir(PRIVATE_PATH.'/cache/smarty/');
 
-// load configuration
-$sql = "SELECT key, value FROM configuration";
-$CFG = array();
-if($query = $DB->query($sql)){
-	while($config = $query->fetch(PDO::FETCH_OBJ)){
-		if(in_array($config->key, array('ip_local', 'ip_service', 'admin_users', 'admin_mails'))){
-			 $CFG[$config->key] = json_decode($config->value);
-		}else{
-			$CFG[$config->key] = $config->value;
-		}
-	}
-}
+// Charge la configuration.
+require PRIVATE_PATH.'/libs/configuration.php';
+$CFG = get_configurations();
 
 require PRIVATE_PATH.'/libs/events.php';
 require PRIVATE_PATH.'/libs/services.php';

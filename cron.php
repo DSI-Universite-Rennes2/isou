@@ -18,23 +18,8 @@ ini_set('display_errors', 'On');
 require PRIVATE_PATH.'/php/common/database.php';
 
 // Charge la configuration.
-$sql = "SELECT key, value FROM configuration";
-$CFG = array();
-if($query = $DB->query($sql)){
-	while ($config = $query->fetch(PDO::FETCH_OBJ)) {
-		if (in_array($config->key, array('authentification_cas_admin_usernames', 'notification_receivers'), true) === true) {
-			$CFG[$config->key] = json_decode($config->value);
-		} elseif (in_array($config->key, array('last_check_update', 'last_cron_update', 'last_daily_cron_update', 'last_update', 'last_weekly_cron_update', 'last_yearly_cron_update'), true) === true) {
-			try {
-				$CFG[$config->key] = new DateTime($config->value);
-			} catch (Exception $exception) {
-				$CFG[$config->key] = new DateTime();
-			}
-		}else{
-			$CFG[$config->key] = $config->value;
-		}
-	}
-}
+require PRIVATE_PATH.'/libs/configuration.php';
+$CFG = get_configurations();
 
 // Créé un fichier cron.pid.
 $pid_file = PRIVATE_PATH.'/cron.pid';
