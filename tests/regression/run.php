@@ -46,21 +46,31 @@ if ($result === 0) {
 }
 
 // Set UseCases.
-for ($i = 1 ; $i <= 3 ; $i++) {
-    echo '* Charge le Scénario '.$i.PHP_EOL;
+$cases_path = __DIR__.'/cases';
+if ($handle = opendir($cases_path)) {
+    while (($entry = readdir($handle)) !== FALSE) {
+        if (preg_match('/^scenario([0-9]+)\.json$/', $entry, $matches) !== 1) {
+            continue;
+        }
 
-    $arguments = new StringInput('--environment=tests --seed=Scenario'.$i.' seed:run');
+        $i = $matches[1];
 
-    ob_start();
-    $result = $phinx->run($arguments, new NullOutput());
-    ob_end_clean();
+        echo '* Charge le Scénario '.$i.PHP_EOL;
 
-    if ($result === 0) {
-        echo str_repeat(' ', 3).'- OK'.PHP_EOL;
-    } else {
-        echo str_repeat(' ', 3).'- Erreur'.PHP_EOL.PHP_EOL;
-        exit(1);
+        $arguments = new StringInput('--environment=tests --seed=Scenario'.$i.' seed:run');
+
+        ob_start();
+        $result = $phinx->run($arguments, new NullOutput());
+        ob_end_clean();
+
+        if ($result === 0) {
+            echo str_repeat(' ', 3).'- OK'.PHP_EOL;
+        } else {
+            echo str_repeat(' ', 3).'- Erreur'.PHP_EOL.PHP_EOL;
+            exit(1);
+        }
     }
+    closedir($handle);
 }
 
 // Run cases.
@@ -114,8 +124,7 @@ foreach ($scenarios as $scenario_file) {
     echo '* '.$scenario->name.PHP_EOL;
     // echo '    '.$scenario->description.PHP_EOL;
     foreach ($scenario->cases as $case) {
-        echo str_repeat(' ', 3).'- '.$case->name.PHP_EOL;
-        // echo str_repeat(' ', 3).$case->description.PHP_EOL;
+        echo str_repeat(' ', 3).'- '.$case->name.' : '.$case->description.PHP_EOL;
 
         $sql = 'UPDATE services SET state = :state WHERE id = :id';
         $query = $DB->prepare($sql);
@@ -130,16 +139,19 @@ foreach ($scenarios as $scenario_file) {
             $service = get_service(array('id' => $output->id));
 
             if ($service->state === $output->state) {
-                echo str_repeat(' ', 6).'✔ ';
+                $state = '✔';
                 $successes_count++;
             } else {
-                echo str_repeat(' ', 6).'✘ ';
+                $state = '✘';
                 $errors_count++;
             }
 
-            $event = ($service->get_current_event() !== false);
+            $event = $service->get_current_event();
 
-            echo $service->name.' : '.State::$STATES[$service->state].' ('.intval($event).' event)'.PHP_EOL;
+            echo str_repeat(' ', 6).$state.' '.$service->name.' : '.State::$STATES[$service->state].PHP_EOL;
+            if ($event !== false) {
+                echo str_repeat(' ', 6).$state.' évènement associé : '.implode(', ', explode(PHP_EOL, $event->description)).PHP_EOL;
+            }
 
             // Reset.
             foreach ($scenario->reset as $input) {
