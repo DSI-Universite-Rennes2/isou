@@ -89,7 +89,7 @@ foreach($events as $i => $event){
 			unset($events[$i]);
 			continue;
 		}
-	}elseif(!($event->begindate >= $begincalendar && $event->enddate <= $endcalendar)){
+	}elseif(!($event->startdate >= $begincalendar && $event->enddate <= $endcalendar)){
 		unset($events[$i]);
 		continue;
 	}
@@ -97,12 +97,12 @@ foreach($events as $i => $event){
 	$event->service = $service->name;
 	$service->idevent = $event->id;
 
-	$begindate = clone $event->begindate;
-	$begindate->setTime(0,0,0);
-	$interval = $begincalendar->diff($begindate);
+	$startdate = clone $event->startdate;
+	$startdate->setTime(0,0,0);
+	$interval = $begincalendar->diff($startdate);
 
 	if($interval->invert === 1){
-		$begindate = clone $begincalendar;
+		$startdate = clone $begincalendar;
 		$i = 0;
 		$j = 0;
 	}else{
@@ -119,13 +119,13 @@ foreach($events as $i => $event){
 		$enddate = clone $event->enddate;
 	}
 
-	while($begindate < $enddate){
+	while($startdate < $enddate){
 		if(!isset($calendar[$i][$j])){
 			break;
 		}
 
 		$calendar[$i][$j]->services[] = $service;
-		$begindate->add($one_day);
+		$startdate->add($one_day);
 
 		$j++;
 		if($j > 6){

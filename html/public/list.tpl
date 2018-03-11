@@ -54,9 +54,9 @@
 					{$service->closed_event->description|nl2br}
 				{else}
 				{if $service->closed_event->enddate === NULL}
-					Service fermé depuis le {$service->closed_event->begindate|date_format:"%A %e %B %Y"}.
+					Service fermé depuis le {$service->closed_event->startdate|date_format:"%A %e %B %Y"}.
 				{else}
-					Service fermé depuis le {$service->closed_event->begindate|date_format:"%A %e %B %Y"}.
+					Service fermé depuis le {$service->closed_event->startdate|date_format:"%A %e %B %Y"}.
 					Réouverture le {$service->closed_event->enddate|date_format:"%A %e %B %Y"}.
 				{/if}
 				{/if}
@@ -70,7 +70,7 @@
 				<td headers="lth4 lth42">&nbsp;</td>
 				<td headers="lth4 lth43">&nbsp;</td>
 			{else}
-				<td headers="lth4 lth41">{$service->last_event->begindate|date_format:"%a %d %b %Hh%M"}</td>
+				<td headers="lth4 lth41">{$service->last_event->startdate|date_format:"%a %d %b %Hh%M"}</td>
 
 				{if $service->last_event->enddate === NULL}
 				<td headers="lth4 lth42">indéterminé</td>
@@ -87,7 +87,7 @@
 				<td headers="lth4 lth42">&nbsp;</td>
 				<td headers="lth4 lth43">&nbsp;</td>
 			{else}
-				<td headers="lth5">{$service->next_scheduled_event->begindate|date_format:"%a %d %b %Hh%M"}</td>
+				<td headers="lth5">{$service->next_scheduled_event->startdate|date_format:"%a %d %b %Hh%M"}</td>
 
 				{if $service->next_scheduled_event->enddate === NULL}
 				<td headers="lth4 lth42">indéterminé</td>
@@ -106,13 +106,13 @@
 					<li>
 					{if $event->period === 7*24*60*60}
 						{* Tous les mois *}
-						Tous les {$event->begindate|date_format:"%d"} du mois de {$event->begindate|date_format:"%Hh%M"} à {$event->enddate|date_format:"%Hh%M"}
+						Tous les {$event->startdate|date_format:"%d"} du mois de {$event->startdate|date_format:"%Hh%M"} à {$event->enddate|date_format:"%Hh%M"}
 					{else if $event->period === 7*24*60*60}
 						{* Toutes les semaines *}
-						Tous les {$event->begindate|date_format:"%A"} de {$event->begindate|date_format:"%Hh%M"} à {$event->enddate|date_format:"%Hh%M"}
+						Tous les {$event->startdate|date_format:"%A"} de {$event->startdate|date_format:"%Hh%M"} à {$event->enddate|date_format:"%Hh%M"}
 					{else}
 						{* Tous les jours *}
-						Tous les jours de {$event->begindate|date_format:"%Hh%M"} à {$event->enddate|date_format:"%Hh%M"}
+						Tous les jours de {$event->startdate|date_format:"%Hh%M"} à {$event->enddate|date_format:"%Hh%M"}
 					{/if}
 
 					{if !empty($event->description)}

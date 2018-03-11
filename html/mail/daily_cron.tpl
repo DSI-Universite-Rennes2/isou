@@ -27,7 +27,7 @@ Liste des services indisponibles de la journée
 {section name=j loop=$categories[i]->services}
    - {$categories[i]->services[j]->getNameForUsers()} : {$categories[i]->services[j]->total}
 {foreach $categories[i]->services[j]->getEvents() as $event}
-     . {$categories[i]->services[j]->getNameForUsers()}, {if $event->getEndDate() === NULL}depuis {$event->getBeginDate()|date_format:'%c'}{else}de {$event->getBeginDate()|date_format:'%c'} à {$event->getEndDate()|date_format:'%c'}{/if}
+     . {$categories[i]->services[j]->getNameForUsers()}, {if $event->getEndDate() === NULL}depuis {$event->getStartDate()|date_format:'%c'}{else}de {$event->getStartDate()|date_format:'%c'} à {$event->getEndDate()|date_format:'%c'}{/if}
 {if $event->getDescription() != ""}
 
        x {$event->getDescription()}

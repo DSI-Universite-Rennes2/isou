@@ -68,7 +68,7 @@ foreach(get_events($options) as $event){
 		continue;
 	}
 
-	$opening_event_id = $event->begindate->format('Y-m-d\TH:i:s').'_'.$event->id;
+	$opening_event_id = $event->startdate->format('Y-m-d\TH:i:s').'_'.$event->id;
 	$items[$opening_event_id] = clone $event;
 	if($event->type === UniversiteRennes2\Isou\Event::TYPE_SCHEDULED){
 		$items[$opening_event_id]->title = 'Interruption : '.$services[$event->idservice];
@@ -77,7 +77,7 @@ foreach(get_events($options) as $event){
 	}
 	$items[$opening_event_id]->link = URL.'#'.$opening_event_id;
 	$items[$opening_event_id]->guid = $opening_event_id;
-	$items[$opening_event_id]->pubdate = gmdate('D, d M Y H:i:s', $event->begindate->getTimestamp());
+	$items[$opening_event_id]->pubdate = gmdate('D, d M Y H:i:s', $event->startdate->getTimestamp());
 
 	if($event->enddate === NULL){
 		$enddate = 'indéterminé';
@@ -91,7 +91,7 @@ foreach(get_events($options) as $event){
 		$description = $items[$opening_event_id]->description;
 	}
 
-	$items[$opening_event_id]->description = 'Date de début : '.$event->begindate->format('d/m/Y H:i').'<br />'.
+	$items[$opening_event_id]->description = 'Date de début : '.$event->startdate->format('d/m/Y H:i').'<br />'.
 		'Date de fin : '.$enddate.'<br /><br />'.
 		'Description : '.$description;
 
@@ -103,7 +103,7 @@ foreach(get_events($options) as $event){
 		$items[$ending_event_id]->guid = $ending_event_id;
 		$items[$ending_event_id]->pubdate = gmdate('D, d M Y H:i:s', $event->enddate->getTimestamp());
 
-		$items[$ending_event_id]->description = 'Date de début : '.$event->begindate->format('d/m/Y H:i').'<br />'.
+		$items[$ending_event_id]->description = 'Date de début : '.$event->startdate->format('d/m/Y H:i').'<br />'.
 			'Date de fin : '.$event->enddate->format('d/m/Y H:i').'<br /><br />'.
 			'Description : '.$description;
 	}

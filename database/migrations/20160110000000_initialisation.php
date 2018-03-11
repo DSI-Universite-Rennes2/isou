@@ -233,7 +233,7 @@ class Initialisation extends AbstractMigration {
         // Create "events" table.
         echo ' ==   - Crée la table "events".'.PHP_EOL;
         $table = $this->table('events');
-        $table->addColumn('begindate', 'string')
+        $table->addColumn('startdate', 'string')
             ->addColumn('enddate', 'string')
             ->addColumn('state', 'integer')
             ->addColumn('type', 'integer')

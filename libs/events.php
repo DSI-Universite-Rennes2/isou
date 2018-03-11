@@ -5,7 +5,7 @@ require_once PRIVATE_PATH.'/classes/isou/event.php';
 function get_event($id){
 	global $DB;
 
-	$sql = "SELECT e.id, e.begindate, e.enddate, e.state, e.type, e.period, e.ideventdescription, ed.description, e.idservice".
+	$sql = "SELECT e.id, e.startdate, e.enddate, e.state, e.type, e.period, e.ideventdescription, ed.description, e.idservice".
 			" FROM events e, events_descriptions ed".
 			" WHERE e.ideventdescription = e.ideventdescription".
 			" AND e.id=?";
@@ -42,20 +42,20 @@ function get_events($options = array()){
 	$params = array();
 	$conditions = array();
 
-	$sql = "SELECT e.id, e.begindate, e.enddate, e.state, e.type, e.period, e.ideventdescription, ed.description, e.idservice, s.name AS service_name".
+	$sql = "SELECT e.id, e.startdate, e.enddate, e.state, e.type, e.period, e.ideventdescription, ed.description, e.idservice, s.name AS service_name".
 			" FROM events e, events_descriptions ed, services s".
 			" WHERE s.id=e.idservice".
 			" AND ed.id=e.ideventdescription";
 
 	// after options
 	if(isset($options['after']) && $options['after'] instanceof DateTime){
-		$sql .= " AND e.begindate >= ?";
+		$sql .= " AND e.startdate >= ?";
 		$params[] = $options['after']->format('Y-m-d\TH:i');
 	}
 
 	// before options
 	if(isset($options['before']) && $options['before'] instanceof DateTime){
-		$sql .= " AND e.begindate < ?";
+		$sql .= " AND e.startdate < ?";
 		$params[] = $options['before']->format('Y-m-d\TH:i');
 	}
 
@@ -82,7 +82,7 @@ function get_events($options = array()){
 
 	// since options
 	if (isset($options['since']) === true) {
-		$sql .= " AND (e.enddate IS NULL OR e.begindate >= ?)";
+		$sql .= " AND (e.enddate IS NULL OR e.startdate >= ?)";
 		if ($options['since'] instanceof DateTime) {
 			$params[] = $options['since']->format('Y-m-d\TH:i:s');
 		} else {
@@ -109,9 +109,9 @@ function get_events($options = array()){
 	if(isset($options['tolerance']) && ctype_digit($options['tolerance']) && $options['tolerance'] > 0){
 		$sql .= " AND".
 			" (".
-			" (e.enddate IS NULL)".// AND (strftime('%s', '".STR_TIME."') - strftime('%s', e.begindate)) > ".$options['tolerance'].")".
+			" (e.enddate IS NULL)".// AND (strftime('%s', '".STR_TIME."') - strftime('%s', e.startdate)) > ".$options['tolerance'].")".
 			" OR".
-			" ((strftime('%s', e.enddate) - strftime('%s', e.begindate)) > ".$options['tolerance'].")".
+			" ((strftime('%s', e.enddate) - strftime('%s', e.startdate)) > ".$options['tolerance'].")".
 			" )";
 	}
 
@@ -125,7 +125,7 @@ function get_events($options = array()){
 	if(isset($options['sort']) && is_array($options['sort'])){
 		$sql .= " ORDER BY ".implode(', ', $options['sort']);
 	}else{
-		$sql .= " ORDER BY e.begindate, e.enddate";
+		$sql .= " ORDER BY e.startdate, e.enddate";
 	}
 
 	$query = $DB->prepare($sql);
@@ -170,19 +170,19 @@ function get_events_by_type($since=NULL, $type=NULL, $servicetype=NULL, $toleran
 	}else{
 		$params[] = $since;
 		if($tolerance === TRUE){
-			$sql_tolerance = " AND ((e.enddate > ? AND strftime('%s', enddate)-strftime('%s', begindate) > ?) OR e.enddate IS NULL)";
+			$sql_tolerance = " AND ((e.enddate > ? AND strftime('%s', enddate)-strftime('%s', startdate) > ?) OR e.enddate IS NULL)";
 			$params[] = $CFG['tolerance'];
 		}else{
 			$sql_tolerance = " AND (e.enddate > ? OR e.enddate IS NULL)";
 		}
 	}
 
-	$sql = "SELECT e.id, e.begindate, e.enddate, e.state, e.type, e.period, e.ideventdescription, ed.description, s.id, s.name".
+	$sql = "SELECT e.id, e.startdate, e.enddate, e.state, e.type, e.period, e.ideventdescription, ed.description, s.id, s.name".
 		" FROM events e, services s, events_descriptions ed".
 		" WHERE s.id = e.idservice".
 		" AND ed.id = e.ideventdescription".
 		" AND s.enable = 1".$sql_type.$sql_servicetype.$sql_tolerance.
-		" ORDER BY e.beginDate DESC";
+		" ORDER BY e.startdate DESC";
 	$query = $DB->prepare($sql);
 	$query->execute($params);
 

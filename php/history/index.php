@@ -17,7 +17,7 @@ if(isset($PAGE_NAME[4])){
 	if(count($options_filter) === 6){
 		$_POST['services'] = explode(',', $options_filter[0]);
 		$_POST['event_type'] = $options_filter[1];
-		$_POST['begindate'] = $options_filter[2];
+		$_POST['startdate'] = $options_filter[2];
 		$_POST['enddate'] = $options_filter[3];
 		$_POST['sort'] = $options_filter[4];
 		$_POST['paging'] = $options_filter[5];
@@ -45,7 +45,7 @@ for($i=10;$i<101;$i=$i+10){
 }
 $smarty->assign('options_paging', $options_paging);
 
-if (isset($_POST['services'], $_POST['event_type'], $_POST['begindate'], $_POST['enddate'], $_POST['sort'], $_POST['paging']) === true) {
+if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST['enddate'], $_POST['sort'], $_POST['paging']) === true) {
 	$events = array();
 
 	$params = array();
@@ -81,15 +81,15 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['begindate'], $_POST[
 		$params[] = $_POST['event_type'];
 	}
 
-	// begindate
+	// startdate
 	try {
-		$begindate = new DateTime($_POST['begindate']);
-		$_POST['begindate'] = $begindate->format('Y-m-d');
+		$startdate = new DateTime($_POST['startdate']);
+		$_POST['startdate'] = $startdate->format('Y-m-d');
 	} catch (Exception $exception) {
-		$_POST['begindate'] = strftime('%Y-%m-01');
+		$_POST['startdate'] = strftime('%Y-%m-01');
 	}
-	$sql_events .= " AND e.begindate >= ?";
-	$params[] = $_POST['begindate'];
+	$sql_events .= " AND e.startdate >= ?";
+	$params[] = $_POST['startdate'];
 
 	// enddate
 	if (empty($_POST['enddate']) === false) {
@@ -106,9 +106,9 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['begindate'], $_POST[
 
 	// sort
 	if($_POST['sort'] === '0'){
-		$sql_sort = " ORDER BY e.begindate DESC";
+		$sql_sort = " ORDER BY e.startdate DESC";
 	}else{
-		$sql_sort = " ORDER BY e.begindate ASC";
+		$sql_sort = " ORDER BY e.startdate ASC";
 	}
 
 	// paging
@@ -124,7 +124,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['begindate'], $_POST[
 
 
 	$events = array();
-	$sql = "SELECT s.name, e.begindate, e.enddate, ed.description, e.type".
+	$sql = "SELECT s.name, e.startdate, e.enddate, ed.description, e.type".
 		" FROM events e, events_descriptions ed, services s".
 		" WHERE s.id = e.idservice".
 		" AND ed.id = e.ideventdescription".
@@ -152,14 +152,14 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['begindate'], $_POST[
 	$query->execute($params);
 	foreach($query->fetchAll(PDO::FETCH_OBJ) as $event){
 		try{
-			$event->begindate = new DateTime($event->begindate);
+			$event->startdate = new DateTime($event->startdate);
 			if($event->enddate !== NULL){
 				$event->enddate = new DateTime($event->enddate);
-				$diff = $event->begindate->diff($event->enddate);
-				$event->total_minutes = round(($event->enddate->getTimestamp()-$event->begindate->getTimestamp())/60);
+				$diff = $event->startdate->diff($event->enddate);
+				$event->total_minutes = round(($event->enddate->getTimestamp()-$event->startdate->getTimestamp())/60);
 			}else{
-				$diff = $event->begindate->diff(new DateTime());
-				$event->total_minutes = round((TIME-$event->begindate->getTimestamp())/60);
+				$diff = $event->startdate->diff(new DateTime());
+				$event->total_minutes = round((TIME-$event->startdate->getTimestamp())/60);
 			}
 
 			list($days, $hours, $minutes) = explode(';', $diff->format('%a;%h;%i'));
@@ -224,7 +224,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['begindate'], $_POST[
 	$options_filter = array();
 	$options_filter[] = implode(',', $_POST['services']);
 	$options_filter[] = $_POST['event_type'];
-	$options_filter[] = $_POST['begindate'];
+	$options_filter[] = $_POST['startdate'];
 	$options_filter[] = $_POST['enddate'];
 	$options_filter[] = $_POST['sort'];
 	$options_filter[] = $_POST['paging'];
@@ -240,8 +240,8 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['begindate'], $_POST[
 	$smarty->assign('pagination', $pagination);
 }
 
-if (isset($_POST['begindate']) === false) {
-	$_POST['begindate'] = strftime('%Y-01-01');
+if (isset($_POST['startdate']) === false) {
+	$_POST['startdate'] = strftime('%Y-01-01');
 }
 
 if (isset($_POST['enddate']) === false) {

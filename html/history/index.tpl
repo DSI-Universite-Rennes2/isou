@@ -24,10 +24,10 @@
 		</div>
 		<div class="form-information-dl-div">
 			<dt class="form-topics-dt">
-				<label for="begindate">Date de début</label>
+				<label for="startdate">Date de début</label>
 			</dt>
 			<dd class="form-values-dd">
-				<input id="begindate" name="begindate" type="date" value="{$smarty.post.begindate}" required="1" />
+				<input id="startdate" name="startdate" type="date" value="{$smarty.post.startdate}" required="1" />
 			</dd>
 		</div>
 		<div class="form-information-dl-div">
@@ -89,7 +89,7 @@
 		{foreach $events as $event}
 		<tr>
 			<td>{$event->name}</td>
-			<td>{$event->begindate|date_format:'%A %e %B %Y %H:%M'}</td>
+			<td>{$event->startdate|date_format:'%A %e %B %Y %H:%M'}</td>
 			<td>{$event->enddate|date_format:'%A %e %B %Y %H:%M'}</td>
 			<td>{$event->total}</td>
 			<td>{$event->total_minutes}</td>

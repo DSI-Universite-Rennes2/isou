@@ -34,8 +34,8 @@ for($i=0;$i<7;$i++){
 			$services_events[$event->idservice][$i] = 0;
 		}
 
-		if($event->begindate < $options['since']){
-			$event->begindate = $options['since'];
+		if($event->startdate < $options['since']){
+			$event->startdate = $options['since'];
 		}
 
 		if($event->enddate === NULL || $event->enddate > $options['before']){
@@ -46,7 +46,7 @@ for($i=0;$i<7;$i++){
 			}
 		}
 
-		$services_events[$event->idservice][$i] += $event->enddate->getTimestamp()-$event->begindate->getTimestamp();
+		$services_events[$event->idservice][$i] += $event->enddate->getTimestamp()-$event->startdate->getTimestamp();
 	}
 }
 

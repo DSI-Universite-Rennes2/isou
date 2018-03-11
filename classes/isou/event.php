@@ -13,7 +13,7 @@ class Event{
 	const TYPE_CLOSED = '3';
 
 	public $id;
-	public $begindate;
+	public $startdate;
 	public $enddate;
 	public $state;
 	public $type;
@@ -38,12 +38,12 @@ class Event{
 		if(isset($this->id)){
 			// PDO instance
 			try{
-				$this->begindate = new \DateTime($this->begindate);
+				$this->startdate = new \DateTime($this->startdate);
 				if($this->enddate !== NULL){
 					$this->enddate = new \DateTime($this->enddate);
 				}
 			}catch(Exception $exception){
-				$this->begindate = new \DateTime();
+				$this->startdate = new \DateTime();
 				$this->enddate = new \DateTime();
 			}
 
@@ -54,7 +54,7 @@ class Event{
 		}else{
 			// manual instance
 			$this->id = 0;
-			$this->begindate = new \DateTime();
+			$this->startdate = new \DateTime();
 			$this->enddate = NULL;
 			$this->state = State::CRITICAL;
 			$this->type = self::TYPE_SCHEDULED;
@@ -83,7 +83,7 @@ class Event{
 					" FROM events E".
 				" WHERE E.id != ?".
 				" AND E.idservice = ?".
-				" AND (E.enddate IS NULL OR (E.enddate >= ? AND E.begindate <= ?))";
+				" AND (E.enddate IS NULL OR (E.enddate >= ? AND E.startdate <= ?))";
 			$query = $DB->prepare($sql);
 			$query->execute(array($this->id, $this->idservice, STR_TIME, STR_TIME));
 			$count = $query->fetch(\PDO::FETCH_OBJ);
@@ -111,7 +111,7 @@ class Event{
 				throw new \Exception('Veuillez indiquer une date de fin.');
 			}
 
-			$interval = $this->begindate->diff($this->enddate);
+			$interval = $this->startdate->diff($this->enddate);
 			if($interval->days > 0){
 				throw new \Exception('L\'évènement doit durer moins de 24 heures.');
 			}
@@ -127,19 +127,19 @@ class Event{
 		}
 	}
 
-	public function set_begindate($date, $time) {
+	public function set_startdate($date, $time) {
 		try {
 			$preg_match_date = preg_match('#^(?P<year>\d{4}).(?P<month>\d{2}).(?P<day>\d{2})$#', $date);
 			$preg_match_time = preg_match('#^(?P<hour>\d{2}).(?P<minute>\d{2})$#', $time);
 
 			if ($preg_match_date === 1 && $preg_match_time === 1) {
-				$begindate = sprintf('%sT%s:00', $date, $time);
+				$startdate = sprintf('%sT%s:00', $date, $time);
 			} else {
 				throw new \Exception();
 			}
 
-			$datetime = new \DateTime($begindate);
-			$this->begindate = $datetime;
+			$datetime = new \DateTime($startdate);
+			$this->startdate = $datetime;
 		} catch(\Exception $exception) {
 			throw new \Exception('La date de début d\'interruption doit être au format AAAA-MM-JJ HH:MM.');
 		}
@@ -165,7 +165,7 @@ class Event{
 				throw new \Exception('La date de fin d\'interruption doit être au format AAAA-MM-JJ HH:MM.');
 			}
 
-			if (($this->begindate < $this->enddate) === false) {
+			if (($this->startdate < $this->enddate) === false) {
 				throw new \Exception('La date de début doit être inférieure à la date de fin.');
 			}
 		}
@@ -192,12 +192,12 @@ class Event{
 			$enddate = $this->enddate->format('Y-m-d\TH:i:s');
 		}
 
-		$params = array($this->begindate->format('Y-m-d\TH:i:s'), $enddate, $this->state, $this->type, $this->period, $this->ideventdescription, $this->idservice);
+		$params = array($this->startdate->format('Y-m-d\TH:i:s'), $enddate, $this->state, $this->type, $this->period, $this->ideventdescription, $this->idservice);
 
 		if($this->id === 0){
-			$sql = "INSERT INTO events(begindate, enddate, state, type, period, ideventdescription, idservice) VALUES(?,?,?,?,?,?,?)";
+			$sql = "INSERT INTO events(startdate, enddate, state, type, period, ideventdescription, idservice) VALUES(?,?,?,?,?,?,?)";
 		}else{
-			$sql = "UPDATE events SET begindate=?, enddate=?, state=?, type=?, period=?, ideventdescription=?, idservice=? WHERE id=?";
+			$sql = "UPDATE events SET startdate=?, enddate=?, state=?, type=?, period=?, ideventdescription=?, idservice=? WHERE id=?";
 			$params[] = $this->id;
 		}
 		$query = $DB->prepare($sql);
@@ -245,7 +245,7 @@ class Event{
 	public function close_all_other_events(){
 		global $DB, $LOGGER;
 
-		$sql = "UPDATE events SET enddate=? WHERE id != ? AND idservice=? AND begindate <= ? AND (enddate IS NULL OR enddate >= ?)";
+		$sql = "UPDATE events SET enddate=? WHERE id != ? AND idservice=? AND startdate <= ? AND (enddate IS NULL OR enddate >= ?)";
 		$query = $DB->prepare($sql);
 		if($query->execute(array(STR_TIME, $this->id, $this->idservice, STR_TIME, STR_TIME))){
 			return TRUE;
@@ -286,7 +286,7 @@ class Event{
 		$str = '';
 
 		if($this->state === State::CLOSED){
-			$str = 'Service fermé depuis le '.strftime('%A %d %B %Y', $this->begindate->getTimestamp()).'.';
+			$str = 'Service fermé depuis le '.strftime('%A %d %B %Y', $this->startdate->getTimestamp()).'.';
 			if($this->enddate !== NULL){
 				$str .= ' Réouverture le '.strftime('%A %d %B %Y', $this->enddate->getTimestamp()).'.';
 			}
@@ -299,34 +299,34 @@ class Event{
 				$period = '';
 			}
 
-			if(TIME > $this->begindate->getTimestamp()){
-				$str = 'Le service est en maintenance'.$period.' de '.strftime('%Hh%M', $this->begindate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
+			if(TIME > $this->startdate->getTimestamp()){
+				$str = 'Le service est en maintenance'.$period.' de '.strftime('%Hh%M', $this->startdate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
 			}else{
-				$str = 'Le service sera en maintenance'.$period.' de '.strftime('%Hh%M', $this->begindate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
+				$str = 'Le service sera en maintenance'.$period.' de '.strftime('%Hh%M', $this->startdate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
 			}
 		}else{
-			if($this->begindate->getTimestamp() > TIME){
+			if($this->startdate->getTimestamp() > TIME){
 				// évènement futur
 				if($this->enddate === NULL){
-					$str = 'Le service sera perturbé le '.strftime('%A %d %B à partir de %Hh%M', $this->begindate->getTimestamp()).'.';
+					$str = 'Le service sera perturbé le '.strftime('%A %d %B à partir de %Hh%M', $this->startdate->getTimestamp()).'.';
 				}else{
-					$str = 'Le service sera perturbé du '.strftime('%A %d %B %Hh%M', $this->begindate->getTimestamp()).' au '.strftime('%A %d %B %Hh%M', $this->enddate->getTimestamp()).'.';
+					$str = 'Le service sera perturbé du '.strftime('%A %d %B %Hh%M', $this->startdate->getTimestamp()).' au '.strftime('%A %d %B %Hh%M', $this->enddate->getTimestamp()).'.';
 				}
 			}elseif($this->enddate !== NULL && $this->enddate->getTimestamp() < TIME){
 				// évènement passé
-				if(strftime('%A%d%B', $this->begindate->getTimestamp()) === strftime('%A%d%B', $this->enddate->getTimestamp())){
+				if(strftime('%A%d%B', $this->startdate->getTimestamp()) === strftime('%A%d%B', $this->enddate->getTimestamp())){
 					// évènement qui s'est déroulé sur une journée
-					$str = 'Le service a été perturbé le '.strftime('%A %d %B', $this->begindate->getTimestamp()).' de '.strftime('%Hh%M', $this->begindate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
+					$str = 'Le service a été perturbé le '.strftime('%A %d %B', $this->startdate->getTimestamp()).' de '.strftime('%Hh%M', $this->startdate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
 				}else{
 					// évènement qui s'est déroulé sur plusieurs journées
-					$str = 'Le service a été perturbé du '.strftime('%A %d %B %Hh%M', $this->begindate->getTimestamp()).' au '.strftime('%A %d %B %Hh%M', $this->enddate->getTimestamp()).'.';
+					$str = 'Le service a été perturbé du '.strftime('%A %d %B %Hh%M', $this->startdate->getTimestamp()).' au '.strftime('%A %d %B %Hh%M', $this->enddate->getTimestamp()).'.';
 				}
 			}else{
 				// évènement en cours
-				if(strftime('%A%d%B', $this->begindate->getTimestamp()) === strftime('%A%d%B')){
-					$str = 'Le service est actuellement perturbé depuis '.strftime('%Hh%M', $this->begindate->getTimestamp()).'.';
+				if(strftime('%A%d%B', $this->startdate->getTimestamp()) === strftime('%A%d%B')){
+					$str = 'Le service est actuellement perturbé depuis '.strftime('%Hh%M', $this->startdate->getTimestamp()).'.';
 				}else{
-					$str = 'Le service est actuellement perturbé depuis le '.strftime('%A %d %B %Hh%M', $this->begindate->getTimestamp()).'.';
+					$str = 'Le service est actuellement perturbé depuis le '.strftime('%A %d %B %Hh%M', $this->startdate->getTimestamp()).'.';
 				}
 			}
 		}
@@ -341,5 +341,3 @@ class Event{
 		// object destructed
 	}
 }
-
-?>

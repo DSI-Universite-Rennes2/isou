@@ -15,9 +15,9 @@
 {foreach $events as $event}
 <tr>
 	<td>{$services[$event->idservice]}</td>
-	<td>{$event->begindate|date_format:"%H:%M"}</td>
+	<td>{$event->startdate|date_format:"%H:%M"}</td>
 	<td>{$event->enddate|date_format:"%H:%M"}</td>
-	<td>{$event->begindate|date_format:"%d %B %Y %H:%M"}</td>
+	<td>{$event->startdate|date_format:"%d %B %Y %H:%M"}</td>
 	<td>{$STATES[$event->state]}</td>
 	<td>{if !empty($event->description)}{$event->description|nl2br}{/if}</td>
 	<td>

@@ -43,7 +43,7 @@
 					{if !empty($event->period) || $event->state === "UniversiteRennes2\Isou\State::CLOSED|constant"}
 						<span class="events-maintenance-span">{$event}</span>
 					{else}
-						{if $event->begindate->getTimestamp() > $smarty.const.TIME}
+						{if $event->startdate->getTimestamp() > $smarty.const.TIME}
 						<span class="events-futur-span">{$event}</span>
 						{elseif $event->enddate !== NULL && $event->enddate->getTimestamp() < $smarty.const.TIME}
 						<span class="events-past-span">{$event}</span>

@@ -24,7 +24,7 @@
 			<tr>
 				<td>{$STATES[$event->state]}</td>
 				<td>{$event->service}</td>
-				<td>{$event->begindate|date_format:"%a %e %b %Hh%M"}</td>
+				<td>{$event->startdate|date_format:"%a %e %b %Hh%M"}</td>
 				{if $event->enddate === null}
 				<td>en cours</td>
 				{else}

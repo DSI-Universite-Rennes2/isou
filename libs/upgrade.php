@@ -107,8 +107,8 @@ function upgrade_100_to_200() {
             }
 
             try {
-                $begindate = new DateTime($old_event->beginDate);
-                $begindate = $begindate->format('Y-m-d\TH:i:s');
+                $startdate = new DateTime($old_event->beginDate);
+                $startdate = $startdate->format('Y-m-d\TH:i:s');
             } catch(Exception $exception) {
                 continue;
             }
@@ -125,7 +125,7 @@ function upgrade_100_to_200() {
             }
 
             $params = array();
-            $params[':begindate'] = $begindate;
+            $params[':startdate'] = $startdate;
             $params[':enddate'] = $enddate;
             $params[':state'] = 2;
             $params[':type'] = $old_event->isScheduled;
@@ -133,8 +133,8 @@ function upgrade_100_to_200() {
             $params[':ideventdescription'] = $description->id;
             $params[':idservice'] = $old_event->idService;
 
-            $sql = "INSERT INTO events(begindate, enddate, state, type, period, ideventdescription, idservice)".
-                " VALUES(:begindate, :enddate, :state, :type, :period, :ideventdescription, :idservice)";
+            $sql = "INSERT INTO events(startdate, enddate, state, type, period, ideventdescription, idservice)".
+                " VALUES(:startdate, :enddate, :state, :type, :period, :ideventdescription, :idservice)";
             $query = $DB->prepare($sql);
             $query->execute($params);
 

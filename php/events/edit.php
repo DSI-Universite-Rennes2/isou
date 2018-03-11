@@ -32,7 +32,7 @@ $options_types = Event::$TYPES;
 
 $options_yesno = array('1' => 'Oui', '0' => 'Non');
 
-if(isset($_POST['type'], $_POST['service'], $_POST['begindate'], $_POST['begintime'], $_POST['enddate'], $_POST['endtime'], $_POST['period'], $_POST['description'])){
+if(isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['starttime'], $_POST['enddate'], $_POST['endtime'], $_POST['period'], $_POST['description'])){
 	$_POST['errors'] = array();
 
 	try{
@@ -54,7 +54,7 @@ if(isset($_POST['type'], $_POST['service'], $_POST['begindate'], $_POST['beginti
 	}
 
 	try{
-		$event->set_begindate($_POST['begindate'], $_POST['begintime']);
+		$event->set_startdate($_POST['startdate'], $_POST['starttime']);
 	}catch(Exception $exception){
 		$_POST['errors'][] = $exception->getMessage();
 	}
@@ -127,5 +127,3 @@ $smarty->assign('options_yesno', $options_yesno);
 $smarty->assign('event', $event);
 
 $TEMPLATE = 'events/edit.tpl';
-
-?>

@@ -43,18 +43,18 @@
 		</div>
 		<div class="form-information-dl-div">
 			<dt class="form-topics-dt">
-				<label for="begindate">Date de début</label>
+				<label for="startdate">Date de début</label>
 			</dt>
 			<dd class="form-values-dd">
-				<input type="date" name="begindate" id="begindate" maxlength="10" placeholder="aaaa-mm-jj" value="{$event->begindate|date_format:'%Y-%m-%d'}" required="1" />
+				<input type="date" name="startdate" id="startdate" maxlength="10" placeholder="aaaa-mm-jj" value="{$event->startdate|date_format:'%Y-%m-%d'}" required="1" />
 			</dd>
 		</div>
 		<div class="form-information-dl-div">
 			<dt class="form-topics-dt">
-				<label for="begintime">Heure de début</label>
+				<label for="starttime">Heure de début</label>
 			</dt>
 			<dd class="form-values-dd">
-				<input type="time" name="begintime" id="begintime" maxlength="5" placeholder="hh:mm" value="{$event->begindate|date_format:'%H:%M'}" required="1" />
+				<input type="time" name="starttime" id="starttime" maxlength="5" placeholder="hh:mm" value="{$event->startdate|date_format:'%H:%M'}" required="1" />
 			</dd>
 		</div>
 		<div class="form-information-dl-div">

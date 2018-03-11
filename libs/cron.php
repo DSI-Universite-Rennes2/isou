@@ -188,7 +188,7 @@ function cron_regenerate_json() {
 		$data = array();
 		$data['name'] = $service->name;
 		$data['state'] = $service->state;
-		$data['date'] = $event->begindate->getTimestamp();
+		$data['date'] = $event->startdate->getTimestamp();
 		$data['description'] = explode("\n", $event->description);
 		$json_data['fisou']['services'][] = $data;
 	}

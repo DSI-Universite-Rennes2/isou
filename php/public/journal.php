@@ -25,7 +25,7 @@ for($i=0;$i<7;$i++){
 	$options['before']->setTime(23, 59, 59);
 	$days[$i]->events = get_events($options);
 	foreach($days[$i]->events as $j => $event){
-		if($event->enddate === NULL && $event->begindate->format('Y-m-d') > $days[$i]->date->format('Y-m-d')){
+		if($event->enddate === NULL && $event->startdate->format('Y-m-d') > $days[$i]->date->format('Y-m-d')){
 			unset($days[$i]->events[$j]);
 		}else if (isset($services[$event->idservice]) === false) {
 			unset($days[$i]->events[$j]);

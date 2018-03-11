@@ -24,7 +24,7 @@ if ($PAGE_NAME[1] === 'fermes') {
 } else {
 	$options = array();
 	$options['service_type'] = Service::TYPE_ISOU;
-	$options['sort'] = array('e.enddate IS NULL DESC', 'e.enddate DESC', 'e.begindate DESC');
+	$options['sort'] = array('e.enddate IS NULL DESC', 'e.enddate DESC', 'e.startdate DESC');
 
 	switch($PAGE_NAME[1]){
 		case 'imprevus':
