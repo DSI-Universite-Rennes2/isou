@@ -21,7 +21,7 @@ for($i=0;$i<7;$i++){
 
 	$options = array();
 	$options['since'] = $since->setTime(0, 0, 0);
-	$options['before'] = $before->setTime(23, 59, 59);
+	$options['before'] = $before->setTime(23, 59, 60);
 	$options['service_type'] = Service::TYPE_ISOU;
 
 	$events = get_events($options);

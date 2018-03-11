@@ -13,7 +13,7 @@
 				{elseif $i === 1}
 				<th id="lth3" class="thWide">Hier</th>
 				{else}
-				<th id="lth3" class="thWide">{$day|date_format:"%A&nbsp;%e"}</th>
+				<th id="lth3" class="thWide">{$day|date_format:"%a&nbsp;%e"}</th>
 				{/if}
 			{/foreach}
 			<th id="lth2">Taux de disponibilité</th>
