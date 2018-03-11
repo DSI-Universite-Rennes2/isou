@@ -219,6 +219,12 @@ class Upgrade200 extends AbstractMigration {
             $table = $this->table('events');
             $rows = $this->query('SELECT * FROM events_old eo JOIN events_isou_old eio ON eo.idEvent = eio.idEvent WHERE eo.typeEvent = 0');
             foreach ($rows as $row) {
+                if (empty($row['endDate']) === true) {
+                    $enddate = null;
+                } else {
+                    $enddate = $row['endDate'].':00';
+                }
+
                 if ($row['isScheduled'] === '2') {
                     $period = $row['period'];
                 } else {
@@ -233,7 +239,7 @@ class Upgrade200 extends AbstractMigration {
 
                 $data = array(
                     'begindate' => $row['beginDate'].':00',
-                    'enddate' => $row['endDate'].':00',
+                    'enddate' => $enddate,
                     'state' => $state,
                     'type' => $row['isScheduled'], // 0 = unscheduled events, 1 = scheduled, 2 = regular, 3 = closed.
                     'period' => $period,

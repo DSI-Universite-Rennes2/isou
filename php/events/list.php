@@ -23,13 +23,13 @@ if ($PAGE_NAME[1] === 'fermes') {
 	$subtemplate = 'events/list_closed_events.tpl';
 } else {
 	$options = array();
-	$options['since'] = strftime('%Y-%m-%dT%H:%M', mktime(0,0,0)-35*24*60*60);
 	$options['service_type'] = Service::TYPE_ISOU;
 	$options['sort'] = array('e.enddate IS NULL DESC', 'e.enddate DESC', 'e.begindate DESC');
 
 	switch($PAGE_NAME[1]){
 		case 'imprevus':
 			$submenu['imprevus']->selected = TRUE;
+			$options['since'] = strftime('%FT%T', mktime(0,0,0)-35*24*60*60);
 			$options['type'] = Event::TYPE_UNSCHEDULED;
 			$subtemplate = 'events/list_default_events.tpl';
 			break;
@@ -41,6 +41,7 @@ if ($PAGE_NAME[1] === 'fermes') {
 		case 'prevus':
 		default:
 			$submenu['prevus']->selected = TRUE;
+			$options['since'] = strftime('%FT%T', mktime(0,0,0)-35*24*60*60);
 			$options['type'] = Event::TYPE_SCHEDULED;
 			$subtemplate = 'events/list_default_events.tpl';
 	}

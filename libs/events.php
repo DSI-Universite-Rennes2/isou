@@ -81,9 +81,13 @@ function get_events($options = array()){
 	}
 
 	// since options
-	if(isset($options['since']) && $options['since'] instanceof DateTime){
+	if (isset($options['since']) === true) {
 		$sql .= " AND (e.enddate IS NULL OR e.begindate >= ?)";
-		$params[] = $options['since']->format('Y-m-d\TH:i');
+		if ($options['since'] instanceof DateTime) {
+			$params[] = $options['since']->format('Y-m-d\TH:i:s');
+		} else {
+			$params[] = $options['since'];
+		}
 	}
 
 	// closed option
@@ -184,5 +188,3 @@ function get_events_by_type($since=NULL, $type=NULL, $servicetype=NULL, $toleran
 
 	return $query->fetchAll(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Event');
 }
-
-?>
