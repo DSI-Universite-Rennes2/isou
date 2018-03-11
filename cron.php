@@ -72,7 +72,7 @@ cron_regenerate_json();
 // Mets à jour la base de données.
 $sql = "UPDATE configuration SET value = :value WHERE key = :key";
 $query = $DB->prepare($sql);
-$query->execute(array(':value' => TIME, ':key' => 'last_cron_update'));
+$query->execute(array(':value' => strftime('%FT%T'), ':key' => 'last_cron_update'));
 
 // Notifications.
 if ($CFG['notification_enabled'] === 1) {

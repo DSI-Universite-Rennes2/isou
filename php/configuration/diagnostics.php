@@ -65,10 +65,11 @@ foreach ($old_databases as $database) {
 }
 
 // Vérification du cron.
-if (isset($CFG['last_cron_update']) === false || empty($CFG['last_cron_update']) === true) {
+if (isset($CFG['last_cron_update']) === false || $CFG['last_cron_update'] === new DateTime('1970-01-01')) {
     $errors['Crons'][] = 'Le fichier cron.php ne semble pas être appelé régulièrement.';
-} else if ((TIME - 10 * 60) > $CFG['last_cron_update']) {
-    $errors['Crons'][] = 'La dernière exécution du cron date du '.strftime('%c', $CFG['last_cron_update']);
+} else if ((TIME - 10 * 60) > $CFG['last_cron_update']->getTimestamp()) {
+    $errors['Crons'][] = 'Le fichier cron.php ne semble pas être appelé régulièrement.'.
+        ' La dernière exécution du cron date du '.strftime('%c', $CFG['last_cron_update']->getTimestamp()).'.';
 }
 
 $smarty->assign('errors', $errors);

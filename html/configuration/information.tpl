@@ -41,21 +41,11 @@
 <dl>
 	<div class="form-information-dl-div">
 		<dt class="form-topics-dt">Dernier lancement du cron</dt>
-		<dd class="form-values-dd">{if $CFG.last_cron_update == 0}Aucune valeur{else}{$CFG.last_cron_update|date_format:'%c'}{/if}</dd>
+		<dd class="form-values-dd">{$CFG.last_cron_update->getTimestamp()|date_format:'%c'}</dd>
 	</div>
 
 	<div class="form-information-dl-div">
 		<dt class="form-topics-dt">Dernier lancement du cron quotidien</dt>
-		<dd class="form-values-dd">{if $CFG.last_daily_cron_update == 0}Aucune valeur{else}{$CFG.last_daily_cron_update|date_format:'%c'}{/if}</dd>
-	</div>
-
-	<div class="form-information-dl-div">
-		<dt class="form-topics-dt">Dernier lancement du cron hebdomadaire</dt>
-		<dd class="form-values-dd">{if $CFG.last_weekly_cron_update == 0}Aucune valeur{else}{$CFG.last_weekly_cron_update|date_format:'%c'}{/if}</dd>
-	</div>
-
-	<div class="form-information-dl-div">
-		<dt class="form-topics-dt">Dernier lancement du cron annuel</dt>
-		<dd class="form-values-dd">{if $CFG.last_yearly_cron_update == 0}Aucune valeur{else}{$CFG.last_yearly_cron_update|date_format:'%c'}{/if}</dd>
+		<dd class="form-values-dd">{$CFG.last_daily_cron_update->getTimestamp()|date_format:'%c'}</dd>
 	</div>
 </dl>

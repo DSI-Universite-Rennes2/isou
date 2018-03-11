@@ -225,6 +225,6 @@ function cron_notify() {
 
 		$sql = "UPDATE configuration SET value=? WHERE key=?";
 		$query = $DB->prepare($sql);
-		$query->execute(array(TIME, 'last_daily_cron_update'));
+		$query->execute(array(strftime('%FT%T'), 'last_daily_cron_update'));
 	}
 }

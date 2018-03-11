@@ -131,8 +131,6 @@ class Initialisation extends AbstractMigration {
                 array('key' => 'last_cron_update', 'value' => 0),
                 array('key' => 'last_daily_cron_update', 'value' => 0),
                 array('key' => 'last_update', 'value' => 0),
-                array('key' => 'last_weekly_cron_update', 'value' => 0),
-                array('key' => 'last_yearly_cron_update', 'value' => 0),
                 array('key' => 'menu_default', 'value' => 'actualite'),
                 array('key' => 'nagios_statusdat_enable', 'value' => 0),
                 array('key' => 'nagios_statusdat_path', 'value' => ''),

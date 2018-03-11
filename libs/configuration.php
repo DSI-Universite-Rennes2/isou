@@ -4,7 +4,7 @@ function get_configurations() {
     global $DB;
 
     $json_attributes = array('authentification_cas_admin_usernames', 'notification_receivers');
-    $datetime_attributes = array('last_check_update', 'last_cron_update', 'last_daily_cron_update', 'last_update', 'last_weekly_cron_update', 'last_yearly_cron_update');
+    $datetime_attributes = array('last_check_update', 'last_cron_update', 'last_daily_cron_update', 'last_update');
 
     $sql = "SELECT key, value FROM configuration";
     $configurations = array();
@@ -16,7 +16,7 @@ function get_configurations() {
                 try {
                     $configurations[$config->key] = new DateTime($config->value);
                 } catch (Exception $exception) {
-                    $configurations[$config->key] = new DateTime();
+                    $configurations[$config->key] = new DateTime('1970-01-01');
                 }
             } else {
                 $configurations[$config->key] = $config->value;

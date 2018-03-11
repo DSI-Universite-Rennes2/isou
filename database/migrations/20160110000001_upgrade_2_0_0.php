@@ -113,6 +113,12 @@ class Upgrade200 extends AbstractMigration {
                     case 'daily_cron_hour':
                         $data[':key'] = 'notification_hour';
                         break;
+                    case 'last_check_update':
+                    case 'last_cron_update':
+                    case 'last_daily_cron_update':
+                    case 'last_update':
+                        $data[':value'] = strftime('%FT%T', $row['value']);
+                        break;
                     case 'local_mail':
                         $data[':key'] = 'notification_sender';
                         break;
