@@ -24,18 +24,18 @@
 		</div>
 		<div class="form-information-dl-div">
 			<dt class="form-topics-dt">
-				<label for="year">Année</label>
+				<label for="begindate">Date de début</label>
 			</dt>
 			<dd class="form-values-dd">
-				{html_options id=year name="year" options=$options_years selected=$smarty.post.year|default:date('Y')}
+				<input id="begindate" name="begindate" type="date" value="{$smarty.post.begindate}" required="1" />
 			</dd>
 		</div>
 		<div class="form-information-dl-div">
 			<dt class="form-topics-dt">
-				<label for="month">Mois</label>
+				<label for="enddate">Date de fin</label>
 			</dt>
 			<dd class="form-values-dd">
-				{html_options id=month name=month options=$options_months selected=$smarty.post.month|default:-1}
+				<input id="enddate" name="enddate" type="date" value="{$smarty.post.enddate}" />
 			</dd>
 		</div>
 		<div class="form-information-dl-div">

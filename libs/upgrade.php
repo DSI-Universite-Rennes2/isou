@@ -26,6 +26,125 @@ function upgrade_100_to_200() {
     if ($phinx->run($arguments, new NullOutput()) !== 0) {
         throw new Exception('Une erreur est survenue lors de la mise à jour vers la version 2.0.0.');
     }
+
+    // Fusion les bases de données annualisées.
+    try {
+        $DB = new PDO(DB_PATH, '', '');
+        $DB->beginTransaction();
+    } catch(PDOException $exception) {
+        throw new Exception($exception->getMessage());
+    }
+
+    $old_databases = array();
+
+    $db_path = dirname(substr(DB_PATH, strlen('sqlite:')));
+    if ($handle = opendir($db_path)) {
+        while (($entry = readdir($handle)) !== false) {
+            if ($entry[0] === '.') {
+                continue;
+            }
+
+            if (is_file($db_path.'/'.$entry) === false) {
+                continue;
+            }
+
+            if (preg_match('/^isou-[0-9]+\.sqlite3$/', $entry) !== 1) {
+                continue;
+            }
+
+            $old_databases[] = $entry;
+        }
+
+        closedir($handle);
+    }
+
+    sort($old_databases);
+    if (count($old_databases) !== 0) {
+        echo PHP_EOL;
+        echo ' **  Fusionne les anciennes bases de données annualisées...'.PHP_EOL;
+    }
+
+    foreach ($old_databases as $entry) {
+        echo ' ==   - Fusionne la base de données '.$entry.' : ';
+
+        try {
+            $old_db = new PDO('sqlite:'.$db_path.'/'.$entry, '', '');
+        } catch(PDOException $exception) {
+            echo $exception->getMessage().PHP_EOL;
+            continue;
+        }
+
+        $sql = 'SELECT e.beginDate, e.endDate, ei.period, ei.isScheduled, ei.idService, ed.description'.
+            ' FROM events e'.
+            ' JOIN events_isou ei ON e.idEvent = ei.idEvent'.
+            ' JOIN events_description ed ON ed.idEventDescription = ei.idEventDescription'.
+            ' WHERE e.typeEvent = 0'.
+            ' AND ei.isScheduled < 2'; // On récupère uniquement l'historique des interruptions prévues et imprévues.
+        $query = $old_db->prepare($sql);
+        if ($query === false) {
+            echo 'Impossible de parcourir la base de données '.$entry.'. Le schéma de données n\'est pas correct.'.PHP_EOL;
+            continue;
+        }
+        $query->execute();
+        $old_events = $query->fetchAll(PDO::FETCH_OBJ);
+
+        $count = 0;
+        $total = count($old_events);
+
+        foreach ($old_events as $old_event) {
+            $sql = "SELECT id, description, autogen FROM events_descriptions WHERE description = :description";
+            $query = $DB->prepare($sql);
+            $query->execute(array(':description' => $old_event->description));
+            $description = $query->fetch(PDO::FETCH_OBJ);
+
+            if ($description === false) {
+                $sql = "INSERT INTO events_descriptions(description, autogen) VALUES (:description, :autogen)";
+                $query = $DB->prepare($sql);
+                $query->execute(array(':description' => $old_event->description, ':autogen' => $old_event->autogen));
+
+                $description = new stdClass();
+                $description->id = $DB->lastInsertId();
+            }
+
+            try {
+                $begindate = new DateTime($old_event->beginDate);
+                $begindate = $begindate->format('Y-m-d\TH:i:s');
+            } catch(Exception $exception) {
+                continue;
+            }
+
+            if (empty($old_event->endDate) === true) {
+                $enddate = null;
+            } else {
+                try {
+                    $enddate = new DateTime($old_event->endDate);
+                    $enddate = $enddate->format('Y-m-d\TH:i:s');
+                } catch(Exception $exception) {
+                    continue;
+                }
+            }
+
+            $params = array();
+            $params[':begindate'] = $begindate;
+            $params[':enddate'] = $enddate;
+            $params[':state'] = 2;
+            $params[':type'] = $old_event->isScheduled;
+            $params[':period'] = null;
+            $params[':ideventdescription'] = $description->id;
+            $params[':idservice'] = $old_event->idService;
+
+            $sql = "INSERT INTO events(begindate, enddate, state, type, period, ideventdescription, idservice)".
+                " VALUES(:begindate, :enddate, :state, :type, :period, :ideventdescription, :idservice)";
+            $query = $DB->prepare($sql);
+            $query->execute($params);
+
+            $count++;
+        }
+
+        echo $count.'/'.$total.' évènements fusionnés.'.PHP_EOL;
+    }
+
+    $DB->commit();
 }
 
 /**

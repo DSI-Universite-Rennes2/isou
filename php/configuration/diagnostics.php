@@ -35,7 +35,34 @@ if (is_file(PUBLIC_PATH.'/config.php') === true) {
 }
 
 // Vérification de la base de données.
-// TODO.
+$old_databases = array();
+
+$db_path = dirname(substr(DB_PATH, strlen('sqlite:')));
+if ($handle = opendir($db_path)) {
+    while (($entry = readdir($handle)) !== false) {
+        if ($entry[0] === '.') {
+            continue;
+        }
+
+        if (is_file($db_path.'/'.$entry) === false) {
+            continue;
+        }
+
+        if ($entry !== 'isou-visits.sqlite3' && preg_match('/^isou-[0-9]+\.sqlite3$/', $entry) !== 1) {
+            continue;
+        }
+
+        $old_databases[] = $entry;
+    }
+
+    closedir($handle);
+}
+
+sort($old_databases);
+
+foreach ($old_databases as $database) {
+    $errors['Base de données'][] = 'Le fichier <code>'.$db_path.'/'.$database.'</code> est dorénavant obsolète. Il peut être supprimé.';
+}
 
 // Vérification du cron.
 if (isset($CFG['last_cron_update']) === false || empty($CFG['last_cron_update']) === true) {

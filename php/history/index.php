@@ -17,8 +17,8 @@ if(isset($PAGE_NAME[4])){
 	if(count($options_filter) === 6){
 		$_POST['services'] = explode(',', $options_filter[0]);
 		$_POST['event_type'] = $options_filter[1];
-		$_POST['year'] = $options_filter[2];
-		$_POST['month'] = $options_filter[3];
+		$_POST['begindate'] = $options_filter[2];
+		$_POST['enddate'] = $options_filter[3];
 		$_POST['sort'] = $options_filter[4];
 		$_POST['paging'] = $options_filter[5];
 	}
@@ -34,31 +34,6 @@ $options_event_types = array(
 );
 $smarty->assign('options_event_types', $options_event_types);
 
-// years
-$current_year = date('Y');
-$options_years = array($current_year => $current_year);
-$databases_directory = dirname(substr(DB_PATH, 7));
-if(is_dir($databases_directory)){
-	if($handle = opendir($databases_directory)){
-		while(($file = readdir($handle)) !== FALSE){
-			if(preg_match('#isou-(\d{4})\.sqlite3#', $file, $year) > 0){
-				$options_years[$year[1]] = $year[1];
-			}
-		}
-		closedir($handle);
-	}
-}
-krsort($options_years);
-$options_years = array(-1 => 'Toutes les années') + $options_years;
-$smarty->assign('options_years', $options_years);
-
-// months
-$options_months = array(-1 => 'Tous les mois');
-for($i=1;$i<13;$i++){
-	$options_months[$i] = strftime('%B', mktime(0, 0, 0, $i));
-}
-$smarty->assign('options_months', $options_months);
-
 // sort
 $options_sorts = array('Décroissant', 'Croissant');
 $smarty->assign('options_sorts', $options_sorts);
@@ -70,7 +45,7 @@ for($i=10;$i<101;$i=$i+10){
 }
 $smarty->assign('options_paging', $options_paging);
 
-if(isset($_POST['services'], $_POST['event_type'], $_POST['year'], $_POST['month'], $_POST['sort'], $_POST['paging'])){
+if (isset($_POST['services'], $_POST['event_type'], $_POST['begindate'], $_POST['enddate'], $_POST['sort'], $_POST['paging']) === true) {
 	$events = array();
 
 	$params = array();
@@ -106,41 +81,34 @@ if(isset($_POST['services'], $_POST['event_type'], $_POST['year'], $_POST['month
 		$params[] = $_POST['event_type'];
 	}
 
-	// year
-	$databases = array();
-	if(isset($options_years[$_POST['year']])){
-		if($_POST['year'] === '-1'){
-			$databases = $options_years;
-			unset($databases[-1]);
-		}else{
-			$databases = array($_POST['year'] => $_POST['year']);
-		}
-
-		foreach($databases as $index => $filename){
-			if($index == $current_year){
-				$databases[$index] = DB_PATH;
-			}else{
-				$databases[$index] = str_replace('isou.sqlite3', 'isou-'.$index.'.sqlite3', DB_PATH);
-			}
-		}
-	}else{
-		$databases[] = DB_PATH;
+	// begindate
+	try {
+		$begindate = new DateTime($_POST['begindate']);
+		$_POST['begindate'] = $begindate->format('Y-m-d');
+	} catch (Exception $exception) {
+		$_POST['begindate'] = strftime('%Y-%m-01');
 	}
+	$sql_events .= " AND e.begindate >= ?";
+	$params[] = $_POST['begindate'];
 
-	// month
-	if($_POST['month'] !== '-1' && isset($options_months[$_POST['month']])){
-		$sql_months = " AND e.begindate LIKE '____-".$_POST['month']."-__%'";
-	}else{
-		$sql_months = '';
+	// enddate
+	if (empty($_POST['enddate']) === false) {
+		try {
+			$enddate = new DateTime($_POST['enddate']);
+			$_POST['enddate'] = $enddate->format('Y-m-d');
+
+			$sql_events .= " AND e.enddate <= ?";
+			$params[] = $_POST['enddate'];
+		} catch (Exception $exception) {
+			$_POST['enddate'] = '';
+		}
 	}
 
 	// sort
 	if($_POST['sort'] === '0'){
 		$sql_sort = " ORDER BY e.begindate DESC";
-		krsort($databases);
 	}else{
 		$sql_sort = " ORDER BY e.begindate ASC";
-		ksort($databases);
 	}
 
 	// paging
@@ -162,7 +130,6 @@ if(isset($_POST['services'], $_POST['event_type'], $_POST['year'], $_POST['month
 		" AND ed.id = e.ideventdescription".
 		$sql_services.
 		$sql_events.
-		$sql_months.
 		" AND s.idtype=?".
 		$sql_sort;
 
@@ -176,84 +143,61 @@ if(isset($_POST['services'], $_POST['event_type'], $_POST['year'], $_POST['month
 			" AND ed.id = e.ideventdescription".
 			$sql_services.
 			$sql_events.
-			$sql_months.
 			" AND s.idtype=?";
 	}
 
 	$params[] = UniversiteRennes2\Isou\Service::TYPE_ISOU;
 
-	foreach($databases as $database){
-		if($database === DB_PATH){
-			$db = $DB;
-		}else{
-			try{
-				if(is_file(substr($database, 7))){
-					$db = new PDO($database);
-				}else{
-					$db = null;
-				}
-			}catch(PDOException $e){
-				$db = null;
+	$query = $DB->prepare($sql);
+	$query->execute($params);
+	foreach($query->fetchAll(PDO::FETCH_OBJ) as $event){
+		try{
+			$event->begindate = new DateTime($event->begindate);
+			if($event->enddate !== NULL){
+				$event->enddate = new DateTime($event->enddate);
+				$diff = $event->begindate->diff($event->enddate);
+				$event->total_minutes = round(($event->enddate->getTimestamp()-$event->begindate->getTimestamp())/60);
+			}else{
+				$diff = $event->begindate->diff(new DateTime());
+				$event->total_minutes = round((TIME-$event->begindate->getTimestamp())/60);
 			}
-		}
 
-		if($db === NULL){
+			list($days, $hours, $minutes) = explode(';', $diff->format('%a;%h;%i'));
+
+			$event->total = array();
+
+			if($days === '1'){
+				$event->total[] = '1 jour';
+			}elseif($days > 1){
+				$event->total[] = $days.' jours';
+			}
+
+			if($hours === '1'){
+				$event->total[] = '1 heure';
+			}elseif($hours > 1){
+				$event->total[] = $hours.' heures';
+			}
+
+			if($minutes > 1){
+				$event->total[] = $minutes.' minutes';
+			}else{
+				$event->total[] = $minutes.' minute';
+			}
+
+			$event->total = implode(', ', $event->total);
+		}catch(Exception $exception){
+			$LOGGER->addError($exception->getMessage());
 			continue;
 		}
 
-		$query = $db->prepare($sql);
+		$events[] = $event;
+	}
+
+	if(!isset($_POST['export'])){
+		$query = $DB->prepare($sql_count);
 		$query->execute($params);
-		foreach($query->fetchAll(PDO::FETCH_OBJ) as $event){
-			try{
-				$event->begindate = new DateTime($event->begindate);
-				if($event->enddate !== NULL){
-					$event->enddate = new DateTime($event->enddate);
-					$diff = $event->begindate->diff($event->enddate);
-					$event->total_minutes = round(($event->enddate->getTimestamp()-$event->begindate->getTimestamp())/60);
-				}else{
-					$diff = $event->begindate->diff(new DateTime());
-					$event->total_minutes = round((TIME-$event->begindate->getTimestamp())/60);
-				}
-
-				list($days, $hours, $minutes) = explode(';', $diff->format('%a;%h;%i'));
-
-				$event->total = array();
-
-				if($days === '1'){
-					$event->total[] = '1 jour';
-				}elseif($days > 1){
-					$event->total[] = $days.' jours';
-				}
-
-				if($hours === '1'){
-					$event->total[] = '1 heure';
-				}elseif($hours > 1){
-					$event->total[] = $hours.' heures';
-				}
-
-				if($minutes > 1){
-					$event->total[] = $minutes.' minutes';
-				}else{
-					$event->total[] = $minutes.' minute';
-				}
-
-				$event->total = implode(', ', $event->total);
-			}catch(Exception $exception){
-				$LOGGER->addError($exception->getMessage());
-				continue;
-			}
-
-			$events[] = $event;
-		}
-
-		if(!isset($_POST['export'])){
-			$query = $db->prepare($sql_count);
-			$query->execute($params);
-			$count = $query->fetch(PDO::FETCH_NUM);
-			$count_events += $count[0];
-		}
-
-		$db = NULL;
+		$count = $query->fetch(PDO::FETCH_NUM);
+		$count_events += $count[0];
 	}
 
 	$smarty->assign('events', $events);
@@ -280,8 +224,8 @@ if(isset($_POST['services'], $_POST['event_type'], $_POST['year'], $_POST['month
 	$options_filter = array();
 	$options_filter[] = implode(',', $_POST['services']);
 	$options_filter[] = $_POST['event_type'];
-	$options_filter[] = $_POST['year'];
-	$options_filter[] = $_POST['month'];
+	$options_filter[] = $_POST['begindate'];
+	$options_filter[] = $_POST['enddate'];
 	$options_filter[] = $_POST['sort'];
 	$options_filter[] = $_POST['paging'];
 	$options_filter = implode(';', $options_filter);
@@ -296,6 +240,12 @@ if(isset($_POST['services'], $_POST['event_type'], $_POST['year'], $_POST['month
 	$smarty->assign('pagination', $pagination);
 }
 
-$TEMPLATE = 'history/index.tpl';
+if (isset($_POST['begindate']) === false) {
+	$_POST['begindate'] = strftime('%Y-01-01');
+}
 
-?>
+if (isset($_POST['enddate']) === false) {
+	$_POST['enddate'] = '';
+}
+
+$TEMPLATE = 'history/index.tpl';

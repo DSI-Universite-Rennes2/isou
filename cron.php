@@ -79,12 +79,6 @@ if ($CFG['notification_enabled'] === 1) {
     cron_notify();
 }
 
-// Rotate database.
-if (strftime('%Y', TIME) !== $CFG['last_yearly_cron_update']->format('Y')) {
-    // on n'est pas à la même année que $CFG['last_yearly_cron_update']
-    cron_rotate_database();
-}
-
 unlink($pid_file);
 
 $LOGGER->addInfo('Temps d\'exécution : '.(microtime(true)-$starttime).' secondes.');
