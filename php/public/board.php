@@ -9,11 +9,10 @@ $TITLE .= ' - Tableau';
 $today = new DateTime();
 
 $categories = array();
-foreach (get_categories() as $category) {
+foreach (get_categories(array('non-empty' => true)) as $category) {
     $categories[$category->id] = $category;
     $categories[$category->id]->services = array();
 }
-
 
 $services_events = array();
 
@@ -31,11 +30,11 @@ for ($i = 0; $i < 7; $i++) {
 
     $events = get_events($options);
     foreach ($events as $event) {
-        if (!isset($services_events[$event->idservice])) {
+        if (isset($services_events[$event->idservice]) === false) {
             $services_events[$event->idservice] = array();
         }
 
-        if (!isset($services_events[$event->idservice][$i])) {
+        if (isset($services_events[$event->idservice][$i]) === false) {
             $services_events[$event->idservice][$i] = 0;
         }
 
@@ -61,18 +60,18 @@ foreach ($services as $service) {
         continue;
     }
 
-    // changement de categorie
+    // Changement de catégorie.
     if (isset($categories[$service->idcategory]) === false) {
         continue;
     }
 
-    // ajout des évènements
+    // Ajout des évènements.
     $service->events = array();
     $service->availabilities = array();
     $service->availabilities_total = 0;
 
     for ($i = 0; $i < 7; $i++) {
-        if (isset($services_events[$service->id][$i])) {
+        if (isset($services_events[$service->id][$i]) === true) {
             if ($i === 0) {
                 $base = time() - mktime(0, 0, 0);
             } else {

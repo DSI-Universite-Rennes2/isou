@@ -1,7 +1,7 @@
 <?php
 
-if (isset($PAGE_NAME[2]) && ctype_digit($PAGE_NAME[2])) {
-    $category = get_category($PAGE_NAME[2]);
+if (isset($PAGE_NAME[2]) === true && ctype_digit($PAGE_NAME[2]) === true) {
+    $category = get_category(array('id' => $PAGE_NAME[2]));
 
     if ($category !== false) {
         if ($PAGE_NAME[1] === 'down') {

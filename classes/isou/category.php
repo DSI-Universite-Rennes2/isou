@@ -143,12 +143,12 @@ class Category{
             $commit = 1;
             $DB->beginTransaction();
 
-            $sql = "UPDATE categories SET position=position-1 WHERE idcategory = ?";
+            $sql = "UPDATE categories SET position=position-1 WHERE id = ?";
             $query = $DB->prepare($sql);
             $commit &= $query->execute(array($this->id));
 
             if ($commit === 1) {
-                $sql = "UPDATE categories SET position=position+1 WHERE idcategory != ? AND position = ?";
+                $sql = "UPDATE categories SET position=position+1 WHERE id != ? AND position = ?";
                 $query = $DB->prepare($sql);
                 $commit &= $query->execute(array($this->id, $this->position - 1));
             }
@@ -187,12 +187,12 @@ class Category{
             $commit = 1;
             $DB->beginTransaction();
 
-            $sql = "UPDATE categories SET position=position+1 WHERE idcategory = ?";
+            $sql = "UPDATE categories SET position=position+1 WHERE id = ?";
             $query = $DB->prepare($sql);
             $commit &= $query->execute(array($this->id));
 
             if ($commit === 1) {
-                $sql = "UPDATE categories SET position=position-1 WHERE idcategory != ? AND position = ?";
+                $sql = "UPDATE categories SET position=position-1 WHERE id != ? AND position = ?";
                 $query = $DB->prepare($sql);
                 $commit &= $query->execute(array($this->id, $this->position + 1));
             }

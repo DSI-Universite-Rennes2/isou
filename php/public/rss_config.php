@@ -8,7 +8,7 @@ require_once PRIVATE_PATH.'/libs/categories.php';
 $key = 0;
 
 $categories = array();
-foreach (get_categories() as $category) {
+foreach (get_categories(array('non-empty' => true)) as $category) {
     $category->services = array();
     $categories[$category->id] = $category;
 }
@@ -20,8 +20,8 @@ foreach ($services as $service) {
         continue;
     }
 
-    if (!isset($categories[$service->idcategory])) {
-        $category = get_category($service->idcategory);
+    if (isset($categories[$service->idcategory]) === false) {
+        $category = get_category(array('id' => $service->idcategory));
         if ($category === false) {
             continue;
         }
@@ -32,12 +32,12 @@ foreach ($services as $service) {
 
     $categories[$service->idcategory]->services[] = $service;
 
-    if (isset($_POST['keys'][$service->id])) {
+    if (isset($_POST['keys'][$service->id]) === true) {
         $key += pow(2, $service->rsskey);
     }
 }
 
-if (isset($_POST['generer'])) {
+if (isset($_POST['generer']) === true) {
     if ($key === 0) {
         $rss_url = URL.'/rss.php';
     } else {
@@ -45,12 +45,6 @@ if (isset($_POST['generer'])) {
     }
 } else {
     $rss_url = null;
-}
-
-foreach ($categories as $idcategory => $category) {
-    if (count($category->services) === 0) {
-        unset($categories[$idcategory]);
-    }
 }
 
 $smarty->assign('categories', $categories);

@@ -12,7 +12,7 @@ $since = new DateTime();
 $since->sub(new DateInterval('P2D')); // TODO: create CFG variable.
 
 $categories = array();
-foreach (get_categories() as $category) {
+foreach (get_categories(array('non-empty' => true)) as $category) {
     $categories[$category->id] = $category;
     $categories[$category->id]->services = array();
 }
@@ -38,12 +38,6 @@ foreach ($services as $service) {
     }
 
     $categories[$service->idcategory]->services[] = $service;
-}
-
-foreach ($categories as $idcategory => $category) {
-    if (count($category->services) === 0) {
-        unset($categories[$idcategory]);
-    }
 }
 
 $smarty->assign('categories', $categories);
