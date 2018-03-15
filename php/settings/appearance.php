@@ -55,4 +55,4 @@ $smarty->assign('menus', $menus);
 $smarty->assign('themes', $themes);
 $smarty->assign('menus_active', $menus_active);
 
-$SUBTEMPLATE = 'configuration/appearance.tpl';
+$SUBTEMPLATE = 'settings/appearance.tpl';

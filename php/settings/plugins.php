@@ -32,4 +32,4 @@ $smarty->assign('submenus', $submenus);
 
 $smarty->assign('PLUGIN_TEMPLATE', $PLUGIN_TEMPLATE);
 
-$SUBTEMPLATE = 'configuration/plugins.tpl';
+$SUBTEMPLATE = 'settings/plugins.tpl';

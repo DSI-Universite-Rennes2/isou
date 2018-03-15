@@ -86,6 +86,4 @@ if(isset($_GET['version'])){
 
 $smarty->assign('newversion', $newversion);
 
-$SUBTEMPLATE = 'configuration/changelog.tpl';
-
-?>
+$SUBTEMPLATE = 'settings/changelog.tpl';

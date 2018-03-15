@@ -74,4 +74,4 @@ if (isset($CFG['last_cron_update']) === false || $CFG['last_cron_update'] === ne
 
 $smarty->assign('errors', $errors);
 
-$SUBTEMPLATE = 'configuration/diagnostics.tpl';
+$SUBTEMPLATE = 'settings/diagnostics.tpl';

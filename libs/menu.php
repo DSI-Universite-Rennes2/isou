@@ -124,7 +124,7 @@ function get_administration_menu(){
 		'url' => 'configuration',
 		'title' => 'configurer l\'application',
 		'label' => 'configuration',
-		'model' => '/php/configuration/index.php',
+		'model' => '/php/settings/index.php',
 	);
 
 	$menu['Avancée']['aide'] = (object) array(

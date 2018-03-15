@@ -7,5 +7,4 @@ $smarty->assign('HTMLPurifierVersion', $HTMLPurifier->version);
 
 $smarty->assign('phpCASVersion', phpCAS::getVersion());
 
-$SUBTEMPLATE = 'configuration/information.tpl';
-
+$SUBTEMPLATE = 'settings/information.tpl';

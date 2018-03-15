@@ -10,26 +10,26 @@ if(!isset($PAGE_NAME[1])){
 
 switch($PAGE_NAME[1]){
 	case 'authentification':
-		require PRIVATE_PATH.'/php/configuration/authentification.php';
+		require PRIVATE_PATH.'/php/settings/authentification.php';
 		break;
 	case 'changelog':
-		require PRIVATE_PATH.'/php/configuration/changelog.php';
+		require PRIVATE_PATH.'/php/settings/changelog.php';
 		break;
 	case 'diagnostiques':
-		require PRIVATE_PATH.'/php/configuration/diagnostics.php';
+		require PRIVATE_PATH.'/php/settings/diagnostics.php';
 		break;
 	case 'informations':
-		require PRIVATE_PATH.'/php/configuration/information.php';
+		require PRIVATE_PATH.'/php/settings/information.php';
 		break;
 	case 'plugins':
-		require PRIVATE_PATH.'/php/configuration/plugins.php';
+		require PRIVATE_PATH.'/php/settings/plugins.php';
 		break;
 	case 'notifications':
-		require PRIVATE_PATH.'/php/configuration/notifications.php';
+		require PRIVATE_PATH.'/php/settings/notifications.php';
 		break;
 	case 'apparence':
 	default:
-		require PRIVATE_PATH.'/php/configuration/appearance.php';
+		require PRIVATE_PATH.'/php/settings/appearance.php';
 }
 
 $services_menu = array();
@@ -51,4 +51,4 @@ $smarty->assign('services_menu', $services_menu);
 
 $smarty->assign('SUBTEMPLATE', $SUBTEMPLATE);
 
-$TEMPLATE = 'configuration/configuration.tpl';
+$TEMPLATE = 'settings/index.tpl';

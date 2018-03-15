@@ -41,5 +41,4 @@ $smarty->assign('options_yes_no', $options_yes_no);
 $smarty->assign('cas_admin_usernames', $cas_admin_usernames);
 
 
-$SUBTEMPLATE = 'configuration/authentification.tpl';
-
+$SUBTEMPLATE = 'settings/authentification.tpl';

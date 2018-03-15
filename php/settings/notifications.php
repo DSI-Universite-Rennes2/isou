@@ -35,5 +35,4 @@ foreach(array('notification_enabled', 'notification_hour', 'notification_receive
 $smarty->assign('receivers', $receivers);
 $smarty->assign('options_yes_no', $options_yes_no);
 
-$SUBTEMPLATE = 'configuration/notifications.tpl';
-
+$SUBTEMPLATE = 'settings/notifications.tpl';
