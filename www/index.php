@@ -62,7 +62,7 @@ if (has_new_version() === true) {
 	}
 
 	// routing
-	$PAGE_NAME = explode('/', get_page_name('index.php', TRUE));
+	$PAGE_NAME = explode('/', get_page_name());
 	if(isset($MENU[$PAGE_NAME[0]])){
 		$current_page = $MENU[$PAGE_NAME[0]];
 	}elseif(isset($ADMINISTRATION_MENU['Générale'][$PAGE_NAME[0]])){

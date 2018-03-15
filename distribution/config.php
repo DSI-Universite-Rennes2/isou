@@ -56,7 +56,7 @@ define('TIME', time());
 define('STR_TIME', strftime('%Y-%m-%dT%H:%M', TIME));
 
 // Calcule l'URL du service.
-define('URL', get_base_url('dirname', HTTPS));
+define('URL', get_base_url($force_https = HTTPS));
 
 // Calcul l'URL du flux RSS.
 define('RSS_URL', URL.'/rss.php');
