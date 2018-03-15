@@ -17,36 +17,40 @@ $idcategories = get_categories_sorted_by_id();
 
 $plugin = Plugin::get_plugin(array('codename' => 'isou'));
 
+$categories = array();
+foreach (get_categories() as $category) {
+    $category->services = array();
+    $categories[$category->id] = $category;
+}
+
 $options = array();
 $options['tolerance'] = $plugin->settings->tolerance;
 $options['plugin'] = PLUGIN_ISOU;
-$options['since'] = new DateTime();
-$options['since']->sub(new DateInterval('P2D')); // TODO: create CFG variable
+$options['finished'] = false;
 
 $events = get_events($options);
 foreach ($events as $event) {
-    if (isset($services[$event->idservice])) {
-        $service = $services[$event->idservice];
-    } else {
+    if (isset($services[$event->idservice]) === false) {
         $service = get_service(array('id' => $event->idservice, 'visible' => true, 'plugin' => PLUGIN_ISOU));
+
         if ($service === false) {
             continue;
-        } else {
-            $services[$event->idservice] = $service;
         }
+
+        $services[$event->idservice] = $service;
     }
+
+    $service = $services[$event->idservice];
 
     // on ne garde que les services ISOU non fermés
     if ($service->state === State::CLOSED) {
         continue;
     }
 
-    if (!isset($categories[$service->idcategory]->services[$event->idservice])) {
+    if (isset($categories[$service->idcategory]->services[$event->idservice]) === false) {
         // initialise la categorie
-        if (!isset($categories[$service->idcategory])) {
-            $categories[$service->idcategory] = new stdClass();
-            $categories[$service->idcategory]->name = $idcategories[$service->idcategory];
-            $categories[$service->idcategory]->services = array();
+        if (isset($categories[$service->idcategory]) === false) {
+            continue;
         }
 
         // ajoute le service à la catégorie
@@ -56,6 +60,12 @@ foreach ($events as $event) {
 
     // ajoute l'évènement au service
     $categories[$service->idcategory]->services[$event->idservice]->events[] = $event;
+}
+
+foreach ($categories as $idcategory => $category) {
+    if (count($category->services) === 0) {
+        unset($categories[$idcategory]);
+    }
 }
 
 $smarty->assign('categories', $categories);
