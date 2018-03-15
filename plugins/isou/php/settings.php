@@ -2,7 +2,10 @@
 
 $smarty->addTemplateDir(PRIVATE_PATH.'/plugins/isou/html');
 
-$options_yes_no = array(1 => 'yes', 0 => 'no');
+$options_yes_no = array(
+1 => 'yes',
+0 => 'no',
+);
 
 $smarty->assign('options_yes_no', $options_yes_no);
 

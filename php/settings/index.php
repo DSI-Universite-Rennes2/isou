@@ -4,32 +4,32 @@ require_once PRIVATE_PATH.'/libs/services.php';
 
 $TITLE .= ' - Administration des services';
 
-if(!isset($PAGE_NAME[1])){
-	$PAGE_NAME[1] = '';
+if (!isset($PAGE_NAME[1])) {
+    $PAGE_NAME[1] = '';
 }
 
-switch($PAGE_NAME[1]){
-	case 'authentification':
-		require PRIVATE_PATH.'/php/settings/authentification.php';
-		break;
-	case 'changelog':
-		require PRIVATE_PATH.'/php/settings/changelog.php';
-		break;
-	case 'diagnostiques':
-		require PRIVATE_PATH.'/php/settings/diagnostics.php';
-		break;
-	case 'informations':
-		require PRIVATE_PATH.'/php/settings/information.php';
-		break;
-	case 'plugins':
-		require PRIVATE_PATH.'/php/settings/plugins.php';
-		break;
-	case 'notifications':
-		require PRIVATE_PATH.'/php/settings/notifications.php';
-		break;
-	case 'apparence':
-	default:
-		require PRIVATE_PATH.'/php/settings/appearance.php';
+switch ($PAGE_NAME[1]) {
+    case 'authentification':
+        require PRIVATE_PATH.'/php/settings/authentification.php';
+        break;
+    case 'changelog':
+        require PRIVATE_PATH.'/php/settings/changelog.php';
+        break;
+    case 'diagnostiques':
+        require PRIVATE_PATH.'/php/settings/diagnostics.php';
+        break;
+    case 'informations':
+        require PRIVATE_PATH.'/php/settings/information.php';
+        break;
+    case 'plugins':
+        require PRIVATE_PATH.'/php/settings/plugins.php';
+        break;
+    case 'notifications':
+        require PRIVATE_PATH.'/php/settings/notifications.php';
+        break;
+    case 'apparence':
+    default:
+        require PRIVATE_PATH.'/php/settings/appearance.php';
 }
 
 $services_menu = array();
@@ -41,10 +41,10 @@ $services_menu['diagnostiques'] = new Isou\Helpers\SimpleMenu('Diagnostiques', '
 $services_menu['informations'] = new Isou\Helpers\SimpleMenu('Informations', 'Configuration avancée', URL.'/index.php/configuration/informations');
 $services_menu['changelog'] = new Isou\Helpers\SimpleMenu('Changelog', 'Afficher le changelog', URL.'/index.php/configuration/changelog');
 
-if(isset($services_menu[$PAGE_NAME[1]])){
-	$services_menu[$PAGE_NAME[1]]->selected = TRUE;
-}else{
-	$services_menu['apparence']->selected = TRUE;
+if (isset($services_menu[$PAGE_NAME[1]])) {
+    $services_menu[$PAGE_NAME[1]]->selected = true;
+} else {
+    $services_menu['apparence']->selected = true;
 }
 
 $smarty->assign('services_menu', $services_menu);

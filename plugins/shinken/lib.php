@@ -16,8 +16,8 @@ function plugin_shinken_update($plugin = null) {
     $params = array(
         'http' => array(
             'method' => 'GET',
-            'header' => 'Authorization: Basic '.base64_encode($username.':'.$password)
-            )
+            'header' => 'Authorization: Basic '.base64_encode($username.':'.$password),
+            ),
         );
 
     // Vérifie si le fichier peut être ouvert.

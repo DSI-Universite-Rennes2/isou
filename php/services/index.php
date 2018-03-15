@@ -15,7 +15,7 @@ foreach ($plugins as $plugin) {
 }
 
 // Plugins.
-if (isset($PAGE_NAME[1]) === false){
+if (isset($PAGE_NAME[1]) === false) {
     $PAGE_NAME[1] = 'isou';
 }
 

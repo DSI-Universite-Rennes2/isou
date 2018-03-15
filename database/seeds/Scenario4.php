@@ -1,17 +1,17 @@
 <?php
 
 /**
- * Initialise le scénario 4.
- *      Contexte du service :
- *          - 1 service Isou
- *          - 1 service Shinken
- */
+  * Initialise le scénario 4.
+  *      Contexte du service :
+  *          - 1 service Isou
+  *          - 1 service Shinken
+  */
 
 use Phinx\Seed\AbstractSeed;
 
 /**
- * Classe de remplissage de données pour Phinx.
- */
+  * Classe de remplissage de données pour Phinx.
+  */
 class Scenario4 extends AbstractSeed {
     const ISOU_SEED_PREFIX_ID = '4';
     const ISOU_SEED_NAME = 'Scenario '.self::ISOU_SEED_PREFIX_ID;
@@ -136,11 +136,11 @@ class Scenario4 extends AbstractSeed {
         $data = array(
             array(
                 'id' => self::ISOU_SEED_PREFIX_ID.'1',
-                'message' => 'service isou inaccessible'
+                'message' => 'service isou inaccessible',
             ),
             array(
                 'id' => self::ISOU_SEED_PREFIX_ID.'2',
-                'message' => 'service shinken inaccessible'
+                'message' => 'service shinken inaccessible',
             ),
         );
         $table = $this->table('dependencies_messages');

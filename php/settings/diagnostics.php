@@ -10,24 +10,24 @@ $errors['Crons'] = array();
 // Vérification du fichier config.php.
 $config = file_get_contents(PRIVATE_PATH.'/config.php');
 
-if(preg_match('/define\(.NAME/', $config) === 1){
-	$errors['Fichier config.php'][] = 'La constante <code>NAME</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
+if (preg_match('/define\(.NAME/', $config) === 1) {
+    $errors['Fichier config.php'][] = 'La constante <code>NAME</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
 }
 
-if(preg_match('/define\(.HEADER/', $config) === 1){
-	$errors['Fichier config.php'][] = 'La constante <code>HEADER</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
+if (preg_match('/define\(.HEADER/', $config) === 1) {
+    $errors['Fichier config.php'][] = 'La constante <code>HEADER</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
 }
 
-if(preg_match('/define\(.STATUSDAT_URL/', $config) === 1){
-	$errors['Fichier config.php'][] = 'La constante <code>STATUSDAT_URL</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
+if (preg_match('/define\(.STATUSDAT_URL/', $config) === 1) {
+    $errors['Fichier config.php'][] = 'La constante <code>STATUSDAT_URL</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
 }
 
-if(preg_match('/define\(.DB_STAT_PATH/', $config) === 1){
-	$errors['Fichier config.php'][] = 'La constante <code>DB_STAT_PATH</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
+if (preg_match('/define\(.DB_STAT_PATH/', $config) === 1) {
+    $errors['Fichier config.php'][] = 'La constante <code>DB_STAT_PATH</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
 }
 
-if(preg_match('/define\(.VERSION/', $config) === 1){
-	$errors['Fichier config.php'][] = 'La constante <code>VERSION</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
+if (preg_match('/define\(.VERSION/', $config) === 1) {
+    $errors['Fichier config.php'][] = 'La constante <code>VERSION</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
 }
 
 if (is_file(PUBLIC_PATH.'/config.php') === true) {
@@ -67,7 +67,7 @@ foreach ($old_databases as $database) {
 // Vérification du cron.
 if (isset($CFG['last_cron_update']) === false || $CFG['last_cron_update'] === new DateTime('1970-01-01')) {
     $errors['Crons'][] = 'Le fichier cron.php ne semble pas être appelé régulièrement.';
-} else if ((TIME - 10 * 60) > $CFG['last_cron_update']->getTimestamp()) {
+} elseif ((TIME - 10 * 60) > $CFG['last_cron_update']->getTimestamp()) {
     $errors['Crons'][] = 'Le fichier cron.php ne semble pas être appelé régulièrement.'.
         ' La dernière exécution du cron date du '.strftime('%c', $CFG['last_cron_update']->getTimestamp()).'.';
 }

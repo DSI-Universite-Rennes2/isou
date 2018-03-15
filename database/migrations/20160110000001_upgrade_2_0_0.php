@@ -1,22 +1,22 @@
 <?php
 
 /**
- * Migre le schéma de données d'Isou en version 2.0.0.
- */
+  * Migre le schéma de données d'Isou en version 2.0.0.
+  */
 
 use Phinx\Migration\AbstractMigration;
 
 /**
- * Classe de migration pour Phinx
- */
+  * Classe de migration pour Phinx
+  */
 class Upgrade200 extends AbstractMigration {
     /**
-     * Modifie la structure du schéma de la base de données.
-     *
-     * @throws Exception if any errors occur.
-     *
-     * @return void
-     */
+      * Modifie la structure du schéma de la base de données.
+      *
+      * @throws Exception if any errors occur.
+      *
+      * @return void
+      */
     public function change() {
         echo PHP_EOL.' #';
         echo PHP_EOL.' ## Migration du schéma en version 2.0.0.'.PHP_EOL;
@@ -80,7 +80,7 @@ class Upgrade200 extends AbstractMigration {
                 $data = array(
                     'id' => $row['idCategory'],
                     'name' => $row['name'],
-                    'position' => $row['position']
+                    'position' => $row['position'],
                     );
                 $table->insert($data);
             }
@@ -101,7 +101,10 @@ class Upgrade200 extends AbstractMigration {
 
             $rows = $this->query('SELECT * FROM configuration_old');
             foreach ($rows as $row) {
-                $data = array(':key' => $row['key'], ':value' => $row['value']);
+                $data = array(
+                ':key' => $row['key'],
+                ':value' => $row['value'],
+                );
 
                 switch ($row['key']) {
                     case 'admin_mails':
@@ -157,7 +160,7 @@ class Upgrade200 extends AbstractMigration {
             $dependencies_messages = array();
 
             $rows = $this->query('SELECT * FROM dependencies');
-            foreach($rows as $row){
+            foreach ($rows as $row) {
                 $idmessage = array_search($row['message'], $dependencies_messages);
                 if ($idmessage === false) {
                     $idmessage = count($dependencies_messages);

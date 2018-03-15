@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Retourne les arguments passés à la requête HTTP.
- *
- * Exemple :
- *    -> URL appelée : https://services.univ-rennes2.fr/isou/index.php/configuration/informations
- *    <- valeur retournée : configuration/informations
- *
- * @var string $script_called
- * @return string
- */
+  * Retourne les arguments passés à la requête HTTP.
+  *
+  * Exemple :
+  *    -> URL appelée : https://services.univ-rennes2.fr/isou/index.php/configuration/informations
+  *    <- valeur retournée : configuration/informations
+  *
+  * @var    string $script_called
+  * @return string
+  */
 function get_page_name($script_called = 'index.php') {
     $uri = $_SERVER["REQUEST_URI"];
 
@@ -23,15 +23,15 @@ function get_page_name($script_called = 'index.php') {
 }
 
 /**
- * Retourne la base de l'URL appelée sans le nom du script appelé.
- *
- * Exemple :
- *    -> URL appelée : https://services.univ-rennes2.fr/isou/index.php/configuration/informations
- *    <- valeur retournée : https://services.univ-rennes2.fr/isou
- *
- * @var boolean $force_https Si True, force l'utilisation du HTTPS.
- * @return string
- */
+  * Retourne la base de l'URL appelée sans le nom du script appelé.
+  *
+  * Exemple :
+  *    -> URL appelée : https://services.univ-rennes2.fr/isou/index.php/configuration/informations
+  *    <- valeur retournée : https://services.univ-rennes2.fr/isou
+  *
+  * @var    boolean $force_https Si True, force l'utilisation du HTTPS.
+  * @return string
+  */
 function get_base_url($force_https = false) {
     if ($force_https === true || (isset($_SERVER['HTTPS']) === true && empty($_SERVER['HTTPS']) === false)) {
         $scheme = 'https://';
@@ -47,7 +47,7 @@ function get_base_url($force_https = false) {
         $_SERVER['SERVER_NAME'] = $_SERVER["HTTP_X_FORWARDED_HOST"];
     }
 
-    if(isset($_SERVER['SERVER_PORT']) === true && in_array($_SERVER['SERVER_PORT'], array(80, 443), true) === false) {
+    if (isset($_SERVER['SERVER_PORT']) === true && in_array($_SERVER['SERVER_PORT'], array(80, 443), true) === false) {
         $_SERVER['SERVER_NAME'] .= ':'.$_SERVER['SERVER_PORT'];
     }
 

@@ -26,4 +26,4 @@ if (isset($_POST['delete']) === true) {
 
 $smarty->assign('service', $service);
 
-$SUBTEMPLATE =  'delete.tpl';
+$SUBTEMPLATE = 'delete.tpl';

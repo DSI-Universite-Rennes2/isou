@@ -2,7 +2,7 @@
 
 if (isset($PAGE_NAME[3]) === true && ctype_digit($PAGE_NAME[3]) === true) {
     $service = get_service(array('id' => $PAGE_NAME[3], 'plugin' => PLUGIN_ISOU));
-}else{
+} else {
     $service = false;
 }
 
@@ -11,7 +11,7 @@ if ($service === false) {
 
     header('Location: '.URL.'/index.php/services/isou');
     exit(0);
-}elseif (isset($_POST['delete']) === true) {
+} elseif (isset($_POST['delete']) === true) {
     $_POST = array_merge($_POST, $service->delete());
 
     if (isset($_POST['errors'][0]) === false) {

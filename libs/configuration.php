@@ -3,10 +3,10 @@
 use UniversiteRennes2\Isou\Plugin;
 
 /**
- * Détermine si l'application doit être mise à jour.
- *
- * @return boolean Retourne true si une mise à jour est disponible.
- */
+  * Détermine si l'application doit être mise à jour.
+  *
+  * @return boolean Retourne true si une mise à jour est disponible.
+  */
 function has_new_version() {
     global $CFG;
 
@@ -59,26 +59,26 @@ function get_plugins() {
     return $plugins;
 }
 
-function set_configuration($key, $value, $field=NULL){
-	global $DB;
+function set_configuration($key, $value, $field = null) {
+    global $DB;
 
-	$sql = "UPDATE configuration SET value=? WHERE key=?";
-	$query = $DB->prepare($sql);
-	if($query->execute(array($value, $key))){
-		if($field === NULL){
-			$_POST['successes'][] = 'Mise à jour de la clé "'.$key.'".';
-		}else{
-			$_POST['successes'][] = 'Mise à jour du champ "'.$field.'".';
-		}
+    $sql = "UPDATE configuration SET value=? WHERE key=?";
+    $query = $DB->prepare($sql);
+    if ($query->execute(array($value, $key))) {
+        if ($field === null) {
+            $_POST['successes'][] = 'Mise à jour de la clé "'.$key.'".';
+        } else {
+            $_POST['successes'][] = 'Mise à jour du champ "'.$field.'".';
+        }
 
-		return true;
-	}else{
-		if($field === NULL){
-			$_POST['errors'][] = 'Erreur lors de la mise à jour de la clé "'.$key.'".';
-		}else{
-			$_POST['errors'][] = 'Erreur lors de la mise à jour du champ "'.$field.'".';
-		}
+        return true;
+    } else {
+        if ($field === null) {
+            $_POST['errors'][] = 'Erreur lors de la mise à jour de la clé "'.$key.'".';
+        } else {
+            $_POST['errors'][] = 'Erreur lors de la mise à jour du champ "'.$field.'".';
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

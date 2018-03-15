@@ -1,93 +1,93 @@
-.form li{
-	list-style: none;
-	padding-left: .5em;
+.form li {
+    list-style: none;
+    padding-left: .5em;
 }
 
 /* * * * * * * * * *
-	Formulaire
+    Formulaire
 * * * * * * * * * * */
-form .pform1{
-	text-align: center;
+form .pform1 {
+    text-align: center;
 }
 
-form p{
-	margin: 0.5em 0;
+form p {
+    margin: 0.5em 0;
 }
 
-.pform1{
-	padding: .5em 0em .5em .3em;
+.pform1 {
+    padding: .5em 0em .5em .3em;
 }
 
-.pform2{
-	padding: 0em 0em .5em 1em;
+.pform2 {
+    padding: 0em 0em .5em 1em;
 }
 
-.childService, .parentService{
-	width: 20em;
+.childService, .parentService {
+    width: 20em;
 }
 
-.hidden{
-	border: none;
-	display: none;
-	line-height: 0em;
-	margin-left: 0em;
+.hidden {
+    border: none;
+    display: none;
+    line-height: 0em;
+    margin-left: 0em;
 }
 
-#description{
-	font-weight: normal;
+#description {
+    font-weight: normal;
 }
 
-#selected{
-	background-color: pink;
+#selected {
+    background-color: pink;
 }
 
-.even{
-	background-color: mistyrose;
-	margin-top: .2em;
+.even {
+    background-color: mistyrose;
+    margin-top: .2em;
 }
 
-.uneven{
-	background-color: papayawhip;
-	margin-top: .2em;
+.uneven {
+    background-color: papayawhip;
+    margin-top: .2em;
 }
 
-.legend{
-	border: .1em black solid;
-	margin: .8em 0em;
-	padding: .5em;
-	text-align: center;
+.legend {
+    border: .1em black solid;
+    margin: .8em 0em;
+    padding: .5em;
+    text-align: center;
 }
 
-.legend li{
-	display: inline;
+.legend li {
+    display: inline;
 }
 
-span.legend{
-	display: -moz-inline-stack;
-	display: inline-block;
-	width: 16px;
-	height: 16px;
-	margin: 0em;
-	padding: 0em;
+span.legend {
+    display: -moz-inline-stack;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin: 0em;
+    padding: 0em;
 }
 
-dl{
-	float: left;
-	width: 40%;
-	padding-left: 10%;
-	margin: .5em 0em;
+dl {
+    float: left;
+    width: 40%;
+    padding-left: 10%;
+    margin: .5em 0em;
 }
 
-dd{
-	padding-left: 10%;
+dd {
+    padding-left: 10%;
 }
 
-.service{
-	clear: both;
+.service {
+    clear: both;
 }
 
-.no-dependencies{
-	float: left;
-	margin: .5em 0em;
-	padding-left: 10%;
+.no-dependencies {
+    float: left;
+    margin: .5em 0em;
+    padding-left: 10%;
 }

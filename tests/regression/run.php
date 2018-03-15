@@ -1,9 +1,8 @@
 <?php
 
 /**
- * Script executant les tests d'intégration.
- *
- */
+  * Script executant les tests d'intégration.
+  */
 
 use Phinx\Console\PhinxApplication;
 use Symfony\Component\Console\Input\StringInput;
@@ -47,7 +46,7 @@ if ($result === 0) {
 // Set UseCases.
 $cases_path = __DIR__.'/cases';
 if ($handle = opendir($cases_path)) {
-    while (($entry = readdir($handle)) !== FALSE) {
+    while (($entry = readdir($handle)) !== false) {
         if (preg_match('/^scenario([0-9]+)\.json$/', $entry, $matches) !== 1) {
             continue;
         }

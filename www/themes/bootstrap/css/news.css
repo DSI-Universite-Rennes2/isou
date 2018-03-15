@@ -1,23 +1,22 @@
-#isou-news-legend-aside{
-	float: right;
+#isou-news-legend-aside {
+    float: right;
 }
 
-#isou-news-legend-h1{
-	font-size: 1.1em;
-	font-weight: bold;
+#isou-news-legend-h1 {
+    font-size: 1.1em;
+    font-weight: bold;
 }
 
 .isou-news-legend-dt,
-.isou-news-legend-dd{
-	display: inline;
+.isou-news-legend-dd {
+    display: inline;
 }
 
-.isou-news-categories{
-	font-size: 1.2em;
-	font-weight: bold;
+.isou-news-categories {
+    font-size: 1.2em;
+    font-weight: bold;
 }
 
-.isou-news-categories:after{
-	content: ' : ';
+.isou-news-categories:after {
+    content: ' : ';
 }
-

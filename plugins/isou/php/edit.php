@@ -23,7 +23,7 @@ if (isset($_POST['category'], $_POST['name'], $_POST['url'], $_POST['visible']) 
     $service->visible = $_POST['visible'];
 
     $_POST['errors'] = $service->check_data($categories);
-    if (isset($_POST['errors'][0]) === false ) {
+    if (isset($_POST['errors'][0]) === false) {
         $_POST = array_merge($_POST, $service->save());
         if (isset($_POST['errors'][0]) === false) {
             $_SESSION['messages']['successes'] = $_POST['successes'];

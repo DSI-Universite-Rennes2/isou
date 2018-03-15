@@ -1,80 +1,80 @@
-#content{
-	padding-right: 1em;
+#content {
+    padding-right: 1em;
 }
 
-#list{
-	text-align: center;
-	font-size: 0.75em;
-	width: 100%;
+#list {
+    text-align: center;
+    font-size: 0.75em;
+    width: 100%;
 }
 
-#list li{
-	margin: 0em;
-	list-style-type: none;
+#list li {
+    margin: 0em;
+    list-style-type: none;
 }
 
-th{
-	font-weight: bold;
-	border:1px solid #a2c2e1;
-	padding: 0em .5em;
+th {
+    font-weight: bold;
+    border:1px solid #a2c2e1;
+    padding: 0em .5em;
 }
 
-.header .thdate{
-	text-align: left;
+.header .thdate {
+    text-align: left;
 }
 
-.header th{
-	text-align: center;
-	background-color:#d6e1ec
+.header th {
+    text-align: center;
+    background-color:#d6e1ec
 }
 
-.category{
-	background-color:#d6e1Fe;
-	text-align: left;
+.category {
+    background-color:#d6e1Fe;
+    text-align: left;
 }
 
-.statusWarning{
-	background-color: #FFA500;
+.statusWarning {
+    background-color: #FFA500;
 }
 
-.statusCritical{
-	background-color: #CD5C5C;
+.statusCritical {
+    background-color: #CD5C5C;
 }
 
-.statusUnknown{
-	background-color: #87CEEB;
+.statusUnknown {
+    background-color: #87CEEB;
 }
 
-.statusClosed{
-	background-color: #FFFFE0;
+.statusClosed {
+    background-color: #FFFFE0;
 }
 
-.regular{
-	margin: 0em;
+.regular {
+    margin: 0em;
 }
 
-.regular li{
-	margin: 0em;
-	list-style-type: none;
+.regular li {
+    margin: 0em;
+    list-style-type: none;
 }
 
-.unscheduled{
-	background-color: #FFE4B5;
+.unscheduled {
+    background-color: #FFE4B5;
 }
 
-.scheduled{
-	background-color: #FFE4B5;
+.scheduled {
+    background-color: #FFE4B5;
 }
 
-.regular{
-	background-color: #FFEFD5;
+.regular {
+    background-color: #FFEFD5;
 }
 
-.closed{
-	background-color: #FFFFE0;
+.closed {
+    background-color: #FFFFE0;
 }
 
-.messages{
-	background-color: #F5DEB3;
-	text-align: left;
+.messages {
+    background-color: #F5DEB3;
+    text-align: left;
 }

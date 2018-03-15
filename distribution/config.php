@@ -47,8 +47,8 @@ require PRIVATE_PATH.'/version.php';
 $LOGGER = new Logger('isou');
 
 if (defined('STDIN') === false) {
-	$LOGGER->pushHandler(new StreamHandler(LOGS_PATH.'/isou.log'));
-	$LOGGER->pushHandler(new StreamHandler(LOGS_PATH.'/error.log', Logger::ERROR));
+    $LOGGER->pushHandler(new StreamHandler(LOGS_PATH.'/isou.log'));
+    $LOGGER->pushHandler(new StreamHandler(LOGS_PATH.'/error.log', Logger::ERROR));
 }
 
 // Calcule le timestamp de l'heure courante.
@@ -69,7 +69,7 @@ error_reporting(-1);
 ini_set('error', LOGS_PATH.'/php_errors.log');
 
 if (DEBUG === true) {
-	ini_set('display_errors', 'On');
-}else{
-	ini_set('display_errors', 'Off');
+    ini_set('display_errors', 'On');
+} else {
+    ini_set('display_errors', 'Off');
 }

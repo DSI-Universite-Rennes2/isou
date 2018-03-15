@@ -5,7 +5,7 @@ try {
         throw new PDOException(DB_PATH.' n\'existe pas.');
     }
     $DB = new PDO(DB_PATH, '', '');
-} catch(PDOException $exception) {
+} catch (PDOException $exception) {
     if (defined('STDIN') === true) {
         exit(1);
     }

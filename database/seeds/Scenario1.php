@@ -1,16 +1,16 @@
 <?php
 
 /**
- * Initialise le scénario 1.
- *      Contexte du service :
- *          - 1 serveur web
- */
+  * Initialise le scénario 1.
+  *      Contexte du service :
+  *          - 1 serveur web
+  */
 
 use Phinx\Seed\AbstractSeed;
 
 /**
- * Classe de remplissage de données pour Phinx.
- */
+  * Classe de remplissage de données pour Phinx.
+  */
 class Scenario1 extends AbstractSeed {
     const ISOU_SEED_PREFIX_ID = '1';
     const ISOU_SEED_NAME = 'Scenario 1';
@@ -104,7 +104,7 @@ class Scenario1 extends AbstractSeed {
         $data = array(
             array(
                 'id' => self::ISOU_SEED_PREFIX_ID.'1',
-                'message' => 'service indisponible'
+                'message' => 'service indisponible',
             ),
         );
         $table = $this->table('dependencies_messages');

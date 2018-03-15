@@ -7,89 +7,89 @@ summary {
     display: list-item;
 }
 
-.alert a{
-	text-decoration: underline;
+.alert a {
+    text-decoration: underline;
 }
 
-.isou-top-aside-p{
-	margin: 0;
+.isou-top-aside-p {
+    margin: 0;
 }
 
-.form-information-dl-div{
-	margin: 1em;
+.form-information-dl-div {
+    margin: 1em;
 }
 
-.form-topics-dt{
-	border-bottom: .1em dotted #A0A0A0;
-	display: inline-block;
-	margin: 0 1.5em 0 0;
-	vertical-align: top;
-	width: 24em;
+.form-topics-dt {
+    border-bottom: .1em dotted #A0A0A0;
+    display: inline-block;
+    margin: 0 1.5em 0 0;
+    vertical-align: top;
+    width: 24em;
 }
 
-.form-values-dd{
-	display: inline-block;
-	vertical-align: top;
+.form-values-dd {
+    display: inline-block;
+    vertical-align: top;
 }
 
-.form-fieldset{
-	border: .1em dotted #A0A0A0;
-	padding: 1em;
-	margin: 1em;
+.form-fieldset {
+    border: .1em dotted #A0A0A0;
+    padding: 1em;
+    margin: 1em;
 }
 
-.form-legend{
-	border: none;
-	font-size: 1em;
-	font-weight: 700;
-	margin: auto;
-	padding: 0 .25em;
-	width: auto;
+.form-legend {
+    border: none;
+    font-size: 1em;
+    font-weight: 700;
+    margin: auto;
+    padding: 0 .25em;
+    width: auto;
 }
 
-.form-fieldset label{
-	font-weight: 100;
+.form-fieldset label {
+    font-weight: 100;
 }
 
-label > input[type=checkbox], label > input[type=radio]{
-	margin-right: .5em;
+label > input[type=checkbox], label > input[type=radio] {
+    margin-right: .5em;
 }
 
-.form-submit-buttons-ul{
-	margin: 1em .5em;
+.form-submit-buttons-ul {
+    margin: 1em .5em;
 }
 
-.label-large, .input-large{
-	width: 24em;
+.label-large, .input-large {
+    width: 24em;
 }
 
-.textarea-large{
-	height: 10em;
-	width: 24em;
+.textarea-large {
+    height: 10em;
+    width: 24em;
 }
 
-.label-extra-large, .input-extra-large{
-	width: 32em;
+.label-extra-large, .input-extra-large {
+    width: 32em;
 }
 
-.label-maximize, .input-maximize{
-	width: 100%;
+.label-maximize, .input-maximize {
+    width: 100%;
 }
 
-.nav-tabs{
-	margin-bottom: 1em;
+.nav-tabs {
+    margin-bottom: 1em;
 }
 
-.footer{
-	margin: 1em auto;
-	padding: 2em 0 0 0;
+.footer {
+    margin: 1em auto;
+    padding: 2em 0 0 0;
 }
 
-#footer-span{
-	border-top: .1em solid #A0A0A0;
-	padding: 1em 2em;
+#footer-span {
+    border-top: .1em solid #A0A0A0;
+    padding: 1em 2em;
 }
 
 #event-services {
-	height: 200px;
+    height: 200px;
 }

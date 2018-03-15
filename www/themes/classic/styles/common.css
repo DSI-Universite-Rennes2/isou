@@ -1,267 +1,267 @@
-*{
-	margin : 0em;
-	padding : 0em;
-	border: none;
+* {
+    margin : 0em;
+    padding : 0em;
+    border: none;
 }
 
-html{
-	font-size: 100%;
+html {
+    font-size: 100%;
 }
 
-body{
-	margin: 0em;
-	padding: 0em .7em;
-	font-family: "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 1em;
-	line-height: 1em;
+body {
+    margin: 0em;
+    padding: 0em .7em;
+    font-family: "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 1em;
+    line-height: 1em;
 }
 
-h1{
-	background-color: #DEEEFF;
-	text-align: center;
-	padding: .3em 0em;
-	font-size: 1.5em;
-	/*height: 1em;*/
-	line-height: 1em;
+h1 {
+    background-color: #DEEEFF;
+    text-align: center;
+    padding: .3em 0em;
+    font-size: 1.5em;
+    /*height: 1em;*/
+    line-height: 1em;
 }
 
-h2{
-	margin: 1em 0em .3em 0em;
-	font-size: 1.2em;
+h2 {
+    margin: 1em 0em .3em 0em;
+    font-size: 1.2em;
 }
 
-ul{
-	margin-left: 1em;
+ul {
+    margin-left: 1em;
 }
 
-ul li{
-	margin-left: 1.5em;
+ul li {
+    margin-left: 1.5em;
 }
 
-#configForm input{
-	border: none;
+#configForm input {
+    border: none;
 }
 
-#configForm #generer{
-	margin: 1em 0em;
-	border: solid 0.1em black;
+#configForm #generer {
+    margin: 1em 0em;
+    border: solid 0.1em black;
 }
 
-.flag{
-	width: 1em;
-	height: 1em;
+.flag {
+    width: 1em;
+    height: 1em;
 }
 
 /* * * * * * * * * *
-	font-style
+    font-style
 * * * * * * * * * * */
-.bold{
-	font-weight: bold;
+.bold {
+    font-weight: bold;
 }
 
-.italic{
-	font-style: italic;
+.italic {
+    font-style: italic;
 }
 
-.strike{
-	text-decoration: line-through;
+.strike {
+    text-decoration: line-through;
 }
 
-.left{
-	text-align: left;
+.left {
+    text-align: left;
 }
 
-.center{
-	text-align: center;
+.center {
+    text-align: center;
 }
 
-.justify{
-	text-align: justify;
+.justify {
+    text-align: justify;
 }
 
-.spacer{
-	clear: both;
-	visibility: hidden;
+.spacer {
+    clear: both;
+    visibility: hidden;
 }
 
 /* * * * * * * * * *
-	Tableau
+    Tableau
 * * * * * * * * * * */
 table {
-	margin-top:1em;
+    margin-top:1em;
 }
 
 table,td {
-	border-collapse: collapse;
-	border:1px solid #a2c2e1;
-	padding:0.2em;
+    border-collapse: collapse;
+    border:1px solid #a2c2e1;
+    padding:0.2em;
 }
 
 caption {
-	margin: 1em 0;
-	color: #002828;
-	background-color: #a1c2e1;
-	font-weight: 700;
+    margin: 1em 0;
+    color: #002828;
+    background-color: #a1c2e1;
+    font-weight: 700;
 }
 
 thead {
-	background-color: #d6e1ec;
-	color: #003C60;
+    background-color: #d6e1ec;
+    color: #003C60;
 }
 
 
 /* * * * * * * * * *
-	Formulaire
+    Formulaire
 * * * * * * * * * * */
-form{
-	margin: .3em 0em;
-	padding: 0em;
+form {
+    margin: .3em 0em;
+    padding: 0em;
 }
 
-#add-form-mask{
-	border: 0.2em ridge #6B8E23;
+#add-form-mask {
+    border: 0.2em ridge #6B8E23;
 }
 
-.form{
-	margin: 2em 0em;
+.form {
+    margin: 2em 0em;
 }
 
-fieldset{
-	margin: 2em 0em;
-	padding: 1em .5em;
-	border: .1em solid black;
+fieldset {
+    margin: 2em 0em;
+    padding: 1em .5em;
+    border: .1em solid black;
 }
 
-fieldset p{
-	margin: .5em;
+fieldset p {
+    margin: .5em;
 }
 
-#edit-form{
-	margin: 0em;
-	padding: 1em;
+#edit-form {
+    margin: 0em;
+    padding: 1em;
 }
 
 
-label, .label{
-	font-weight: bold;
-	display: -moz-inline-stack;
-	display: inline-block;
-	vertical-align: top;
+label, .label {
+    font-weight: bold;
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: top;
 }
 
-input, select, textarea{
-	border: .1em solid black;
-	line-height: 1.3em;
-	margin: 0em .3em;
-	padding-left: .3em;
+input, select, textarea {
+    border: .1em solid black;
+    line-height: 1.3em;
+    margin: 0em .3em;
+    padding-left: .3em;
 }
 
-.hidden{
-	border: none;
-	display: none;
-	line-height: 0em;
-	margin-left: 0em;
+.hidden {
+    border: none;
+    display: none;
+    line-height: 0em;
+    margin-left: 0em;
 }
 
-.invisible{
-	display: none;
+.invisible {
+    display: none;
 }
 
-.sr-only{
-	border: 0px none;
-	height: 1px;
-	margin: -1px;
-	overflow: hidden;
-	padding: 0px;
-	position: absolute;
-	width: 1px;
+.sr-only {
+    border: 0px none;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0px;
+    position: absolute;
+    width: 1px;
 }
 
-#header{
-	text-align: right;
-	text-decoration: none;
-	font-size: .7em;
-	margin: .5em 0em;
-	color: #505050;
+#header {
+    text-align: right;
+    text-decoration: none;
+    font-size: .7em;
+    margin: .5em 0em;
+    color: #505050;
 }
 
-#header p{
-	margin: .2em 0em;
+#header p {
+    margin: .2em 0em;
 }
 
-#top-border{
-	border-bottom: 0.1em solid #9A9A9A;
+#top-border {
+    border-bottom: 0.1em solid #9A9A9A;
 }
 
-.quickaccess{
-	float: left;
+.quickaccess {
+    float: left;
 }
 
-.quickaccess a:visited, .quickaccess a:hover, .quickaccess a:link, .quickaccess a:active, .quickaccess a:focus{
-	color: #545560;
+.quickaccess a:visited, .quickaccess a:hover, .quickaccess a:link, .quickaccess a:active, .quickaccess a:focus {
+    color: #545560;
 }
 
-#connexion{
-	color: #000000;
-}
-
-/* * * *
-	CONTENEUR
-* * * */
-#content{
-	margin: 1em 0em;
-	padding-left: 1em;
-}
-
-#annonce{
-	background-color: #FFA07A;
-	border: .1em #8B0000 solid;
-	margin: .8em 0em;
-	padding: .5em;
-	text-align: center;
-	font-weight: bold;
-}
-
-.icons{
-	width: 1em;
-	height: 1em;
-}
-
-a, a:visited, a:hover, a:link, a:active, a:focus{
-	color: blue;
-	text-decoration: underline;
-}
-
-.nolink, .nolink:visited, .nolink:hover, .nolink:link, .nolink:active, .nolink:focus{
-	color: black;
-	cursor: default;
-	text-decoration: none;
+#connexion {
+    color: #000000;
 }
 
 /* * * *
-	BAS DE PAGE CRI RENNES 2
+    CONTENEUR
 * * * */
-#footer{
-	background-color: lightblue;
-	text-align: center;
-	margin: .7em 0em;
-	padding: .3em 1em;
-	font-size: .8em;
-	font-weight: bold;
+#content {
+    margin: 1em 0em;
+    padding-left: 1em;
 }
 
-#update, #unavailable, .update{
-	background-color: orange;
-	border: .3em red solid;
-	margin: .8em 0em;
-	padding: .5em;
-	text-align: center;
-	font-weight: bold;
+#annonce {
+    background-color: #FFA07A;
+    border: .1em #8B0000 solid;
+    margin: .8em 0em;
+    padding: .5em;
+    text-align: center;
+    font-weight: bold;
 }
 
-#no-event{
-	text-align: center;
-	padding: 1em;
-	border: .2em dotted purple;
-	margin-top: 3em;
+.icons {
+    width: 1em;
+    height: 1em;
+}
+
+a, a:visited, a:hover, a:link, a:active, a:focus {
+    color: blue;
+    text-decoration: underline;
+}
+
+.nolink, .nolink:visited, .nolink:hover, .nolink:link, .nolink:active, .nolink:focus {
+    color: black;
+    cursor: default;
+    text-decoration: none;
+}
+
+/* * * *
+    BAS DE PAGE CRI RENNES 2
+* * * */
+#footer {
+    background-color: lightblue;
+    text-align: center;
+    margin: .7em 0em;
+    padding: .3em 1em;
+    font-size: .8em;
+    font-weight: bold;
+}
+
+#update, #unavailable, .update {
+    background-color: orange;
+    border: .3em red solid;
+    margin: .8em 0em;
+    padding: .5em;
+    text-align: center;
+    font-weight: bold;
+}
+
+#no-event {
+    text-align: center;
+    padding: 1em;
+    border: .2em dotted purple;
+    margin-top: 3em;
 }

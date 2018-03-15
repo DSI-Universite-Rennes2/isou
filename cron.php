@@ -4,7 +4,7 @@ use UniversiteRennes2\Isou\Plugin;
 
 // Vérification que le script est bien exécuté en CLI.
 if (defined('STDIN') === false) {
-	die();
+    die();
 }
 
 require __DIR__.'/config.php';
@@ -29,23 +29,23 @@ $plugins = get_plugins();
 // Créé un fichier cron.pid.
 $pid_file = PRIVATE_PATH.'/cron.pid';
 if (is_file($pid_file) === true) {
-	echo 'Le fichier '.$pid_file.' existe déjà. Un processus du cron est en cours.'.PHP_EOL;
-	$pid = file_get_contents($pid_file);
+    echo 'Le fichier '.$pid_file.' existe déjà. Un processus du cron est en cours.'.PHP_EOL;
+    $pid = file_get_contents($pid_file);
 
-	// un cron est déjà en cours d'execution
-	$atime = fileatime($pid_file);
-	if ($atime !== false && $atime+(10*60) < TIME) {
-		// si le fichier existe depuis plus de 10 minutes, alerter les admins
-		if (file_exists('/proc/'.$pid) === false) {
-			unlink($pid_file);
-			echo 'Aucun processus en cours n\'a pour identifiant '.$pid.'.'.PHP_EOL;
-			echo 'Le fichier '.$pid_file.' a été supprimé.'.PHP_EOL;
-		} else {
-			error_log('Le fichier \''.$pid_file.'\' a été créé depuis plus de 10 minutes.'.PHP_EOL.
-				'Il est probablement nécessaire de tuer le processus '.$pid.'.');
-			exit(1);
-		}
-	}
+    // un cron est déjà en cours d'execution
+    $atime = fileatime($pid_file);
+    if ($atime !== false && $atime + (10 * 60) < TIME) {
+        // si le fichier existe depuis plus de 10 minutes, alerter les admins
+        if (file_exists('/proc/'.$pid) === false) {
+            unlink($pid_file);
+            echo 'Aucun processus en cours n\'a pour identifiant '.$pid.'.'.PHP_EOL;
+            echo 'Le fichier '.$pid_file.' a été supprimé.'.PHP_EOL;
+        } else {
+            error_log('Le fichier \''.$pid_file.'\' a été créé depuis plus de 10 minutes.'.PHP_EOL.
+                'Il est probablement nécessaire de tuer le processus '.$pid.'.');
+            exit(1);
+        }
+    }
 }
 
 file_put_contents($pid_file, getmypid());
@@ -100,5 +100,5 @@ if ($CFG['notification_enabled'] === 1) {
 
 unlink($pid_file);
 
-$LOGGER->addInfo('Temps d\'exécution : '.(microtime(true)-$starttime).' secondes.');
+$LOGGER->addInfo('Temps d\'exécution : '.(microtime(true) - $starttime).' secondes.');
 $LOGGER->addInfo('Fin du cron '.strftime('%c'));

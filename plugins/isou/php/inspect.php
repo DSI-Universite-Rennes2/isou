@@ -2,7 +2,7 @@
 
 if (isset($PAGE_NAME[3]) === true && ctype_digit($PAGE_NAME[3]) === true) {
     $service = get_service(array('id' => $PAGE_NAME[3], 'plugin' => PLUGIN_ISOU));
-}else{
+} else {
     $service = false;
 }
 

@@ -3,341 +3,347 @@
 namespace UniversiteRennes2\Isou;
 
 class Event{
-	const PERIOD_NONE = '0';
-	const PERIOD_DAILY = '86400';
-	const PERIOD_WEEKLY = '604800';
+    const PERIOD_NONE = '0';
+    const PERIOD_DAILY = '86400';
+    const PERIOD_WEEKLY = '604800';
 
-	const TYPE_UNSCHEDULED = '0';
-	const TYPE_SCHEDULED = '1';
-	const TYPE_REGULAR = '2';
-	const TYPE_CLOSED = '3';
+    const TYPE_UNSCHEDULED = '0';
+    const TYPE_SCHEDULED = '1';
+    const TYPE_REGULAR = '2';
+    const TYPE_CLOSED = '3';
 
-	public $id;
-	public $startdate;
-	public $enddate;
-	public $state;
-	public $type;
-	public $period;
-	public $ideventdescription;
-	public $description;
-	public $idservice;
+    public $id;
+    public $startdate;
+    public $enddate;
+    public $state;
+    public $type;
+    public $period;
+    public $ideventdescription;
+    public $description;
+    public $idservice;
 
-	public static $TYPES = array(
-		self::TYPE_SCHEDULED => 'Évènement prévu',
-		self::TYPE_UNSCHEDULED => 'Évènement imprévu',
-		self::TYPE_REGULAR => 'Évènement régulier',
-		self::TYPE_CLOSED => 'Service fermé',
-		);
-	public static $PERIODS = array(
-		self::PERIOD_NONE => 'Aucune',
-		self::PERIOD_DAILY => 'Tous les jours',
-		self::PERIOD_WEEKLY => 'Toutes les semaines',
-		);
+    public static $TYPES = array(
+        self::TYPE_SCHEDULED => 'Évènement prévu',
+        self::TYPE_UNSCHEDULED => 'Évènement imprévu',
+        self::TYPE_REGULAR => 'Évènement régulier',
+        self::TYPE_CLOSED => 'Service fermé',
+        );
+    public static $PERIODS = array(
+        self::PERIOD_NONE => 'Aucune',
+        self::PERIOD_DAILY => 'Tous les jours',
+        self::PERIOD_WEEKLY => 'Toutes les semaines',
+        );
 
-	public function __construct(){
-		if(isset($this->id)){
-			// PDO instance
-			try{
-				$this->startdate = new \DateTime($this->startdate);
-				if($this->enddate !== NULL){
-					$this->enddate = new \DateTime($this->enddate);
-				}
-			}catch(Exception $exception){
-				$this->startdate = new \DateTime();
-				$this->enddate = new \DateTime();
-			}
+    public function __construct() {
+        if (isset($this->id)) {
+            // PDO instance
+            try {
+                $this->startdate = new \DateTime($this->startdate);
+                if ($this->enddate !== null) {
+                    $this->enddate = new \DateTime($this->enddate);
+                }
+            } catch (Exception $exception) {
+                $this->startdate = new \DateTime();
+                $this->enddate = new \DateTime();
+            }
 
-			if(empty($this->period)){
-				$this->period = self::PERIOD_NONE;
-			}
+            if (empty($this->period)) {
+                $this->period = self::PERIOD_NONE;
+            }
+        } else {
+            // manual instance
+            $this->id = 0;
+            $this->startdate = new \DateTime();
+            $this->enddate = null;
+            $this->state = State::CRITICAL;
+            $this->type = self::TYPE_SCHEDULED;
+            $this->period = '0';
+            $this->ideventdescription = 1;
+            $this->description = null;
+            $this->idservice = 0;
+        }
+    }
 
-		}else{
-			// manual instance
-			$this->id = 0;
-			$this->startdate = new \DateTime();
-			$this->enddate = NULL;
-			$this->state = State::CRITICAL;
-			$this->type = self::TYPE_SCHEDULED;
-			$this->period = '0';
-			$this->ideventdescription = 1;
-			$this->description = NULL;
-			$this->idservice = 0;
-		}
-	}
+    public function set_service($idservice, $options_services = null) {
+        global $DB;
 
-	public function set_service($idservice, $options_services=NULL){
-		global $DB;
+        $this->idservice = $idservice;
 
-		$this->idservice = $idservice;
+        if ($options_services === null) {
+            require_once PRIVATE_PATH.'/libs/services.php';
 
-		if($options_services === NULL){
-			require_once PRIVATE_PATH.'/libs/services.php';
+            $options_services = get_isou_services_sorted_by_idtype();
+        }
 
-			$options_services = get_isou_services_sorted_by_idtype();
-		}
+        if (!isset($options_services[$this->idservice])) {
+            throw new \Exception('Le service mis en maintenance n\'est pas valide.');
+        } else {
+            $sql = "SELECT COUNT(E.id) AS total".
+                    " FROM events E".
+                " WHERE E.id != ?".
+                " AND E.idservice = ?".
+                " AND (E.enddate IS NULL OR (E.enddate >= ? AND E.startdate <= ?))";
+            $query = $DB->prepare($sql);
+            $query->execute(array($this->id, $this->idservice, STR_TIME, STR_TIME));
+            $count = $query->fetch(\PDO::FETCH_OBJ);
+            if ($count->total !== '0') {
+                throw new \Exception('Un évènement est déjà en cours pour ce service. Veuillez modifier ou supprimer l\'ancien évènement.');
+            }
+        }
+    }
 
-		if(!isset($options_services[$this->idservice])){
-			throw new \Exception('Le service mis en maintenance n\'est pas valide.');
-		}else{
-			$sql = "SELECT COUNT(E.id) AS total".
-					" FROM events E".
-				" WHERE E.id != ?".
-				" AND E.idservice = ?".
-				" AND (E.enddate IS NULL OR (E.enddate >= ? AND E.startdate <= ?))";
-			$query = $DB->prepare($sql);
-			$query->execute(array($this->id, $this->idservice, STR_TIME, STR_TIME));
-			$count = $query->fetch(\PDO::FETCH_OBJ);
-			if($count->total !== '0'){
-				throw new \Exception('Un évènement est déjà en cours pour ce service. Veuillez modifier ou supprimer l\'ancien évènement.');
-			}
-		}
-	}
+    public function set_period($period) {
+        $this->period = $period;
 
-	public function set_period($period){
-		$this->period = $period;
+        if (empty($this->period)) {
+            $this->period = self::PERIOD_NONE;
+        } else {
+            if (!isset(self::$PERIODS[$this->period])) {
+                throw new \Exception('La périodicité n\'est pas valide.');
+            }
 
-		if(empty($this->period)){
-			$this->period = self::PERIOD_NONE;
-		}else{
-			if(!isset(self::$PERIODS[$this->period])){
-				throw new \Exception('La périodicité n\'est pas valide.');
-			}
+            if ($this->type !== self::TYPE_REGULAR) {
+                throw new \Exception('Seuls les évènements de type régulier peuvent avoir une périodicité.');
+            }
 
-			if($this->type !== self::TYPE_REGULAR){
-				throw new \Exception('Seuls les évènements de type régulier peuvent avoir une périodicité.');
-			}
+            if ($this->enddate === null) {
+                throw new \Exception('Veuillez indiquer une date de fin.');
+            }
 
-			if($this->enddate === NULL){
-				throw new \Exception('Veuillez indiquer une date de fin.');
-			}
+            $interval = $this->startdate->diff($this->enddate);
+            if ($interval->days > 0) {
+                throw new \Exception('L\'évènement doit durer moins de 24 heures.');
+            }
+        }
+    }
 
-			$interval = $this->startdate->diff($this->enddate);
-			if($interval->days > 0){
-				throw new \Exception('L\'évènement doit durer moins de 24 heures.');
-			}
+    public function set_type($type) {
+        $this->type = $type;
 
-		}
-	}
+        if (!isset(self::$TYPES[$this->type])) {
+            throw new \Exception('Le type d\'opération n\'est pas valide.');
+        }
+    }
 
-	public function set_type($type){
-		$this->type = $type;
+    public function set_startdate($date, $time) {
+        try {
+            $preg_match_date = preg_match('#^(?P<year>\d{4}).(?P<month>\d{2}).(?P<day>\d{2})$#', $date);
+            $preg_match_time = preg_match('#^(?P<hour>\d{2}).(?P<minute>\d{2})$#', $time);
 
-		if(!isset(self::$TYPES[$this->type])){
-			throw new \Exception('Le type d\'opération n\'est pas valide.');
-		}
-	}
+            if ($preg_match_date === 1 && $preg_match_time === 1) {
+                $startdate = sprintf('%sT%s:00', $date, $time);
+            } else {
+                throw new \Exception();
+            }
 
-	public function set_startdate($date, $time) {
-		try {
-			$preg_match_date = preg_match('#^(?P<year>\d{4}).(?P<month>\d{2}).(?P<day>\d{2})$#', $date);
-			$preg_match_time = preg_match('#^(?P<hour>\d{2}).(?P<minute>\d{2})$#', $time);
+            $datetime = new \DateTime($startdate);
+            $this->startdate = $datetime;
+        } catch (\Exception $exception) {
+            throw new \Exception('La date de début d\'interruption doit être au format AAAA-MM-JJ HH:MM.');
+        }
+    }
 
-			if ($preg_match_date === 1 && $preg_match_time === 1) {
-				$startdate = sprintf('%sT%s:00', $date, $time);
-			} else {
-				throw new \Exception();
-			}
+    public function set_enddate($date, $time) {
+        if (empty($date) === true || empty($time) === true) {
+            $this->enddate = null;
+        } else {
+            try {
+                $preg_match_date = preg_match('#^(?P<year>\d{4}).(?P<month>\d{2}).(?P<day>\d{2})$#', $date);
+                $preg_match_time = preg_match('#^(?P<hour>\d{2}).(?P<minute>\d{2})$#', $time);
 
-			$datetime = new \DateTime($startdate);
-			$this->startdate = $datetime;
-		} catch(\Exception $exception) {
-			throw new \Exception('La date de début d\'interruption doit être au format AAAA-MM-JJ HH:MM.');
-		}
-	}
+                if ($preg_match_date === 1 && $preg_match_time === 1) {
+                    $enddate = sprintf('%sT%s:00', $date, $time);
+                } else {
+                    throw new \Exception();
+                }
 
-	public function set_enddate($date, $time) {
-		if (empty($date) === true || empty($time) === true) {
-			$this->enddate = NULL;
-		} else {
-			try {
-				$preg_match_date = preg_match('#^(?P<year>\d{4}).(?P<month>\d{2}).(?P<day>\d{2})$#', $date);
-				$preg_match_time = preg_match('#^(?P<hour>\d{2}).(?P<minute>\d{2})$#', $time);
+                $datetime = new \DateTime($enddate);
+                $this->enddate = $datetime;
+            } catch (\Exception $exception) {
+                throw new \Exception('La date de fin d\'interruption doit être au format AAAA-MM-JJ HH:MM.');
+            }
 
-				if ($preg_match_date === 1 && $preg_match_time === 1) {
-					$enddate = sprintf('%sT%s:00', $date, $time);
-				} else {
-					throw new \Exception();
-				}
+            if (($this->startdate < $this->enddate) === false) {
+                throw new \Exception('La date de début doit être inférieure à la date de fin.');
+            }
+        }
+    }
 
-				$datetime = new \DateTime($enddate);
-				$this->enddate = $datetime;
-			} catch(\Exception $exception) {
-				throw new \Exception('La date de fin d\'interruption doit être au format AAAA-MM-JJ HH:MM.');
-			}
+    public function set_state($state, $options_states = null) {
+        $this->state = $state;
 
-			if (($this->startdate < $this->enddate) === false) {
-				throw new \Exception('La date de début doit être inférieure à la date de fin.');
-			}
-		}
-	}
+        if ($options_states === null) {
+            $options_states = State::$STATES;
+        }
 
-	public function set_state($state, $options_states=NULL){
-		$this->state = $state;
+        if (!isset($options_states[$this->state])) {
+            throw new \Exception('L\'état du service a une valeur incorrecte.');
+        }
+    }
 
-		if($options_states === NULL){
-			$options_states = State::$STATES;
-		}
+    public function save() {
+        global $DB, $LOGGER;
 
-		if(!isset($options_states[$this->state])){
-			throw new \Exception('L\'état du service a une valeur incorrecte.');
-		}
-	}
+        if ($this->enddate === null) {
+            $enddate = null;
+        } else {
+            $enddate = $this->enddate->format('Y-m-d\TH:i:s');
+        }
 
-	public function save(){
-		global $DB, $LOGGER;
+        $params = array(
+        $this->startdate->format('Y-m-d\TH:i:s'),
+        $enddate,
+        $this->state,
+        $this->type,
+        $this->period,
+        $this->ideventdescription,
+        $this->idservice,
+        );
 
-		if($this->enddate === NULL){
-			$enddate = NULL;
-		}else{
-			$enddate = $this->enddate->format('Y-m-d\TH:i:s');
-		}
+        if ($this->id === 0) {
+            $sql = "INSERT INTO events(startdate, enddate, state, type, period, ideventdescription, idservice) VALUES(?,?,?,?,?,?,?)";
+        } else {
+            $sql = "UPDATE events SET startdate=?, enddate=?, state=?, type=?, period=?, ideventdescription=?, idservice=? WHERE id=?";
+            $params[] = $this->id;
+        }
+        $query = $DB->prepare($sql);
 
-		$params = array($this->startdate->format('Y-m-d\TH:i:s'), $enddate, $this->state, $this->type, $this->period, $this->ideventdescription, $this->idservice);
+        if ($query->execute($params)) {
+            if ($this->id === 0) {
+                $this->id = $DB->lastInsertId();
+            }
+        } else {
+            // log db errors
+            $LOGGER->addError(implode(', ', $query->errorInfo()));
 
-		if($this->id === 0){
-			$sql = "INSERT INTO events(startdate, enddate, state, type, period, ideventdescription, idservice) VALUES(?,?,?,?,?,?,?)";
-		}else{
-			$sql = "UPDATE events SET startdate=?, enddate=?, state=?, type=?, period=?, ideventdescription=?, idservice=? WHERE id=?";
-			$params[] = $this->id;
-		}
-		$query = $DB->prepare($sql);
+            throw new \Exception('Une erreur est survenue lors de l\'enregistrement de l\'évènement.');
+        }
+    }
 
-		if($query->execute($params)){
-			if($this->id === 0){
-				$this->id = $DB->lastInsertId();
-			}
-		}else{
-			// log db errors
-			$LOGGER->addError(implode(', ', $query->errorInfo()));
+    public function delete() {
+        global $DB, $LOGGER;
 
-			throw new \Exception('Une erreur est survenue lors de l\'enregistrement de l\'évènement.');
-		}
-	}
+        $sql = "DELETE FROM events WHERE id=?";
+        $query = $DB->prepare($sql);
 
-	public function delete(){
-		global $DB, $LOGGER;
+        if ($query->execute(array($this->id)) === false) {
+            // log db errors
+            $LOGGER->addError(implode(', ', $query->errorInfo()));
 
-		$sql = "DELETE FROM events WHERE id=?";
-		$query = $DB->prepare($sql);
+            throw new \Exception('Une erreur est survenue lors de la suppression de l\'évènement.');
+        }
+    }
 
-		if($query->execute(array($this->id)) === FALSE){
-			// log db errors
-			$LOGGER->addError(implode(', ', $query->errorInfo()));
+    public function close() {
+        global $DB, $LOGGER;
 
-			throw new \Exception('Une erreur est survenue lors de la suppression de l\'évènement.');
-		}
-	}
+        $sql = "UPDATE events SET enddate=? WHERE id=?";
+        $query = $DB->prepare($sql);
+        if ($query->execute(array(STR_TIME, $this->id))) {
+            $this->enddate = new \DateTime(STR_TIME);
+            return true;
+        } else {
+            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            return false;
+        }
+    }
 
-	public function close(){
-		global $DB, $LOGGER;
+    public function close_all_other_events() {
+        global $DB, $LOGGER;
 
-		$sql = "UPDATE events SET enddate=? WHERE id=?";
-		$query = $DB->prepare($sql);
-		if($query->execute(array(STR_TIME, $this->id))){
-			$this->enddate = new \DateTime(STR_TIME);
-			return TRUE;
-		}else{
-			$LOGGER->addError(implode(', ', $query->errorInfo()));
-			return FALSE;
-		}
-	}
+        $sql = "UPDATE events SET enddate=? WHERE id != ? AND idservice=? AND startdate <= ? AND (enddate IS NULL OR enddate >= ?)";
+        $query = $DB->prepare($sql);
+        if ($query->execute(array(STR_TIME, $this->id, $this->idservice, STR_TIME, STR_TIME))) {
+            return true;
+        } else {
+            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            return false;
+        }
+    }
 
-	public function close_all_other_events(){
-		global $DB, $LOGGER;
+    public function set_description($description = null, $autogen = 0) {
+        global $DB, $LOGGER;
 
-		$sql = "UPDATE events SET enddate=? WHERE id != ? AND idservice=? AND startdate <= ? AND (enddate IS NULL OR enddate >= ?)";
-		$query = $DB->prepare($sql);
-		if($query->execute(array(STR_TIME, $this->id, $this->idservice, STR_TIME, STR_TIME))){
-			return TRUE;
-		}else{
-			$LOGGER->addError(implode(', ', $query->errorInfo()));
-			return FALSE;
-		}
-	}
+        if ($description !== null) {
+            $this->description = $description;
+        }
+        $description = get_event_description_by_content($this->description);
 
-	public function set_description($description=NULL, $autogen=0){
-		global $DB, $LOGGER;
+        if ($description === false) {
+            $sql = "INSERT INTO events_descriptions(description, autogen) VALUES(?,?)";
+            $query = $DB->prepare($sql);
+            if ($query->execute(array($this->description, $autogen))) {
+                $this->ideventdescription = $DB->lastInsertId();
+                $this->description = $description;
+            } else {
+                // log db errors
+                $LOGGER->addError(implode(', ', $query->errorInfo()));
+                return false;
+            }
+        } else {
+            $this->ideventdescription = $description->ideventdescription;
+            $this->description = $description;
+        }
 
-		if($description !== NULL){
-			$this->description = $description;
-		}
-		$description = get_event_description_by_content($this->description);
+        return true;
+    }
 
-		if($description === FALSE){
-			$sql = "INSERT INTO events_descriptions(description, autogen) VALUES(?,?)";
-			$query = $DB->prepare($sql);
-			if($query->execute(array($this->description, $autogen))){
-				$this->ideventdescription = $DB->lastInsertId();
-				$this->description = $description;
-			}else{
-				// log db errors
-				$LOGGER->addError(implode(', ', $query->errorInfo()));
-				return FALSE;
-			}
-		}else{
-			$this->ideventdescription = $description->ideventdescription;
-			$this->description = $description;
-		}
+    public function __toString() {
+        $str = '';
 
-		return TRUE;
-	}
+        if ($this->state === State::CLOSED) {
+            $str = 'Service fermé depuis le '.strftime('%A %d %B %Y', $this->startdate->getTimestamp()).'.';
+            if ($this->enddate !== null) {
+                $str .= ' Réouverture le '.strftime('%A %d %B %Y', $this->enddate->getTimestamp()).'.';
+            }
+        } elseif (!empty($this->period)) {
+            if ($this->period === 86400) {
+                $period = ' quotidienne';
+            } elseif ($this->period === 604800) {
+                $period = ' hebdomadaire';
+            } else {
+                $period = '';
+            }
 
-	public function __toString(){
-		$str = '';
+            if (TIME > $this->startdate->getTimestamp()) {
+                $str = 'Le service est en maintenance'.$period.' de '.strftime('%Hh%M', $this->startdate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
+            } else {
+                $str = 'Le service sera en maintenance'.$period.' de '.strftime('%Hh%M', $this->startdate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
+            }
+        } else {
+            if ($this->startdate->getTimestamp() > TIME) {
+                // évènement futur
+                if ($this->enddate === null) {
+                    $str = 'Le service sera perturbé le '.strftime('%A %d %B à partir de %Hh%M', $this->startdate->getTimestamp()).'.';
+                } else {
+                    $str = 'Le service sera perturbé du '.strftime('%A %d %B %Hh%M', $this->startdate->getTimestamp()).' au '.strftime('%A %d %B %Hh%M', $this->enddate->getTimestamp()).'.';
+                }
+            } elseif ($this->enddate !== null && $this->enddate->getTimestamp() < TIME) {
+                // évènement passé
+                if (strftime('%A%d%B', $this->startdate->getTimestamp()) === strftime('%A%d%B', $this->enddate->getTimestamp())) {
+                    // évènement qui s'est déroulé sur une journée
+                    $str = 'Le service a été perturbé le '.strftime('%A %d %B', $this->startdate->getTimestamp()).' de '.strftime('%Hh%M', $this->startdate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
+                } else {
+                    // évènement qui s'est déroulé sur plusieurs journées
+                    $str = 'Le service a été perturbé du '.strftime('%A %d %B %Hh%M', $this->startdate->getTimestamp()).' au '.strftime('%A %d %B %Hh%M', $this->enddate->getTimestamp()).'.';
+                }
+            } else {
+                // évènement en cours
+                if (strftime('%A%d%B', $this->startdate->getTimestamp()) === strftime('%A%d%B')) {
+                    $str = 'Le service est actuellement perturbé depuis '.strftime('%Hh%M', $this->startdate->getTimestamp()).'.';
+                } else {
+                    $str = 'Le service est actuellement perturbé depuis le '.strftime('%A %d %B %Hh%M', $this->startdate->getTimestamp()).'.';
+                }
+            }
+        }
 
-		if($this->state === State::CLOSED){
-			$str = 'Service fermé depuis le '.strftime('%A %d %B %Y', $this->startdate->getTimestamp()).'.';
-			if($this->enddate !== NULL){
-				$str .= ' Réouverture le '.strftime('%A %d %B %Y', $this->enddate->getTimestamp()).'.';
-			}
-		}elseif(!empty($this->period)){
-			if($this->period === 86400){
-				$period = ' quotidienne';
-			}elseif($this->period === 604800){
-				$period = ' hebdomadaire';
-			}else{
-				$period = '';
-			}
+        return $str;
+    }
 
-			if(TIME > $this->startdate->getTimestamp()){
-				$str = 'Le service est en maintenance'.$period.' de '.strftime('%Hh%M', $this->startdate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
-			}else{
-				$str = 'Le service sera en maintenance'.$period.' de '.strftime('%Hh%M', $this->startdate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
-			}
-		}else{
-			if($this->startdate->getTimestamp() > TIME){
-				// évènement futur
-				if($this->enddate === NULL){
-					$str = 'Le service sera perturbé le '.strftime('%A %d %B à partir de %Hh%M', $this->startdate->getTimestamp()).'.';
-				}else{
-					$str = 'Le service sera perturbé du '.strftime('%A %d %B %Hh%M', $this->startdate->getTimestamp()).' au '.strftime('%A %d %B %Hh%M', $this->enddate->getTimestamp()).'.';
-				}
-			}elseif($this->enddate !== NULL && $this->enddate->getTimestamp() < TIME){
-				// évènement passé
-				if(strftime('%A%d%B', $this->startdate->getTimestamp()) === strftime('%A%d%B', $this->enddate->getTimestamp())){
-					// évènement qui s'est déroulé sur une journée
-					$str = 'Le service a été perturbé le '.strftime('%A %d %B', $this->startdate->getTimestamp()).' de '.strftime('%Hh%M', $this->startdate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
-				}else{
-					// évènement qui s'est déroulé sur plusieurs journées
-					$str = 'Le service a été perturbé du '.strftime('%A %d %B %Hh%M', $this->startdate->getTimestamp()).' au '.strftime('%A %d %B %Hh%M', $this->enddate->getTimestamp()).'.';
-				}
-			}else{
-				// évènement en cours
-				if(strftime('%A%d%B', $this->startdate->getTimestamp()) === strftime('%A%d%B')){
-					$str = 'Le service est actuellement perturbé depuis '.strftime('%Hh%M', $this->startdate->getTimestamp()).'.';
-				}else{
-					$str = 'Le service est actuellement perturbé depuis le '.strftime('%A %d %B %Hh%M', $this->startdate->getTimestamp()).'.';
-				}
-			}
-		}
-
-		return $str;
-	}
-
-	/**
-	*	@desc	Destruct instance
-	*/
-	public function __destruct() {
-		// object destructed
-	}
+    /**
+      * @desc   Destruct instance
+      */
+    public function __destruct() {
+        // object destructed
+    }
 }

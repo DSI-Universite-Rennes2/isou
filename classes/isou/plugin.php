@@ -48,7 +48,7 @@ class Plugin {
 
         if (isset($conditions[0]) === true) {
             $sql_condition = ' WHERE '.implode(' AND ', $conditions);
-        }else{
+        } else {
             $sql_condition = '';
         }
 
@@ -70,7 +70,7 @@ class Plugin {
                 }
 
                 return $records[0];
-            }else{
+            } else {
                 return false;
             }
         }
@@ -103,7 +103,6 @@ class Plugin {
                 default:
                     $this->settings->{$setting->key} = $setting->value;
             }
-
         }
     }
 
@@ -171,7 +170,6 @@ class Plugin {
 
         $settings = (array) $this->settings;
         foreach ($settings as $key => $value) {
-
             $sql = "SELECT id FROM plugins_settings WHERE key = :key AND idplugin = :idplugin";
             $query = $DB->prepare($sql);
             $query->execute(array(':key' => $key, ':idplugin' => $this->id));
@@ -179,7 +177,7 @@ class Plugin {
 
             if ($setting === false) {
                 $sql = "INSERT INTO plugins_settings(key, value, type, idplugin) VALUES(:key, :value, :type, :idplugin)";
-            } else if ($overwrite === true) {
+            } elseif ($overwrite === true) {
                 $sql = "UPDATE plugins_settings SET value = :value WHERE key = :key AND idplugin = :idplugin";
             } else {
                 continue;

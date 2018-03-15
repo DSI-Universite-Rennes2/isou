@@ -24,38 +24,38 @@ $options['since'] = new DateTime();
 $options['since']->sub(new DateInterval('P2D')); // TODO: create CFG variable
 
 $events = get_events($options);
-foreach($events as $event){
-	if(isset($services[$event->idservice])){
-		$service = $services[$event->idservice];
-	}else{
-		$service = get_service(array('id' => $event->idservice, 'visible' => true, 'plugin' => PLUGIN_ISOU));
-		if($service === FALSE){
-			continue;
-		}else{
-			$services[$event->idservice] = $service;
-		}
-	}
+foreach ($events as $event) {
+    if (isset($services[$event->idservice])) {
+        $service = $services[$event->idservice];
+    } else {
+        $service = get_service(array('id' => $event->idservice, 'visible' => true, 'plugin' => PLUGIN_ISOU));
+        if ($service === false) {
+            continue;
+        } else {
+            $services[$event->idservice] = $service;
+        }
+    }
 
-	// on ne garde que les services ISOU non fermés
-	if($service->state === State::CLOSED){
-		continue;
-	}
+    // on ne garde que les services ISOU non fermés
+    if ($service->state === State::CLOSED) {
+        continue;
+    }
 
-	if(!isset($categories[$service->idcategory]->services[$event->idservice])){
-		// initialise la categorie
-		if(!isset($categories[$service->idcategory])){
-			$categories[$service->idcategory] = new stdClass();
-			$categories[$service->idcategory]->name = $idcategories[$service->idcategory];
-			$categories[$service->idcategory]->services = array();
-		}
+    if (!isset($categories[$service->idcategory]->services[$event->idservice])) {
+        // initialise la categorie
+        if (!isset($categories[$service->idcategory])) {
+            $categories[$service->idcategory] = new stdClass();
+            $categories[$service->idcategory]->name = $idcategories[$service->idcategory];
+            $categories[$service->idcategory]->services = array();
+        }
 
-		// ajoute le service à la catégorie
-		$categories[$service->idcategory]->services[$event->idservice] = $service;
-		$categories[$service->idcategory]->services[$event->idservice]->events = array();
-	}
+        // ajoute le service à la catégorie
+        $categories[$service->idcategory]->services[$event->idservice] = $service;
+        $categories[$service->idcategory]->services[$event->idservice]->events = array();
+    }
 
-	// ajoute l'évènement au service
-	$categories[$service->idcategory]->services[$event->idservice]->events[] = $event;
+    // ajoute l'évènement au service
+    $categories[$service->idcategory]->services[$event->idservice]->events[] = $event;
 }
 
 $smarty->assign('categories', $categories);

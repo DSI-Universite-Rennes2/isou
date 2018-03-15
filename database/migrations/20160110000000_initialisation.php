@@ -1,22 +1,22 @@
 <?php
 
 /**
- * Initialise le schéma de données d'Isou.
- */
+  * Initialise le schéma de données d'Isou.
+  */
 
 use Phinx\Migration\AbstractMigration;
 
 /**
- * Classe de migration pour Phinx
- */
+  * Classe de migration pour Phinx
+  */
 class Initialisation extends AbstractMigration {
     /**
-     * Modifie la structure du schéma de la base de données.
-     *
-     * @throws Exception if any errors occur.
-     *
-     * @return void
-     */
+      * Modifie la structure du schéma de la base de données.
+      *
+      * @throws Exception if any errors occur.
+      *
+      * @return void
+      */
     public function change() {
         echo PHP_EOL.' #';
         echo PHP_EOL.' ## Initialisation Phinx'.PHP_EOL;
@@ -126,24 +126,96 @@ class Initialisation extends AbstractMigration {
         // Insert "configuration" data.
         echo ' ==   - Insère les données dans la table "configuration".'.PHP_EOL;
         $rows = array(
-                array('key' => 'authentification_cas_admin_usernames', 'value' => '', 'type' => 'array'),
-                array('key' => 'authentification_cas_enabled', 'value' => 0, 'type' => 'string'),
-                array('key' => 'authentification_manual_enabled', 'value' => 0, 'type' => 'string'),
-                array('key' => 'authentification_manual_password', 'value' => '', 'type' => 'string'),
-                array('key' => 'authentification_manual_path', 'value' => '', 'type' => 'string'),
-                array('key' => 'last_check_update', 'value' => 0, 'type' => 'datetime'),
-                array('key' => 'last_cron_update', 'value' => 0, 'type' => 'datetime'),
-                array('key' => 'last_daily_cron_update', 'value' => 0, 'type' => 'datetime'),
-                array('key' => 'last_update', 'value' => 0, 'type' => 'datetime'),
-                array('key' => 'menu_default', 'value' => 'actualite', 'type' => 'string'),
-                array('key' => 'notification_enabled', 'value' => 0, 'type' => 'string'),
-                array('key' => 'notification_hour', 'value' => '06:00', 'type' => 'string'),
-                array('key' => 'notification_receivers', 'value' => '', 'type' => 'array'),
-                array('key' => 'notification_sender', 'value' => '', 'type' => 'string'),
-                array('key' => 'site_header', 'value' => 'ISOU : État des services numériques offerts par l\'Université', 'type' => 'string'),
-                array('key' => 'site_name', 'value' => 'Isou', 'type' => 'string'),
-                array('key' => 'theme', 'value' => 'bootstrap', 'type' => 'string'),
-                array('key' => 'version', 'value' => '2.0.0', 'type' => 'string'),
+                array(
+                    'key' => 'authentification_cas_admin_usernames',
+                    'value' => '',
+                    'type' => 'array',
+                ),
+                array(
+                    'key' => 'authentification_cas_enabled',
+                    'value' => 0,
+                    'type' => 'string',
+                ),
+                array(
+                    'key' => 'authentification_manual_enabled',
+                    'value' => 0,
+                    'type' => 'string',
+                ),
+                array(
+                    'key' => 'authentification_manual_password',
+                    'value' => '',
+                    'type' => 'string',
+                ),
+                array(
+                    'key' => 'authentification_manual_path',
+                    'value' => '',
+                    'type' => 'string',
+                ),
+                array(
+                    'key' => 'last_check_update',
+                    'value' => 0,
+                    'type' => 'datetime',
+                ),
+                array(
+                    'key' => 'last_cron_update',
+                    'value' => 0,
+                    'type' => 'datetime',
+                ),
+                array(
+                    'key' => 'last_daily_cron_update',
+                    'value' => 0,
+                    'type' => 'datetime',
+                ),
+                array(
+                    'key' => 'last_update',
+                    'value' => 0,
+                    'type' => 'datetime',
+                ),
+                array(
+                    'key' => 'menu_default',
+                    'value' => 'actualite',
+                    'type' => 'string',
+                ),
+                array(
+                    'key' => 'notification_enabled',
+                    'value' => 0,
+                    'type' => 'string',
+                ),
+                array(
+                    'key' => 'notification_hour',
+                    'value' => '06:00',
+                    'type' => 'string',
+                ),
+                array(
+                    'key' => 'notification_receivers',
+                    'value' => '',
+                    'type' => 'array',
+                ),
+                array(
+                    'key' => 'notification_sender',
+                    'value' => '',
+                    'type' => 'string',
+                ),
+                array(
+                    'key' => 'site_header',
+                    'value' => 'ISOU : État des services numériques offerts par l\'Université',
+                    'type' => 'string',
+                ),
+                array(
+                    'key' => 'site_name',
+                    'value' => 'Isou',
+                    'type' => 'string',
+                ),
+                array(
+                    'key' => 'theme',
+                    'value' => 'bootstrap',
+                    'type' => 'string',
+                ),
+                array(
+                    'key' => 'version',
+                    'value' => '2.0.0',
+                    'type' => 'string',
+                ),
             );
         $table->insert($rows);
         $table->saveData();
