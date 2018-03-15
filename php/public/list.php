@@ -9,7 +9,7 @@ require_once PRIVATE_PATH.'/libs/categories.php';
 $TITLE .= ' - Liste';
 
 $since = new DateTime();
-$since->sub(new DateInterval('P2D')); // TODO: create CFG variable
+$since->sub(new DateInterval('P2D')); // TODO: create CFG variable.
 
 $categories = array();
 foreach (get_categories() as $category) {
@@ -24,21 +24,26 @@ foreach ($services as $service) {
         continue;
     }
 
-    // changement de categorie
+    // Changement de categorie.
     if (isset($categories[$service->idcategory]) === false) {
         continue;
     }
 
-    // ajout des évènements
+    // Ajout des évènements.
     if ($service->is_closed === true) {
         $service->closed_event = $service->get_closed_event();
     } else {
-        $service->last_event = $service->get_last_events(array('since' => $since, 'one_record' => true));
-        $service->next_scheduled_event = $service->get_next_scheduled_events(array('one_record' => true));
+        $service->events = get_events(array('since' => $since, 'idservice' => $service->id));
         $service->regular_events = $service->get_regular_events();
     }
 
     $categories[$service->idcategory]->services[] = $service;
+}
+
+foreach ($categories as $idcategory => $category) {
+    if (count($category->services) === 0) {
+        unset($categories[$idcategory]);
+    }
 }
 
 $smarty->assign('categories', $categories);

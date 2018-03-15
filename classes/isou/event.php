@@ -296,43 +296,55 @@ class Event{
             if ($this->enddate !== null) {
                 $str .= ' Réouverture le '.strftime('%A %d %B %Y', $this->enddate->getTimestamp()).'.';
             }
-        } elseif (!empty($this->period)) {
-            if ($this->period === 86400) {
-                $period = ' quotidienne';
-            } elseif ($this->period === 604800) {
-                $period = ' hebdomadaire';
-            } else {
-                $period = '';
-            }
+        } elseif (empty($this->period) === false) {
+            $starttime = $this->startdate->format('H\hi');
+            $endtime = $this->enddate->format('H\hi');
 
-            if (TIME > $this->startdate->getTimestamp()) {
-                $str = 'Le service est en maintenance'.$period.' de '.strftime('%Hh%M', $this->startdate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
-            } else {
-                $str = 'Le service sera en maintenance'.$period.' de '.strftime('%Hh%M', $this->startdate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
+            switch ($this->period) {
+                case self::PERIOD_WEEKLY:
+                    $str = 'Tous les '.strftime('%A', $this->startdate->getTimestamp()).' de '.$starttime.' à '.$endtime.'.';
+                    break;
+                case self::PERIOD_DAILY:
+                default:
+                    $str = 'Tous les jours de '.$starttime.' à '.$endtime.'.';
             }
         } else {
+            $starttime = $this->startdate->format('H\hi');
+            $startday = strftime('%A %d %B', $this->startdate->getTimestamp());
+
+            if ($this->type === self::TYPE_SCHEDULED) {
+                $type = 'en maintenance';
+            } else {
+                $type = 'perturbé';
+            }
+
             if ($this->startdate->getTimestamp() > TIME) {
-                // évènement futur
+                // Évènement futur.
                 if ($this->enddate === null) {
-                    $str = 'Le service sera perturbé le '.strftime('%A %d %B à partir de %Hh%M', $this->startdate->getTimestamp()).'.';
+                    $str = 'Le service sera '.$type.' le '.$startday.' à partir de '.$starttime.'.';
                 } else {
-                    $str = 'Le service sera perturbé du '.strftime('%A %d %B %Hh%M', $this->startdate->getTimestamp()).' au '.strftime('%A %d %B %Hh%M', $this->enddate->getTimestamp()).'.';
+                    $endtime = $this->enddate->format('H\hi');
+                    $endday = strftime('%A %d %B', $this->enddate->getTimestamp());
+                    $str = 'Le service sera '.$type.' du '.$startday.' '.$starttime.' au '.$endday.' '.$endtime.'.';
                 }
             } elseif ($this->enddate !== null && $this->enddate->getTimestamp() < TIME) {
-                // évènement passé
+                $endtime = $this->enddate->format('H\hi');
+
+                // Évènement passé.
                 if (strftime('%A%d%B', $this->startdate->getTimestamp()) === strftime('%A%d%B', $this->enddate->getTimestamp())) {
-                    // évènement qui s'est déroulé sur une journée
-                    $str = 'Le service a été perturbé le '.strftime('%A %d %B', $this->startdate->getTimestamp()).' de '.strftime('%Hh%M', $this->startdate->getTimestamp()).' à '.strftime('%Hh%M', $this->enddate->getTimestamp()).'.';
+                    // Évènement qui s'est déroulé sur une journée.
+                    $str = 'Le service a été '.$type.' le '.$startday.' de '.$starttime.' à '.$endtime.'.';
                 } else {
-                    // évènement qui s'est déroulé sur plusieurs journées
-                    $str = 'Le service a été perturbé du '.strftime('%A %d %B %Hh%M', $this->startdate->getTimestamp()).' au '.strftime('%A %d %B %Hh%M', $this->enddate->getTimestamp()).'.';
+                    // Évènement qui s'est déroulé sur plusieurs journées.
+                    $endday = strftime('%A %d %B', $this->enddate->getTimestamp());
+                    $str = 'Le service a été '.$type.' du '.$startday.' '.$starttime.' au '.$endday.' '.$endtime.'.';
                 }
             } else {
-                // évènement en cours
+                // Évènement en cours.
                 if (strftime('%A%d%B', $this->startdate->getTimestamp()) === strftime('%A%d%B')) {
-                    $str = 'Le service est actuellement perturbé depuis '.strftime('%Hh%M', $this->startdate->getTimestamp()).'.';
+                    $str = 'Le service est '.$type.' depuis '.$starttime.'.';
                 } else {
-                    $str = 'Le service est actuellement perturbé depuis le '.strftime('%A %d %B %Hh%M', $this->startdate->getTimestamp()).'.';
+                    $str = 'Le service est '.$type.' depuis le '.$startday.' '.$starttime.'.';
                 }
             }
         }

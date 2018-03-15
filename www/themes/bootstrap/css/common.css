@@ -93,3 +93,26 @@ label > input[type=checkbox], label > input[type=radio] {
 #event-services {
     height: 200px;
 }
+
+.isou-list-event-scheduled {
+    background-image: url('../images/calendar.gif');
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+.isou-list-event-unscheduled {
+    background-image: url('../images/caution.gif');
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+.isou-list-event-regular {
+    background-image: url('../images/clock.gif');
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+.isou-list-event-description {
+    font-style: italic;
+    padding-left: 1em;
+}
