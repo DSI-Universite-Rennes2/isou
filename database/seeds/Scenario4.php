@@ -39,7 +39,7 @@ class Scenario4 extends AbstractSeed {
                 'visible' => 1,
                 'locked' => 0,
                 'rsskey' => self::ISOU_SEED_PREFIX_ID.'1',
-                'idtype' => 1, // Type isou.
+                'idplugin' => 1, // Type isou.
                 'idcategory' => self::ISOU_SEED_PREFIX_ID.'1',
                 ),
             array(
@@ -50,7 +50,7 @@ class Scenario4 extends AbstractSeed {
                 'visible' => 0, // Masqué.
                 'locked' => 0,
                 'rsskey' => self::ISOU_SEED_PREFIX_ID.'2',
-                'idtype' => 1, // Type isou.
+                'idplugin' => 1, // Type isou.
                 'idcategory' => self::ISOU_SEED_PREFIX_ID.'1',
                 ),
             array(
@@ -61,7 +61,7 @@ class Scenario4 extends AbstractSeed {
                 'visible' => 0,
                 'locked' => 0,
                 'rsskey' => null,
-                'idtype' => 3, // Type shinken.
+                'idplugin' => 3, // Type shinken.
                 'idcategory' => null,
                 ),
             );

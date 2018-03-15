@@ -1,37 +1,37 @@
 <?php
 
+use Isou\Helpers\SimpleMenu;
+use UniversiteRennes2\Isou\Plugin;
+
 require_once PRIVATE_PATH.'/libs/services.php';
-require_once PRIVATE_PATH.'/classes/helpers/simple_menu.php';
 
 $TITLE .= ' - Administration des services';
 
-if(!isset($PAGE_NAME[1])){
-	$PAGE_NAME[1] = '';
+// Set up menu.
+$submenus = array();
+$plugins = Plugin::get_plugins();
+foreach ($plugins as $plugin) {
+    $submenus[$plugin->codename] = new SimpleMenu('Services '.$plugin->name, '', URL.'/index.php/services/'.$plugin->codename);
 }
 
-switch($PAGE_NAME[1]){
-	case 'nagios-statusdat':
-	case 'shinken-thruk':
-		require PRIVATE_PATH.'/php/services/backend_index.php';
-		break;
-	default:
-		require PRIVATE_PATH.'/php/services/isou_index.php';
+// Plugins.
+if (isset($PAGE_NAME[1]) === false){
+    $PAGE_NAME[1] = 'isou';
 }
 
-$services_menu = array();
-$services_menu['isou'] = new Isou\Helpers\SimpleMenu('Services ISOU', 'Afficher la liste des services ISOU', URL.'/index.php/services/isou');
-$services_menu['nagios-statusdat'] = new Isou\Helpers\SimpleMenu('Services Nagios (Status.dat)', 'Afficher la liste des services Nagios (Status.dat)', URL.'/index.php/services/nagios-statusdat');
-$services_menu['shinken-thruk'] = new Isou\Helpers\SimpleMenu('Services Shinken (Thruk)', 'Afficher la liste des services Shinken (Thruk)', URL.'/index.php/services/shinken-thruk');
-
-if(isset($services_menu[$PAGE_NAME[1]])){
-	$services_menu[$PAGE_NAME[1]]->selected = TRUE;
-}else{
-	$services_menu['isou']->selected = TRUE;
+$plugin = 'PLUGIN_'.strtoupper($PAGE_NAME[1]);
+if (defined($plugin) === false) {
+    $PAGE_NAME[1] = 'isou';
 }
+$plugin = constant('PLUGIN_'.strtoupper($PAGE_NAME[1]));
 
-$smarty->assign('services_menu', $services_menu);
+$submenus[$PAGE_NAME[1]]->selected = true;
+
+$plugin = Plugin::get_plugin(array('id' => $plugin));
+require PRIVATE_PATH.'/plugins/'.$plugin->codename.'/index.php';
+
+$smarty->assign('submenus', $submenus);
 
 $smarty->assign('SUBTEMPLATE', $SUBTEMPLATE);
 
 $TEMPLATE = 'services/services.tpl';
-

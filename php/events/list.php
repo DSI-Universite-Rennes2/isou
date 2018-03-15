@@ -23,7 +23,7 @@ if ($PAGE_NAME[1] === 'fermes') {
 	$subtemplate = 'events/list_closed_events.tpl';
 } else {
 	$options = array();
-	$options['service_type'] = Service::TYPE_ISOU;
+	$options['plugin'] = PLUGIN_ISOU;
 	$options['sort'] = array('e.enddate IS NULL DESC', 'e.enddate DESC', 'e.startdate DESC');
 
 	switch($PAGE_NAME[1]){
@@ -52,6 +52,6 @@ if ($PAGE_NAME[1] === 'fermes') {
 $smarty->assign('events', $events);
 $smarty->assign('submenu', $submenu);
 $smarty->assign('subtemplate', $subtemplate);
-$smarty->assign('services', get_services_sorted_by_id(Service::TYPE_ISOU));
+$smarty->assign('services', get_services_sorted_by_id(PLUGIN_ISOU));
 
 $TEMPLATE = 'events/list.tpl';

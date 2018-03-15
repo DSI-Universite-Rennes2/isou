@@ -3,7 +3,6 @@
 require_once PRIVATE_PATH.'/libs/events.php';
 require_once PRIVATE_PATH.'/libs/events_descriptions.php';
 require_once PRIVATE_PATH.'/libs/services.php';
-require_once PRIVATE_PATH.'/classes/helpers/simple_menu.php';
 
 $TITLE .= ' - Administration des évènements';
 
@@ -23,5 +22,3 @@ switch($PAGE_NAME[1]){
 	default:
 		require_once PRIVATE_PATH.'/php/events/list.php';
 }
-
-?>

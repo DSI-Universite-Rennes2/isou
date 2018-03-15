@@ -1,5 +1,6 @@
 <?php
 
+use UniversiteRennes2\Isou\Plugin;
 use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
@@ -14,9 +15,11 @@ $categories = array();
 
 $idcategories = get_categories_sorted_by_id();
 
+$plugin = Plugin::get_plugin(array('codename' => 'isou'));
+
 $options = array();
-$options['tolerance'] = $CFG['tolerance'];
-$options['service_type'] = Service::TYPE_ISOU;
+$options['tolerance'] = $plugin->settings->tolerance;
+$options['plugin'] = PLUGIN_ISOU;
 $options['since'] = new DateTime();
 $options['since']->sub(new DateInterval('P2D')); // TODO: create CFG variable
 
@@ -25,7 +28,7 @@ foreach($events as $event){
 	if(isset($services[$event->idservice])){
 		$service = $services[$event->idservice];
 	}else{
-		$service = get_service(array('id' => $event->idservice, 'visible' => true, 'type' => Service::TYPE_ISOU));
+		$service = get_service(array('id' => $event->idservice, 'visible' => true, 'plugin' => PLUGIN_ISOU));
 		if($service === FALSE){
 			continue;
 		}else{
@@ -58,5 +61,3 @@ foreach($events as $event){
 $smarty->assign('categories', $categories);
 
 $TEMPLATE = 'public/news.tpl';
-
-?>

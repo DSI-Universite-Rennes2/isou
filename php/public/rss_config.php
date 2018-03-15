@@ -1,7 +1,5 @@
 <?php
 
-use UniversiteRennes2\Isou\Service;
-
 $TITLE .= ' - Configuration Flux RSS';
 
 require_once PRIVATE_PATH.'/libs/services.php';
@@ -10,7 +8,7 @@ require_once PRIVATE_PATH.'/libs/categories.php';
 $key = 0;
 $categories = array();
 
-$services = get_services(array('type' => Service::TYPE_ISOU, 'visible' => true));
+$services = get_services(array('plugin' => PLUGIN_ISOU, 'visible' => true));
 
 foreach($services as $service){
 	if($service->enable === '0' || $service->visible === '0'){

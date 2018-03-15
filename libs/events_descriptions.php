@@ -1,7 +1,5 @@
 <?php
 
-require_once PRIVATE_PATH.'/classes/isou/event_description.php';
-
 function get_event_description($id){
 	global $DB;
 
@@ -31,5 +29,3 @@ function get_event_description_by_content($description){
 
 	return $query->fetch();
 }
-
-?>

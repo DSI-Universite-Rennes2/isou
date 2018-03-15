@@ -14,6 +14,12 @@ if (is_file($db_file_path) === false) {
         exit(1);
     }
 
+    require PRIVATE_PATH.'/php/common/database.php';
+
+    // Installe les plugins.
+    echo PHP_EOL;
+    upgrade_plugins();
+
     echo PHP_EOL;
     echo 'Installation terminée.'.PHP_EOL;
     exit(0);
@@ -29,14 +35,14 @@ if (isset($CFG['version']) === false) {
     $CFG['version'] = '';
 }
 
-if (CURRENT_VERSION === $CFG['version']) {
+if (has_new_version() === false && upgrade_plugins($check_only = true) === false) {
     echo 'Aucune mise à jour à effectuer.'.PHP_EOL;
     exit(0);
 }
 
 // Avertissement avant la mise à jour.
-echo 'Vous vous apprêtez à faire une mise à jour d\'Isou.'.PHP_EOL;
-echo 'Avant de lancer la procédure, il est fortement recommandé de faire une sauvegarde du fichier "'.$db_file_path.'"'.PHP_EOL;
+echo 'Vous vous apprêtez à faire une mise à jour d\'Isou.'.PHP_EOL.PHP_EOL;
+echo '   - Avant de lancer la procédure, il est fortement recommandé de faire une sauvegarde du fichier "'.$db_file_path.'"'.PHP_EOL.PHP_EOL;
 echo 'Souhaitez-vous lancer la mise à jour ? (o/n)'.PHP_EOL;
 $response = trim(fgets(STDIN));
 if (in_array($response, array('o', 'y', 'O', 'Y'), true) === false) {
@@ -63,6 +69,10 @@ try {
         case '1.0.0':
         case '2013-00-00.1':
             upgrade_100_to_200();
+        default:
+            // Finally, upgrade plugins.
+            echo PHP_EOL;
+            upgrade_plugins();
     }
 } catch (Exception $exception) {
     echo 'Echec lors de la mise à jour !'.PHP_EOL;

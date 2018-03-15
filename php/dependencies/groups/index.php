@@ -1,9 +1,7 @@
 <?php
 
-use UniversiteRennes2\Isou\Service;
-
 if(isset($PAGE_NAME[2]) && ctype_digit($PAGE_NAME[2])){
-	$service = get_service(array('id' => $PAGE_NAME[2], 'type' => Service::TYPE_ISOU));
+	$service = get_service(array('id' => $PAGE_NAME[2], 'plugin' => PLUGIN_ISOU));
 }else{
 	$service = FALSE;
 }
@@ -43,5 +41,3 @@ if(isset($PAGE_NAME[7])){
 }else{
 	require PRIVATE_PATH.'/php/dependencies/groups/list.php';
 }
-
-?>

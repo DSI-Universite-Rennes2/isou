@@ -50,10 +50,13 @@ $smarty->setCompileDir(PRIVATE_PATH.'/cache/smarty/');
 require PRIVATE_PATH.'/libs/configuration.php';
 $CFG = get_configurations();
 
+// Charge les plugins.
+$plugins = get_plugins();
+
 require PRIVATE_PATH.'/libs/events.php';
 require PRIVATE_PATH.'/libs/services.php';
 
-$services = get_services_sorted_by_id(UniversiteRennes2\Isou\Service::TYPE_ISOU);
+$services = get_services_sorted_by_id(PLUGIN_ISOU);
 
 $items = array();
 $options = array();

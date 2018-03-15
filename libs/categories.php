@@ -1,9 +1,5 @@
 <?php
 
-use UniversiteRennes2\Isou;
-
-require PRIVATE_PATH.'/classes/isou/category.php';
-
 function get_category($id){
 	global $DB;
 
@@ -34,5 +30,3 @@ function get_categories_sorted_by_id(){
 
 	return $query->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE);
 }
-
-?>

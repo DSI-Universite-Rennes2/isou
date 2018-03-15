@@ -1,8 +1,9 @@
 <?php
 
+use UniversiteRennes2\Isou\Event;
+
 require_once PRIVATE_PATH.'/libs/events.php';
 require_once PRIVATE_PATH.'/libs/services.php';
-require_once PRIVATE_PATH.'/classes/helpers/simple_menu.php';
 
 $TITLE .= ' - Historique des évènements';
 
@@ -29,8 +30,8 @@ $options_services = get_isou_services_sorted_by_idtype();
 $smarty->assign('options_services', $options_services);
 $options_event_types = array(
 	-1 => 'Tous',
-	UniversiteRennes2\Isou\Event::TYPE_SCHEDULED => 'Prévues',
-	UniversiteRennes2\Isou\Event::TYPE_UNSCHEDULED => 'Non prévues'
+	Event::TYPE_SCHEDULED => 'Prévues',
+	Event::TYPE_UNSCHEDULED => 'Non prévues'
 );
 $smarty->assign('options_event_types', $options_event_types);
 
@@ -130,7 +131,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
 		" AND ed.id = e.ideventdescription".
 		$sql_services.
 		$sql_events.
-		" AND s.idtype=?".
+		" AND s.idplugin=?".
 		$sql_sort;
 
 	if(!isset($_POST['export'])){
@@ -143,10 +144,10 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
 			" AND ed.id = e.ideventdescription".
 			$sql_services.
 			$sql_events.
-			" AND s.idtype=?";
+			" AND s.idplugin=?";
 	}
 
-	$params[] = UniversiteRennes2\Isou\Service::TYPE_ISOU;
+	$params[] = PLUGIN_ISOU;
 
 	$query = $DB->prepare($sql);
 	$query->execute($params);

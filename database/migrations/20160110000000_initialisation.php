@@ -27,6 +27,9 @@ class Initialisation extends AbstractMigration {
         // Menus table.
         $this->setup_menus();
 
+        // Plugins table.
+        $this->setup_plugins();
+
         // Announcement table.
         $this->setup_announcement();
 
@@ -117,36 +120,30 @@ class Initialisation extends AbstractMigration {
         $table = $this->table('configuration', array('id' => false, 'primary_key' => array('key')));
         $table->addColumn('key', 'string')
             ->addColumn('value', 'string')
+            ->addColumn('type', 'string')
             ->create();
 
         // Insert "configuration" data.
         echo ' ==   - Insère les données dans la table "configuration".'.PHP_EOL;
         $rows = array(
-                array('key' => 'authentification_cas_admin_usernames', 'value' => ''),
-                array('key' => 'authentification_cas_enabled', 'value' => 0),
-                array('key' => 'authentification_manual_enabled', 'value' => 0),
-                array('key' => 'authentification_manual_password', 'value' => ''),
-                array('key' => 'authentification_manual_path', 'value' => ''),
-                array('key' => 'last_check_update', 'value' => 0),
-                array('key' => 'last_cron_update', 'value' => 0),
-                array('key' => 'last_daily_cron_update', 'value' => 0),
-                array('key' => 'last_update', 'value' => 0),
-                array('key' => 'menu_default', 'value' => 'actualite'),
-                array('key' => 'nagios_statusdat_enable', 'value' => 0),
-                array('key' => 'nagios_statusdat_path', 'value' => ''),
-                array('key' => 'notification_enabled', 'value' => 0),
-                array('key' => 'notification_hour', 'value' => '06:00'),
-                array('key' => 'notification_receivers', 'value' => ''),
-                array('key' => 'notification_sender', 'value' => ''),
-                array('key' => 'shinken_thruk_enable', 'value' => 0),
-                array('key' => 'shinken_thruk_password', 'value' => ''),
-                array('key' => 'shinken_thruk_path', 'value' => ''),
-                array('key' => 'shinken_thruk_username', 'value' => ''),
-                array('key' => 'site_header', 'value' => 'ISOU : État des services numériques offerts par l\'université'),
-                array('key' => 'site_name', 'value' => 'Isou'),
-                array('key' => 'theme', 'value' => 'bootstrap'),
-                array('key' => 'tolerance', 'value' => 120),
-                array('key' => 'version', 'value' => '2.0.0'),
+                array('key' => 'authentification_cas_admin_usernames', 'value' => '', 'type' => 'array'),
+                array('key' => 'authentification_cas_enabled', 'value' => 0, 'type' => 'string'),
+                array('key' => 'authentification_manual_enabled', 'value' => 0, 'type' => 'string'),
+                array('key' => 'authentification_manual_password', 'value' => '', 'type' => 'string'),
+                array('key' => 'authentification_manual_path', 'value' => '', 'type' => 'string'),
+                array('key' => 'last_check_update', 'value' => 0, 'type' => 'datetime'),
+                array('key' => 'last_cron_update', 'value' => 0, 'type' => 'datetime'),
+                array('key' => 'last_daily_cron_update', 'value' => 0, 'type' => 'datetime'),
+                array('key' => 'last_update', 'value' => 0, 'type' => 'datetime'),
+                array('key' => 'menu_default', 'value' => 'actualite', 'type' => 'string'),
+                array('key' => 'notification_enabled', 'value' => 0, 'type' => 'string'),
+                array('key' => 'notification_hour', 'value' => '06:00', 'type' => 'string'),
+                array('key' => 'notification_receivers', 'value' => '', 'type' => 'array'),
+                array('key' => 'notification_sender', 'value' => '', 'type' => 'string'),
+                array('key' => 'site_header', 'value' => 'ISOU : État des services numériques offerts par l\'Université', 'type' => 'string'),
+                array('key' => 'site_name', 'value' => 'Isou', 'type' => 'string'),
+                array('key' => 'theme', 'value' => 'bootstrap', 'type' => 'string'),
+                array('key' => 'version', 'value' => '2.0.0', 'type' => 'string'),
             );
         $table->insert($rows);
         $table->saveData();
@@ -342,6 +339,74 @@ class Initialisation extends AbstractMigration {
         $table->saveData();
     }
 
+    public function setup_plugins() {
+        echo PHP_EOL.' **  Tables des plugins...'.PHP_EOL;
+
+        // Create "plugins" table.
+        echo ' ==   - Crée la table "plugins".'.PHP_EOL;
+        $table = $this->table('plugins');
+        $table->addColumn('name', 'string')
+            ->addColumn('codename', 'string')
+            ->addColumn('active', 'integer')
+            ->addColumn('version', 'string')
+            ->addIndex(array('codename'), array('unique' => true))
+            ->addIndex(array('active'))
+            ->create();
+
+        // Insert "plugins" data.
+        echo ' ==   - Insère les données dans la table "plugins".'.PHP_EOL;
+        $rows = array(
+                array(
+                    'id' => 1,
+                    'name' => 'Isou',
+                    'codename' => 'isou',
+                    'active' => 1,
+                    'version' => '1.0.0',
+                ),
+                array(
+                    'id' => 2,
+                    'name' => 'Nagios',
+                    'codename' => 'nagios',
+                    'active' => 0,
+                    'version' => '1.0.0',
+                ),
+            );
+        $table->insert($rows);
+        $table->saveData();
+
+        // Create "plugins_settings" table.
+        echo ' ==   - Crée la table "plugins_settings".'.PHP_EOL;
+        $table = $this->table('plugins_settings');
+        $table->addColumn('key', 'string')
+            ->addColumn('value', 'string')
+            ->addColumn('type', 'string')
+            ->addColumn('idplugin', 'string')
+            ->addIndex(array('key'))
+            ->addIndex(array('key', 'idplugin'), array('unique' => true))
+            ->create();
+
+        // Insert "plugins_settings" data.
+        echo ' ==   - Insère les données dans la table "plugins_settings".'.PHP_EOL;
+        $rows = array(
+                array(
+                    'id' => 1,
+                    'key' => 'tolerance',
+                    'value' => '120',
+                    'type' => 'string',
+                    'idplugin' => 1,
+                ),
+                array(
+                    'id' => 2,
+                    'key' => 'statusdat_path',
+                    'value' => '/var/share/nagios/status.dat',
+                    'type' => 'string',
+                    'idplugin' => 2,
+                ),
+            );
+        $table->insert($rows);
+        $table->saveData();
+    }
+
     public function setup_services() {
         echo PHP_EOL.' **  Table des services...'.PHP_EOL;
 
@@ -363,13 +428,14 @@ class Initialisation extends AbstractMigration {
             ->addColumn('visible', 'integer')
             ->addColumn('locked', 'integer')
             ->addColumn('rsskey', 'integer')
-            ->addColumn('idtype', 'integer')
+            ->addColumn('timemodified', 'string')
+            ->addColumn('idplugin', 'integer')
             ->addColumn('idcategory', 'integer')
-            ->addIndex(array('rsskey', 'idtype', 'idcategory'))
+            ->addIndex(array('rsskey', 'idplugin', 'idcategory'))
             ->addIndex(array('idcategory'))
-            ->addIndex(array('idtype'))
+            ->addIndex(array('idplugin'))
             ->addIndex(array('rsskey'), array('unique' => true))
-            ->addIndex(array('name', 'idtype'), array('unique' => true))
+            ->addIndex(array('name', 'idplugin'), array('unique' => true))
             ->create();
     }
 

@@ -12,7 +12,7 @@ use UniversiteRennes2\Isou\State;
 
 // mets à jour Isou en fonction des changements d'état des services backend, des évènements prévues, fermés, etc...
 function update_services_tree() {
-	global $LOGGER;
+	global $CFG, $LOGGER;
 
 	$services = get_services();
 
@@ -136,7 +136,7 @@ function update_services_tree() {
 	}
 
 	// check current events
-	$events = get_events(array('service_type' => Service::TYPE_ISOU, 'finished' => false));
+	$events = get_events(array('plugin' => PLUGIN_ISOU, 'finished' => false));
 	foreach($events as $event){
 		$error = false;
 
@@ -166,7 +166,7 @@ function cron_regenerate_json() {
 	$json_data['fisou'] = array();
 	$json_data['fisou']['services'] = array();
 
-	$services = get_services(array('type' => Service::TYPE_ISOU));
+	$services = get_services(array('plugin' => PLUGIN_ISOU));
 	foreach ($services as $service) {
 		if ($service->state === State::OK) {
 			continue;

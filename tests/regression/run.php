@@ -8,7 +8,6 @@
 use Phinx\Console\PhinxApplication;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
-use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
 require __DIR__.'/../../config.php';
@@ -82,6 +81,9 @@ $DB = new PDO('sqlite:'.$db_file_path, '', '');
 require PRIVATE_PATH.'/libs/configuration.php';
 $CFG = get_configurations();
 
+// Charge les plugins.
+$plugins = get_plugins();
+
 $cases_dir = __DIR__.'/cases/';
 
 $scenarios = array();
@@ -125,7 +127,7 @@ foreach ($scenarios as $scenario_file) {
             $query->execute(array(':state' => $input->state, ':id' => $input->id));
         }
 
-        update_services_tree(get_services(array('type' => Service::TYPE_SHINKEN_THRUK)));
+        update_services_tree();
 
         foreach ($case->outputs as $output) {
             $service = get_service(array('id' => $output->id));
@@ -149,7 +151,8 @@ foreach ($scenarios as $scenario_file) {
             foreach ($scenario->reset as $input) {
                 $query->execute(array(':state' => $input->state, ':id' => $input->id));
             }
-            update_services_tree(get_services(array('type' => Service::TYPE_SHINKEN_THRUK)));
+
+            update_services_tree();
         }
     }
 }

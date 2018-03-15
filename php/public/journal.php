@@ -1,19 +1,21 @@
 <?php
 
-use UniversiteRennes2\Isou\Service;
+use UniversiteRennes2\Isou\Plugin;
 
 require_once PRIVATE_PATH.'/libs/events.php';
 require_once PRIVATE_PATH.'/libs/services.php';
 
 $TITLE .= ' - Journal';
 
-foreach (get_services(array('type' => Service::TYPE_ISOU, 'visible' => true)) as $service) {
+foreach (get_services(array('plugin' => PLUGIN_ISOU, 'visible' => true)) as $service) {
 	$services[$service->id] = $service->name;
 }
 
+$plugin = Plugin::get_plugin(array('codename' => 'isou'));
+
 $options = array();
-$options['tolerance'] = $CFG['tolerance'];
-$options['service_type'] = Service::TYPE_ISOU;
+$options['tolerance'] = $plugin->settings->tolerance;
+$options['plugin'] = PLUGIN_ISOU;
 
 $days = array();
 for($i=0;$i<7;$i++){

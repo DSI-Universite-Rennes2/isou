@@ -4,8 +4,8 @@
 <h1 class="sr-only">Services</h1>
 
 <ul class="nav nav-tabs">
-{foreach $services_menu as $menu}
-	<li{if $menu->selected === TRUE} class="active"{/if}><a href="{$menu->url}" title="{$menu->title}">{$menu->label}</a></li>
+{foreach $submenus as $menu}
+    <li{if $menu->selected === TRUE} class="active"{/if}><a href="{$menu->url}" title="{$menu->title}">{$menu->label}</a></li>
 {/foreach}
 </ul>
 

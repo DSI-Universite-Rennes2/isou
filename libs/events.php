@@ -1,6 +1,6 @@
 <?php
 
-require_once PRIVATE_PATH.'/classes/isou/event.php';
+use UniversiteRennes2\Isou\Plugin;
 
 function get_event($id){
 	global $DB;
@@ -25,7 +25,7 @@ function get_event($id){
 *	idservice		=> int
 *	one_record		=> bool
 *	regular			=> bool
-*	service_type	=> int : index key from UniversiteRennes2\Isou\Service::$TYPES
+*	plugin			=> int : index key from UniversiteRennes2\Isou\Service::$TYPES
 *	since			=> DateTime
 *	finished		=> bool
 *	state			=> int : index key from UniversiteRennes2\Isou\State::$STATES
@@ -74,10 +74,10 @@ function get_events($options = array()){
 		}
 	}
 
-	// service_type options
-	if(isset($options['service_type'], UniversiteRennes2\Isou\Service::$TYPES[$options['service_type']])){
-		$sql .= " AND s.idtype=?";
-		$params[] = $options['service_type'];
+	// plugin options
+	if (isset($options['plugin']) === true && ctype_digit($options['plugin']) === true) {
+		$sql .= " AND s.idplugin=?";
+		$params[] = $options['plugin'];
 	}
 
 	// since options
@@ -161,7 +161,7 @@ function get_events_by_type($since=NULL, $type=NULL, $servicetype=NULL, $toleran
 	if($servicetype === NULL){
 		$sql_servicetype = "";
 	}else{
-		$sql_servicetype = " AND s.idtype = ?";
+		$sql_servicetype = " AND s.idplugin = ?";
 		$params[] = $servicetype;
 	}
 
@@ -170,8 +170,9 @@ function get_events_by_type($since=NULL, $type=NULL, $servicetype=NULL, $toleran
 	}else{
 		$params[] = $since;
 		if($tolerance === TRUE){
+			$plugin = Plugin::get_plugin(array('codename' => 'isou'));
 			$sql_tolerance = " AND ((e.enddate > ? AND strftime('%s', enddate)-strftime('%s', startdate) > ?) OR e.enddate IS NULL)";
-			$params[] = $CFG['tolerance'];
+			$params[] = $plugin->settings->tolerance;
 		}else{
 			$sql_tolerance = " AND (e.enddate > ? OR e.enddate IS NULL)";
 		}

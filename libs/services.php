@@ -1,7 +1,5 @@
 <?php
 
-require_once PRIVATE_PATH.'/classes/isou/service.php';
-
 /**
   * @param array $options Array in format:
   *		@see function get_services()
@@ -67,7 +65,7 @@ function get_services($options=array()){
 		} else {
 			$LOGGER->addInfo('L\'option \'locked\' doit être un booléan.', array('value', $options['locked']));
 		}
-    }
+	}
 
 	if (isset($options['state'])) {
 		if (ctype_digit($options['state'])) {
@@ -87,12 +85,12 @@ function get_services($options=array()){
 		}
 	}
 
-	if(isset($options['type'])) {
-		if (isset(UniversiteRennes2\Isou\Service::$TYPES[$options['type']])) {
-			$conditions[] = 's.idtype = ?';
-			$params[] = $options['type'];
+	if (isset($options['plugin']) === true) {
+		if (ctype_digit($options['plugin']) === true) {
+			$conditions[] = 's.idplugin = ?';
+			$params[] = $options['plugin'];
 		} else {
-			$LOGGER->addInfo('L\'option \'type\' n\'a pas une valeur valide.', array('value', $options['type']));
+			$LOGGER->addInfo('L\'option \'plugin\' doit être un entier.', array('value', $options['plugin']));
 		}
 	}
 
@@ -102,7 +100,7 @@ function get_services($options=array()){
 		$sql_condition = '';
 	}
 
-	$sql = 'SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory'.
+	$sql = 'SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idplugin, s.idcategory'.
 			' FROM services s'.
 			' '.$sql_condition.
 			' ORDER BY UPPER(s.name)';
@@ -130,7 +128,7 @@ function get_services_sorted_by_id($type=NULL){
 		$sql = "SELECT id, name FROM services ORDER BY UPPER(name)";
 		$params = array();
 	}else{
-		$sql = "SELECT id, name FROM services WHERE idtype=? ORDER BY UPPER(name)";
+		$sql = "SELECT id, name FROM services WHERE idplugin=? ORDER BY UPPER(name)";
 		$params = array($type);
 	}
 	$query = $DB->prepare($sql);
@@ -141,35 +139,25 @@ function get_services_sorted_by_id($type=NULL){
 function get_services_sorted_by_idtype(){
 	global $CFG, $DB;
 
-	$sql = "SELECT s.id, s.name, s.idtype".
+	$sql = "SELECT s.id, s.name, s.idplugin".
 		" FROM services s".
 		" ORDER BY UPPER(s.name)";
 	$query = $DB->prepare($sql);
 	$query->execute();
 
+	$plugins = Plugin::get_plugins(array('active' => true));
+
 	$services = array();
-	if($CFG['nagios_statusdat_enable'] === '1'){
-		$services['Services Nagios'] = array();
+	foreach ($plugins as $plugin) {
+		$services['Services '.$plugin->name] = array();
 	}
-
-	if($CFG['shinken_thruk_enable'] === '1'){
-		$services['Services Shinken'] = array();
-	}
-
-	$services['Services ISOU'] = array();
 
 	while($service = $query->fetch(PDO::FETCH_OBJ)){
-		if($service->idtype === UniversiteRennes2\Isou\Service::TYPE_NAGIOS_STATUSDAT){
-			if(isset($services['Services Nagios'])){
-				$services['Services Nagios'][$service->id] = $service->name;
-			}
-		}elseif($service->idtype === UniversiteRennes2\Isou\Service::TYPE_SHINKEN_THRUK){
-			if(isset($services['Services Shinken'])){
-				$services['Services Shinken'][$service->id] = $service->name;
-			}
-		}else{
-			$services['Services ISOU'][$service->id] = $service->name;
+		if(isset($services[$service->idplugin]) === false){
+			$services[$service->idplugin] = array();
 		}
+
+		$services[$service->idplugin][] = $service->name;
 	}
 
 	return $services;
@@ -180,10 +168,10 @@ function get_isou_services_sorted_by_idtype(){
 
 	$sql = "SELECT s.id, s.name".
 		" FROM services s".
-		" WHERE s.idtype=?".
+		" WHERE s.idplugin=?".
 		" ORDER BY UPPER(s.name)";
 	$query = $DB->prepare($sql);
-	$query->execute(array(UniversiteRennes2\Isou\Service::TYPE_ISOU));
+	$query->execute(array(PLUGIN_ISOU));
 
 	return $query->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE);
 }
@@ -191,7 +179,7 @@ function get_isou_services_sorted_by_idtype(){
 function get_services_by_dependencies_group($idgroup){
 	global $DB;
 
-	$sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory, dgc.servicestate".
+	$sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idplugin, s.idcategory, dgc.servicestate".
 			" FROM services s, dependencies_groups_content dgc".
 			" WHERE s.id=dgc.idservice".
 			" AND dgc.idgroup=?".
@@ -201,6 +189,3 @@ function get_services_by_dependencies_group($idgroup){
 
 	return $query->fetchAll(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Service');
 }
-
-
-?>

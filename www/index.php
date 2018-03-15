@@ -1,5 +1,7 @@
 <?php
 
+use UniversiteRennes2\Isou\Plugin;
+
 session_name('isou');
 session_start();
 
@@ -16,17 +18,18 @@ $smarty->setTemplateDir(PRIVATE_PATH.'/html/');
 $smarty->setCompileDir(PRIVATE_PATH.'/cache/smarty/');
 
 // load scripts
-require PRIVATE_PATH.'/classes/helpers/script.php';
 $SCRIPTS = array();
 
 // load styles
-require PRIVATE_PATH.'/classes/helpers/style.php';
 $STYLES = array();
 
 require PRIVATE_PATH.'/php/common/database.php';
 
 require PRIVATE_PATH.'/libs/configuration.php';
 $CFG = get_configurations();
+
+// Charge les plugins.
+$plugins = get_plugins();
 
 // set title
 if (isset($CFG['site_name']) === true) {
@@ -35,7 +38,7 @@ if (isset($CFG['site_name']) === true) {
     $TITLE = 'Isou';
 }
 
-if (CURRENT_VERSION !== $CFG['version']) {
+if (has_new_version() === true) {
 	// Display maintenance page.
 	$TEMPLATE = 'public/update.tpl';
 

@@ -20,16 +20,6 @@
 				<input class="input-extra-large" type="text" name="site_header" id="site-header" value="{$CFG.site_header}" />
 			</dd>
 		</div>
-
-	    <div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="tolerance" aria-describedby="tolerance-aria-describedby">Tolérance d'interruption (en secondes)</label>
-			</dt>
-			<dd class="form-values-dd">
-				<input type="number" step="60" min="0" max="600" name="tolerance" id="tolerance" value="{$CFG.tolerance}" />
-				<p id="tolerance-aria-describedby">exemple : ne pas afficher dans les pages publiques un service interrompu moins de 300 secondes (5 minutes)</p>
-			</dd>
-		</div>
 	</dl>
 
 	<fieldset>

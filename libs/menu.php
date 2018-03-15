@@ -1,7 +1,5 @@
 <?php
 
-require_once PRIVATE_PATH.'/classes/helpers/menu.php';
-
 function get_menu(){
 	global $DB;
 
@@ -138,6 +136,3 @@ function get_administration_menu(){
 
 	return $menu;
 }
-
-
-?>

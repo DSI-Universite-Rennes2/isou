@@ -1,7 +1,5 @@
 <?php
 
-use UniversiteRennes2\Isou\Service;
-
 require_once PRIVATE_PATH.'/libs/events.php';
 require_once PRIVATE_PATH.'/libs/services.php';
 require_once PRIVATE_PATH.'/libs/categories.php';
@@ -9,7 +7,14 @@ require_once PRIVATE_PATH.'/libs/categories.php';
 $TITLE .= ' - Tableau';
 
 $today = new DateTime();
+
 $categories = array();
+foreach (get_categories() as $category) {
+	$categories[$category->id] = $category;
+	$categories[$category->id]->services = array();
+}
+
+
 $services_events = array();
 
 $days = array();
@@ -22,7 +27,7 @@ for($i=0;$i<7;$i++){
 	$options = array();
 	$options['since'] = $since->setTime(0, 0, 0);
 	$options['before'] = $before->setTime(23, 59, 60);
-	$options['service_type'] = Service::TYPE_ISOU;
+	$options['plugin'] = PLUGIN_ISOU;
 
 	$events = get_events($options);
 	foreach($events as $event){
@@ -50,20 +55,15 @@ for($i=0;$i<7;$i++){
 	}
 }
 
-$services = get_services(array('type' => Service::TYPE_ISOU, 'visible' => true));
+$services = get_services(array('plugin' => PLUGIN_ISOU, 'visible' => true));
 foreach($services as $service){
 	if($service->enable === '0' || $service->visible === '0'){
 		continue;
 	}
 
 	// changement de categorie
-	if(!isset($categories[$service->idcategory])){
-		$category = get_category($service->idcategory);
-		if($category === FALSE){
-			continue;
-		}
-		$categories[$service->idcategory] = $category;
-		$categories[$service->idcategory]->services = array();
+	if (isset($categories[$service->idcategory]) === false) {
+		continue;
 	}
 
 	// ajout des évènements

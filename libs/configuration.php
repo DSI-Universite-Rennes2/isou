@@ -1,30 +1,62 @@
 <?php
 
+use UniversiteRennes2\Isou\Plugin;
+
+/**
+ * Détermine si l'application doit être mise à jour.
+ *
+ * @return boolean Retourne true si une mise à jour est disponible.
+ */
+function has_new_version() {
+    global $CFG;
+
+    return CURRENT_VERSION !== $CFG['version'];
+}
+
 function get_configurations() {
     global $DB;
 
-    $json_attributes = array('authentification_cas_admin_usernames', 'notification_receivers');
-    $datetime_attributes = array('last_check_update', 'last_cron_update', 'last_daily_cron_update', 'last_update');
+    $sql = "SELECT key, value, type FROM configuration";
+    $query = $DB->prepare($sql);
 
-    $sql = "SELECT key, value FROM configuration";
+    if ($query === false) {
+        // Try to query old database scheme.
+        $sql = "SELECT key, value, 'string' AS type FROM configuration";
+        $query = $DB->prepare($sql);
+    }
+
     $configurations = array();
-    if ($query = $DB->query($sql)) {
+    if ($query !== false) {
+        $query->execute();
         while ($config = $query->fetch(PDO::FETCH_OBJ)) {
-            if (in_array($config->key, $json_attributes, true) === true) {
-                $configurations[$config->key] = json_decode($config->value);
-            } elseif (in_array($config->key, $datetime_attributes, true) === true) {
-                try {
-                    $configurations[$config->key] = new DateTime($config->value);
-                } catch (Exception $exception) {
-                    $configurations[$config->key] = new DateTime('1970-01-01');
-                }
-            } else {
-                $configurations[$config->key] = $config->value;
+            switch ($config->type) {
+                case 'array':
+                    $configurations[$config->key] = json_decode($config->value);
+                    break;
+                case 'datetime':
+                    try {
+                        $configurations[$config->key] = new DateTime($config->value);
+                    } catch (Exception $exception) {
+                        $configurations[$config->key] = new DateTime('1970-01-01');
+                    }
+                    break;
+                case 'string':
+                default:
+                    $configurations[$config->key] = $config->value;
             }
         }
     }
 
     return $configurations;
+}
+
+function get_plugins() {
+    $plugins = Plugin::get_plugins();
+    foreach ($plugins as $plugin) {
+        define('PLUGIN_'.strtoupper($plugin->codename), $plugin->id);
+    }
+
+    return $plugins;
 }
 
 function set_configuration($key, $value, $field=NULL){

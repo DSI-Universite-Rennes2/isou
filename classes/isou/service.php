@@ -3,10 +3,6 @@
 namespace UniversiteRennes2\Isou;
 
 class Service{
-	const TYPE_ISOU = '1';
-	const TYPE_NAGIOS_STATUSDAT = '2';
-	const TYPE_SHINKEN_THRUK = '3';
-
 	public $id;
 	public $name;
 	public $url;
@@ -16,11 +12,10 @@ class Service{
 	public $visible;
 	public $locked;
 	public $rsskey;
-	public $idtype;
+	public $timemodified;
+	public $idplugin;
 	public $idcategory;
 	public $category;
-
-	public static $TYPES = array(self::TYPE_ISOU => 'Isou', self::TYPE_NAGIOS_STATUSDAT => 'Nagios (status.dat)', self::TYPE_SHINKEN_THRUK => 'Shinken (Thruk)');
 
 	public function __construct(){
 		if(!isset($this->id)){
@@ -34,7 +29,8 @@ class Service{
 			$this->visible = 1;
 			$this->locked = 0;
 			$this->rsskey = NULL;
-			$this->idtype = self::TYPE_ISOU;
+			$this->timemodified = strftime('%FT%T');
+			$this->idplugin = PLUGIN_ISOU;
 			$this->idcategory = NULL;
 			$this->category = '';
 		}
@@ -54,7 +50,8 @@ class Service{
 			$errors[] = 'Le nom du service ne peut pas être vide.';
 		}
 
-		if(!isset(self::$TYPES[$this->idtype])){
+		$plugin = Plugin::get_plugins(array('single' => true, 'id' => $this->idplugin, 'active' => true));
+		if ($plugin === false) {
 			$errors[] = 'Le type de service choisi est invalide.';
 		}
 
@@ -62,7 +59,7 @@ class Service{
 			$errors[] = 'La visibilité choisi est invalide.';
 		}
 
-		if($this->idtype === self::TYPE_ISOU){
+		if ($this->idplugin === PLUGIN_ISOU) {
 			if($this->url === ''){
 				$this->url = NULL;
 			}
@@ -97,13 +94,14 @@ class Service{
 	function save(){
 		global $DB, $LOGGER;
 
+		$this->timemodified = strftime('%FT%T');
 		$results = array('successes' => array(), 'errors' => array());
-		$params = array($this->name, $this->url, $this->state, $this->comment, $this->enable, $this->visible, $this->locked, $this->rsskey, $this->idtype, $this->idcategory);
+		$params = array($this->name, $this->url, $this->state, $this->comment, $this->enable, $this->visible, $this->locked, $this->rsskey, $this->timemodified, $this->idplugin, $this->idcategory);
 
 		if($this->id === 0){
-			$sql = "INSERT INTO services(name, url, state, comment, enable, visible, locked, rsskey, idtype, idcategory) VALUES(?,?,?,?,?,?,?,?,?,?)";
+			$sql = "INSERT INTO services(name, url, state, comment, enable, visible, locked, rsskey, timemodified, idplugin, idcategory) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 		}else{
-			$sql = "UPDATE services SET name=?, url=?, state=?, comment=?, enable=?, visible=?, locked=?, rsskey=?, idtype=?, idcategory=? WHERE idservice=?";
+			$sql = "UPDATE services SET name=?, url=?, state=?, comment=?, enable=?, visible=?, locked=?, rsskey=?, timemodified=?, idplugin=?, idcategory=? WHERE id=?";
 			$params[] = $this->id;
 		}
 		$query = $DB->prepare($sql);
@@ -171,9 +169,9 @@ class Service{
 	public function change_state($state){
 		global $DB, $LOGGER;
 
-		$sql = "UPDATE services SET state=? WHERE id=?";
+		$sql = "UPDATE services SET state=?, timemodified=? WHERE id=?";
 		$query = $DB->prepare($sql);
-		if($query->execute(array($state, $this->id))){
+		if($query->execute(array($state, strftime('%FT%T'), $this->id))){
 			// $LOGGER->addInfo('Le service "'.$this->name.'" est passé de l\'état '.$this->state.' à l\'état '.$state.'.');
 			$this->state = $state;
 			return TRUE;
@@ -186,9 +184,9 @@ class Service{
 	public function enable($enable = '1') {
 		global $DB, $LOGGER;
 
-		$sql = "UPDATE services SET state=?, enable=? WHERE id=?";
+		$sql = "UPDATE services SET state=?, enable=?, timemodified=? WHERE id=?";
 		$query = $DB->prepare($sql);
-		if($query->execute(array(State::OK, $enable, $this->id))){
+		if($query->execute(array(State::OK, $enable, strftime('%FT%T'), $this->id))){
 			$this->enable = $enable;
 			return TRUE;
 		}else{
@@ -325,5 +323,3 @@ class Service{
 		// object destructed
 	}
 }
-
-?>

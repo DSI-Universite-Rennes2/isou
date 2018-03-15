@@ -12,8 +12,12 @@ $since = new DateTime();
 $since->sub(new DateInterval('P2D')); // TODO: create CFG variable
 
 $categories = array();
+foreach (get_categories() as $category) {
+	$categories[$category->id] = $category;
+	$categories[$category->id]->services = array();
+}
 
-$services = get_services(array('type' => Service::TYPE_ISOU, 'visible' => true));
+$services = get_services(array('plugin' => PLUGIN_ISOU, 'visible' => true));
 
 foreach($services as $service){
 	if($service->enable === '0' || $service->visible === '0'){
@@ -21,14 +25,8 @@ foreach($services as $service){
 	}
 
 	// changement de categorie
-	if(!isset($categories[$service->idcategory])){
-		$category = get_category($service->idcategory);
-		if($category === FALSE){
-			continue;
-		}
-
-		$categories[$service->idcategory] = $category;
-		$categories[$service->idcategory]->services = array();
+	if (isset($categories[$service->idcategory]) === false) {
+		continue;
 	}
 
 	// ajout des évènements

@@ -180,7 +180,7 @@ class Dependency_Group{
 	public function get_services(){
 		global $DB;
 
-		$sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
+		$sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idplugin, s.idcategory".
 			" FROM services s".
 			" JOIN dependencies_groups dg ON s.id = dg.idservice".
 			" WHERE dg.id = ?";
@@ -206,7 +206,7 @@ class Dependency_Group{
 	public function get_content_services(){
 		global $DB;
 
-		$sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idtype, s.idcategory".
+		$sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idplugin, s.idcategory".
 			" FROM services s".
 			" JOIN dependencies_groups_content dgc ON s.id = dgc.idservice".
 			" WHERE dgc.idgroup = ?";

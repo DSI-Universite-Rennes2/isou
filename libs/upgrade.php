@@ -8,6 +8,7 @@
 use Phinx\Console\PhinxApplication;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
+use UniversiteRennes2\Isou\Plugin;
 
 /**
  * Procède à la migration de la version 1.0.0 (2013-00-00.1) à la version 2.0.0.
@@ -210,6 +211,96 @@ function upgrade_090_to_095() {
     echo 'Mise à jour de la version 0.9.0 vers la version 0.9.5.'.PHP_EOL;
 
     throw new Exception('Not implemented. TODO...');
+}
+
+/**
+ * Détermine si un plugin doit être mis à jour ou applique les mises à jour.
+ *
+ * @var boolean $check_only Indique si les mises à jour doivent être signalées ou appliquées.
+ *
+ * @return boolean Retourne true si une mise à jour est disponible ou si les mises à jour ont été faites correctement.
+ */
+function upgrade_plugins($check_only = false) {
+    global $DB, $LOGGER;
+
+    $plugins_path = PRIVATE_PATH.'/plugins';
+
+    $entries = array();
+    if ($handle = opendir($plugins_path)) {
+        while (($entry = readdir($handle)) !== false) {
+            if ($entry[0] === '.') {
+                continue;
+            }
+
+            if (is_dir($plugins_path.'/'.$entry) === false) {
+                continue;
+            }
+
+            if (is_file($plugins_path.'/'.$entry.'/version.php') === false) {
+                $LOGGER->addInfo('Le fichier '.$entry.'/version.php n\'existe pas.');
+                continue;
+            }
+
+            $entries[] = $entry;
+        }
+
+        closedir($handle);
+    }
+
+    foreach ($entries as $entry) {
+        $module = include($plugins_path.'/'.$entry.'/version.php');
+
+        if (is_object($module) === false) {
+            $LOGGER->addInfo('Le fichier '.$entry.'/version.php ne retourne pas un objet.');
+            continue;
+        }
+
+        $module->codename = $entry;
+        $plugin = Plugin::get_plugin(array('codename' => $module->codename));
+
+        if ($plugin === false) {
+            // Install new plugin.
+
+            if ($check_only === true) {
+                return true;
+            }
+
+            $plugin = new Plugin();
+            $plugin->name = $module->name;
+            $plugin->codename = $module->codename;
+            $plugin->version = $module->version;
+
+            $plugin->install();
+
+            $plugin->settings = $module->settings;
+            $plugin->install_settings();
+            continue;
+        }
+
+        if ($plugin->version !== $module->version) {
+            // Update plugin.
+
+            if ($check_only === true) {
+                return true;
+            }
+
+            $plugin->name = $module->name;
+            $plugin->version = $module->version;
+
+            $plugin->update();
+
+            $plugin->settings = $module->settings;
+            $plugin->update_settings($overwrite = false);
+        }
+    }
+
+    if ($check_only === true) {
+        // Si on arrive ici, c'est qu'il n'y a pas de mises à jour à faire.
+        return false;
+    } else {
+        // Si on arrive ici, c'est que l'application des mises à jour s'est bien passée.
+        return true;
+    }
 }
 
 /**

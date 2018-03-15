@@ -1,9 +1,5 @@
 <?php
 
-use UniversiteRennes2\Isou;
-
-require PRIVATE_PATH.'/classes/isou/state.php';
-
 function get_state($id){
 	global $DB;
 

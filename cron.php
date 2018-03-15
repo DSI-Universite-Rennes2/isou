@@ -1,5 +1,7 @@
 <?php
 
+use UniversiteRennes2\Isou\Plugin;
+
 // Vérification que le script est bien exécuté en CLI.
 if (defined('STDIN') === false) {
 	die();
@@ -20,6 +22,9 @@ require PRIVATE_PATH.'/php/common/database.php';
 // Charge la configuration.
 require PRIVATE_PATH.'/libs/configuration.php';
 $CFG = get_configurations();
+
+// Charge les plugins.
+$plugins = get_plugins();
 
 // Créé un fichier cron.pid.
 $pid_file = PRIVATE_PATH.'/cron.pid';
@@ -53,14 +58,28 @@ require_once PRIVATE_PATH.'/libs/states.php';
 require_once PRIVATE_PATH.'/libs/services.php';
 
 // Mets à jour les backends.
-if ($CFG['nagios_statusdat_enable'] === '1') {
-    require_once PRIVATE_PATH.'/libs/nagios.php';
-    get_updated_nagios_statusdat_services();
-}
+$plugins = Plugin::get_plugins(array('active' => true));
+foreach ($plugins as $plugin) {
+    if ($plugin->codename === 'isou') {
+        continue;
+    }
 
-if ($CFG['shinken_thruk_enable'] === '1') {
-    require_once PRIVATE_PATH.'/libs/shinken.php';
-    get_updated_shinken_thruk_services();
+    $plugin_library_file = PRIVATE_PATH.'/plugins/'.$plugin->codename.'/lib.php';
+    if (is_readable($plugin_library_file) === false) {
+        $LOGGER->addWarning('Le fichier "'.$plugin_library_file.'" n\'existe pas.');
+        continue;
+    }
+
+    require $plugin_library_file;
+    $function_name = 'plugin_'.$plugin->codename.'_update';
+    if (function_exists($function_name) === false) {
+        $LOGGER->addWarning('La fonction "'.$function_name.'" n\'existe pas.');
+        continue;
+    }
+
+    if ($function_name($plugin) === false) {
+        $LOGGER->addWarning('La mise à jour du backend "'.$plugin->codename.'" ne s\'est pas passé correctement.');
+    }
 }
 
 // Mets à jour les services ISOU.

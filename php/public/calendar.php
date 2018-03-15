@@ -1,6 +1,7 @@
 <?php
 
 use UniversiteRennes2\Isou\Event;
+use UniversiteRennes2\Isou\Plugin;
 use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
@@ -64,9 +65,11 @@ for($i=0;$i<5;$i++){
 $begincalendar = new DateTime($begincalendar);
 $endcalendar = new DateTime($endcalendar);
 
+$plugin = Plugin::get_plugin(array('codename' => 'isou'));
+
 $options = array();
-$options['tolerance'] = $CFG['tolerance'];
-$options['service_type'] = Service::TYPE_ISOU;
+$options['tolerance'] = $plugin->settings->tolerance;
+$options['plugin'] = PLUGIN_ISOU;
 $options['type'] = Event::TYPE_SCHEDULED;
 $options['since'] = $begincalendar;
 

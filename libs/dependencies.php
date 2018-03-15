@@ -1,8 +1,5 @@
 <?php
 
-require_once PRIVATE_PATH.'/classes/isou/dependency_group.php';
-require_once PRIVATE_PATH.'/classes/isou/dependency_group_content.php';
-
 function get_dependency_group($id){
 	global $DB;
 
@@ -148,5 +145,3 @@ function get_dependency_message($id){
 
 	return $query->fetch(PDO::FETCH_OBJ);
 }
-
-?>

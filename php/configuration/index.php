@@ -1,7 +1,6 @@
 <?php
 
 require_once PRIVATE_PATH.'/libs/services.php';
-require_once PRIVATE_PATH.'/classes/helpers/simple_menu.php';
 
 $TITLE .= ' - Administration des services';
 
@@ -22,8 +21,8 @@ switch($PAGE_NAME[1]){
 	case 'informations':
 		require PRIVATE_PATH.'/php/configuration/information.php';
 		break;
-	case 'monitoring':
-		require PRIVATE_PATH.'/php/configuration/monitoring.php';
+	case 'plugins':
+		require PRIVATE_PATH.'/php/configuration/plugins.php';
 		break;
 	case 'notifications':
 		require PRIVATE_PATH.'/php/configuration/notifications.php';
@@ -36,7 +35,7 @@ switch($PAGE_NAME[1]){
 $services_menu = array();
 $services_menu['apparence'] = new Isou\Helpers\SimpleMenu('Apparence', 'Configuration de l\'apparence, des menus, etc', URL.'/index.php/configuration/apparence');
 $services_menu['authentification'] = new Isou\Helpers\SimpleMenu('Authentification', 'Gestion de l\'authentification', URL.'/index.php/configuration/authentification');
-$services_menu['monitoring'] = new Isou\Helpers\SimpleMenu('Monitoring', 'Gestion des backends de monitoring', URL.'/index.php/configuration/monitoring');
+$services_menu['plugins'] = new Isou\Helpers\SimpleMenu('Plugins', 'Gestion des plugins', URL.'/index.php/configuration/plugins');
 $services_menu['notifications'] = new Isou\Helpers\SimpleMenu('Notifications', 'Gestion des notifications', URL.'/index.php/configuration/notifications');
 $services_menu['diagnostiques'] = new Isou\Helpers\SimpleMenu('Diagnostiques', 'Procédure de diagnostique', URL.'/index.php/configuration/diagnostiques');
 $services_menu['informations'] = new Isou\Helpers\SimpleMenu('Informations', 'Configuration avancée', URL.'/index.php/configuration/informations');
@@ -53,4 +52,3 @@ $smarty->assign('services_menu', $services_menu);
 $smarty->assign('SUBTEMPLATE', $SUBTEMPLATE);
 
 $TEMPLATE = 'configuration/configuration.tpl';
-

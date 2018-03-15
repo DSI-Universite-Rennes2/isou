@@ -11,6 +11,9 @@
         "homepage": "https://www.univ-rennes2.fr/dsi",
         "role": "Developer"
     }],
+    "autoload": {
+        "classmap": ["classes/"]
+    },
     "require": {
         "php": ">=5.6",
         "smarty/smarty": "~3.1",

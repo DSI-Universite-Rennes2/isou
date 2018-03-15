@@ -16,7 +16,7 @@ if($event === FALSE){
 }
 
 if ($event->idservice !== 0) {
-	$service = get_service(array('id' => $event->idservice, 'type' => Service::TYPE_ISOU));
+	$service = get_service(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
 	$event->locked = $service->locked;
 } else {
 	$event->locked = 0;
@@ -90,7 +90,7 @@ if(isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['startti
 			$event->save();
 
 			if (isset($_POST['locked'])) {
-				$service = get_service(array('id' => $event->idservice, 'type' => Service::TYPE_ISOU));
+				$service = get_service(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
 
 				if ($_POST['locked'] === '1') {
 					$service->lock($event->state);

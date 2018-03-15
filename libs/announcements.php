@@ -1,7 +1,5 @@
 <?php
 
-require PRIVATE_PATH.'/classes/isou/announcement.php';
-
 function get_announcement(){
 	global $DB;
 
@@ -29,5 +27,3 @@ function get_visible_announcement(){
 
 	return $query->fetch();
 }
-
-?>

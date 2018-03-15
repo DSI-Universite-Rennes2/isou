@@ -18,10 +18,8 @@ class Scenario1 extends AbstractSeed {
     public function run() {
         // Active le service shinken.
         $connection = $this->getAdapter()->getConnection();
-        $statement = $connection->prepare('UPDATE configuration SET value = 1 WHERE key = :key');
-        $statement->execute(array(':key' => 'nagios_statusdat_enable'));
-        $statement = $connection->prepare('UPDATE configuration SET value = 1 WHERE key = :key');
-        $statement->execute(array(':key' => 'shinken_thruk_enable'));
+        $statement = $connection->prepare('UPDATE plugins SET active = 1');
+        $statement->execute();
 
         // Création des catégories.
         $data = array(
@@ -45,7 +43,7 @@ class Scenario1 extends AbstractSeed {
                 'visible' => 1,
                 'locked' => 0,
                 'rsskey' => self::ISOU_SEED_PREFIX_ID.'1',
-                'idtype' => 1, // Type isou.
+                'idplugin' => 1, // Type isou.
                 'idcategory' => self::ISOU_SEED_PREFIX_ID.'1',
                 ),
             array(
@@ -56,7 +54,7 @@ class Scenario1 extends AbstractSeed {
                 'visible' => 0,
                 'locked' => 0,
                 'rsskey' => null,
-                'idtype' => 3, // Type shinken.
+                'idplugin' => 3, // Type shinken.
                 'idcategory' => null,
                 ),
             );

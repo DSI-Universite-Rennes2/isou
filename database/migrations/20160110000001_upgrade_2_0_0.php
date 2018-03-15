@@ -138,10 +138,8 @@ class Upgrade200 extends AbstractMigration {
             }
 
             // Force l'utilisation de Nagios.
-            $data = array('key' => 'nagios_statusdat_enable', 'value' => 1);
-            $statement->execute($data);
-            $data = array('key' => 'nagios_statusdat_path', 'value' => '/var/share/nagios/status.dat');
-            $statement->execute($data);
+            $statement = $connection->prepare('UPDATE plugins SET active = 1 WHERE codename = "nagios"');
+            $statement->execute();
 
             echo ' ==   - Supprime l\'ancienne table "configuration_old".'.PHP_EOL;
             $this->dropTable('configuration_old');
@@ -310,9 +308,9 @@ class Upgrade200 extends AbstractMigration {
             $rows = $this->query('SELECT * FROM services_old');
             foreach ($rows as $row) {
                 if (empty($row['nameForUsers']) === true) {
-                    $idtype = 2; // Type Nagios.
+                    $idplugin = 2; // Plugin Nagios.
                 } else {
-                    $idtype = 1; // Type Isou.
+                    $idplugin = 1; // Plugin Isou.
                     $row['name'] = $row['nameForUsers'];
                 }
 
@@ -334,7 +332,8 @@ class Upgrade200 extends AbstractMigration {
                     'visible' => $row['visible'],
                     'locked' => $row['readonly'],
                     'rsskey' => $row['rssKey'],
-                    'idtype' => $idtype,
+                    'timemodified' => strftime('%FT%T'),
+                    'idplugin' => $idplugin,
                     'idcategory' => $row['idCategory'],
                     );
                 $table->insert($data);
