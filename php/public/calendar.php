@@ -11,7 +11,7 @@ require_once PRIVATE_PATH.'/libs/services.php';
 $TITLE .= ' - Calendrier';
 
 $_GET['page'] = 1;
-if (isset($PAGE_NAME[1]) && ctype_digit($PAGE_NAME[1])) {
+if (isset($PAGE_NAME[1]) === true && ctype_digit($PAGE_NAME[1]) === true) {
     if ($PAGE_NAME[1] === '0') {
         $_GET['page'] = 1;
     } elseif ($PAGE_NAME[1] > 5) {
@@ -23,8 +23,7 @@ if (isset($PAGE_NAME[1]) && ctype_digit($PAGE_NAME[1])) {
 
 $date = getdate();
 
-// $CALENDAR_STEP = 'WEEKLY'; // TODO: faire une option
-$CALENDAR_STEP = 'MONTHLY';
+$CALENDAR_STEP = 'MONTHLY'; // TODO: faire une option pour gérer la navigation par semaine (WEEKLY).
 
 if ($CALENDAR_STEP === 'WEEKLY') {
     $time = mktime(0, 0, 0) - ((6 + $date['wday'] - (($_GET['page'] - 1) * 7))) * 24 * 60 * 60;
@@ -74,31 +73,27 @@ $options['type'] = Event::TYPE_SCHEDULED;
 $options['since'] = $begincalendar;
 
 $events = get_events($options);
-foreach ($events as $i => $event) {
+foreach ($events as $event) {
     $service = get_service(array('id' => $event->idservice, 'visible' => true));
 
     if ($service === false) {
-        unset($events[$i]);
         continue;
     }
 
     if ($event->state === State::CLOSED) {
-        unset($events[$i]);
         continue;
     }
 
     if ($event->enddate === null) {
-        if ($_GET['page'] != 1) {
-            unset($events[$i]);
+        if ($_GET['page'] !== '1') {
             continue;
         }
-    } elseif (!($event->startdate >= $begincalendar && $event->enddate <= $endcalendar)) {
-        unset($events[$i]);
+    } elseif (($event->startdate >= $begincalendar && $event->enddate <= $endcalendar) === false) {
         continue;
     }
 
     $event->service = $service->name;
-    $service->idevent = $event->id;
+    $service->event = $event;
 
     $startdate = clone $event->startdate;
     $startdate->setTime(0, 0, 0);
@@ -123,7 +118,7 @@ foreach ($events as $i => $event) {
     }
 
     while ($startdate < $enddate) {
-        if (!isset($calendar[$i][$j])) {
+        if (isset($calendar[$i][$j]) === false) {
             break;
         }
 
@@ -139,7 +134,6 @@ foreach ($events as $i => $event) {
 }
 
 $smarty->assign('calendar', $calendar);
-$smarty->assign('events', $events);
 $smarty->assign('now', mktime(0, 0, 0));
 
 $TEMPLATE = 'public/calendar.tpl';
