@@ -145,7 +145,7 @@ function update_services_tree() {
         }
 
         if ($error === false) {
-            $service = get_service(array('enable' => true, 'id' => $event->idservice));
+            $service = get_service(array('enable' => true, 'id' => $event->idservice, 'locked' => false));
             if ($service !== false) {
                 $LOGGER->addInfo('   L\'évènement du service "'.$service->name.'" (id #'.$event->id.') a été fermé.');
                 $service->change_state(State::OK);

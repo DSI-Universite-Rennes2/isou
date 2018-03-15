@@ -1,0 +1,92 @@
+{
+    "name": "Scenario 5",
+    "description": "Contexte du service verrouillé :\n- 1 serveur web",
+    "cases": [
+        {
+            "name": "Case 1",
+            "description": "Le service \"serveur web (Scenario5)\" est instable et le service final est forcé sur l'état OK. Le service final doit fonctionner.",
+            "inputs": [
+                {
+                    "id": "51",
+                    "state": "0"
+                },
+                {
+                    "id": "52",
+                    "state": "1"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "51",
+                    "state": "0"
+                }
+            ]
+        },
+        {
+            "name": "Case 2",
+            "description": "Le service \"serveur web (Scenario5)\" fonctionne et le service final est forcé sur l'état instable. Le service final doit être instable.",
+            "inputs": [
+                {
+                    "id": "51",
+                    "state": "1"
+                },
+                {
+                    "id": "52",
+                    "state": "0"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "51",
+                    "state": "1"
+                }
+            ]
+        },
+        {
+            "name": "Case 3",
+            "description": "Le service \"serveur web (Scenario5)\" est HS et le service final est forcé sur l'état instable. Le service final doit être instable.",
+            "inputs": [
+                {
+                    "id": "51",
+                    "state": "1"
+                },
+                {
+                    "id": "52",
+                    "state": "2"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "51",
+                    "state": "1"
+                }
+            ]
+        },
+        {
+            "name": "Case 4",
+            "description": "Le service \"serveur web (Scenario5)\" est instable et le service final est forcé sur l'état indisponible. Le service final doit être indisponible.",
+            "inputs": [
+                {
+                    "id": "51",
+                    "state": "2"
+                },
+                {
+                    "id": "52",
+                    "state": "1"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "51",
+                    "state": "2"
+                }
+            ]
+        }
+    ],
+    "reset" : [
+        {
+            "id": "52",
+            "state": "0"
+        }
+    ]
+}
