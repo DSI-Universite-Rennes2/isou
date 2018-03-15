@@ -1,5 +1,9 @@
-details {
+details table {
     background: #F5F5F5;
+}
+
+details ul {
+    margin-left: 1em;
 }
 
 summary {

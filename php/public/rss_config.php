@@ -6,7 +6,12 @@ require_once PRIVATE_PATH.'/libs/services.php';
 require_once PRIVATE_PATH.'/libs/categories.php';
 
 $key = 0;
+
 $categories = array();
+foreach (get_categories() as $category) {
+    $category->services = array();
+    $categories[$category->id] = $category;
+}
 
 $services = get_services(array('plugin' => PLUGIN_ISOU, 'visible' => true));
 
@@ -40,6 +45,12 @@ if (isset($_POST['generer'])) {
     }
 } else {
     $rss_url = null;
+}
+
+foreach ($categories as $idcategory => $category) {
+    if (count($category->services) === 0) {
+        unset($categories[$idcategory]);
+    }
 }
 
 $smarty->assign('categories', $categories);

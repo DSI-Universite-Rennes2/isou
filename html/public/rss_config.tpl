@@ -4,35 +4,45 @@
 <h1 class="sr-only">Flux RSS</h1>
 
 {if count($categories) === 0}
-	<p class="alert alert-info">Aucun service disponible pour le moment.</p>
+    <p class="alert alert-info">Aucun service disponible pour le moment.</p>
 {else}
-	<p class="well">Sélectionnez les services qui vous intéressent afin de ne recevoir, par flux RSS, que les informations à propos de ces services ou cliquez directement sur le bouton "Générer le flux RSS" en bas de page pour surveiller tous les services.</p>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Flux RSS sélectif</h2>
+            <p class="alert alert-info">Sélectionnez les services qui vous intéressent afin de ne recevoir, par flux RSS, que les informations à propos de ces services ou cliquez directement sur le bouton "Générer le flux RSS" en bas de page pour surveiller tous les services.</p>
 
-	<form method="post" action="{$smarty.const.URL}/index.php/rss/config#rss-url">
+            <form method="post" action="{$smarty.const.URL}/index.php/rss/config#rss-url">
+                <ul class="list-unstyled">
+                {foreach $categories as $category}
+                   <li>
+                    <details>
+                        <summary>{$category->name}</summary>
+                        <ul class="list-unstyled">
+                        {foreach $category->services as $service}
+                            <li>
+                                <input type="checkbox" name="keys[{$service->id}]" id="key-{$service->id}" value="{$service->id}"{if isset($smarty.post.keys[$service->id])} checked="1"{/if} />
+                                <label for="key-{$service->id}">{$service->name}</label>
+                            </li>
+                        {/foreach}
+                        </ul>
+                    </details>
+                    </li>
+                {/foreach}
+                </ul>
 
-	<ul class="list-unstyled">
-	{foreach $categories as $category}
-	<li>
-		<h2 class="isou-rss-categories">{$category->name}</h2>
-		<ul>
-		{foreach $category->services as $service}
-		<li>
-			<input type="checkbox" name="keys[{$service->id}]" id="key-{$service->id}" value="{$service->id}"{if isset($smarty.post.keys[$service->id])} checked="1"{/if} />
-			<label for="key-{$service->id}">{$service->name}</label>
-		</li>
-		{/foreach}
-		</ul>
-	</li>
-	{/foreach}
-	</ul>
+                <p><input class="btn btn-primary" type="submit" name="generer" value="Générer le flux RSS" id="generer" /></p>
+            </form>
 
-	<p><input class="btn btn-primary" type="submit" name="generer" value="Générer le flux RSS" id="generer" /></p>
+            {if $rss_url !== NULL}
+                <p id="rss-url">Vous pouvez consulter les actualités des services sélectionnés précédemment en utilisant ce lien RSS : <a href="{$rss_url}" title="lien vers le flux RSS">{$rss_url}</a>.</p>
+            {/if}
+        </div>
 
-	</form>
-
-	{if $rss_url !== NULL}
-	<p id="rss-url">Vous pouvez consulter les actualités des services sélectionnés précédemment en utilisant ce lien RSS : <a href="{$rss_url}" title="lien vers le flux RSS">{$rss_url}</a>.</p>
-	{/if}
+        <div class="col-md-6">
+            <h2>Flux RSS complet</h2>
+            <p><a class="btn btn-primary" href="{$smarty.const.URL}/rss.php">Accéder au flux complet</a></p>
+        </div>
+    </div>
 {/if}
 
 </article>
