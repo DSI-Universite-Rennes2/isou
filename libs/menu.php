@@ -73,61 +73,58 @@ function get_active_menu_sorted_by_url() {
 }
 
 function get_administration_menu() {
-    $menu = array(
-        'Générale' => array(),
-        'Avancée' => array(),
-    );
+    $menu = array();
 
-    $menu['Générale']['evenements'] = (object) array(
+    $menu['evenements'] = (object) array(
         'url' => 'evenements',
         'title' => 'ajouter un évenement',
         'label' => 'évènements',
         'model' => '/php/events/index.php',
     );
 
-    $menu['Générale']['annonce'] = (object) array(
+    $menu['annonce'] = (object) array(
         'url' => 'annonce',
         'title' => 'ajouter une annonce',
         'label' => 'annonce',
         'model' => '/php/announcement/index.php',
     );
 
-    $menu['Générale']['statistiques'] = (object) array(
+    $menu['statistiques'] = (object) array(
         'url' => 'statistiques',
         'title' => 'afficher les statistiques',
         'label' => 'statistiques',
         'model' => '/php/history/index.php',
     );
 
-    $menu['Avancée']['services'] = (object) array(
+    $menu['services'] = (object) array(
         'url' => 'services',
         'title' => 'ajouter un service',
         'label' => 'services',
         'model' => '/php/services/index.php',
     );
 
-    $menu['Avancée']['dependances'] = (object) array(
+    $menu['dependances'] = (object) array(
         'url' => 'dependances',
         'title' => 'ajouter une dépendance',
         'label' => 'dépendances',
         'model' => '/php/dependencies/index.php',
     );
 
-    $menu['Avancée']['categories'] = (object) array(
+    $menu['categories'] = (object) array(
         'url' => 'categories',
         'title' => 'ajouter une catégorie',
         'label' => 'catégories',
         'model' => '/php/categories/index.php',
     );
 
-    $menu['Avancée']['configuration'] = (object) array(
+    $menu['configuration'] = (object) array(
         'url' => 'configuration',
         'title' => 'configurer l\'application',
         'label' => 'configuration',
         'model' => '/php/settings/index.php',
     );
 
-    $menu['Avancée']['aide'] = (object) array(
+    $menu['aide'] = (object) array(
         'url' => 'aide',
         'title' => 'afficher l\'aide',
         'label' => 'aide',

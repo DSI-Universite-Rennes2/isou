@@ -61,19 +61,10 @@
 				</div>
 
 				<ul class="nav navbar-nav menu-ul">
-				{foreach $ADMINISTRATION_MENU as $submenu => $menus}
-				<li class="menu-ul-items">
-					<div class="navbar-header menu-title">
-						<span class="navbar-brand">{$submenu}</span>
-					</div>
-					<ul class="nav navbar-nav menu-ul">
-					{foreach $menus as $menu}
-						<li class="menu-ul-items{if isset($menu->selected)} active{/if}">
-							<a class="menu-entries" href="{$smarty.const.URL}/index.php/{$menu->url}" title="{$menu->title}">{$menu->label}</a>
-						</li>
-					{/foreach}
-					</ul>
-				</li>
+				{foreach $ADMINISTRATION_MENU as $menu}
+					<li class="menu-ul-items{if isset($menu->selected)} active{/if}">
+						<a class="menu-entries" href="{$smarty.const.URL}/index.php/{$menu->url}" title="{$menu->title}">{$menu->label}</a>
+					</li>
 				{/foreach}
 				</ul>
 			</div>
