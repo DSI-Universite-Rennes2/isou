@@ -1,121 +1,97 @@
 <?php
 
+/**
+  * Fonctions liées aux procédures du crontab.
+  */
+
 use UniversiteRennes2\Isou\Event;
 use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
-// TODO:
-// - chercher tous les regular_events dépassés et créer un nouvel event avec une period (DateTimeInterval)
-// - créer un unscheduled évènement pour chaque backend, sans message de description (INTRODUIRE UN LEFT JOIN ?)
-// - comment stocker les descriptions ? JSON ?
-// - comment faire revenir les services en vert ? (voir ligne 26)
-// mets à jour Isou en fonction des changements d'état des services backend, des évènements prévues, fermés, etc...
+/**
+  * Mets à jour Isou en fonction des changements d'état des services backend, des évènements prévues, fermés, etc...
+  *
+  * @return void
+  */
 function update_services_tree() {
     global $CFG, $LOGGER;
 
+    // TODO: utilisé la propriété timemodified.
     $services = get_services();
 
     $LOGGER->addInfo('Mise à jour de l\'arbre des dépendances');
 
-    // check new backend events
+    // Vérifie tous les services.
     while (current($services) !== false) {
         $parent_service = array_shift($services);
-        // TODO: create event
+
+        // Définis tous les enfants de ce service.
         $parent_service->set_reverse_dependencies($parent_service->state);
 
         $LOGGER->addInfo('Recherche des dépendances pour le service '.$parent_service->name.' (id #'.$parent_service->id.')');
         $LOGGER->addInfo('   '.count($parent_service->reverse_dependencies).' groupes dépendent du service "'.$parent_service->name.'" (avec l\'état: '.$parent_service->state.')');
 
-        if ($parent_service->state == State::OK) {
-            // tous les services ISOU dépendant de ce service
-            // $check_isou_services après cette boucle
-        }
-        // } else { ...
+        // Parcours chaque enfant.
         foreach ($parent_service->reverse_dependencies as $dependencies_group) {
-            $child_service = get_service(array('enabled' => true, 'id' => $dependencies_group->idservice));
+            $child_service = get_service(array('id' => $dependencies_group->idservice, 'enabled' => true));
 
+            // Si l'enfant n'existe plus ou n'est plus actif, on ne fait rien.
             if ($child_service === false) {
                 $LOGGER->addError('   Le service avec l\'id #'.$dependencies_group->idservice.' n\'existe pas.'.
                     ' Il est pourtant lié avec le service "'.$parent_service->name.'" (id #'.$parent_service->id.') dans le groupe "'.$dependencies_group->name.'" (id #'.$dependencies_group->id.')');
                 continue;
             }
 
+            // Si le service enfant est verrouillé, on ne fait rien.
             if ($child_service->locked === '1') {
-                // do nothing ; service is locked
                 $LOGGER->addInfo('   Le service "'.$child_service->name.'" (id #'.$child_service->id.') est actuellement en mode forcé. Il ne peut pas être mis à jour.');
                 continue;
             }
 
+            // On récupère l'évènement en cours de l'enfant.
             $event = $child_service->get_current_event();
 
-            // if($event !== FALSE && in_array($event->type, array(Event::TYPE_REGULAR, Event::TYPE_CLOSED))){
-            if ($event !== false && in_array($event->type, array(Event::TYPE_REGULAR), true) === true) {
-                // do nothing ;  service in maintenance or closed
+            // Si il y a un évènement en cours de type régulier ou de fermeture, on ne fait rien.
+            if ($event !== false && in_array($event->type, array(Event::TYPE_REGULAR, Event::TYPE_CLOSED), $strict = true) === true) {
                 $LOGGER->addInfo('   Le service "'.$child_service->name.'" (id #'.$child_service->id.') a actuellement une interruption régulière en cours ou est fermé. Il ne peut pas être mis à jour.');
                 continue;
             }
 
             $LOGGER->addInfo('   Analyse du groupe "'.$dependencies_group->name.'" (id #'.$dependencies_group->id.') attaché au service "'.$child_service->name.'" (id #'.$child_service->id.')');
 
-            if ($dependencies_group->redundant === '0') {
-                // Groupe de services non-redondés.
-                if ($child_service->state <= $dependencies_group->groupstate) {
-                    // change service state.
-                    if ($child_service->state !== $dependencies_group->groupstate) {
-                        // change l'état du service et ajoute un évènement au besoin
-                        $LOGGER->addInfo('   Le service "'.$child_service->name.'" (id #'.$child_service->id.') passe de l\'état '.$child_service->state.' à '.$dependencies_group->groupstate.'.');
-                        $child_service->change_state($dependencies_group->groupstate);
-                    } else {
-                        continue;
-                    }
-                } else {
-                    continue;
-                }
-            } else {
-                // Groupe de services redondés.
-                // TODO: add array to don't check X times the same redundant group
-                // look other group members
-                $redundant_services = get_services_by_dependencies_group($dependencies_group->id);
+            if ($dependencies_group->redundant === '1') {
+                // Si le goupe est redondé... on cherche une dépendance qui fonctionne bien.
                 $state = State::UNKNOWN;
+
+                // TODO: faire en sorte de ne pas avoir à recalculer cette boucle à chaque fois.
+                $redundant_services = get_services_by_dependencies_group($dependencies_group->id);
                 foreach ($redundant_services as $redundant_service) {
-                    // find the best service status (hope to find State::OK)
+                    // On cherche au moins un service qui fonctionnerait.
                     if ($state > $redundant_service->state) {
                         $state = $redundant_service->state;
                     }
                 }
 
-                if (in_array($state, array(State::OK, State::CLOSED), true)) {
-                    // do nothing, at least one server up !
+                if (in_array($state, array(State::OK, State::CLOSED), $strict = true) === true) {
+                    // Un service semble fonctionné dans le groupe redondé. Il n'y a donc pas de problèmes.
                     continue;
                 }
-
-                // update service
-                if ($child_service->state < $state) {
-                    $LOGGER->addInfo('   Le service "'.$child_service->name.'" (id #'.$child_service->id.') passe de l\'état '.$child_service->state.' à '.$dependencies_group->groupstate.'.');
-                    $child_service->change_state($state);
-                    // update_services_tree(array($child_service));
-                    // array_unshift($services, $child_service);
-                    // $child_service->state = $dependencies_group->groupstate;
-                    // save service...
-                } else {
-                    continue;
-                }
-            }
-
-            // create event.
-            if ($event === false) {
-                $LOGGER->addInfo('Création d\'un évènement pour le service "'.$child_service->name.'" (id #'.$child_service->id.').');
-
-                $event = new Event();
-                $event->state = $child_service->state;
-                $event->type = Event::TYPE_UNSCHEDULED;
-                $event->idservice = $child_service->id;
             } else {
-                $LOGGER->addInfo('Un évènement existe déjà pour le service "'.$child_service->name.'" (id #'.$child_service->id.').');
+                // Si le goupe n'est pas redondé... on prend l'état du groupe de dépendances.
+                $state = $dependencies_group->groupstate;
             }
 
-            // update event message.
-            // si un évènement a été créé précédemment, on met à jour le message de l'évènement si nécessaire
+            if ($child_service->state < $state) {
+                // Le niveau d'état du groupe est plus important que l'état actuel du service.
+                // On change l'état du service et ajoute un évènement au besoin.
+                $LOGGER->addInfo('   Le service "'.$child_service->name.'" (id #'.$child_service->id.') passe de l\'état '.$child_service->state.' à '.$dependencies_group->groupstate.'.');
+                $event = $child_service->change_state($state);
+            } else {
+                // Ce groupe de dépendance n'a pas de problèmes. On continue à parcourir les autres groupes de dépendances.
+                continue;
+            }
+
+            // Si un évènement a été créé précédemment, on met à jour le message de l'évènement si nécessaire.
             $message = get_dependency_message($dependencies_group->idmessage);
             if (empty($event->description) === true) {
                 $event->set_description($message->message, 1);
@@ -125,13 +101,13 @@ function update_services_tree() {
                 $event->save();
             }
 
-            // vérifions que ce service n'ait pas lui même des dépendances avec d'autres services
-            // update_services_tree(array($child_service));
+            // Vérifions que ce service n'ait pas lui même des dépendances avec d'autres services.
+            // Nous mettons ce service dans la liste des services à vérifier. Il sera analysé dans la prochaine itération de la boucle.
             array_unshift($services, $child_service);
         }
     }
 
-    // check current events
+    // Vérifie les évènements Isou non terminés.
     $events = get_events(array('plugin' => PLUGIN_ISOU, 'finished' => false));
     foreach ($events as $event) {
         $error = false;
@@ -144,12 +120,12 @@ function update_services_tree() {
             }
         }
 
+        // Si il n'y a pas de services en erreur dans les dépendances, on peut tenter de fermer l'évènement.
         if ($error === false) {
             $service = get_service(array('enable' => true, 'id' => $event->idservice, 'locked' => false));
             if ($service !== false) {
                 $LOGGER->addInfo('   L\'évènement du service "'.$service->name.'" (id #'.$event->id.') a été fermé.');
                 $service->change_state(State::OK);
-                $event->close();
             }
         }
     }
@@ -157,6 +133,11 @@ function update_services_tree() {
     $LOGGER->addInfo('Fin de la mise à jour de l\'arbre des dépendances');
 }
 
+/**
+  * Régénère le fichier public isou.json listant les interruptions en cours.
+  *
+  * @return void
+  */
 function cron_regenerate_json() {
     $json_data = array();
     $json_data['fisou'] = array();
@@ -192,11 +173,17 @@ function cron_regenerate_json() {
     $json_data = json_encode($json_data, JSON_PRETTY_PRINT);
 
     $json_file = PUBLIC_PATH.'/isou.json';
-    if (!is_file($json_file) || trim(file_get_contents($json_file)) !== trim($json_data)) {
+    // Mets à jour le fichier uniquement si le contenu est différent.
+    if (is_file($json_file) === false || trim(file_get_contents($json_file)) !== trim($json_data)) {
         file_put_contents($json_file, $json_data);
     }
 }
 
+/**
+  * Envoie une notification quotidienne des évènements ayant eu lieu.
+  *
+  * @return void
+  */
 function cron_notify() {
     global $DB, $LOGGER;
 
@@ -205,19 +192,53 @@ function cron_notify() {
     $daily_cron_time = explode(':', $CFG['daily_cron_hour']);
     $daily_cron_time = mktime($daily_cron_time[0], $daily_cron_time[1]);
 
-    // si on n'est pas le même jour que $CFG['last_daily_cron_update']
-    if ($now->format('d') != $CFG['last_daily_cron_update']->format('d') && $now->getTimestamp() >= $daily_cron_time) {
-        // Liste des services forcés
+    // Si on n'est pas le même jour que $CFG['last_daily_cron_update'].
+    if ($now->format('d') !== $CFG['last_daily_cron_update']->format('d') && $now->getTimestamp() >= $daily_cron_time) {
+        // Liste des services forcés.
         $services = get_services(array('locked' => true));
 
-        // Liste des événements
+        // Liste des événements.
         $events = get_events(array('since' => $now));
 
-        // Liste des services supprimés
-        // TODO
-        // TODO: send mail
+        // TODO: Liste des services supprimés.
+        // TODO: Envoyer la notification.
+
+        // Mets à jour le témoin de dernière notification dans la base de données.
         $sql = "UPDATE configuration SET value=? WHERE key=?";
         $query = $DB->prepare($sql);
         $query->execute(array(strftime('%FT%T'), 'last_daily_cron_update'));
+    }
+}
+
+/**
+  * Supprime les anciens évènements des plugins autres qu'Isou.
+  *
+  * @return void
+  */
+function cron_delete_old_plugin_events() {
+    global $LOGGER;
+
+    // On garde les évènements sur 90 jours.
+    $expire = strftime('%FT%T', time() - (90 * 24 * 60 * 60));
+    $expired_date = new DateTime($expire);
+
+    $services = get_services();
+    foreach ($services as $service) {
+        if ($service->idplugin === PLUGIN_ISOU) {
+            continue;
+        }
+
+        foreach ($service->get_all_events() as $event) {
+            if ($event->enddate === null) {
+                continue;
+            }
+
+            if ($event->enddate > $expired_date) {
+                continue;
+            }
+
+            $LOGGER->addInfo('Supprime l\'évènement #'.$event->id.' du '.$event->startdate->format('Y-m-d\TH:i:s').' au '.$event->enddate->format('Y-m-d\TH:i:s'));
+            $event->delete();
+        }
     }
 }

@@ -1,9 +1,20 @@
 <?php
 
+/**
+  * Fonctions liées aux mises à jour des services du plugin Nagios.
+  */
+
 use UniversiteRennes2\Isou\State;
 
+/**
+  * Mets l'état des services du plugin Nagios.
+  *
+  * @param UniversiteRennes2\Isou\Plugin $plugin Une instance du plugin Nagios.
+  *
+  * @return boolean True si la mise à jour s'est déroulée correctement ; False si une erreur est survenue.
+  */
 function plugin_nagios_update($plugin) {
-    global $CFG, $LOGGER;
+    global $LOGGER;
 
     // Vérifie si le fichier est lisible.
     if (is_readable($plugin->settings->statusdat_path) === false) {
@@ -72,7 +83,7 @@ function plugin_nagios_update($plugin) {
 
     if (is_dir($cache_path) === false) {
         if (mkdir($cache_path, 0755, $recursive = true) === false) {
-            $_SESSION['messages']['errors'][] = 'Impossible de créer le dossier "'.$cache_path.'"';
+            $LOGGER->addError('Impossible de créer le dossier "'.$cache_path.'"');
         }
     }
 
@@ -90,8 +101,7 @@ function plugin_nagios_update($plugin) {
 
         if ($service->state !== $services[$id]->state) {
             $LOGGER->addInfo('   Le service "'.$service->name.'" (id #'.$service->id.') passe de l\'état '.$service->state.' à '.$services[$id]->state.'.');
-            $service->state = $services[$id]->state;
-            $service->save();
+            $service->change_state($services[$id]->state);
         }
     }
 

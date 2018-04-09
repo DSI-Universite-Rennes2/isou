@@ -193,14 +193,28 @@ class Service{
 
         $sql = "UPDATE services SET state=?, timemodified=? WHERE id=?";
         $query = $DB->prepare($sql);
-        if ($query->execute(array($state, strftime('%FT%T'), $this->id))) {
-            // $LOGGER->addInfo('Le service "'.$this->name.'" est passé de l\'état '.$this->state.' à l\'état '.$state.'.');
-            $this->state = $state;
-            return true;
-        } else {
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
-            return false;
+        if ($query->execute(array($state, strftime('%FT%T'), $this->id)) === false) {
+            throw new \Exception(implode(', ', $query->errorInfo()));
         }
+
+        $this->state = $state;
+
+        $event = $this->get_current_event();
+        if ($event !== false && ($this->state === State::OK || $this->state !== $event->state)) {
+            $event->close();
+            $event = false;
+        }
+
+        if ($event === false && $this->state !== State::OK) {
+            $event = new Event();
+            $event->state = $this->state;
+            $event->type = Event::TYPE_UNSCHEDULED;
+            $event->idservice = $this->id;
+
+            $event->save();
+        }
+
+        return $event;
     }
 
     public function enable($enable = '1') {

@@ -94,6 +94,9 @@ update_services_tree();
 // On regénère le fichier isou.json.
 cron_regenerate_json();
 
+// Nettoie les anciens évènements des plugins autres qu'Isou.
+cron_delete_old_plugin_events();
+
 // Mets à jour la base de données.
 $sql = "UPDATE configuration SET value = :value WHERE key = :key";
 $query = $DB->prepare($sql);

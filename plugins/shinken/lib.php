@@ -1,14 +1,30 @@
 <?php
 
+/**
+  * Fonctions liées aux mises à jour des services du plugin Shinken.
+  */
+
 use UniversiteRennes2\Isou\State;
 
-function plugin_shinken_update($plugin = null) {
-    global $CFG, $LOGGER;
+/**
+  * Mets l'état des services du plugin Shinken.
+  *
+  * @param UniversiteRennes2\Isou\Plugin $plugin Une instance du plugin Shinken.
+  *
+  * @return boolean True si la mise à jour s'est déroulée correctement ; False si une erreur est survenue.
+  */
+function plugin_shinken_update($plugin) {
+    global $LOGGER;
 
-    // TODO: load CFG.
-    $url = $CFG['plugins']['shinken']['url'];
-    $username = $CFG['plugins']['shinken']['username'];
-    $password = $CFG['plugins']['shinken']['password'];
+    $url = $plugin->settings->thruk_path;
+    if (empty($url) === true) {
+        $LOGGER->addError('Le paramètre "URL de Thruk" semble être vide.');
+
+        return false;
+    }
+
+    $username = $plugin->settings->thruk_username;
+    $password = $plugin->settings->thruk_password;
 
     // Appel le webservice de Shinken.
     $url .= '?host=all&view_mode=json&columns=host_name,description,state,acknowledged,is_flapping';
@@ -69,7 +85,7 @@ function plugin_shinken_update($plugin = null) {
 
     if (is_dir($cache_path) === false) {
         if (mkdir($cache_path, 0755, $recursive = true) === false) {
-            $_SESSION['messages']['errors'][] = 'Impossible de créer le dossier "'.$cache_path.'"';
+            $LOGGER->addError('Impossible de créer le dossier "'.$cache_path.'"');
         }
     }
 
@@ -87,8 +103,7 @@ function plugin_shinken_update($plugin = null) {
 
         if ($service->state !== $services[$id]->state) {
             $LOGGER->addInfo('   Le service "'.$service->name.'" (id #'.$service->id.') passe de l\'état '.$service->state.' à '.$services[$id]->state.'.');
-            $service->state = $services[$id]->state;
-            $service->save();
+            $service->change_state($services[$id]->state);
         }
     }
 
