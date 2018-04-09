@@ -23,6 +23,12 @@ require PRIVATE_PATH.'/php/common/database.php';
 require PRIVATE_PATH.'/libs/configuration.php';
 $CFG = get_configurations();
 
+// Vérifie si un nouvelle version n'est pas en cours d'installation.
+if (has_new_version() === true) {
+    $LOGGER->addInfo('Une nouvelle version est en cours d\'installation.');
+    exit(0);
+}
+
 // Charge les plugins.
 $plugins = get_plugins();
 
