@@ -23,11 +23,11 @@ class Service{
             $this->id = 0;
             $this->name = '';
             $this->url = null;
-            $this->state = 0;
+            $this->state = State::OK;
             $this->comment = null;
-            $this->enable = 1;
-            $this->visible = 1;
-            $this->locked = 0;
+            $this->enable = '1';
+            $this->visible = '1';
+            $this->locked = '0';
             $this->rsskey = null;
             $this->timemodified = strftime('%FT%T');
             $this->idplugin = PLUGIN_ISOU;
@@ -55,8 +55,12 @@ class Service{
             $errors[] = 'Le type de service choisi est invalide.';
         }
 
-        if (!in_array($this->visible, array(0, 1))) {
-            $errors[] = 'La visibilité choisi est invalide.';
+        if (in_array($this->visible, array('0', '1'), $strict = true) === false) {
+            $errors[] = 'La valeur choisie pour la visibilité n\'est pas valide.';
+        }
+
+        if (in_array($this->locked, array('0', '1'), $strict = true) === false) {
+            $errors[] = 'La valeur choisie pour le verrouillage n\'est pas valide.';
         }
 
         if ($this->idplugin === PLUGIN_ISOU) {

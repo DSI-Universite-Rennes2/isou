@@ -16,11 +16,12 @@ if ($service === false) {
 require_once PRIVATE_PATH.'/libs/categories.php';
 $categories = get_categories_sorted_by_id();
 
-if (isset($_POST['category'], $_POST['name'], $_POST['url'], $_POST['visible']) === true) {
+if (isset($_POST['category'], $_POST['name'], $_POST['url'], $_POST['visible'], $_POST['locked']) === true) {
     $service->idcategory = $_POST['category'];
     $service->name = $_POST['name'];
     $service->url = $_POST['url'];
     $service->visible = $_POST['visible'];
+    $service->locked = $_POST['locked'];
 
     $_POST['errors'] = $service->check_data($categories);
     if (isset($_POST['errors'][0]) === false) {
@@ -34,7 +35,8 @@ if (isset($_POST['category'], $_POST['name'], $_POST['url'], $_POST['visible']) 
     }
 }
 
-$smarty->assign('yesno', array('1' => 'Afficher', '0' => 'Masquer'));
+$smarty->assign('options_visible', array('1' => 'Afficher', '0' => 'Masquer'));
+$smarty->assign('options_locked', array('1' => 'Verrouiller', '0' => 'Déverrouiller'));
 
 $smarty->assign('service', $service);
 

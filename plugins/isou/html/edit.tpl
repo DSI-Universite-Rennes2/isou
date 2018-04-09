@@ -35,7 +35,13 @@
         <div class="form-information-dl-div">
             <dt class="form-topics-dt">Visibilité du service</dt>
             <dd class="form-values-dd">
-                {html_radios id=visible name=visible options=$yesno selected=$service->visible}
+                {html_radios id=visible name=visible options=$options_visible selected=$service->visible}
+            </dd>
+        </div>
+        <div class="form-information-dl-div">
+            <dt class="form-topics-dt">Verrouillage</dt>
+            <dd class="form-values-dd">
+                {html_radios id=locked name=locked options=$options_locked selected=$service->locked}
             </dd>
         </div>
     </dl>
