@@ -258,11 +258,11 @@ class Initialisation extends AbstractMigration {
 
         // Create "dependencies_groups_content" table.
         echo ' ==   - Crée la table "dependencies_groups_content".'.PHP_EOL;
-        $table = $this->table('dependencies_groups_content', array('id' => false, 'primary_key' => array('idgroup', 'idservice', 'servicestate')));
+        $table = $this->table('dependencies_groups_content');
         $table->addColumn('idgroup', 'integer')
             ->addColumn('idservice', 'integer')
             ->addColumn('servicestate', 'integer')
-            // ->addIndex(array('idgroup', 'idservice'), array('unique' => true))
+            ->addIndex(array('idgroup', 'idservice'), array('unique' => true))
             ->create();
     }
 

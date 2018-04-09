@@ -1,33 +1,73 @@
 <?php
 
-function get_dependency_group($id) {
-    global $DB;
+function get_dependency_group($options = array()) {
+    if (isset($options['id']) === false) {
+        throw new Exception('La fonction "get_dependency_group" doit passer en paramètre un tableau contenant un index "id".');
+    }
 
+    $options['one_record'] = true;
+
+    return get_dependency_groups($options);
+}
+
+function get_dependency_groups($options = array()) {
+    global $DB, $LOGGER;
+
+    $params = array();
+    $conditions = array();
+
+    if (isset($options['id']) === true) {
+        if (ctype_digit($options['id']) === true) {
+            $conditions[] = 'dg.id = ?';
+            $params[] = $options['id'];
+        } else {
+            $LOGGER->addInfo('L\'option \'id\' doit être un entier.', array('value', $options['id']));
+        }
+    }
+
+    if (isset($options['service']) === true) {
+        if (ctype_digit($options['service']) === true) {
+            $conditions[] = 'dg.idservice = ?';
+            $params[] = $options['service'];
+        } else {
+            $LOGGER->addInfo('L\'option \'service\' doit être un entier.', array('value', $options['service']));
+        }
+    }
+
+    if (isset($conditions[0])) {
+        $sql_condition = ' WHERE '.implode(' AND ', $conditions);
+    } else {
+        $sql_condition = '';
+    }
+
+    // get_service_dependency_group($id) SQL query.
+    /*
     $sql = "SELECT dg.id, dg.name, dg.redundant, dg.groupstate, dg.idservice, s.name AS service, dg.idmessage, dm.message".
             " FROM dependencies_groups dg, dependencies_messages dm, services s".
             " WHERE dm.id=dg.idmessage".
             " AND s.id=dg.idservice".
             " AND dg.id=?";
+    */
+    $sql = "SELECT dg.id, dg.name, dg.redundant, dg.groupstate, dg.idservice, dg.idmessage, dm.message".
+            " FROM dependencies_groups dg".
+            " JOIN dependencies_messages dm ON dm.id = dg.idmessage".
+            $sql_condition.
+            " ORDER BY dg.groupstate, dg.redundant DESC, dg.name";
     $query = $DB->prepare($sql);
-    $query->execute(array($id));
+    $query->execute($params);
 
     $query->setFetchMode(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Dependency_Group');
 
-    return $query->fetch();
-}
+    if (isset($options['one_record']) === true) {
+        $records = $query->fetchAll();
+        if (isset($records[0]) === true) {
+            return $records[0];
+        } else {
+            return false;
+        }
+    }
 
-function get_service_dependency_groups($idservice) {
-    global $DB;
-
-    $sql = "SELECT dg.id, dg.name, dg.redundant, dg.groupstate, dg.idservice, dg.idmessage, dm.message".
-            " FROM dependencies_groups dg, dependencies_messages dm".
-            " WHERE dm.id=dg.idmessage".
-            " AND dg.idservice=?".
-            " ORDER BY dg.groupstate, dg.redundant DESC, dg.name";
-    $query = $DB->prepare($sql);
-    $query->execute(array($idservice));
-
-    return $query->fetchAll(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Dependency_Group');
+    return $query->fetchAll();
 }
 
 function get_service_reverse_dependency_groups($idservice, $state = null) {
@@ -71,31 +111,64 @@ function get_dependency_groups_sorted_by_id() {
     return $groups;
 }
 
-function get_dependency_group_content($idgroup, $idservice) {
-    global $DB;
+function get_dependency_group_content($options = array()) {
+    if (isset($options['id']) === false) {
+        throw new Exception('La fonction "get_dependency_group_content" doit passer en paramètre un tableau contenant un index "id".');
+    }
 
-    $sql = "SELECT dgc.idgroup, dgc.idservice, dgc.servicestate".
+    $options['one_record'] = true;
+
+    return get_dependency_group_contents($options);
+}
+
+function get_dependency_group_contents($options = array()) {
+    global $DB, $LOGGER;
+
+    $params = array();
+    $conditions = array();
+
+    if (isset($options['id']) === true) {
+        if (ctype_digit($options['id']) === true) {
+            $conditions[] = 'dgc.id = ?';
+            $params[] = $options['id'];
+        } else {
+            $LOGGER->addInfo('L\'option \'id\' doit être un entier.', array('value', $options['id']));
+        }
+    }
+
+    if (isset($options['group']) === true) {
+        if (ctype_digit($options['group']) === true) {
+            $conditions[] = 'dgc.idgroup = ?';
+            $params[] = $options['group'];
+        } else {
+            $LOGGER->addInfo('L\'option \'idgroup\' doit être un entier.', array('value', $options['group']));
+        }
+    }
+
+    if (isset($conditions[0])) {
+        $sql_condition = ' WHERE '.implode(' AND ', $conditions);
+    } else {
+        $sql_condition = '';
+    }
+
+    $sql = "SELECT dgc.id, dgc.idgroup, dgc.idservice, dgc.servicestate".
         " FROM dependencies_groups_content dgc".
-        " WHERE dgc.idgroup=?".
-        " AND dgc.idservice=?";
+        $sql_condition;
     $query = $DB->prepare($sql);
-    $query->execute(array($idgroup, $idservice));
+    $query->execute($params);
 
     $query->setFetchMode(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Dependency_Group_Content');
 
-    return $query->fetch();
-}
+    if (isset($options['one_record']) === true) {
+        $records = $query->fetchAll();
+        if (isset($records[0]) === true) {
+            return $records[0];
+        } else {
+            return false;
+        }
+    }
 
-function get_dependency_group_contents($idgroup) {
-    global $DB;
-
-    $sql = "SELECT dgc.idgroup, dgc.idservice, dgc.servicestate".
-        " FROM dependencies_groups_content dgc".
-        " WHERE dgc.idgroup=?";
-    $query = $DB->prepare($sql);
-    $query->execute(array($idgroup));
-
-    return $query->fetchAll(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Dependency_Group_Content');
+    return $query->fetchAll();
 }
 
 // TODO: split this function
@@ -119,7 +192,7 @@ function get_dependencies_groups_and_groups_contents_by_service_sorted_by_flags(
         }
 
         // load content
-        $sql = "SELECT dgc.idgroup, dgc.idservice, s.name, dgc.servicestate".
+        $sql = "SELECT dgc.id, dgc.idgroup, dgc.idservice, s.name, dgc.servicestate".
             " FROM dependencies_groups_content dgc, services s".
             " WHERE s.id=dgc.idservice".
             " AND dgc.idgroup=?".

@@ -1,49 +1,89 @@
 <?php
 
+use UniversiteRennes2\Isou\State;
+
 require_once PRIVATE_PATH.'/libs/dependencies.php';
 require_once PRIVATE_PATH.'/libs/services.php';
 
 $TITLE .= ' - Administration des dépendances';
 
-if (!isset($PAGE_NAME[1])) {
+if (isset($PAGE_NAME[1]) === false) {
     $PAGE_NAME[1] = '';
 }
 
-switch ($PAGE_NAME[1]) {
-    case 'service':
-        require PRIVATE_PATH.'/php/dependencies/groups/index.php';
-        break;
-    default:
-        require PRIVATE_PATH.'/php/dependencies/services/list.php';
+if ($PAGE_NAME[1] === 'service' && isset($PAGE_NAME[2]) === true && ctype_digit($PAGE_NAME[2]) === true) {
+    $service = get_service(array('id' => $PAGE_NAME[2], 'plugin' => PLUGIN_ISOU));
+
+    if ($service === false) {
+        $_SESSION['messages'] = array('errors' => 'Ce service n\'existe pas.');
+
+        header('Location: '.URL.'/index.php/dependances');
+        exit(0);
+    }
+
+    if (isset($PAGE_NAME[4]) === true && $PAGE_NAME[3] === 'group') {
+        if (isset($PAGE_NAME[7]) === true && ctype_digit($PAGE_NAME[7]) === true && $PAGE_NAME[5] === 'content' && ctype_digit($PAGE_NAME[4]) === true) {
+            // Group contents.
+            switch ($PAGE_NAME[6]) {
+                case 'delete':
+                    require PRIVATE_PATH.'/php/dependencies/contents/delete.php';
+                    break;
+                case 'edit':
+                default:
+                    require PRIVATE_PATH.'/php/dependencies/contents/edit.php';
+            }
+        } else if (isset($PAGE_NAME[5]) === true && ctype_digit($PAGE_NAME[5]) === true) {
+            // Groups.
+            switch ($PAGE_NAME[4]) {
+                case 'delete':
+                    require PRIVATE_PATH.'/php/dependencies/groups/delete.php';
+                    break;
+                case 'duplicate':
+                    require PRIVATE_PATH.'/php/dependencies/groups/duplicate.php';
+                    break;
+                case 'edit':
+                default:
+                    require PRIVATE_PATH.'/php/dependencies/groups/edit.php';
+            }
+        }
+    }
+
+    if (isset($TEMPLATE) === false) {
+        // Affiche les groupes d'un service.
+        require PRIVATE_PATH.'/php/dependencies/groups/list.php';
+    }
 }
-/*
 
-    $action = (isset($PAGE_NAME[3]) && in_array($PAGE_NAME[3], array('edit', 'delete', 'duplicate')));
-    $group = (isset($PAGE_NAME[5]) && $PAGE_NAME[4] === 'group' && ctype_digit($PAGE_NAME[5]));
-    if($group){
-        $group = get_dependency_group($group);
+if (isset($TEMPLATE) === false) {
+    // Affiche la liste des services.
+    require_once PRIVATE_PATH.'/libs/services.php';
+    require_once PRIVATE_PATH.'/libs/categories.php';
+
+    $categories = array();
+    foreach (get_categories(array('non-empty' => true)) as $category) {
+        $categories[$category->id] = $category;
+        $categories[$category->id]->services = array();
     }
 
-    $content = (isset($PAGE_NAME[7]) && $PAGE_NAME[6] === 'content' && ctype_digit($PAGE_NAME[7]));
+    $services = get_services(array('plugin' => PLUGIN_ISOU));
+    foreach ($services as $service) {
+        $service->count_warning_groups = 0;
+        $service->count_critical_groups = 0;
 
-    if(isset($PAGE_NAME[3]
+        foreach ($service->get_dependencies() as $dependency) {
+            switch ($dependency->groupstate) {
+                case State::WARNING:
+                    $service->count_warning_groups++;
+                    break;
+                case State::CRITICAL:
+                    $service->count_critical_groups++;
+            }
+        }
 
-    if(!isset($PAGE_NAME[3])){
-        $PAGE_NAME[3] = 'view';
+        $categories[$service->idcategory]->services[] = $service;
     }
 
-    switch($PAGE_NAME[3]){
-        case 'edit':
-            require PRIVATE_PATH.'/php/dependencies/edit.php';
-            break;
-        case 'delete':
-            require PRIVATE_PATH.'/php/dependencies/delete.php';
-            break;
-        case 'duplicate':
-            require PRIVATE_PATH.'/php/dependencies/duplicate.php';
-            break;
-        default:
-            require PRIVATE_PATH.'/php/dependencies/view.php';
-    }
+    $smarty->assign('categories', $categories);
+
+    $TEMPLATE = 'dependencies/index.tpl';
 }
-*/

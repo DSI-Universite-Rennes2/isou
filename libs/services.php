@@ -1,5 +1,7 @@
 <?php
 
+use UniversiteRennes2\Isou\Plugin;
+
 /**
   * @param array $options Array in format:
   * @see function get_services()

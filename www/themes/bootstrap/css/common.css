@@ -1,14 +1,14 @@
-details table {
-    background: #F5F5F5;
-}
-
-details ul {
-    margin-left: 1em;
+details {
+    margin: .5em 1em;
 }
 
 summary {
     background: #FFFFFF;
+    background: #F5F5F5;
+    cursor: pointer;
     display: list-item;
+    font-weight: bold;
+    padding: .5em;
 }
 
 .alert a {

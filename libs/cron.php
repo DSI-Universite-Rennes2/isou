@@ -136,7 +136,7 @@ function update_services_tree() {
     foreach ($events as $event) {
         $error = false;
 
-        $groups = get_service_dependency_groups($event->idservice);
+        $groups = get_dependency_groups(array('service' => $event->idservice));
         foreach ($groups as $group) {
             if ($group->is_up() === false) {
                 $error = true;

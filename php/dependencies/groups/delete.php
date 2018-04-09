@@ -1,10 +1,6 @@
 <?php
 
-if (isset($PAGE_NAME[5]) && ctype_digit($PAGE_NAME[5])) {
-    $dependency_group = get_dependency_group($PAGE_NAME[5]);
-} else {
-    $dependency_group = false;
-}
+$dependency_group = get_dependency_group(array('id' => $PAGE_NAME[5]));
 
 if ($dependency_group === false) {
     $_SESSION['messages'] = array('errors' => array('Ce groupe n\'existe pas.'));

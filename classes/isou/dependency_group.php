@@ -16,7 +16,7 @@ class Dependency_Group{
         if (!isset($this->id)) {
             // instance manuelle
             $this->id = 0;
-            $this->name = 'Groupe non redondé';
+            $this->name = 'Groupe de dépendances';
             $this->redundant = 0;
             $this->groupstate = State::WARNING;
             $this->idservice = 1;
@@ -65,7 +65,7 @@ class Dependency_Group{
         $query = $DB->prepare($sql);
         $query->execute(array($this->message));
         if ($message = $query->fetch(\PDO::FETCH_OBJ)) {
-            return $message->idmessage;
+            return $message->id;
         } else {
             return false;
         }
@@ -127,23 +127,25 @@ class Dependency_Group{
     public function duplicate() {
         global $DB;
 
-        $contents = get_dependency_group_contents($this->id);
+        $contents = get_dependency_group_contents(array('group' => $this->id));
 
         // create new group
-        $this->id = 0;
+        $group = clone $this;
+        $group->id = 0;
 
         if ($this->groupstate === State::WARNING) {
-            $this->groupstate = State::CRITICAL;
+            $group->groupstate = State::CRITICAL;
         } else {
-            $this->groupstate = State::WARNING;
+            $group->groupstate = State::WARNING;
         }
 
-        $results = $this->save();
+        $results = $group->save();
 
         // toggle group contents
         foreach ($contents as $content) {
-            $content->idgroup = $this->id;
-            if ($this->groupstate === State::CRITICAL) {
+            $content->id = 0;
+            $content->idgroup = $group->id;
+            if ($content->servicestate === State::WARNING) {
                 $content->servicestate = State::CRITICAL;
             } else {
                 $content->servicestate = State::WARNING;
@@ -159,15 +161,15 @@ class Dependency_Group{
         global $DB, $LOGGER;
 
         $results = array(
-        'successes' => array(),
-        'errors' => array(),
-        );
+            'successes' => array(),
+            'errors' => array(),
+            );
         $commit = 1;
 
         $DB->beginTransaction();
 
         $queries = array();
-        $queries[] = "DELETE FROM dependencies_groups WHERE idgroup = ?";
+        $queries[] = "DELETE FROM dependencies_groups WHERE id = ?";
         $queries[] = "DELETE FROM dependencies_groups_content WHERE idgroup = ?";
 
         foreach ($queries as $sql) {

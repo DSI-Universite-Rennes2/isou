@@ -1,24 +1,23 @@
 <?php
 
-if (isset($PAGE_NAME[5]) && ctype_digit($PAGE_NAME[5])) {
-    $dependency_group = get_dependency_group($PAGE_NAME[5]);
-} else {
-    $dependency_group = false;
-}
+use UniversiteRennes2\Isou\State;
+use UniversiteRennes2\Isou\Dependency_Group;
+
+$dependency_group = get_dependency_group(array('id' => $PAGE_NAME[5]));
 
 if ($dependency_group === false) {
-    $dependency_group = new UniversiteRennes2\Isou\Dependency_Group();
+    $dependency_group = new Dependency_Group();
     $dependency_group->idservice = $service->id;
 }
 
 $options_redundants = array(
-1 => 'Oui',
-0 => 'Non',
-);
+    1 => 'Oui',
+    0 => 'Non',
+    );
 $options_states = array(
-1 => 'Orange',
-2 => 'Rouge',
-);
+    State::WARNING => State::$STATES[State::WARNING],
+    State::CRITICAL => State::$STATES[State::CRITICAL],
+    );
 $options_services = array($service->id => $service->name);
 
 if (isset($_POST['name'], $_POST['redundant'], $_POST['groupstate'], $_POST['message'])) {

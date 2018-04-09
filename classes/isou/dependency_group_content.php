@@ -3,6 +3,7 @@
 namespace UniversiteRennes2\Isou;
 
 class Dependency_Group_Content{
+    public $id;
     public $idgroup;
     public $idservice;
     public $servicestate;
@@ -10,6 +11,7 @@ class Dependency_Group_Content{
     public function __construct() {
         if (!isset($this->idgroup)) {
             // instance manuelle
+            $this->id = 0;
             $this->idgroup = 0;
             $this->idservice = 0;
             $this->servicestate = 1;
@@ -41,24 +43,24 @@ class Dependency_Group_Content{
 
 
     public function save() {
-        global $DB;
+        global $DB, $LOGGER;
 
         $results = array(
-        'successes' => array(),
-        'errors' => array(),
-        );
-        $params = array(
-        $this->idgroup,
-        $this->idservice,
-        $this->servicestate,
+            'successes' => array(),
+            'errors' => array(),
         );
 
-        if (isset($this->old_idgroup, $this->old_service)) {
-            $sql = "UPDATE dependencies_groups_content SET idgroup=?, idservice=?, servicestate=? WHERE idgroup=? AND idservice=?";
-            $params[] = $this->old_idgroup;
-            $params[] = $this->old_idservice;
+        $params = array(
+            ':idgroup' => $this->idgroup,
+            ':idservice' => $this->idservice,
+            ':state' => $this->servicestate,
+        );
+
+        if ($this->id === 0) {
+            $sql = "INSERT INTO dependencies_groups_content(idgroup, idservice, servicestate) VALUES(:idgroup, :idservice, :state)";
         } else {
-            $sql = "INSERT INTO dependencies_groups_content(idgroup, idservice, servicestate) VALUES(?,?,?)";
+            $sql = "UPDATE dependencies_groups_content SET idgroup = :idgroup, idservice = :idservice, servicestate = :state WHERE id = :id";
+            $params[':id'] = $this->id;
         }
         $query = $DB->prepare($sql);
 

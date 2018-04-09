@@ -1,10 +1,6 @@
 <?php
 
-if (isset($PAGE_NAME[7]) && ctype_digit($PAGE_NAME[5]) && ctype_digit($PAGE_NAME[7])) {
-    $dependency_group_content = get_dependency_group_content($PAGE_NAME[5], $PAGE_NAME[7]);
-} else {
-    $dependency_group_content = false;
-}
+$dependency_group_content = get_dependency_group_content(array('id' => $PAGE_NAME[7]));
 
 if ($dependency_group_content === false) {
     $_SESSION['messages'] = array('errors' => array('Ce contenu n\'existe pas.'));
@@ -23,6 +19,7 @@ if ($dependency_group_content === false) {
 }
 
 $smarty->assign('service', $service);
+$smarty->assign('content', get_service(array('id' => $dependency_group_content->idservice)));
 $smarty->assign('dependency_group_content', $dependency_group_content);
 
 $TEMPLATE = 'dependencies/contents/delete.tpl';

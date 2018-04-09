@@ -268,7 +268,7 @@ class Service{
         if ($this->dependencies === null) {
             require_once PRIVATE_PATH.'/libs/dependencies.php';
 
-            $this->dependencies = get_service_dependency_groups($this->id);
+            $this->dependencies = get_dependency_groups(array('service' => $this->id));
         }
 
         return $this->dependencies;
