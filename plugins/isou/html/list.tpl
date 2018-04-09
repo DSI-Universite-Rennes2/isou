@@ -17,16 +17,14 @@
             {* <!-- <caption class="services-caption"></caption> --> *}
             <thead>
                 <tr>
-                    <th class="col-md-2" id="head-state-{$i}">État actuel</th>
-                    <th class="col-md-4" id="head-name-{$i}">Nom du service</th>
+                    <th class="col-md-5" id="head-name-{$i}">Nom du service</th>
                     <th class="col-md-2" id="head-action-{$i}">Actions</th>
-                    <th class="col-md-4" id="head-note-{$i}">Notes</th>
+                    <th class="col-md-5" id="head-note-{$i}">Notes</th>
                 </tr>
             </thead>
             <tbody>
                 {foreach $category->services as $service}
                 <tr{if !empty($service->css)} class="{$service->css}"{/if}>
-                    <td headers="head-state-{$i}">{$STATES[{$service->state}]}</td>
                     <td id="service-{$service->id}" headers="head-name-{$i}">
                         {$service->name}
                         {if $service->url !== NULL}

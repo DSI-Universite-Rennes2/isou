@@ -14,16 +14,14 @@
         <caption>{count($services)} services {$plugin->name} gérés dans Isou</caption>
         <thead>
         <tr>
-            <th class="col-md-2" id="head-state">État actuel</th>
-            <th class="col-md-4" id="head-name">Nom du service</th>
+            <th class="col-md-5" id="head-name">Nom du service</th>
             <th class="col-md-2" id="head-action">Actions</th>
-            <th class="col-md-4" id="head-note">Notes</th>
+            <th class="col-md-5" id="head-note">Notes</th>
         </tr>
         </thead>
         <tbody>
         {foreach $services as $service}
         <tr>
-            <td headers="head-state">{$STATES[{$service->state}]}</td>
             <td headers="head-name">{$service->name}</td>
             <td headers="head-action">
                 <ul class="list-inline">

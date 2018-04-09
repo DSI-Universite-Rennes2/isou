@@ -108,12 +108,10 @@ if (isset($ADMINISTRATION_MENU)) {
     $smarty->assign('ADMINISTRATION_MENU', $ADMINISTRATION_MENU);
 }
 
-$smarty->display('common/html_head.tpl');
-$smarty->display('common/html_body_header.tpl');
-$smarty->display($TEMPLATE);
-$smarty->display('common/html_body_footer.tpl');
+$smarty->assign('TEMPLATE', $TEMPLATE);
+$smarty->display('common/base.tpl');
 
-// close pdo connection
+// Close pdo connection.
 $DB = null;
 
 unset($_SESSION['messages']);
