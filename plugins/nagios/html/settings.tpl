@@ -1,6 +1,7 @@
 <form method="post" action="{$smarty.const.URL}/index.php/configuration/plugins/{$plugin->codename}">
 
     {include file="common/messages_form.tpl"}
+    {include file="common/messages_session.tpl"}
 
     <fieldset>
         <legend>{$plugin->name}</legend>

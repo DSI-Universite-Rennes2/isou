@@ -176,7 +176,7 @@ class Plugin {
             $setting = $query->fetch();
 
             if ($setting === false) {
-                $sql = "INSERT INTO plugins_settings(key, value, type, idplugin) VALUES(:key, :value, :type, :idplugin)";
+                $sql = "INSERT INTO plugins_settings(key, value, type, idplugin) VALUES(:key, :value, 'string', :idplugin)";
             } elseif ($overwrite === true) {
                 $sql = "UPDATE plugins_settings SET value = :value WHERE key = :key AND idplugin = :idplugin";
             } else {
@@ -188,7 +188,6 @@ class Plugin {
             $params = array();
             $params[':key'] = $key;
             $params[':value'] = $value;
-            $params[':type'] = 'string';
             $params[':idplugin'] = $this->id;
 
             $query->execute($params);

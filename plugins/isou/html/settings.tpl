@@ -16,11 +16,11 @@
             </div>
             <div class="form-group">
                 <dt class="form-topics-dt">
-                    <label for="tolerance" aria-describedby="tolerance-aria-describedby">Tolérance d'interruption (en secondes)</label>
+                    <label for="plugin-isou-tolerance" aria-describedby="plugin-isou-tolerance-aria-describedby">Tolérance d'interruption (en minutes)</label>
                 </dt>
                 <dd class="form-values-dd">
-                    <input type="number" step="60" min="0" max="600" name="tolerance" id="tolerance" value="{$plugin->settings->tolerance}" /><br />
-                    <span id="tolerance-aria-describedby">exemple : ne pas afficher sur les pages publiques les interruptions inférieures à 300 secondes (5 minutes)</span>
+                    <input type="number" step="1" min="0" max="10" name="plugin_isou_tolerance" id="plugin-isou-tolerance" value="{$plugin->settings->tolerance/60}" /><br />
+                    <span id="plugin-isou-tolerance-aria-describedby">exemple : ne pas afficher sur les pages publiques les interruptions inférieures à 2 minutes (faux positifs)</span>
                 </dd>
             </div>
         </dl>
