@@ -8,7 +8,9 @@ class Menu{
     public $title;
     public $url;
     public $model;
+    public $type;
     public $position;
+    public $active;
     public $selected;
 
     public function __construct() {
@@ -21,7 +23,9 @@ class Menu{
             $this->title = '';
             $this->url = '';
             $this->model = '';
+            $this->type = '';
             $this->position = '';
+            $this->active = '';
         }
 
         $this->selected = false;
@@ -31,11 +35,11 @@ class Menu{
         global $DB;
 
         $results = array(
-        'successes' => array(),
-        'errors' => array(),
+            'successes' => array(),
+            'errors' => array(),
         );
 
-        $sql = "UPDATE menu SET active=? WHERE idmenu=?";
+        $sql = "UPDATE menu SET active=? WHERE id=?";
         $query = $DB->prepare($sql);
         if ($query->execute(array($this->active, $this->id))) {
             if ($this->active === '1') {

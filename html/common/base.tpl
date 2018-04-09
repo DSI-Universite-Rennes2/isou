@@ -53,7 +53,7 @@
             <h1 id="isou-header">{$CFG.site_header}</h1>
         </header>
 
-        {if count($MENU) > 1 || isset($ADMINISTRATION_MENU)}
+        {if count($MENU) > 1 || isset($ADMINISTRATION_MENU) === true}
         <nav id="navigation" role="navigation">
             <h1 class="sr-only">Navigation</h1>
 
@@ -64,7 +64,7 @@
                 </div>
                 <ul class="nav navbar-nav menu-ul">
                 {foreach $MENU as $menu}
-                <li class="menu-ul-items{if $menu->selected === TRUE} active{/if}">
+                <li class="menu-ul-items{if $menu->selected === true} active{/if}">
                     <a class="menu-entries" href="{$smarty.const.URL}/index.php/{$menu->url}" title="{$menu->title}">{$menu->label}</a>
                 </li>
                 {/foreach}
@@ -72,7 +72,7 @@
             </div>
             {/if}
 
-            {if isset($ADMINISTRATION_MENU)}
+            {if isset($ADMINISTRATION_MENU) === true}
             <div id="administration-menu" class="container-fluid navbar navbar-inverse menu-div">
                 <div class="navbar-right">
                     <div class="navbar-header menu-title">
@@ -81,7 +81,7 @@
 
                     <ul class="nav navbar-nav menu-ul">
                     {foreach $ADMINISTRATION_MENU as $menu}
-                        <li class="menu-ul-items{if isset($menu->selected)} active{/if}">
+                        <li class="menu-ul-items{if $menu->selected === true} active{/if}">
                             <a class="menu-entries" href="{$smarty.const.URL}/index.php/{$menu->url}" title="{$menu->title}">{$menu->label}</a>
                         </li>
                     {/foreach}

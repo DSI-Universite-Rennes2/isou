@@ -68,8 +68,8 @@ if (has_new_version() === true) {
     } elseif (isset($ADMINISTRATION_MENU[$PAGE_NAME[0]]) === true) {
         $current_page = $ADMINISTRATION_MENU[$PAGE_NAME[0]];
     } else {
-        if (isset($CFG['default_menu'], $MENU[$CFG['default_menu']]) === true) {
-            $current_page = $MENU[$CFG['default_menu']];
+        if (isset($CFG['menu_default'], $MENU[$CFG['menu_default']]) === true) {
+            $current_page = $MENU[$CFG['menu_default']];
         } else {
             $current_page = current($MENU);
         }

@@ -1,24 +1,69 @@
 <?php
 
-function get_menu() {
+function get_menus($options = array()) {
     global $DB;
 
-    $menu = array();
+    $joins = array();
+    $params = array();
+    $conditions = array();
 
-    $sql = "SELECT id, label, title, url, active, model, position".
-            " FROM menus".
-            " ORDER BY position";
-    $query = $DB->prepare($sql);
-    $query->execute();
-
-    $query->setFetchMode(PDO::FETCH_CLASS, 'Isou\Helpers\Menu');
-
-    while ($item = $query->fetch()) {
-        $item->selected = false;
-        $menu[$item->url] = $item;
+    if (isset($options['id']) === true) {
+        if (ctype_digit($options['id']) === true) {
+            $conditions[] = 'm.id = ?';
+            $params[] = $options['id'];
+        } else {
+            $LOGGER->addInfo('L\'option \'id\' doit être un entier.', array('value', $options['id']));
+        }
     }
 
-    return $menu;
+    if (isset($options['type']) === true) {
+        if (is_string($options['type']) === false) {
+            $LOGGER->addInfo('L\'option \'type\' doit être un booléan.', array('value', $options['type']));
+        } else {
+            $params['type'] = $options['type'];
+            $conditions[] = 'm.type = :type';
+        }
+    }
+
+    if (isset($options['active']) === true) {
+        if (is_bool($options['active']) === false) {
+            $LOGGER->addInfo('L\'option \'active\' doit être un booléan.', array('value', $options['active']));
+        } else if ($options['active'] === true) {
+            $conditions[] = 'm.active = 1';
+        }
+    }
+
+    if (isset($conditions[0]) === true) {
+        $sql_conditions = ' WHERE '.implode(' AND ', $conditions);
+    } else {
+        $sql_conditions = '';
+    }
+
+    $sql = "SELECT m.id, m.label, m.title, m.url, m.model, m.type, m.position, m.active".
+        " FROM menus m".
+        implode(' ', $joins).
+        $sql_conditions.
+        " ORDER BY m.position";
+    $query = $DB->prepare($sql);
+    $query->execute($params);
+
+    $query->setFetchMode(PDO::FETCH_CLASS, 'Isou\Helpers\Menu');
+    $records = $query->fetchAll();
+
+    if (isset($options['one_record']) === true) {
+        if (isset($records[0]) === true) {
+            return $records[0];
+        } else {
+            return false;
+        }
+    }
+
+    $menus = array();
+    foreach ($records as $i => $record) {
+        $menus[$record->url] = $record;
+    }
+
+    return $menus;
 }
 
 function get_menu_sorted_by_url() {
@@ -28,6 +73,7 @@ function get_menu_sorted_by_url() {
 
     $sql = "SELECT url, label".
             " FROM menus".
+            " WHERE type = 'guest'".
             " ORDER BY position";
     $query = $DB->prepare($sql);
     $query->execute();
@@ -36,25 +82,7 @@ function get_menu_sorted_by_url() {
 }
 
 function get_active_menu() {
-    global $DB;
-
-    $menu = array();
-
-    $sql = "SELECT id, label, title, url, active, model, position".
-            " FROM menus".
-            " WHERE active=1".
-            " ORDER BY position";
-    $query = $DB->prepare($sql);
-    $query->execute();
-
-    $query->setFetchMode(PDO::FETCH_CLASS, 'Isou\Helpers\Menu');
-
-    while ($item = $query->fetch()) {
-        $item->selected = false;
-        $menu[$item->url] = $item;
-    }
-
-    return $menu;
+    return get_menus(array('active' => true, 'type' => 'guest'));
 }
 
 function get_active_menu_sorted_by_url() {
@@ -73,63 +101,5 @@ function get_active_menu_sorted_by_url() {
 }
 
 function get_administration_menu() {
-    $menu = array();
-
-    $menu['evenements'] = (object) array(
-        'url' => 'evenements',
-        'title' => 'ajouter un évenement',
-        'label' => 'évènements',
-        'model' => '/php/events/index.php',
-    );
-
-    $menu['annonce'] = (object) array(
-        'url' => 'annonce',
-        'title' => 'ajouter une annonce',
-        'label' => 'annonce',
-        'model' => '/php/announcement/index.php',
-    );
-
-    $menu['statistiques'] = (object) array(
-        'url' => 'statistiques',
-        'title' => 'afficher les statistiques',
-        'label' => 'statistiques',
-        'model' => '/php/history/index.php',
-    );
-
-    $menu['services'] = (object) array(
-        'url' => 'services',
-        'title' => 'ajouter un service',
-        'label' => 'services',
-        'model' => '/php/services/index.php',
-    );
-
-    $menu['dependances'] = (object) array(
-        'url' => 'dependances',
-        'title' => 'ajouter une dépendance',
-        'label' => 'dépendances',
-        'model' => '/php/dependencies/index.php',
-    );
-
-    $menu['categories'] = (object) array(
-        'url' => 'categories',
-        'title' => 'ajouter une catégorie',
-        'label' => 'catégories',
-        'model' => '/php/categories/index.php',
-    );
-
-    $menu['configuration'] = (object) array(
-        'url' => 'configuration',
-        'title' => 'configurer l\'application',
-        'label' => 'configuration',
-        'model' => '/php/settings/index.php',
-    );
-
-    $menu['aide'] = (object) array(
-        'url' => 'aide',
-        'title' => 'afficher l\'aide',
-        'label' => 'aide',
-        'model' => '/php/help/index.php',
-    );
-
-    return $menu;
+    return get_menus(array('type' => 'admin'));
 }
