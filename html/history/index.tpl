@@ -76,7 +76,8 @@
 	<caption class="text-center">Historique des interruptions : {$count_events} {if $count_events > 1}évènements trouvés{else}évènement trouvé{/if}.</caption>
 	<thead>
 		<tr>
-		<th>Service</th>
+			<th>Service</th>
+			<th>État</th>
 			<th>Date de début</th>
 			<th>Date de fin</th>
 			<th>Durée</th>
@@ -89,6 +90,7 @@
 		{foreach $events as $event}
 		<tr>
 			<td>{$event->name}</td>
+			<td>{$STATES[$event->state]}</td>
 			<td>{$event->startdate|date_format:'%A %e %B %Y %H:%M'}</td>
 			<td>{$event->enddate|date_format:'%A %e %B %Y %H:%M'}</td>
 			<td>{$event->total}</td>

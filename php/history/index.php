@@ -1,6 +1,9 @@
 <?php
 
 use UniversiteRennes2\Isou\Event;
+use UniversiteRennes2\Isou\State;
+
+use Isou\Helpers\SimpleMenu;
 
 require_once PRIVATE_PATH.'/libs/events.php';
 require_once PRIVATE_PATH.'/libs/services.php';
@@ -128,7 +131,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
 
 
     $events = array();
-    $sql = "SELECT s.name, e.startdate, e.enddate, ed.description, e.type".
+    $sql = "SELECT s.name, e.startdate, e.enddate, e.state, ed.description, e.type".
         " FROM events e, events_descriptions ed, services s".
         " WHERE s.id = e.idservice".
         " AND ed.id = e.ideventdescription".
@@ -160,10 +163,10 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
             if ($event->enddate !== null) {
                 $event->enddate = new DateTime($event->enddate);
                 $diff = $event->startdate->diff($event->enddate);
-                $event->total_minutes = round(($event->enddate->getTimestamp() - $event->startdate->getTimestamp()) / 60);
+                $event->total_minutes = intval(($event->enddate->getTimestamp() - $event->startdate->getTimestamp()) / 60);
             } else {
                 $diff = $event->startdate->diff(new DateTime());
-                $event->total_minutes = round((TIME - $event->startdate->getTimestamp()) / 60);
+                $event->total_minutes = intval((TIME - $event->startdate->getTimestamp()) / 60);
             }
 
             list($days, $hours, $minutes) = explode(';', $diff->format('%a;%h;%i'));
@@ -194,10 +197,14 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
             continue;
         }
 
+        if (isset($_POST['export']) === true) {
+            $event->state_alt = $STATES[$event->state]->alternate_text;
+        }
+
         $events[] = $event;
     }
 
-    if (!isset($_POST['export'])) {
+    if (isset($_POST['export']) === false) {
         $query = $DB->prepare($sql_count);
         $query->execute($params);
         $count = $query->fetch(PDO::FETCH_NUM);
@@ -238,7 +245,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
     for ($i = 1; $i <= $count_pages; $i++) {
         $selected = ($page == $i);
         $url = URL.'/index.php/statistiques/page/'.$i.'/filter/'.$options_filter.'#resultat';
-        $pagination[] = new Isou\Helpers\SimpleMenu($i, 'Page '.$i, $url, $selected);
+        $pagination[] = new SimpleMenu($i, 'Page '.$i, $url, $selected);
     }
 
     $smarty->assign('pagination', $pagination);
