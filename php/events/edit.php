@@ -92,6 +92,12 @@ if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['startt
 
             $event->save();
 
+            if ($_POST['type'] === Event::TYPE_CLOSED && $event->is_now() === true) {
+                $service = get_service(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
+                $service->state = State::CLOSED;
+                $service->save();
+            }
+
             if (isset($_POST['locked'])) {
                 $service = get_service(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
 

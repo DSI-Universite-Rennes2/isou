@@ -64,6 +64,22 @@ class Event{
         }
     }
 
+    public function is_now($datetime = null) {
+        global $LOGGER;
+
+        try {
+            $datetime = new \DateTime($datetime);
+        } catch (Exception $exception) {
+            $datetime = new \DateTime();
+            $LOGGER->addInfo($exception->getMessage());
+        }
+
+        $bigger_than_startdate = ($datetime >= $this->startdate);
+        $lower_than_enddate = ($this->enddate === null || $datetime <= $this->enddate);
+
+        return $bigger_than_startdate && $lower_than_enddate;
+    }
+
     public function set_service($idservice, $options_services = null) {
         global $DB;
 
@@ -176,8 +192,14 @@ class Event{
             $options_states = State::$STATES;
         }
 
-        if (!isset($options_states[$this->state])) {
+        if (isset($options_states[$this->state]) === false) {
             throw new \Exception('L\'état du service a une valeur incorrecte.');
+        }
+
+        if ($this->type === self::TYPE_CLOSED) {
+            if ($this->state !== State::CLOSED) {
+                throw new \Exception('L\'état du service doit être positionné sur fermé pour un évènement de fermeture');
+            }
         }
     }
 

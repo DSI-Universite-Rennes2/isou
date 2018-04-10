@@ -1,10 +1,10 @@
 <table class="table table-bordered table-condensed">
 <thead>
 <tr>
+	<th>État</th>
 	<th>Service</th>
 	<th>Date de début</th>
 	<th>Date de fin</th>
-	<th>État</th>
 	<th>Description</th>
 	<th>Actions</th>
 </tr>
@@ -13,10 +13,14 @@
 <tbody>
 {foreach $events as $event}
 <tr>
+	<td>{$STATES[$event->state]}</td>
 	<td>{$services[$event->idservice]}</td>
 	<td>{$event->startdate|date_format:"%d %B %Y %H:%M"}</td>
-	<td{if $event->enddate === NULL} class="danger">en cours{else}>{$event->enddate|date_format:"%d %B %Y %H:%M"}{/if}</td>
-	<td>{$STATES[$event->state]}</td>
+	{if $event->enddate === null}
+	<td class="danger">en cours</td>
+	{else}
+	<td>{$event->enddate|date_format:"%d %B %Y %H:%M"}</td>
+	{/if}
 	<td>{if !empty($event->description)}{$event->description|nl2br}{/if}</td>
 	<td>
 		<ul class="list-inline">

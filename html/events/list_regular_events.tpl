@@ -1,11 +1,11 @@
 <table class="table table-bordered table-condensed">
 <thead>
 <tr>
+	<th>État</th>
 	<th>Service</th>
 	<th>Début</th>
 	<th>Fin</th>
 	<th>Prochaine interruption</th>
-	<th>État</th>
 	<th>Description</th>
 	<th>Actions</th>
 </tr>
@@ -14,11 +14,11 @@
 <tbody>
 {foreach $events as $event}
 <tr>
+	<td>{$STATES[$event->state]}</td>
 	<td>{$services[$event->idservice]}</td>
 	<td>{$event->startdate|date_format:"%H:%M"}</td>
 	<td>{$event->enddate|date_format:"%H:%M"}</td>
 	<td>{$event->startdate|date_format:"%d %B %Y %H:%M"}</td>
-	<td>{$STATES[$event->state]}</td>
 	<td>{if !empty($event->description)}{$event->description|nl2br}{/if}</td>
 	<td>
 		<ul class="list-inline">
