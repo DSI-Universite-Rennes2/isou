@@ -44,6 +44,12 @@
                 {html_radios id=locked name=locked options=$options_locked selected=$service->locked}
             </dd>
         </div>
+        <div class="form-information-dl-div">
+            <dt class="form-topics-dt">État</dt>
+            <dd class="form-values-dd">
+                {html_options id=state name=state options=$options_state selected=$service->state}
+            </dd>
+        </div>
     </dl>
 
     <ul class="list-inline">
