@@ -1,7 +1,6 @@
 <?php
 
 use UniversiteRennes2\Isou\Plugin;
-use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
 require_once PRIVATE_PATH.'/libs/events.php';
@@ -42,23 +41,28 @@ foreach ($events as $event) {
 
     $service = $services[$event->idservice];
 
-    // on ne garde que les services ISOU non fermés
+    // On ne garde que les services ISOU non fermés.
     if ($service->state === State::CLOSED) {
         continue;
     }
 
+    // On n'affiche pas les évènements à venir.
+    if ($event->startdate > new DateTime()) {
+        continue;
+    }
+
     if (isset($categories[$service->idcategory]->services[$event->idservice]) === false) {
-        // initialise la categorie
+        // Initialise la categorie.
         if (isset($categories[$service->idcategory]) === false) {
             continue;
         }
 
-        // ajoute le service à la catégorie
+        // Ajoute le service à la catégorie.
         $categories[$service->idcategory]->services[$event->idservice] = $service;
         $categories[$service->idcategory]->services[$event->idservice]->events = array();
     }
 
-    // ajoute l'évènement au service
+    // Ajoute l'évènement au service.
     $categories[$service->idcategory]->services[$event->idservice]->events[] = $event;
 }
 
