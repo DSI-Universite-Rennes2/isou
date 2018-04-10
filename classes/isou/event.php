@@ -111,10 +111,14 @@ class Event{
     public function set_period($period) {
         $this->period = $period;
 
-        if (empty($this->period)) {
+        if (empty($this->period) === true) {
+            if ($this->type === self::TYPE_REGULAR) {
+                throw new \Exception('Les évènements de type régulier doivent avoir une périodicité.');
+            }
+
             $this->period = self::PERIOD_NONE;
         } else {
-            if (!isset(self::$PERIODS[$this->period])) {
+            if (isset(self::$PERIODS[$this->period]) === false) {
                 throw new \Exception('La périodicité n\'est pas valide.');
             }
 
@@ -179,8 +183,16 @@ class Event{
                 throw new \Exception('La date de fin d\'interruption doit être au format AAAA-MM-JJ HH:MM.');
             }
 
-            if (($this->startdate < $this->enddate) === false) {
+            if ($this->startdate >= $this->enddate) {
                 throw new \Exception('La date de début doit être inférieure à la date de fin.');
+            }
+        }
+
+        if ($this->type === self::TYPE_REGULAR) {
+            // Note: on laisse la possibilité à l'utilisateur de saisir des journées différentes, notamment dans le cas où la date d'interruption régulière aurait lieu de 23h à 1h.
+
+            if ($this->enddate === null) {
+                throw new \Exception('Une date de fin est requise pour un évènement régulier.');
             }
         }
     }
