@@ -1,4 +1,4 @@
-<form action="{$smarty.const.URL}/index.php/evenements/delete/{$event->id}" method="post">
+<form action="{$smarty.const.URL}/index.php/evenements/{$eventtype}/delete/{$event->id}" method="post">
 	<div class="text-center alert alert-danger">
 		<p>Voulez-vous vraiment supprimer cet évènement ?</p>
 		<ul class="list-inline form-submit-buttons-ul">
@@ -6,7 +6,7 @@
 				<input class="btn btn-danger" type="submit" name="delete" value="supprimer" />
 			</li>
 			<li>
-				<a class="btn btn-default" href="{$smarty.const.URL}/index.php/evenements">annuler</a>
+				<a class="btn btn-default" href="{$smarty.const.URL}/index.php/evenements/{$eventtype}">annuler</a>
 			</li>
 		</ul>
 	</div>

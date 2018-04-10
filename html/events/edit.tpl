@@ -1,4 +1,4 @@
-<form action="{$smarty.const.URL}/index.php/evenements/edit/{$event->id}" method="post">
+<form action="{$smarty.const.URL}/index.php/evenements/{$eventtype}/edit/{$event->id}" method="post">
 
 	{if $event->id == 0}
 	<h2>Ajouter un évènement</h2>
@@ -106,7 +106,7 @@ Exemple :<br />Pour le {$smarty.now|date_format:'%A %d %B %Y à %H heures et %M 
 			<input class="btn btn-primary" type="submit" value="enregistrer" />
 		</li>
 		<li>
-			<a class="btn btn-default" href="{$smarty.const.URL}/index.php/evenements">annuler</a>
+			<a class="btn btn-default" href="{$smarty.const.URL}/index.php/evenements/{$eventtype}">annuler</a>
 		</li>
 	</ul>
 </form>

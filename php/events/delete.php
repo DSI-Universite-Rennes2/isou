@@ -1,9 +1,10 @@
 <?php
 
-if (isset($PAGE_NAME[2]) && ctype_digit($PAGE_NAME[2])) {
-    $event = get_event($PAGE_NAME[2]);
-} else {
-    $event = false;
+use UniversiteRennes2\Isou\Event;
+
+$event = false;
+if (isset($PAGE_NAME[3]) === true && ctype_digit($PAGE_NAME[3]) === true) {
+    $event = get_event($PAGE_NAME[3]);
 }
 
 if ($event === false) {
@@ -11,7 +12,8 @@ if ($event === false) {
 
     header('Location: '.URL.'/index.php/evenements');
     exit(0);
-} elseif (isset($_POST['delete'])) {
+} elseif (isset($_POST['delete']) === true) {
+    // Valide la suppression de l'évènement.
     $_POST['errors'] = array();
 
     try {
@@ -20,13 +22,22 @@ if ($event === false) {
         $_POST['errors'][] = $exception->getMessage();
     }
 
-    if (!isset($_POST['errors'][0])) {
+    if (isset($_POST['errors'][0]) === false) {
         $_SESSION['messages'] = array('successes' => 'L\'évènement a été supprimé.');
 
-        if ($event->type === UniversiteRennes2\Isou\Event::TYPE_UNSCHEDULED) {
-            header('Location: '.URL.'/index.php/evenements/imprevus');
-        } else {
-            header('Location: '.URL.'/index.php/evenements/prevus');
+        switch ($event->type) {
+            case Event::TYPE_CLOSED:
+                header('Location: '.URL.'/index.php/evenements/fermes');
+                break;
+            case Event::TYPE_REGULAR:
+                header('Location: '.URL.'/index.php/evenements/reguliers');
+                break;
+            case Event::TYPE_UNSCHEDULED:
+                header('Location: '.URL.'/index.php/evenements/imprevus');
+                break;
+            case Event::TYPE_SCHEDULED:
+            default:
+                header('Location: '.URL.'/index.php/evenements/prevus');
         }
         exit(0);
     }
@@ -34,4 +45,4 @@ if ($event === false) {
 
 $smarty->assign('event', $event);
 
-$TEMPLATE = 'events/delete.tpl';
+$subtemplate = 'events/delete.tpl';

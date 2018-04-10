@@ -2,13 +2,11 @@
 
 use UniversiteRennes2\Isou\Event;
 use UniversiteRennes2\Isou\EventDescription;
-use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
-if (isset($PAGE_NAME[2]) && ctype_digit($PAGE_NAME[2])) {
-    $event = get_event($PAGE_NAME[2]);
-} else {
-    $event = false;
+$event = false;
+if (isset($PAGE_NAME[3]) === true && ctype_digit($PAGE_NAME[3]) === true) {
+    $event = get_event($PAGE_NAME[3]);
 }
 
 if ($event === false) {
@@ -20,6 +18,24 @@ if ($event->idservice !== 0) {
     $event->locked = $service->locked;
 } else {
     $event->locked = 0;
+
+    // Essaye de positionner correctement le type d'évènement dans le ménu déroulant.
+    if (isset($_POST['type']) === false) {
+        switch ($PAGE_NAME[1]) {
+            case 'fermes':
+                $event->set_type(Event::TYPE_CLOSED);
+                break;
+            case 'imprevus':
+                $event->set_type(Event::TYPE_UNSCHEDULED);
+                break;
+            case 'reguliers':
+                $event->set_type(Event::TYPE_REGULAR);
+                break;
+            case 'prevus':
+            default:
+                $event->set_type(Event::TYPE_SCHEDULED);
+        }
+    }
 }
 
 $options_states = State::$STATES;
@@ -31,11 +47,11 @@ $options_services = get_isou_services_sorted_by_idtype();
 $options_types = Event::$TYPES;
 
 $options_yesno = array(
-'1' => 'Oui',
-'0' => 'Non',
-);
+    '1' => 'Oui',
+    '0' => 'Non',
+    );
 
-if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['starttime'], $_POST['enddate'], $_POST['endtime'], $_POST['period'], $_POST['description'])) {
+if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['starttime'], $_POST['enddate'], $_POST['endtime'], $_POST['period'], $_POST['description']) === true) {
     $_POST['errors'] = array();
 
     try {
@@ -81,7 +97,7 @@ if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['startt
         $event_description->autogen = 0;
     }
 
-    if (!isset($_POST['errors'][0])) {
+    if (isset($_POST['errors'][0]) === false) {
         $DB->beginTransaction();
 
         try {
@@ -98,7 +114,7 @@ if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['startt
                 $service->save();
             }
 
-            if (isset($_POST['locked'])) {
+            if (isset($_POST['locked']) === true) {
                 $service = get_service(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
 
                 if ($_POST['locked'] === '1') {
@@ -114,13 +130,22 @@ if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['startt
             $_POST['errors'] = array($exception->getMessage());
         }
 
-        if (!isset($_POST['errors'][0])) {
+        if (isset($_POST['errors'][0]) === false) {
             $_SESSION['messages'] = array('successes' => 'L\'évènement a été enregistré.');
 
-            if ($event->type === Event::TYPE_UNSCHEDULED) {
-                header('Location: '.URL.'/index.php/evenements/imprevus');
-            } else {
-                header('Location: '.URL.'/index.php/evenements/prevus');
+            switch ($event->type) {
+                case Event::TYPE_CLOSED:
+                    header('Location: '.URL.'/index.php/evenements/fermes');
+                    break;
+                case Event::TYPE_REGULAR:
+                    header('Location: '.URL.'/index.php/evenements/reguliers');
+                    break;
+                case Event::TYPE_UNSCHEDULED:
+                    header('Location: '.URL.'/index.php/evenements/imprevus');
+                    break;
+                case Event::TYPE_SCHEDULED:
+                default:
+                    header('Location: '.URL.'/index.php/evenements/prevus');
             }
             exit(0);
         }
@@ -135,4 +160,4 @@ $smarty->assign('options_yesno', $options_yesno);
 
 $smarty->assign('event', $event);
 
-$TEMPLATE = 'events/edit.tpl';
+$subtemplate = 'events/edit.tpl';
