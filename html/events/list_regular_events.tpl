@@ -3,6 +3,7 @@
 		<tr>
 			<th>État</th>
 			<th>Service</th>
+			<th>Périodicité</th>
 			<th>Début</th>
 			<th>Fin</th>
 			<th>Prochaine interruption</th>
@@ -15,6 +16,7 @@
 		<tr>
 			<td>{$STATES[$event->state]}</td>
 			<td>{$services[$event->idservice]}</td>
+			<td>{if $event->period === UniversiteRennes2\Isou\Event::PERIOD_DAILY}Quotidienne{else if $event->period === UniversiteRennes2\Isou\Event::PERIOD_DAILY}Hebdomadaire{/if}</td>
 			<td>{$event->startdate|date_format:"%H:%M"}</td>
 			<td>{$event->enddate|date_format:"%H:%M"}</td>
 			<td>{$event->startdate|date_format:"%d %B %Y %H:%M"}</td>
