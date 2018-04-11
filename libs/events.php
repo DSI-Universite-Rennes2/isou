@@ -102,6 +102,12 @@ function get_events($options = array()) {
         $params[] = $options['plugin'];
     }
 
+    // not plugin options
+    if (isset($options['notplugin']) === true && ctype_digit($options['notplugin']) === true) {
+        $sql .= " AND s.idplugin!=?";
+        $params[] = $options['notplugin'];
+    }
+
     // since options
     if (isset($options['since']) === true) {
         $sql .= " AND (e.enddate IS NULL OR e.startdate >= ?)";

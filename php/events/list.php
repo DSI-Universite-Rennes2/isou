@@ -11,6 +11,11 @@ $options['sort'] = array(
     );
 
 switch ($PAGE_NAME[1]) {
+    case 'autres':
+        unset($options['plugin']);
+        $options['notplugin'] = PLUGIN_ISOU;
+        $subtemplate = 'events/list_plugins_events.tpl';
+        break;
     case 'fermes':
         $options['since'] = strftime('%FT%T', mktime(0, 0, 0) - 35 * 24 * 60 * 60);
         $options['type'] = Event::TYPE_CLOSED;
