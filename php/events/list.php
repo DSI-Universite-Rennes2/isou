@@ -33,4 +33,3 @@ switch ($PAGE_NAME[1]) {
 }
 
 $smarty->assign('events', get_events($options));
-$smarty->assign('services', get_services_sorted_by_id(PLUGIN_ISOU));

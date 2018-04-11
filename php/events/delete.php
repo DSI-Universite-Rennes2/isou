@@ -10,7 +10,7 @@ if (isset($PAGE_NAME[3]) === true && ctype_digit($PAGE_NAME[3]) === true) {
 if ($event === false) {
     $_SESSION['messages'] = array('errors' => 'Cet évènement n\'existe pas.');
 
-    header('Location: '.URL.'/index.php/evenements');
+    header('Location: '.URL.'/index.php/evenements/'.$PAGE_NAME[1]);
     exit(0);
 } elseif (isset($_POST['delete']) === true) {
     // Valide la suppression de l'évènement.

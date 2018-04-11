@@ -1,6 +1,6 @@
 <form action="{$smarty.const.URL}/index.php/evenements/{$eventtype}/delete/{$event->id}" method="post">
 	<div class="text-center alert alert-danger">
-		<p>Voulez-vous vraiment supprimer cet évènement ?</p>
+		<p>Voulez-vous vraiment supprimer l'évènement <strong>{$event->service_name}</strong> du {$event->startdate|date_format:"%a %d %B %Y %H:%M"}{if $event->enddate !== null} au {$event->enddate|date_format:"%a %d %B %Y %H:%M"}{/if} ?</p>
 		<ul class="list-inline form-submit-buttons-ul">
 			<li>
 				<input class="btn btn-danger" type="submit" name="delete" value="supprimer" />
