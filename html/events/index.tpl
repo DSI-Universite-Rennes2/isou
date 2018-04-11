@@ -18,9 +18,11 @@
 	{include file=$subtemplate}
 {else}
 	{* Liste des évènements. *}
-	<p class="text-right">
-		<a class="btn btn-primary" href="{$smarty.const.URL}/index.php/evenements/{$eventtype}/edit/0">Ajouter un évènement</a>
-	</p>
+	{if $show_add_button === true}
+		<p class="text-right">
+			<a class="btn btn-primary" href="{$smarty.const.URL}/index.php/evenements/{$eventtype}/edit/0">Ajouter un évènement</a>
+		</p>
+	{/if}
 
 	{include file="common/messages_session.tpl"}
 

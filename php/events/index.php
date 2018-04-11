@@ -39,6 +39,7 @@ switch ($PAGE_NAME[2]) {
         require_once PRIVATE_PATH.'/php/events/list.php';
 }
 
+$smarty->assign('show_add_button', ($PAGE_NAME[1] !== 'autres' && $PAGE_NAME[2] === 'list'));
 $smarty->assign('eventtype', $PAGE_NAME[1]);
 $smarty->assign('submenu', $submenu);
 $smarty->assign('subtemplate', $subtemplate);
