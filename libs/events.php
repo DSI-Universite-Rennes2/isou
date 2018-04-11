@@ -2,21 +2,15 @@
 
 use UniversiteRennes2\Isou\Plugin;
 
-function get_event($id) {
-    global $DB;
+function get_event($options = array()) {
+    if (isset($options['id']) === false) {
+        throw new Exception(__FUNCTION__.': le paramètre $options[\'id\'] est requis.');
+    }
 
-    $sql = "SELECT e.id, e.startdate, e.enddate, e.state, e.type, e.period, e.ideventdescription, ed.description, e.idservice".
-            " FROM events e, events_descriptions ed".
-            " WHERE e.ideventdescription = e.ideventdescription".
-            " AND e.id=?";
-    $query = $DB->prepare($sql);
-    $query->execute(array($id));
+    $options['one_record'] = true;
 
-    $query->setFetchMode(PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Event');
-
-    return $query->fetch();
+    return get_events($options);
 }
-
 
 /**
   * @param array $options Array in format:
@@ -46,6 +40,15 @@ function get_events($options = array()) {
             " FROM events e, events_descriptions ed, services s".
             " WHERE s.id=e.idservice".
             " AND ed.id=e.ideventdescription";
+
+    if (isset($options['id'])) {
+        if (ctype_digit($options['id'])) {
+            $sql .= ' AND e.id = ?';
+            $params[] = $options['id'];
+        } else {
+            $LOGGER->addInfo('L\'option \'id\' doit être un entier.', array('value', $options['id']));
+        }
+    }
 
     // after options
     if (isset($options['after']) && $options['after'] instanceof DateTime) {

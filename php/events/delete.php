@@ -4,7 +4,7 @@ use UniversiteRennes2\Isou\Event;
 
 $event = false;
 if (isset($PAGE_NAME[3]) === true && ctype_digit($PAGE_NAME[3]) === true) {
-    $event = get_event($PAGE_NAME[3]);
+    $event = get_event(array('id' => $PAGE_NAME[3]));
 }
 
 if ($event === false) {
