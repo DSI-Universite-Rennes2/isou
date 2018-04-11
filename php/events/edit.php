@@ -11,13 +11,6 @@ if (isset($PAGE_NAME[3]) === true && ctype_digit($PAGE_NAME[3]) === true) {
 
 if ($event === false) {
     $event = new Event();
-}
-
-if ($event->idservice !== 0) {
-    $service = get_service(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
-    $event->locked = $service->locked;
-} else {
-    $event->locked = 0;
 
     // Essaye de positionner correctement le type d'évènement dans le ménu déroulant.
     if (isset($_POST['type']) === false) {
@@ -45,11 +38,6 @@ $options_periods = Event::$PERIODS;
 $options_services = get_isou_services_sorted_by_idtype();
 
 $options_types = Event::$TYPES;
-
-$options_yesno = array(
-    '1' => 'Oui',
-    '0' => 'Non',
-    );
 
 if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['starttime'], $_POST['enddate'], $_POST['endtime'], $_POST['period'], $_POST['description']) === true) {
     $_POST['errors'] = array();
@@ -114,16 +102,6 @@ if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['startt
                 $service->save();
             }
 
-            if (isset($_POST['locked']) === true) {
-                $service = get_service(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
-
-                if ($_POST['locked'] === '1') {
-                    $service->lock($event->state);
-                } else {
-                    $service->unlock();
-                }
-            }
-
             $DB->commit();
         } catch (Exception $exception) {
             $DB->rollBack();
@@ -156,7 +134,6 @@ $smarty->assign('options_states', $options_states);
 $smarty->assign('options_periods', $options_periods);
 $smarty->assign('options_services', $options_services);
 $smarty->assign('options_types', $options_types);
-$smarty->assign('options_yesno', $options_yesno);
 
 $smarty->assign('event', $event);
 

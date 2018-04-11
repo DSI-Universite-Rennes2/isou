@@ -27,18 +27,10 @@
 		</div>
 		<div class="form-information-dl-div">
 			<dt class="form-topics-dt">
-				<label for="state">État du service</label>
+				<label for="state">État du service lors de l'interruption</label>
 			</dt>
 			<dd class="form-values-dd">
 				{html_options id="state" name="state" options=$options_states selected=$event->state}
-			</dd>
-		</div>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="locked">Verrouiller le service</label>
-			</dt>
-			<dd class="form-values-dd">
-				{html_options id="locked" name="locked" options=$options_yesno selected=$event->locked}
 			</dd>
 		</div>
 		<div class="form-information-dl-div">
