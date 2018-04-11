@@ -30,6 +30,9 @@ switch ($PAGE_NAME[2]) {
     case 'edit':
         require_once PRIVATE_PATH.'/php/events/edit.php';
         break;
+    case 'more':
+        require_once PRIVATE_PATH.'/php/events/more.php';
+        break;
     case 'list':
     default:
         require_once PRIVATE_PATH.'/php/events/list.php';

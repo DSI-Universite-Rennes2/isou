@@ -62,6 +62,25 @@ function get_events($options = array()) {
         $params[] = $options['before']->format('Y-m-d\TH:i');
     }
 
+    // enddate_between options
+    if (isset($options['enddate_between']) === true) {
+        if (is_array($options['enddate_between']) === false) {
+            // LOG
+        } else if (isset($options['enddate_between'][1]) === false) {
+            // LOG
+        } else {
+            if (($options['enddate_between'][0] instanceof DateTime) === false) {
+                // LOG
+            } else if (($options['enddate_between'][1] instanceof DateTime) === false) {
+                // LOG
+            } else {
+                $sql .= " AND e.enddate BETWEEN ? AND ?";
+                $params[] = $options['enddate_between'][0]->format('Y-m-d\TH:i:s');
+                $params[] = $options['enddate_between'][1]->format('Y-m-d\TH:i:s');
+            }
+        }
+    }
+
     // idservice options
     if (isset($options['idservice']) && ctype_digit($options['idservice'])) {
         $sql .= " AND s.id = ?";

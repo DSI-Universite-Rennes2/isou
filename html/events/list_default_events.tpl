@@ -23,6 +23,7 @@
 			<td>{if empty($event->description) === false}{$event->description|nl2br}{/if}</td>
 			<td>
 				<ul class="list-inline">
+					<li><a class="btn btn-xs btn-success" href="{$smarty.const.URL}/index.php/evenements/{$eventtype}/more/{$event->id}">détails</a></li>
 					<li><a class="btn btn-xs btn-primary" href="{$smarty.const.URL}/index.php/evenements/{$eventtype}/edit/{$event->id}">modifier</a></li>
 					<li><a class="btn btn-xs btn-danger" href="{$smarty.const.URL}/index.php/evenements/{$eventtype}/delete/{$event->id}">supprimer</a></li>
 				</ul>
