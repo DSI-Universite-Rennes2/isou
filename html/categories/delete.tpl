@@ -1,6 +1,3 @@
-<main role="main">
-<article id="content">
-
 <form action="{$smarty.const.URL}/index.php/categories/delete/{$category->id}" method="post">
 	<div class="text-center alert alert-danger">
 		<p>Voulez-vous vraiment supprimer la catégorie "{$category->name}" et ses services associés ?</p>
@@ -14,6 +11,3 @@
 		</ul>
 	</div>
 </form>
-
-</article>
-</main>

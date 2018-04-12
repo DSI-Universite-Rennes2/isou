@@ -1,6 +1,3 @@
-<main role="main">
-<article id="content">
-
 <h1 class="sr-only">Catégories</h1>
 
 <p class="text-right"><a class="btn btn-primary" href="{$smarty.const.URL}/index.php/categories/edit/0">Ajouter une catégorie</a></p>
@@ -52,6 +49,3 @@
         </tbody>
     </table>
 {/if}
-
-</article>
-</main>

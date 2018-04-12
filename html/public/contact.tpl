@@ -1,9 +1,6 @@
-<main role="main">
-<article id="content">
-
 <h1 class="sr-only">Contact</h1>
 
-{if isset($IS_ADMIN, $smarty.get.edit)}
+{if isset($IS_ADMIN, $smarty.get.edit) === true}
 	<form id="contact" action="{$smarty.const.URL}/index.php/contact/edit#contact" method="post">
 		{include file="common/messages_form.tpl"}
 		<p>
@@ -16,7 +13,7 @@
 		</p>
 	</form>
 {else}
-	{if isset($IS_ADMIN)}
+	{if isset($IS_ADMIN) === true}
 		<p class="text-right"><a class="btn btn-primary" href="{$smarty.const.URL}/index.php/contact/edit#contact">éditer la page</a></p>
 
 		{include file="common/messages_session.tpl"}
@@ -24,6 +21,3 @@
 
 	{$message}
 {/if}
-
-</article>
-</main>

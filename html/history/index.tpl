@@ -1,6 +1,3 @@
-<main role="main">
-<article id="content">
-
 <h1 class="sr-only">Historique</h1>
 
 <form action="{$smarty.const.URL}/index.php/statistiques#resultat" method="post">
@@ -68,7 +65,7 @@
 </form>
 
 {if isset($events)}
-	{if !isset($events[0])}
+	{if isset($events[0]) === false}
 	<p id="resultat" class="alert alert-info">Aucun résultat</p>
 	{else}
 
@@ -113,7 +110,7 @@
 	<nav>
 	<ul class="pagination">
 		{foreach $pagination as $page}
-			<li{if $page->selected === TRUE} class="active"{/if}><a href="{$page->url}" title="{$page->title}">{$page->label}</a></li>
+			<li{if $page->selected === true} class="active"{/if}><a href="{$page->url}" title="{$page->title}">{$page->label}</a></li>
 		{/foreach}
 	</ul>
 	</nav>
@@ -121,6 +118,3 @@
 
 	{/if}
 {/if}
-
-</article>
-</main>

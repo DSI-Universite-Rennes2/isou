@@ -1,6 +1,3 @@
-<main role="main">
-<article id="content">
-
 <table id="list" class="table table-condensed" summary="Journal des perturbations et interruptions de services Rennes 2">
 	<caption class="text-center">Journal des services monitorés</caption>
 	<thead>
@@ -37,6 +34,3 @@
 	</tbody>
 	{/foreach}
 </table>
-
-</article>
-</main>

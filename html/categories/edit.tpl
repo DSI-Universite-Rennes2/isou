@@ -1,6 +1,3 @@
-<main role="main">
-<article id="content">
-
 <form action="{$smarty.const.URL}/index.php/categories/edit/{$category->id}" method="post">
 	{if $category->id == 0}
 	<h2>Ajouter une catégorie</h2>
@@ -30,6 +27,3 @@
 		</li>
 	</ul>
 </form>
-
-</article>
-</main>

@@ -74,9 +74,9 @@
 			</dd>
 		</div>
 		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">Périodicité</dt>
+			<dt class="form-topics-dt" id="period">Périodicité</dt>
 			<dd class="form-values-dd">
-				{html_radios name='period' options=$options_periods selected=$event->period}
+				{html_radios aria-labelledby="period" name="period" options=$options_periods selected=$event->period}
 			</dd>
 		</div>
 		<div class="form-information-dl-div">

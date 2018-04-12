@@ -19,7 +19,7 @@
 			{else}
 			<td>{$event->enddate|date_format:"%a %d %B %Y %H:%M"}</td>
 			{/if}
-			<td>{if !empty($event->description)}{$event->description|nl2br}{/if}</td>
+			<td>{if empty($event->description) === false}{$event->description|nl2br}{/if}</td>
 		{/foreach}
 	</tbody>
 </table>

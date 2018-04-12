@@ -1,24 +1,29 @@
-{if isset($smarty.post.successes[0])}
+{if isset($smarty.post.successes[0]) === true}
 <div class="alert alert-success">
-{foreach $smarty.post.successes as $success}
-    <p>{$success}</p>
-{/foreach}
+	<ul class="list-unstyled">
+	{foreach $smarty.post.successes as $success}
+		<li>{$success}</li>
+	{/foreach}
+	</ul>
 </div>
 {/if}
 
-{if isset($smarty.post.warnings[0])}
+{if isset($smarty.post.warnings[0]) === true}
 <div class="alert alert-warning">
-{foreach $smarty.post.warnings as $warning}
-    <p>{$warning}</p>
-{/foreach}
+	<ul class="list-unstyled">
+	{foreach $smarty.post.warnings as $warning}
+		<li>{$warning}</li>
+	{/foreach}
+	</ul>
 </div>
 {/if}
 
-{if isset($smarty.post.errors[0])}
+{if isset($smarty.post.errors[0]) === true}
 <div class="alert alert-danger">
-{foreach $smarty.post.errors as $error}
-    <p>{$error}</p>
-{/foreach}
+	<ul class="list-unstyled">
+	{foreach $smarty.post.errors as $error}
+		<li>{$error}</li>
+	{/foreach}
+	</ul>
 </div>
 {/if}
-

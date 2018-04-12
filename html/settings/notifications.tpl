@@ -4,11 +4,9 @@
 
 	<dl>
 		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="notification-enabled">Activer les notifications</label>
-			</dt>
+			<dt class="form-topics-dt" id="notification-enabled">Activer les notifications</dt>
 			<dd class="form-values-dd">
-				{html_radios id="notification-enabled" name="notification_enabled" options=$options_yes_no selected=$CFG.notification_enabled}
+				{html_radios aria-labelledby="notification-enabled" name="notification_enabled" options=$options_yes_no selected=$CFG.notification_enabled}
 			</dd>
 		</div>
 
@@ -46,4 +44,3 @@
 		</li>
 	</ul>
 </form>
-

@@ -1,6 +1,3 @@
-<main role="main">
-<article id="content">
-
 <h1 class="sr-only">Annonce</h1>
 
 <p class="alert alert-info">L'annonce est un message qui sera affiché en bandeau sur toutes les pages publiques.</p>
@@ -18,9 +15,9 @@
 			</dd>
 		</div>
 		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">Afficher l'annonce</dt>
+			<dt class="form-topics-dt" id="visible">Afficher l'annonce</dt>
 			<dd class="form-values-dd">
-				{html_radios name="visible" options=$options_visible selected=$announcement->visible}
+				{html_radios aria-labelledby="visible" name="visible" options=$options_visible selected=$announcement->visible}
 			</dd>
 		</div>
 	</dl>
@@ -36,6 +33,3 @@
 		</li>
 	</ul>
 </form>
-
-</article>
-</main>

@@ -6,11 +6,9 @@
 		<legend>Authentification CAS</legend>
 		<dl>
 			<div class="form-information-dl-div">
-				<dt class="form-topics-dt">
-					<label for="authentification-cas-enabled">Activer l'authentification CAS</label>
-				</dt>
+				<dt class="form-topics-dt" id="authentification-cas-enabled">Activer l'authentification CAS</dt>
 				<dd class="form-values-dd">
-					{html_radios id="authentification-cas-enabled" name="authentification_cas_enabled" options=$options_yes_no selected=$CFG.authentification_cas_enabled}
+					{html_radios aria-labelledby="authentification-cas-enabled" name="authentification_cas_enabled" options=$options_yes_no selected=$CFG.authentification_cas_enabled}
 				</dd>
 			</div>
 			<div class="form-information-dl-div">
@@ -18,7 +16,7 @@
 					<label for="authentification-cas-admin-usernames">Liste des identifiants CAS ayant les droits administrateurs</label>
 				</dt>
 				<dd class="form-values-dd">
-					<textarea class="textarea-large" name="authentification_cas_admin_usernames" id="authentification_cas_admin_usernames">{$cas_admin_usernames}</textarea>
+					<textarea class="textarea-large" id="authentification-cas-admin-usernames" name="authentification_cas_admin_usernames">{$cas_admin_usernames}</textarea>
 				</dd>
 			</div>
 		</dl>
@@ -28,11 +26,9 @@
 		<legend>Authentification manuelle</legend>
 		<dl>
 			<div class="form-information-dl-div">
-				<dt class="form-topics-dt">
-					<label for="authentification-manual-enabled">Activer l'authentification manuelle</label>
-				</dt>
+				<dt class="form-topics-dt" id="authentification-manual-enabled">Activer l'authentification manuelle</dt>
 				<dd class="form-values-dd">
-					{html_radios id="authentification-manual-enabled" name="authentification_manual_enabled" options=$options_yes_no selected=$CFG.authentification_manual_enabled}
+					{html_radios aria-labelledby="authentification-manual-enabled" name="authentification_manual_enabled" options=$options_yes_no selected=$CFG.authentification_manual_enabled}
 				</dd>
 			</div>
 			<div class="form-information-dl-div">
@@ -60,5 +56,3 @@
 		</li>
 	</ul>
 </form>
-
-

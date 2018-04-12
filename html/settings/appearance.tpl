@@ -3,7 +3,7 @@
 	{include file="common/messages_form.tpl"}
 
 	<dl>
-	    <div class="form-information-dl-div">
+		<div class="form-information-dl-div">
 			<dt class="form-topics-dt">
 				<label for="site-name">Nom du service</label>
 			</dt>
@@ -12,7 +12,7 @@
 			</dd>
 		</div>
 
-	    <div class="form-information-dl-div">
+		<div class="form-information-dl-div">
 			<dt class="form-topics-dt">
 				<label for="site-header">Titre ou entête du service</label>
 			</dt>

@@ -1,6 +1,3 @@
-<main role="main">
-<article id="content">
-
 <h1 class="sr-only">Évènements</h1>
 
 <ul class="nav nav-tabs">
@@ -32,6 +29,3 @@
 		{include file=$subtemplate}
 	{/if}
 {/if}
-
-</article>
-</main>
