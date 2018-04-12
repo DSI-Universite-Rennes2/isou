@@ -255,7 +255,7 @@ function upgrade_plugins($check_only = false) {
         }
 
         $module->codename = $entry;
-        $plugin = Plugin::get_plugin(array('codename' => $module->codename));
+        $plugin = Plugin::get_record(array('codename' => $module->codename));
 
         if ($plugin === false) {
             // Install new plugin.

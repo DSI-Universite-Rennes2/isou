@@ -1,12 +1,10 @@
 <?php
 
 use UniversiteRennes2\Isou\Event;
+use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
 use Isou\Helpers\SimpleMenu;
-
-require_once PRIVATE_PATH.'/libs/events.php';
-require_once PRIVATE_PATH.'/libs/services.php';
 
 $TITLE .= ' - Historique des évènements';
 
@@ -29,7 +27,7 @@ if (isset($PAGE_NAME[4])) {
 }
 
 // services
-$options_services = get_isou_services_sorted_by_idtype();
+$options_services = Service::get_records(array('fetch_column' => true, 'plugin' => PLUGIN_ISOU));
 $smarty->assign('options_services', $options_services);
 $options_event_types = array(
     -1 => 'Tous',
@@ -40,9 +38,9 @@ $smarty->assign('options_event_types', $options_event_types);
 
 // sort
 $options_sorts = array(
-'Décroissant',
-'Croissant',
-);
+    'Décroissant',
+    'Croissant',
+    );
 $smarty->assign('options_sorts', $options_sorts);
 
 // max result

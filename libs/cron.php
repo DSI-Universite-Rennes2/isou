@@ -4,6 +4,8 @@
   * Fonctions liées aux procédures du crontab.
   */
 
+use UniversiteRennes2\Isou\Dependency_Group;
+use UniversiteRennes2\Isou\Dependency_Message;
 use UniversiteRennes2\Isou\Event;
 use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
@@ -17,7 +19,7 @@ function update_services_tree() {
     global $CFG, $LOGGER;
 
     // TODO: utilisé la propriété timemodified.
-    $services = get_services();
+    $services = Service::get_records();
 
     $LOGGER->addInfo('Mise à jour de l\'arbre des dépendances');
 
@@ -33,7 +35,7 @@ function update_services_tree() {
 
         // Parcours chaque enfant.
         foreach ($parent_service->reverse_dependencies as $dependencies_group) {
-            $child_service = get_service(array('id' => $dependencies_group->idservice, 'enabled' => true));
+            $child_service = Service::get_record(array('id' => $dependencies_group->idservice, 'enabled' => true));
 
             // Si l'enfant n'existe plus ou n'est plus actif, on ne fait rien.
             if ($child_service === false) {
@@ -64,7 +66,7 @@ function update_services_tree() {
                 $state = State::UNKNOWN;
 
                 // TODO: faire en sorte de ne pas avoir à recalculer cette boucle à chaque fois.
-                $redundant_services = get_services_by_dependencies_group($dependencies_group->id);
+                $redundant_services = Service::get_records(array('dependencies_group' => $dependencies_group->id));
                 foreach ($redundant_services as $redundant_service) {
                     // On cherche au moins un service qui fonctionnerait.
                     if ($state > $redundant_service->state) {
@@ -92,7 +94,7 @@ function update_services_tree() {
             }
 
             // Si un évènement a été créé précédemment, on met à jour le message de l'évènement si nécessaire.
-            $message = get_dependency_message($dependencies_group->idmessage);
+            $message = Dependency_Message::get_record(array('id' => $dependencies_group->idmessage));
             if (empty($event->description) === true) {
                 $event->set_description($message->message, 1);
                 $event->save();
@@ -108,11 +110,11 @@ function update_services_tree() {
     }
 
     // Vérifie les évènements Isou non terminés.
-    $events = get_events(array('plugin' => PLUGIN_ISOU, 'finished' => false, 'type' => Event::TYPE_UNSCHEDULED));
+    $events = Event::get_records(array('plugin' => PLUGIN_ISOU, 'finished' => false, 'type' => Event::TYPE_UNSCHEDULED));
     foreach ($events as $event) {
         $error = false;
 
-        $groups = get_dependency_groups(array('service' => $event->idservice));
+        $groups = Dependency_Group::get_records(array('service' => $event->idservice));
         foreach ($groups as $group) {
             if ($group->is_up() === false) {
                 $error = true;
@@ -122,7 +124,7 @@ function update_services_tree() {
 
         // Si il n'y a pas de services en erreur dans les dépendances, on peut tenter de fermer l'évènement.
         if ($error === false) {
-            $service = get_service(array('enable' => true, 'id' => $event->idservice, 'locked' => false, 'plugin' => PLUGIN_ISOU));
+            $service = Service::get_record(array('id' => $event->idservice, 'enable' => true, 'locked' => false, 'plugin' => PLUGIN_ISOU));
             if ($service !== false) {
                 $LOGGER->addInfo('   L\'évènement du service "'.$service->name.'" (id #'.$event->id.') a été fermé.');
                 $service->change_state(State::OK);
@@ -131,13 +133,13 @@ function update_services_tree() {
     }
 
     // Ajoute le témoin de fermeture lorsqu'un évènement de fermeture démarre.
-    $events = get_events(array('plugin' => PLUGIN_ISOU, 'type' => Event::TYPE_CLOSED));
+    $events = Event::get_records(array('plugin' => PLUGIN_ISOU, 'type' => Event::TYPE_CLOSED));
     foreach ($events as $event) {
         if ($event->is_now() === false) {
             continue;
         }
 
-        $service = get_service(array('id' => $event->idservice, 'locked' => false, 'plugin' => PLUGIN_ISOU));
+        $service = Service::get_record(array('id' => $event->idservice, 'locked' => false, 'plugin' => PLUGIN_ISOU));
         if ($service !== false && $service->state !== State::CLOSED) {
             $LOGGER->addInfo('   Le service "'.$service->name.'" (id #'.$service->id.') passe de l\'état '.$service->state.' à '.State::CLOSED.'.');
             $event = $service->change_state(State::CLOSED);
@@ -157,7 +159,7 @@ function cron_regenerate_json() {
     $json_data['fisou'] = array();
     $json_data['fisou']['services'] = array();
 
-    $services = get_services(array('plugin' => PLUGIN_ISOU));
+    $services = Service::get_records(array('plugin' => PLUGIN_ISOU));
     foreach ($services as $service) {
         if ($service->state === State::OK) {
             continue;
@@ -209,10 +211,10 @@ function cron_notify() {
     // Si on n'est pas le même jour que $CFG['last_daily_cron_update'].
     if ($now->format('d') !== $CFG['last_daily_cron_update']->format('d') && $now->getTimestamp() >= $daily_cron_time) {
         // Liste des services forcés.
-        $services = get_services(array('locked' => true));
+        $services = Service::get_records(array('locked' => true));
 
         // Liste des événements.
-        $events = get_events(array('since' => $now));
+        $events = Event::get_records(array('since' => $now));
 
         // TODO: Liste des services supprimés.
         // TODO: Envoyer la notification.
@@ -236,7 +238,7 @@ function cron_delete_old_plugin_events() {
     $expire = strftime('%FT%T', time() - (90 * 24 * 60 * 60));
     $expired_date = new DateTime($expire);
 
-    $services = get_services();
+    $services = Service::get_records();
     foreach ($services as $service) {
         if ($service->idplugin === PLUGIN_ISOU) {
             continue;

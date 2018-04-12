@@ -1,25 +1,24 @@
 <?php
 
+use UniversiteRennes2\Isou\Category;
+use UniversiteRennes2\Isou\Event;
 use UniversiteRennes2\Isou\Plugin;
+use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
-
-require_once PRIVATE_PATH.'/libs/events.php';
-require_once PRIVATE_PATH.'/libs/services.php';
-require_once PRIVATE_PATH.'/libs/categories.php';
 
 $TITLE .= ' - Actualité';
 
 $services = array();
 $categories = array();
 
-$idcategories = get_categories_sorted_by_id();
-
-$plugin = Plugin::get_plugin(array('codename' => 'isou'));
+$plugin = Plugin::get_record(array('id' => PLUGIN_ISOU));
 
 $categories = array();
-foreach (get_categories() as $category) {
+$idcategories = array();
+foreach (Category::get_records() as $category) {
     $category->services = array();
     $categories[$category->id] = $category;
+    $idcategories[$category->id] = $category->name;
 }
 
 $options = array();
@@ -27,10 +26,10 @@ $options['tolerance'] = $plugin->settings->tolerance;
 $options['plugin'] = PLUGIN_ISOU;
 $options['finished'] = false;
 
-$events = get_events($options);
+$events = Event::get_records($options);
 foreach ($events as $event) {
     if (isset($services[$event->idservice]) === false) {
-        $service = get_service(array('id' => $event->idservice, 'visible' => true, 'plugin' => PLUGIN_ISOU));
+        $service = Service::get_record(array('id' => $event->idservice, 'visible' => true, 'plugin' => PLUGIN_ISOU));
 
         if ($service === false) {
             continue;

@@ -1,11 +1,13 @@
 <?php
 
+use UniversiteRennes2\Isou\Announcement;
 use UniversiteRennes2\Isou\Plugin;
+use UniversiteRennes2\Isou\State;
 
 session_name('isou');
 session_start();
 
-if (!is_file(__DIR__.'/../config.php')) {
+if (is_file(__DIR__.'/../config.php') === false) {
     echo 'L\'application ne semble pas être installée.'.
         ' Merci d\'exécuter en ligne de commande le script install.php qui se trouve dans ./sources/private/upgrade.';
     exit(1);
@@ -49,11 +51,10 @@ if (has_new_version() === true) {
     // Display default pages.
     require PRIVATE_PATH.'/php/common/authentification.php';
 
-    // load states
-    require PRIVATE_PATH.'/libs/states.php';
-    $STATES = get_states();
+    // Load states.
+    $STATES = State::get_records();
 
-    // load menu
+    // Load menu.
     require PRIVATE_PATH.'/libs/menu.php';
 
     $MENU = get_active_menu();
@@ -76,11 +77,9 @@ if (has_new_version() === true) {
     }
     $current_page->selected = true;
 
-    // load announcement
-    if (isset($MENU[$current_page->url])) {
-        require PRIVATE_PATH.'/libs/announcements.php';
-
-        $ANNOUNCEMENT = get_visible_announcement();
+    // Load announcement.
+    if (isset($MENU[$current_page->url]) === true) {
+        $ANNOUNCEMENT = Announcement::get_record(array('empty' => false, 'visible' => true));
     }
 
     require PRIVATE_PATH.$current_page->model;
@@ -100,7 +99,7 @@ $smarty->assign('CFG', $CFG);
 $smarty->assign('STATES', $STATES);
 $smarty->assign('MENU', $MENU);
 
-if (isset($ANNOUNCEMENT) && $ANNOUNCEMENT !== false) {
+if (isset($ANNOUNCEMENT) === true && $ANNOUNCEMENT !== false) {
     $smarty->assign('ANNOUNCEMENT', $ANNOUNCEMENT);
 }
 

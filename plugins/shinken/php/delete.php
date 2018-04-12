@@ -1,9 +1,10 @@
 <?php
 
+use UniversiteRennes2\Isou\Service;
+
+$service = false;
 if (isset($PAGE_NAME[3]) === true && ctype_digit($PAGE_NAME[3]) === true) {
-    $service = get_service(array('id' => $PAGE_NAME[3], 'plugin' => PLUGIN_SHINKEN));
-} else {
-    $service = false;
+    $service = Service::get_record(array('id' => $PAGE_NAME[3], 'plugin' => PLUGIN_SHINKEN));
 }
 
 if ($service === false) {

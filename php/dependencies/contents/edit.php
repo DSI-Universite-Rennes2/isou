@@ -1,10 +1,12 @@
 <?php
 
-use UniversiteRennes2\Isou\Plugin;
-use UniversiteRennes2\Isou\State;
+use UniversiteRennes2\Isou\Dependency_Group;
 use UniversiteRennes2\Isou\Dependency_Group_Content;
+use UniversiteRennes2\Isou\Plugin;
+use UniversiteRennes2\Isou\Service;
+use UniversiteRennes2\Isou\State;
 
-$dependency_group = get_dependency_group(array('id' => $PAGE_NAME[4]));
+$dependency_group = Dependency_Group::get_record(array('id' => $PAGE_NAME[4]));
 
 if ($dependency_group === false) {
     $_SESSION['messages'] = array('errors' => array('Ce contenu n\'existe pas.'));
@@ -13,7 +15,7 @@ if ($dependency_group === false) {
     exit(0);
 }
 
-$dependency_group_content = get_dependency_group_content(array('id' => $PAGE_NAME[7]));
+$dependency_group_content = Dependency_Group_Content::get_record(array('id' => $PAGE_NAME[7]));
 if ($dependency_group_content === false) {
     $dependency_group_content = new Dependency_Group_Content();
 }
@@ -21,15 +23,15 @@ if ($dependency_group_content === false) {
 $options_states = array(
     State::WARNING => State::$STATES[State::WARNING],
     State::CRITICAL => State::$STATES[State::CRITICAL],
-);
+    );
 
 $plugins = array();
-foreach (Plugin::get_plugins(['active' => true]) as $plugin) {
+foreach (Plugin::get_records(['active' => true]) as $plugin) {
     $plugins[$plugin->id] = $plugin->name;
 }
 
 $options_services = array();
-foreach (get_services() as $option) {
+foreach (Service::get_records() as $option) {
     if (isset($plugins[$option->idplugin]) === false) {
         continue;
     }
@@ -63,7 +65,7 @@ if (isset($_POST['services'], $_POST['servicestate']) === true) {
                 break;
             }
 
-            if (get_service(array('id' => $child)) === false) {
+            if (Service::get_record(array('id' => $child)) === false) {
                 $_POST['errors'][] = 'Le champ "État du service lié" est invalide.';
                 break;
             }

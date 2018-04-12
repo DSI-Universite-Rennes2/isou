@@ -1,6 +1,8 @@
 <?php
 
-$services = get_services(array('plugin' => $plugin->id));
+use UniversiteRennes2\Isou\Service;
+
+$services = Service::get_records(array('plugin' => $plugin->id));
 
 foreach ($services as $service) {
     $service->notes = array();

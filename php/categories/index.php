@@ -1,10 +1,8 @@
 <?php
 
-require PRIVATE_PATH.'/libs/categories.php';
-
 $TITLE .= ' - Administration des catégories';
 
-if (!isset($PAGE_NAME[1])) {
+if (isset($PAGE_NAME[1]) === false) {
     $PAGE_NAME[1] = '';
 }
 

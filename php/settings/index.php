@@ -1,7 +1,5 @@
 <?php
 
-require_once PRIVATE_PATH.'/libs/services.php';
-
 $TITLE .= ' - Administration des services';
 
 if (!isset($PAGE_NAME[1])) {

@@ -1,9 +1,10 @@
 <?php
 
+use UniversiteRennes2\Isou\Category;
 use UniversiteRennes2\Isou\Service;
 
 if (isset($PAGE_NAME[3]) === true && ctype_digit($PAGE_NAME[3]) === true) {
-    $service = get_service(array('id' => $PAGE_NAME[3], 'plugin' => PLUGIN_ISOU));
+    $service = Service::get_record(array('id' => $PAGE_NAME[3], 'plugin' => PLUGIN_ISOU));
 } else {
     $service = false;
 }
@@ -13,9 +14,6 @@ if ($service === false) {
     $service->idplugin = PLUGIN_ISOU;
 }
 
-require_once PRIVATE_PATH.'/libs/categories.php';
-$categories = get_categories_sorted_by_id();
-
 if (isset($_POST['category'], $_POST['name'], $_POST['url'], $_POST['visible'], $_POST['locked'], $_POST['state']) === true) {
     $service->idcategory = $_POST['category'];
     $service->name = $_POST['name'];
@@ -24,7 +22,7 @@ if (isset($_POST['category'], $_POST['name'], $_POST['url'], $_POST['visible'], 
     $service->locked = $_POST['locked'];
     $service->state = $_POST['state'];
 
-    $_POST['errors'] = $service->check_data($categories);
+    $_POST['errors'] = $service->check_data();
     if (isset($_POST['errors'][0]) === false) {
         $_POST = array_merge($_POST, $service->save());
         if (isset($_POST['errors'][0]) === false) {
@@ -47,6 +45,6 @@ $smarty->assign('options_state', $options_state);
 
 $smarty->assign('service', $service);
 
-$smarty->assign('categories', $categories);
+$smarty->assign('categories', Category::get_records(array('fetch_column' => true)));
 
 $SUBTEMPLATE = 'edit.tpl';

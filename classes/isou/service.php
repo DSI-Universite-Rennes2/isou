@@ -2,7 +2,7 @@
 
 namespace UniversiteRennes2\Isou;
 
-class Service{
+class Service {
     public $id;
     public $name;
     public $url;
@@ -19,7 +19,7 @@ class Service{
 
     public function __construct() {
         if (isset($this->id) === false) {
-            // Manual instance.
+            // Instance manuelle.
             $this->id = 0;
             $this->name = '';
             $this->url = null;
@@ -42,7 +42,11 @@ class Service{
         $this->reverse_dependencies = null;
     }
 
-    function check_data($categories = array()) {
+    public function __tostring() {
+        return $this->name.' (id: '.$this->id.')';
+    }
+
+    public function check_data() {
         $errors = array();
 
         $this->name = htmlentities($this->name, ENT_NOQUOTES, 'UTF-8');
@@ -50,7 +54,7 @@ class Service{
             $errors[] = 'Le nom du service ne peut pas être vide.';
         }
 
-        $plugin = Plugin::get_plugins(array('single' => true, 'id' => $this->idplugin, 'active' => true));
+        $plugin = Plugin::get_record(array('id' => $this->idplugin, 'active' => true));
         if ($plugin === false) {
             $errors[] = 'Le type de service choisi est invalide.';
         }
@@ -71,7 +75,7 @@ class Service{
             if ($this->rsskey === null) {
                 global $DB;
 
-                $sql = "SELECT rsskey FROM services WHERE rsskey IS NOT NULL ORDER BY rsskey DESC";
+                $sql = 'SELECT rsskey FROM services WHERE rsskey IS NOT NULL ORDER BY rsskey DESC';
                 $query = $DB->query($sql);
                 if ($key = $query->fetch(\PDO::FETCH_OBJ)) {
                     $this->rsskey = ++$key->rsskey;
@@ -81,7 +85,8 @@ class Service{
                 }
             }
 
-            if (!isset($categories[$this->idcategory])) {
+            $category = Category::get_record(array('id' => $this->idcategory));
+            if ($category === false) {
                 $errors[] = 'La catégorie choisie est invalide.';
             }
         } else {
@@ -95,33 +100,209 @@ class Service{
         return $errors;
     }
 
-    function save() {
+    /**
+      * @param array $options Array in format:
+      * @see function get_records()
+      * Note : fetch_one param is always set at true
+      *
+      * @return UniversiteRennes2\Isou\Service|false
+      */
+    public static function get_record($options = array()) {
+        if (isset($options['id']) === false) {
+            throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] est requis.');
+        }
+
+        $options['fetch_one'] = true;
+
+        return self::get_records($options);
+    }
+
+    /**
+      * @param array $options Array in format:
+      *   category        => int : category id
+      *   enable          => bool
+      *   id              => int : service id
+      *   locked          => bool
+      *   fetch_one      => bool
+      *   visible         => bool
+      *   type            => int : index key from UniversiteRennes2\Isou\Service::$TYPES
+      *
+      * @return UniversiteRennes2\Isou\Service[]|UniversiteRennes2\Isou\Service|false
+      */
+    public static function get_records($options = array()) {
+        global $DB;
+
+        $joins = array();
+        $conditions = array();
+        $parameters = array();
+
+        // Parcours les options.
+        if (isset($options['id']) === true) {
+            if (ctype_digit($options['id']) === true) {
+                $conditions[] = 's.id = :id';
+                $parameters[':id'] = $options['id'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'id\' doit être un entier. Valeur donnée : '.var_export($options['id'], $return = true));
+            }
+
+            unset($options['id']);
+        }
+
+        if (isset($options['enable']) === true) {
+            if (is_bool($options['enable']) === true) {
+                $conditions[] = 's.enable = :enable';
+                $parameters[':enable'] = intval($options['enable']);
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'enable\' doit être un booléan. Valeur donnée : '.var_export($options['enable'], $return = true));
+            }
+
+            unset($options['enable']);
+        }
+
+        if (isset($options['locked']) === true) {
+            if (is_bool($options['locked']) === true) {
+                $conditions[] = 's.locked = :locked';
+                $parameters[':locked'] = intval($options['locked']);
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'locked\' doit être un booléan. Valeur donnée : '.var_export($options['locked'], $return = true));
+            }
+
+            unset($options['locked']);
+        }
+
+        if (isset($options['state']) === true) {
+            if (ctype_digit($options['state']) === true) {
+                $conditions[] = 's.state = :state';
+                $parameters[':state'] = $options['state'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'state\' doit être un entier. Valeur donnée : '.var_export($options['state'], $return = true));
+            }
+
+            unset($options['state']);
+        }
+
+        if (isset($options['visible']) === true) {
+            if (is_bool($options['visible']) === true) {
+                $conditions[] = 's.visible = :visible';
+                $parameters[':visible'] = intval($options['visible']);
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'visible\' doit être un booléan. Valeur donnée : '.var_export($options['visible'], $return = true));
+            }
+
+            unset($options['visible']);
+        }
+
+        if (isset($options['category']) === true) {
+            if (ctype_digit($options['category']) === true) {
+                $conditions[] = 's.idcategory = :idcategory';
+                $parameters[':idcategory'] = $options['category'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'category\' doit être un entier. Valeur donnée : '.var_export($options['category'], $return = true));
+            }
+
+            unset($options['category']);
+        }
+
+        if (isset($options['plugin']) === true) {
+            if (ctype_digit($options['plugin']) === true) {
+                $conditions[] = 's.idplugin = :plugin';
+                $parameters[':plugin'] = $options['plugin'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'plugin\' doit être un entier. Valeur donnée : '.var_export($options['plugin'], $return = true));
+            }
+
+            unset($options['plugin']);
+        }
+
+        if (isset($options['dependencies_group']) === true) {
+            if (ctype_digit($options['dependencies_group']) === true) {
+                $joins[] = 'JOIN dependencies_groups_content dgc ON s.id = dgc.idservice';
+                $conditions[] = 'dgc.idgroup = :dependencies_group';
+                $parameters[':dependencies_group'] = $options['dependencies_group'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'dependencies_group\' doit être un entier. Valeur donnée : '.var_export($options['dependencies_group'], $return = true));
+            }
+
+            unset($options['dependencies_group']);
+        }
+
+        // Construis le WHERE.
+        if (isset($conditions[0]) === true) {
+            $sql_conditions = ' WHERE '.implode(' AND ', $conditions);
+        } else {
+            $sql_conditions = '';
+        }
+
+        // Vérifie si toutes les options ont été utilisées.
+        foreach ($options as $key => $option) {
+            if (in_array($key, array('fetch_column', 'fetch_one'), $strict = true) === true) {
+                continue;
+            }
+
+            throw new \Exception(__METHOD__.': l\'option \''.$key.'\' n\'a pas été utilisée. Valeur donnée : '.var_export($option, $return = true));
+        }
+
+        // Construis la requête.
+        if (isset($options['fetch_column']) === true) {
+            $sql = 'SELECT s.id, s.name'.
+                ' FROM services s'.
+                $sql_conditions.
+                ' ORDER BY UPPER(s.name)';
+
+            $query = $DB->prepare($sql);
+            $query->execute($parameters);
+
+            return $query->fetchAll(\PDO::FETCH_COLUMN | \PDO::FETCH_UNIQUE);
+        }
+
+        $sql = 'SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idplugin, s.idcategory'.
+                ' FROM services s'.
+                ' '.implode(' ', $joins).
+                $sql_conditions.
+                ' ORDER BY UPPER(s.name)';
+        $query = $DB->prepare($sql);
+        $query->execute($parameters);
+
+        $query->setFetchMode(\PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Service');
+
+        if (isset($options['fetch_one']) === true) {
+            return $query->fetch();
+        }
+
+        return $query->fetchAll();
+    }
+
+    public function save() {
         global $DB, $LOGGER;
 
         $this->timemodified = strftime('%FT%T');
+
         $results = array(
             'successes' => array(),
             'errors' => array(),
             );
+
         $params = array(
-            $this->name,
-            $this->url,
-            $this->state,
-            $this->comment,
-            $this->enable,
-            $this->visible,
-            $this->locked,
-            $this->rsskey,
-            $this->timemodified,
-            $this->idplugin,
-            $this->idcategory,
+            ':name' => $this->name,
+            ':url' => $this->url,
+            ':state' => $this->state,
+            ':comment' => $this->comment,
+            ':enable' => $this->enable,
+            ':visible' => $this->visible,
+            ':locked' => $this->locked,
+            ':rsskey' => $this->rsskey,
+            ':timemodified' => $this->timemodified,
+            ':idplugin' => $this->idplugin,
+            ':idcategory' => $this->idcategory,
             );
 
         if ($this->id === 0) {
-            $sql = "INSERT INTO services(name, url, state, comment, enable, visible, locked, rsskey, timemodified, idplugin, idcategory) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+            $sql = 'INSERT INTO services(name, url, state, comment, enable, visible, locked, rsskey, timemodified, idplugin, idcategory)'.
+                ' VALUES(:name, :url, :state, :comment, :enable, :visible, :locked, :rsskey, :timemodified, :idplugin, :idcategory)';
         } else {
-            $sql = "UPDATE services SET name=?, url=?, state=?, comment=?, enable=?, visible=?, locked=?, rsskey=?, timemodified=?, idplugin=?, idcategory=? WHERE id=?";
-            $params[] = $this->id;
+            $sql = 'UPDATE services SET name=:name, url=:url, state=:state, comment=:comment, enable=:enable, visible=:visible, locked=:locked,'.
+                ' rsskey=:rsskey, timemodified=:timemodified, idplugin=:idplugin, idcategory=:idcategory WHERE id = :id';
+            $params[':id'] = $this->id;
         }
         $query = $DB->prepare($sql);
 
@@ -131,7 +312,7 @@ class Service{
             }
             $results['successes'] = array('Les données ont été correctement enregistrées.');
         } else {
-            // log db errors
+            // Enregistre le message d'erreur.
             $LOGGER->addError(implode(', ', $query->errorInfo()));
 
             $results['errors'] = array('Une erreur est survenue lors de l\'enregistrement des données.');
@@ -140,46 +321,47 @@ class Service{
         return $results;
     }
 
-    function delete() {
+    public function delete() {
         global $DB, $LOGGER;
 
         $results = array(
             'successes' => array(),
             'errors' => array(),
             );
+
         $commit = 1;
 
         $previous_transaction = $DB->inTransaction();
-        if (!$previous_transaction) {
+        if ($previous_transaction === false) {
             $DB->beginTransaction();
         }
 
-        // suppression des évènements, des dépendances et du service
+        // Suppression des évènements, des dépendances et du service.
         $queries = array();
-        $queries[] = "DELETE FROM events WHERE idservice=?";
-        $queries[] = "DELETE FROM dependencies_groups_content WHERE idservice=?";
-        $queries[] = "DELETE FROM dependencies_groups WHERE idservice=?";
-        $queries[] = "DELETE FROM services WHERE id=?";
+        $queries[] = 'DELETE FROM events WHERE idservice = :id';
+        $queries[] = 'DELETE FROM dependencies_groups_content WHERE idservice = :id';
+        $queries[] = 'DELETE FROM dependencies_groups WHERE idservice = :id';
+        $queries[] = 'DELETE FROM services WHERE id = :id';
         foreach ($queries as $sql) {
             $query = $DB->prepare($sql);
-            $commit &= $query->execute(array($this->id));
+            $commit &= $query->execute(array(':id' => $this->id));
         }
 
-        // suppression des groupes sans contenu
-        $sql = "DELETE FROM dependencies_groups WHERE id NOT IN (SELECT DISTINCT idgroup FROM dependencies_groups_content)";
+        // Suppression des groupes sans contenu.
+        $sql = 'DELETE FROM dependencies_groups WHERE id NOT IN (SELECT DISTINCT idgroup FROM dependencies_groups_content)';
         $query = $DB->prepare($sql);
         $commit &= $query->execute();
 
         if ($commit === 1) {
-            if (!$previous_transaction) {
+            if ($previous_transaction === false) {
                 $DB->commit();
             }
             $results['successes'] = array('Les données ont été correctement supprimées.');
         } else {
-            // log db errors
+            // Enregistre le message d'erreur.
             $LOGGER->addError(implode(', ', $query->errorInfo()));
 
-            if (!$previous_transaction) {
+            if ($previous_transaction === false) {
                 $DB->rollBack();
             }
             $results['errors'] = array('Une erreur est survenue lors de la suppression des données.');
@@ -191,9 +373,9 @@ class Service{
     public function change_state($state) {
         global $DB, $LOGGER;
 
-        $sql = "UPDATE services SET state=?, timemodified=? WHERE id=?";
+        $sql = 'UPDATE services SET state=:state, timemodified=:timemodified WHERE id = :id';
         $query = $DB->prepare($sql);
-        if ($query->execute(array($state, strftime('%FT%T'), $this->id)) === false) {
+        if ($query->execute(array(':state' => $state, ':timemodified' => strftime('%FT%T'), ':id' => $this->id)) === false) {
             throw new \Exception(implode(', ', $query->errorInfo()));
         }
 
@@ -220,9 +402,9 @@ class Service{
     public function enable($enable = '1') {
         global $DB, $LOGGER;
 
-        $sql = "UPDATE services SET state=?, enable=?, timemodified=? WHERE id=?";
+        $sql = 'UPDATE services SET state=:state, enable=:enable, timemodified=:timemodified WHERE id = :id';
         $query = $DB->prepare($sql);
-        if ($query->execute(array(State::OK, $enable, strftime('%FT%T'), $this->id))) {
+        if ($query->execute(array(':state' => State::OK, ':enable' => $enable, ':timemodified' => strftime('%FT%T'), ':id' => $this->id))) {
             $this->enable = $enable;
             return true;
         } else {
@@ -238,9 +420,9 @@ class Service{
     public function visible($visible = '1') {
         global $DB, $LOGGER;
 
-        $sql = "UPDATE services SET visible=? WHERE id=?";
+        $sql = 'UPDATE services SET visible=:visible WHERE id = :id';
         $query = $DB->prepare($sql);
-        if ($query->execute(array($visible, $this->id))) {
+        if ($query->execute(array(':visible' => $visible, ':id' => $this->id))) {
             $this->visible = '1';
             return true;
         } else {
@@ -256,9 +438,9 @@ class Service{
     public function lock($state) {
         global $DB, $LOGGER;
 
-        $sql = "UPDATE services SET state=?, locked=1 WHERE id = ?";
+        $sql = 'UPDATE services SET state=:state, locked=1 WHERE id = :id';
         $query = $DB->prepare($sql);
-        if ($query->execute(array($state, $this->id))) {
+        if ($query->execute(array(':state' => $state, ':id' => $this->id))) {
             $this->state = $state;
             $this->locked = '1';
             return true;
@@ -271,9 +453,9 @@ class Service{
     public function unlock() {
         global $DB, $LOGGER;
 
-        $sql = "UPDATE services SET locked=0 WHERE id = ?";
+        $sql = 'UPDATE services SET locked=0 WHERE id = :id';
         $query = $DB->prepare($sql);
-        if ($query->execute(array($this->id))) {
+        if ($query->execute(array(':id' => $this->id))) {
             $this->locked = '0';
             return true;
         } else {
@@ -284,9 +466,7 @@ class Service{
 
     public function get_dependencies() {
         if ($this->dependencies === null) {
-            require_once PRIVATE_PATH.'/libs/dependencies.php';
-
-            $this->dependencies = get_dependency_groups(array('service' => $this->id));
+            $this->dependencies = Dependency_Group::get_records(array('service' => $this->id));
         }
 
         return $this->dependencies;
@@ -294,9 +474,7 @@ class Service{
 
     public function get_reverse_dependencies($state = null) {
         if ($this->reverse_dependencies === null) {
-            require_once PRIVATE_PATH.'/libs/dependencies.php';
-
-            $this->reverse_dependencies = get_service_reverse_dependency_groups($this->id, $state);
+            $this->reverse_dependencies = Dependency_Group::get_service_reverse_dependency_groups($this->id, $state);
         }
 
         return $this->reverse_dependencies;
@@ -306,55 +484,31 @@ class Service{
         $this->reverse_dependencies = $this->get_reverse_dependencies($state);
     }
 
-    public function get_next_scheduled_events($options = array()) {
-        $options['idservice'] = $this->id;
-        $options['type'] = Event::TYPE_SCHEDULED;
-        $options['after'] = new \DateTime();
-        $options['regular'] = false;
-
-        return get_events($options);
-    }
-
-    public function get_last_events($options = array()) {
-        $options['idservice'] = $this->id;
-        $options['before'] = new \DateTime();
-
-        return get_events($options);
-    }
-
     public function get_all_events($options = array()) {
         $options['idservice'] = $this->id;
 
-        return get_events($options);
+        return Event::get_records($options);
     }
 
     public function get_current_event($options = array()) {
         $options['idservice'] = $this->id;
         $options['finished'] = false;
-        $options['one_record'] = true;
+        $options['fetch_one'] = true;
 
-        return get_events($options);
+        return Event::get_records($options);
     }
 
     public function get_closed_event($options = array()) {
         $options['idservice'] = $this->id;
-        $options['one_record'] = true;
+        $options['fetch_one'] = true;
 
-        return get_events($options);
+        return Event::get_records($options);
     }
 
     public function get_regular_events($options = array()) {
         $options['idservice'] = $this->id;
         $options['regular'] = true;
 
-        return get_events($options);
-    }
-
-    public function __toString() {
-        return $this->name.' (id: '.$this->id.')';
-    }
-
-    public function __destruct() {
-        // object destructed
+        return Event::get_records($options);
     }
 }

@@ -51,7 +51,7 @@ function get_configurations() {
 }
 
 function get_plugins() {
-    $plugins = Plugin::get_plugins();
+    $plugins = Plugin::get_records();
     foreach ($plugins as $plugin) {
         define('PLUGIN_'.strtoupper($plugin->codename), $plugin->id);
     }

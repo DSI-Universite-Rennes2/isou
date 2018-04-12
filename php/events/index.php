@@ -2,10 +2,6 @@
 
 use Isou\Helpers\SimpleMenu;
 
-require_once PRIVATE_PATH.'/libs/events.php';
-require_once PRIVATE_PATH.'/libs/events_descriptions.php';
-require_once PRIVATE_PATH.'/libs/services.php';
-
 $TITLE .= ' - Administration des évènements';
 
 $submenu = array();

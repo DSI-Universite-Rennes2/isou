@@ -4,7 +4,7 @@ use UniversiteRennes2\Isou\Plugin;
 
 $smarty->addTemplateDir(PRIVATE_PATH.'/plugins/nagios/html');
 
-$plugin = Plugin::get_plugin(array('id' => PLUGIN_NAGIOS));
+$plugin = Plugin::get_record(array('id' => PLUGIN_NAGIOS));
 
 if (empty($plugin->active) === true) {
     $PAGE_NAME[2] = '';

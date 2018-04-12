@@ -5,17 +5,14 @@ use UniversiteRennes2\Isou\Plugin;
 use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
-require_once PRIVATE_PATH.'/libs/events.php';
-require_once PRIVATE_PATH.'/libs/services.php';
-
 $TITLE .= ' - Calendrier';
 
-$_GET['page'] = 1;
+$_GET['page'] = '1';
 if (isset($PAGE_NAME[1]) === true && ctype_digit($PAGE_NAME[1]) === true) {
     if ($PAGE_NAME[1] === '0') {
-        $_GET['page'] = 1;
+        $_GET['page'] = '1';
     } elseif ($PAGE_NAME[1] > 5) {
-        $_GET['page'] = 5;
+        $_GET['page'] = '5';
     } else {
         $_GET['page'] = $PAGE_NAME[1];
     }
@@ -64,7 +61,7 @@ for ($i = 0; $i < 5; $i++) {
 $begincalendar = new DateTime($begincalendar);
 $endcalendar = new DateTime($endcalendar);
 
-$plugin = Plugin::get_plugin(array('codename' => 'isou'));
+$plugin = Plugin::get_record(array('id' => PLUGIN_ISOU));
 
 $options = array();
 $options['tolerance'] = $plugin->settings->tolerance;
@@ -72,9 +69,9 @@ $options['plugin'] = PLUGIN_ISOU;
 $options['type'] = Event::TYPE_SCHEDULED;
 $options['since'] = $begincalendar;
 
-$events = get_events($options);
+$events = Event::get_records($options);
 foreach ($events as $event) {
-    $service = get_service(array('id' => $event->idservice, 'visible' => true));
+    $service = Service::get_record(array('id' => $event->idservice, 'visible' => true));
 
     if ($service === false) {
         continue;

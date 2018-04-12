@@ -1,12 +1,13 @@
 <?php
 
 use UniversiteRennes2\Isou\Event;
-use UniversiteRennes2\Isou\EventDescription;
+use UniversiteRennes2\Isou\Event_Description;
+use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
 $event = false;
 if (isset($PAGE_NAME[3]) === true && ctype_digit($PAGE_NAME[3]) === true) {
-    $event = get_event(array('id' => $PAGE_NAME[3]));
+    $event = Event::get_record(array('id' => $PAGE_NAME[3]));
 }
 
 if ($event === false) {
@@ -35,7 +36,7 @@ $options_states = State::$STATES;
 
 $options_periods = Event::$PERIODS;
 
-$options_services = get_isou_services_sorted_by_idtype();
+$options_services = Service::get_records(array('fetch_column' => true, 'plugin' => PLUGIN_ISOU));
 
 $options_types = Event::$TYPES;
 
@@ -78,9 +79,9 @@ if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['startt
         $_POST['errors'][] = $exception->getMessage();
     }
 
-    $event_description = get_event_description_by_content($_POST['description']);
+    $event_description = Event_Description::get_record(array('description' => $_POST['description'], 'autogen' => false));
     if ($event_description === false) {
-        $event_description = new EventDescription();
+        $event_description = new Event_Description();
         $event_description->description = $_POST['description'];
         $event_description->autogen = 0;
     }
@@ -97,7 +98,7 @@ if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['startt
             $event->save();
 
             if ($_POST['type'] === Event::TYPE_CLOSED && $event->is_now() === true) {
-                $service = get_service(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
+                $service = Service::get_record(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
                 $service->state = State::CLOSED;
                 $service->save();
             }

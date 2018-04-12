@@ -4,6 +4,7 @@
   * Fonctions liées aux mises à jour des services du plugin Nagios.
   */
 
+use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
 /**
@@ -92,7 +93,7 @@ function plugin_nagios_update($plugin) {
     }
 
     // Mets à jour les états des services Nagios dans la base de données d'Isou.
-    foreach (get_services(array('plugin' => PLUGIN_NAGIOS)) as $service) {
+    foreach (Service::get_records(array('plugin' => PLUGIN_NAGIOS)) as $service) {
         $id = md5($service->name);
 
         if (isset($services[$id]) === false) {

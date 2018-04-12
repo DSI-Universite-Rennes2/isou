@@ -1,18 +1,23 @@
 <?php
 
+use UniversiteRennes2\Isou\Dependency_Group;
+use UniversiteRennes2\Isou\Dependency_Group_Content;
+use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
-$dependency_group = get_dependency_group(array('id' => $PAGE_NAME[5]));
+$dependency_group = Dependency_Group::get_record(array('id' => $PAGE_NAME[5]));
 
 if ($dependency_group === false) {
     $_SESSION['messages'] = array('errors' => array('Ce groupe n\'existe pas.'));
 
     header('Location: '.URL.'/index.php/dependances/service/'.$service->id);
     exit(0);
-} elseif (isset($_POST['duplicate'])) {
+}
+
+if (isset($_POST['duplicate']) === true) {
     $_POST = array_merge($_POST, $dependency_group->duplicate());
 
-    if (!isset($_POST['errors'][0])) {
+    if (isset($_POST['errors'][0]) === false) {
         $_SESSION['messages']['successes'] = $_POST['successes'];
 
         header('Location: '.URL.'/index.php/dependances/service/'.$service->id);
@@ -37,8 +42,8 @@ if ($dependency_group === false) {
             exit(0);
     }
 
-    foreach (get_dependency_group_contents(array('group' => $dependency_group->id)) as $content) {
-        $child = get_service(array('id' => $content->idservice));
+    foreach (Dependency_Group_Content::get_records(array('group' => $dependency_group->id)) as $content) {
+        $child = Service::get_record(array('id' => $content->idservice));
         if ($child !== false) {
             switch ($content->servicestate) {
                 case State::WARNING:

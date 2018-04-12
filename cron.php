@@ -57,14 +57,9 @@ if (is_file($pid_file) === true) {
 file_put_contents($pid_file, getmypid());
 
 require_once PRIVATE_PATH.'/libs/cron.php';
-require_once PRIVATE_PATH.'/libs/events.php';
-require_once PRIVATE_PATH.'/libs/events_descriptions.php';
-require_once PRIVATE_PATH.'/libs/dependencies.php';
-require_once PRIVATE_PATH.'/libs/states.php';
-require_once PRIVATE_PATH.'/libs/services.php';
 
 // Mets à jour les backends.
-$plugins = Plugin::get_plugins(array('active' => true));
+$plugins = Plugin::get_records(array('active' => true));
 foreach ($plugins as $plugin) {
     if ($plugin->codename === 'isou') {
         continue;

@@ -1,10 +1,8 @@
 <?php
 
+use UniversiteRennes2\Isou\Category;
+use UniversiteRennes2\Isou\Event;
 use UniversiteRennes2\Isou\Service;
-
-require_once PRIVATE_PATH.'/libs/events.php';
-require_once PRIVATE_PATH.'/libs/services.php';
-require_once PRIVATE_PATH.'/libs/categories.php';
 
 $TITLE .= ' - Liste';
 
@@ -12,12 +10,12 @@ $since = new DateTime();
 $since->sub(new DateInterval('P2D')); // TODO: create CFG variable.
 
 $categories = array();
-foreach (get_categories(array('non-empty' => true)) as $category) {
+foreach (Category::get_records(array('non-empty' => true)) as $category) {
     $categories[$category->id] = $category;
     $categories[$category->id]->services = array();
 }
 
-$services = get_services(array('plugin' => PLUGIN_ISOU, 'visible' => true));
+$services = Service::get_records(array('plugin' => PLUGIN_ISOU, 'visible' => true));
 
 foreach ($services as $service) {
     if ($service->enable === '0' || $service->visible === '0') {
@@ -33,7 +31,7 @@ foreach ($services as $service) {
     if ($service->is_closed === true) {
         $service->closed_event = $service->get_closed_event();
     } else {
-        $service->events = get_events(array('since' => $since, 'idservice' => $service->id));
+        $service->events = Event::get_records(array('since' => $since, 'idservice' => $service->id));
         $service->regular_events = $service->get_regular_events();
     }
 

@@ -43,11 +43,15 @@
             {foreach $week as $day}
                 <td {if $day->datetime < $now}class="active"{else if $day->datetime === $now}class="info"{/if}">
                     <span id="date-{$day->datetime|date_format:'%d-%B-%Y'}">{$day->datetime|date_format:$day->strftime}</span>
-                    {if isset($day->services[0])}
+                    {if isset($day->services[0]) === true}
                     <ul>
                         {foreach $day->services as $service}
                         <li>
+                            {if $service->event->enddate === null}
+                            <div>{$service->name} - à partir de {$service->event->startdate->format('H\hi')}.</div>
+                            {else}
                             <div>{$service->name} - de {$service->event->startdate->format('H\hi')} à {$service->event->enddate->format('H\hi')}.</div>
+                            {/if}
                             {if empty($service->event->description) === false}
                             <div class="isou-calendar-description">{$service->event->description}</div>
                             {/if}

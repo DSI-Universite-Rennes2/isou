@@ -1,14 +1,14 @@
 <?php
 
+use UniversiteRennes2\Isou\Dependency_Group;
+use UniversiteRennes2\Isou\Dependency_Group_Content;
 use UniversiteRennes2\Isou\Event;
-
-require PRIVATE_PATH.'/libs/dependencies.php';
 
 $TITLE .= ' - Évènements en cours';
 
 $event = false;
 if (isset($PAGE_NAME[3]) === true && ctype_digit($PAGE_NAME[3]) === true) {
-    $event = get_event(array('id' => $PAGE_NAME[3]));
+    $event = Event::get_record(array('id' => $PAGE_NAME[3]));
 }
 
 if ($event === false) {
@@ -20,14 +20,14 @@ if ($event === false) {
 
 $events = array($event);
 
-$groups = get_dependency_groups(array('service' => $event->idservice));
+$groups = Dependency_Group::get_records(array('service' => $event->idservice));
 foreach ($groups as $group) {
-    $contents = get_dependency_group_contents(array('group' => $group->id));
+    $contents = Dependency_Group_Content::get_records(array('group' => $group->id));
     foreach ($contents as $content) {
         if ($event->enddate === null) {
-            $dependency_events = get_events(array('idservice' => $content->idservice, 'finished' => false));
+            $dependency_events = Event::get_records(array('idservice' => $content->idservice, 'finished' => false));
         } else {
-            $dependency_events = get_events(array('idservice' => $content->idservice, 'between' => array($event->startdate, $event->enddate)));
+            $dependency_events = Event::get_records(array('idservice' => $content->idservice, 'between' => array($event->startdate, $event->enddate)));
         }
 
         foreach ($dependency_events as $dependency_event) {

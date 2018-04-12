@@ -1,19 +1,19 @@
 <?php
 
-$TITLE .= ' - Configuration Flux RSS';
+use UniversiteRennes2\Isou\Category;
+use UniversiteRennes2\Isou\Service;
 
-require_once PRIVATE_PATH.'/libs/services.php';
-require_once PRIVATE_PATH.'/libs/categories.php';
+$TITLE .= ' - Configuration Flux RSS';
 
 $key = 0;
 
 $categories = array();
-foreach (get_categories(array('non-empty' => true)) as $category) {
+foreach (Category::get_records(array('non-empty' => true)) as $category) {
     $category->services = array();
     $categories[$category->id] = $category;
 }
 
-$services = get_services(array('plugin' => PLUGIN_ISOU, 'visible' => true));
+$services = Service::get_records(array('plugin' => PLUGIN_ISOU, 'visible' => true));
 
 foreach ($services as $service) {
     if ($service->enable === '0' || $service->visible === '0') {
@@ -21,7 +21,7 @@ foreach ($services as $service) {
     }
 
     if (isset($categories[$service->idcategory]) === false) {
-        $category = get_category(array('id' => $service->idcategory));
+        $category = Category::get_record(array('id' => $service->idcategory));
         if ($category === false) {
             continue;
         }

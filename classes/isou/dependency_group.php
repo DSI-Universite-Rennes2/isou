@@ -2,7 +2,7 @@
 
 namespace UniversiteRennes2\Isou;
 
-class Dependency_Group{
+class Dependency_Group {
     public $id;
     public $name;
     public $redundant;
@@ -13,8 +13,8 @@ class Dependency_Group{
     public $message;
 
     public function __construct() {
-        if (!isset($this->id)) {
-            // instance manuelle
+        if (isset($this->id) === false) {
+            // Instance manuelle.
             $this->id = 0;
             $this->name = 'Groupe de dépendances';
             $this->redundant = 0;
@@ -58,12 +58,48 @@ class Dependency_Group{
         return $errors;
     }
 
+    // TODO: split this function
+    public static function get_dependencies_groups_and_groups_contents_by_service_sorted_by_flags($idservice) {
+        global $DB;
+
+        $groups = array();
+
+        $sql = 'SELECT dg.id, dg.name, dg.redundant, dg.groupstate, dg.idservice, dg.idmessage, dm.message'.
+            ' FROM dependencies_groups dg'.
+            ' JOIN dependencies_messages dm ON dm.id = dg.idmessage'.
+            ' WHERE dg.idservice = :idservice'.
+            ' ORDER BY dg.groupstate, dg.redundant DESC, dg.name';
+        $query = $DB->prepare($sql);
+        $query->execute(array(':idservice' => $idservice));
+        $query->setFetchMode(\PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Dependency_Group');
+
+        while ($group = $query->fetch()) {
+            if (isset($groups[$group->groupstate]) === false) {
+                $groups[$group->groupstate] = array();
+            }
+
+            // Load content.
+            $sql = 'SELECT dgc.id, dgc.idgroup, dgc.idservice, s.name, dgc.servicestate'.
+                ' FROM dependencies_groups_content dgc'.
+                ' JOIN services s ON s.id = dgc.idservice'.
+                ' WHERE dgc.idgroup = :idgroup'.
+                ' ORDER BY dgc.servicestate DESC, s.name';
+            $contents = $DB->prepare($sql);
+            $contents->execute(array(':idgroup' => $group->id));
+            $group->contents = $contents->fetchAll(\PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Dependency_Group_Content');
+
+            $groups[$group->groupstate][$group->id] = $group;
+        }
+
+        return $groups;
+    }
+
     public function get_message() {
         global $DB;
 
-        $sql = "SELECT id FROM dependencies_messages WHERE message = ?";
+        $sql = 'SELECT id FROM dependencies_messages WHERE message = :message';
         $query = $DB->prepare($sql);
-        $query->execute(array($this->message));
+        $query->execute(array(':message' => $this->message));
         if ($message = $query->fetch(\PDO::FETCH_OBJ)) {
             return $message->id;
         } else {
@@ -71,15 +107,113 @@ class Dependency_Group{
         }
     }
 
+    public static function get_record($options = array()) {
+        if (isset($options['id']) === false) {
+            throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] est requis.');
+        }
+
+        $options['fetch_one'] = true;
+
+        return self::get_records($options);
+    }
+
+    public static function get_records($options = array()) {
+        global $DB;
+
+        $conditions = array();
+        $parameters = array();
+
+        // Parcours les options.
+        if (isset($options['id']) === true) {
+            if (ctype_digit($options['id']) === true) {
+                $conditions[] = 'dg.id = :id';
+                $parameters[':id'] = $options['id'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'id\' doit être un entier. Valeur donnée : '.var_export($options['id'], $return = true));
+            }
+
+            unset($options['id']);
+        }
+
+        if (isset($options['service']) === true) {
+            if (ctype_digit($options['service']) === true) {
+                $conditions[] = 'dg.idservice = :service';
+                $parameters[':service'] = $options['service'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'service\' doit être un entier. Valeur donnée : '.var_export($options['service'], $return = true));
+            }
+
+            unset($options['service']);
+        }
+
+        // Construis le WHERE.
+        if (isset($conditions[0]) === true) {
+            $sql_conditions = ' WHERE '.implode(' AND ', $conditions);
+        } else {
+            $sql_conditions = '';
+        }
+
+        // Vérifie si toutes les options ont été utilisées.
+        foreach ($options as $key => $option) {
+            if (in_array($key, array('fetch_column', 'fetch_one'), $strict = true) === true) {
+                continue;
+            }
+
+            throw new \Exception(__METHOD__.': l\'option \''.$key.'\' n\'a pas été utilisée. Valeur donnée : '.var_export($option, $return = true));
+        }
+
+        // Construis la requête.
+        $sql = 'SELECT dg.id, dg.name, dg.redundant, dg.groupstate, dg.idservice, dg.idmessage, dm.message'.
+            ' FROM dependencies_groups dg'.
+            ' JOIN dependencies_messages dm ON dm.id = dg.idmessage'.
+            $sql_conditions.
+            ' ORDER BY dg.groupstate, dg.redundant DESC, dg.name';
+        $query = $DB->prepare($sql);
+        $query->execute($parameters);
+
+        $query->setFetchMode(\PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Dependency_Group');
+
+        if (isset($options['fetch_one']) === true) {
+            return $query->fetch();
+        }
+
+        return $query->fetchAll();
+    }
+
+    public static function get_service_reverse_dependency_groups($idservice, $state = null) {
+        global $DB;
+
+        $conditions = array();
+        $parameters = array();
+
+        $conditions[] = 'dgc.idservice = :idservice';
+        $parameters[':idservice'] = $idservice;
+
+        if ($state !== null) {
+            $parameters[':state'] = $state;
+            $conditions[] = 'dgc.servicestate = :state';
+        }
+
+        $sql = 'SELECT dg.id, dg.name, dg.redundant, dg.groupstate, dg.idservice, dg.idmessage'.
+            ' FROM dependencies_groups dg'.
+            ' JOIN dependencies_groups_content dgc ON dg.id = dgc.idgroup'.
+            ' WHERE '.implode(' AND ', $conditions).
+            ' ORDER BY dg.groupstate, dg.redundant DESC, dg.name';
+        $query = $DB->prepare($sql);
+        $query->execute($parameters);
+
+        return $query->fetchAll(\PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Dependency_Group');
+    }
+
     public function set_message() {
         global $DB, $LOGGER;
 
-        $sql = "INSERT INTO dependencies_messages(message) VALUES(?)";
+        $sql = 'INSERT INTO dependencies_messages(message) VALUES(:message)';
         $query = $DB->prepare($sql);
-        if ($query->execute(array($this->message))) {
+        if ($query->execute(array(':message' => $this->message))) {
             return $DB->lastInsertId();
         } else {
-            // log db errors
+            // Enregistre le message d'erreur.
             $LOGGER->addError(implode(', ', $query->errorInfo()));
 
             return false;
@@ -90,22 +224,23 @@ class Dependency_Group{
         global $DB, $LOGGER;
 
         $results = array(
-        'successes' => array(),
-        'errors' => array(),
-        );
+            'successes' => array(),
+            'errors' => array(),
+            );
+
         $params = array(
-        $this->name,
-        $this->redundant,
-        $this->groupstate,
-        $this->idservice,
-        $this->idmessage,
-        );
+            ':name' => $this->name,
+            ':redundant' => $this->redundant,
+            ':groupstate' => $this->groupstate,
+            ':idservice' => $this->idservice,
+            ':idmessage' => $this->idmessage,
+            );
 
         if ($this->id === 0) {
-            $sql = "INSERT INTO dependencies_groups(name, redundant, groupstate, idservice, idmessage) VALUES(?,?,?,?,?)";
+            $sql = 'INSERT INTO dependencies_groups(name, redundant, groupstate, idservice, idmessage) VALUES(:name, :redundant, :groupstate, :idservice, :idmessage)';
         } else {
-            $sql = "UPDATE dependencies_groups SET name=?, redundant=?, groupstate=?, idservice=?, idmessage=? WHERE id=?";
-            $params[] = $this->id;
+            $sql = 'UPDATE dependencies_groups SET name=:name, redundant=:redundant, groupstate=:groupstate, idservice=:idservice, idmessage=:idmessage WHERE id = :id';
+            $params[':id'] = $this->id;
         }
         $query = $DB->prepare($sql);
 
@@ -115,7 +250,7 @@ class Dependency_Group{
             }
             $results['successes'] = array('Les données ont été correctement enregistrées.');
         } else {
-            // log db errors
+            // Enregistre le message d'erreur.
             $LOGGER->addError(implode(', ', $query->errorInfo()));
 
             $results['errors'] = array('Une erreur est survenue lors de l\'enregistrement des données.');
@@ -127,9 +262,9 @@ class Dependency_Group{
     public function duplicate() {
         global $DB;
 
-        $contents = get_dependency_group_contents(array('group' => $this->id));
+        $contents = Dependency_Group_Content::get_records(array('group' => $this->id));
 
-        // create new group
+        // Crée un nouveau groupe.
         $group = clone $this;
         $group->id = 0;
 
@@ -141,7 +276,7 @@ class Dependency_Group{
 
         $results = $group->save();
 
-        // toggle group contents
+        // Inverse les contenus du groupe.
         foreach ($contents as $content) {
             $content->id = 0;
             $content->idgroup = $group->id;
@@ -164,24 +299,25 @@ class Dependency_Group{
             'successes' => array(),
             'errors' => array(),
             );
+
         $commit = 1;
 
         $DB->beginTransaction();
 
         $queries = array();
-        $queries[] = "DELETE FROM dependencies_groups WHERE id = ?";
-        $queries[] = "DELETE FROM dependencies_groups_content WHERE idgroup = ?";
+        $queries[] = 'DELETE FROM dependencies_groups WHERE id = :id';
+        $queries[] = 'DELETE FROM dependencies_groups_content WHERE idgroup = :id';
 
         foreach ($queries as $sql) {
             $query = $DB->prepare($sql);
-            $commit &= $query->execute(array($this->id));
+            $commit &= $query->execute(array(':id' => $this->id));
         }
 
         if ($commit === 1) {
             $DB->commit();
             $results['successes'] = array('Les données ont été correctement supprimées.');
         } else {
-            // log db errors
+            // Enregistre le message d'erreur.
             $LOGGER->addError(implode(', ', $query->errorInfo()));
 
             $DB->rollBack();
@@ -191,75 +327,36 @@ class Dependency_Group{
         return $results;
     }
 
-    public function get_services() {
-        global $DB;
-
-        $sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idplugin, s.idcategory".
-            " FROM services s".
-            " JOIN dependencies_groups dg ON s.id = dg.idservice".
-            " WHERE dg.id = ?";
-        $query = $DB->prepare($sql);
-        $query->execute(array($this->id));
-
-        $this->services = $query->fetchAll(\PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Service');
-    }
-
-    public function get_content_services_sorted_by_id() {
-        global $DB;
-
-        $sql = "SELECT s.id, s.name".
-            " FROM services s".
-            " JOIN dependencies_groups_content dgc ON s.id = dgc.idservice".
-            " WHERE dgc.idgroup = ?";
-        $query = $DB->prepare($sql);
-        $query->execute(array($this->id));
-
-        $this->services = $query->fetchAll(\PDO::FETCH_COLUMN | \PDO::FETCH_UNIQUE);
-    }
-
-    public function get_content_services() {
-        global $DB;
-
-        $sql = "SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idplugin, s.idcategory".
-            " FROM services s".
-            " JOIN dependencies_groups_content dgc ON s.id = dgc.idservice".
-            " WHERE dgc.idgroup = ?";
-        $query = $DB->prepare($sql);
-        $query->execute(array($this->id));
-
-        $this->services = $query->fetchAll(\PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Service');
-    }
-
     public function is_up() {
         global $DB;
 
-        $this->get_content_services();
+        $services = Service::get_records(array('dependencies_group' => $this->id));
 
-        foreach ($this->services as $service) {
-            $sql = "SELECT idgroup, idservice, servicestate".
-                " FROM dependencies_groups_content dgc".
-                " WHERE idgroup = :idgroup".
-                " AND idservice = :idservice".
-                " AND servicestate <= :servicestate";
+        foreach ($services as $service) {
+            $sql = 'SELECT idgroup, idservice, servicestate'.
+                ' FROM dependencies_groups_content dgc'.
+                ' WHERE idgroup = :idgroup'.
+                ' AND idservice = :idservice'.
+                ' AND servicestate <= :servicestate';
 
             $query = $DB->prepare($sql);
             $query->execute(array(':idgroup' => $this->id, ':idservice' => $service->id, ':servicestate' => $service->state));
             $status = $query->fetch(\PDO::FETCH_OBJ);
 
             if ($status !== false && $this->redundant === '0') {
-                // there is at least one service down :(
+                // Le groupe n'est pas redondé et au moins un service ne fonctionne pas... Le groupe ne fonctionne pas.
                 return false;
             } elseif ($status === false && $this->redundant === '1') {
-                // there is at least one service up !
+                // Le groupe est redondé et au moins un service fonctionne... Le groupe fonctionne.
                 return true;
             }
         }
 
         if ($this->redundant === '0') {
-            // there is no service down !
+            // Le groupe n'est pas redondé et tous les services fonctionne. Le groupe fonctionne.
             return true;
         } else {
-            // there is no service up :(
+            // Le groupe est redondé et aucun service ne fonctionne. Le groupe ne fonctionne pas.
             return false;
         }
     }

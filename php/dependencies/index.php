@@ -1,9 +1,9 @@
 <?php
 
+use UniversiteRennes2\Isou\Category;
+use UniversiteRennes2\Isou\Dependency;
+use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
-
-require_once PRIVATE_PATH.'/libs/dependencies.php';
-require_once PRIVATE_PATH.'/libs/services.php';
 
 $TITLE .= ' - Administration des dépendances';
 
@@ -12,7 +12,7 @@ if (isset($PAGE_NAME[1]) === false) {
 }
 
 if ($PAGE_NAME[1] === 'service' && isset($PAGE_NAME[2]) === true && ctype_digit($PAGE_NAME[2]) === true) {
-    $service = get_service(array('id' => $PAGE_NAME[2], 'plugin' => PLUGIN_ISOU));
+    $service = Service::get_record(array('id' => $PAGE_NAME[2], 'plugin' => PLUGIN_ISOU));
 
     if ($service === false) {
         $_SESSION['messages'] = array('errors' => 'Ce service n\'existe pas.');
@@ -56,16 +56,13 @@ if ($PAGE_NAME[1] === 'service' && isset($PAGE_NAME[2]) === true && ctype_digit(
 
 if (isset($TEMPLATE) === false) {
     // Affiche la liste des services.
-    require_once PRIVATE_PATH.'/libs/services.php';
-    require_once PRIVATE_PATH.'/libs/categories.php';
-
     $categories = array();
-    foreach (get_categories(array('non-empty' => true)) as $category) {
+    foreach (Category::get_records(array('non-empty' => true)) as $category) {
         $categories[$category->id] = $category;
         $categories[$category->id]->services = array();
     }
 
-    $services = get_services(array('plugin' => PLUGIN_ISOU));
+    $services = Service::get_records(array('plugin' => PLUGIN_ISOU));
     foreach ($services as $service) {
         $service->count_warning_groups = 0;
         $service->count_critical_groups = 0;

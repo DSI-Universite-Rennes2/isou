@@ -3,6 +3,7 @@
 if (DEV === true) {
     $IS_ADMIN = true;
     $IS_AUTH = false;
+    $_SESSION['phpCAS']['user'] = 'isou';
 } else {
     // initialize phpCAS
     phpCAS::client(CAS_VERSION_2_0, CAS_URL, CAS_PORT, CAS_URI);

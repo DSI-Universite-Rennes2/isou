@@ -7,15 +7,11 @@
 use Phinx\Console\PhinxApplication;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
+use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
 require __DIR__.'/../../config.php';
 require PRIVATE_PATH.'/libs/cron.php';
-require PRIVATE_PATH.'/libs/events.php';
-require PRIVATE_PATH.'/libs/events_descriptions.php';
-require PRIVATE_PATH.'/libs/dependencies.php';
-require PRIVATE_PATH.'/libs/states.php';
-require PRIVATE_PATH.'/libs/services.php';
 
 $db_file_path = PRIVATE_PATH.'/database/tests.sqlite3';
 if (is_file($db_file_path) === true) {
@@ -129,7 +125,7 @@ foreach ($scenarios as $scenario_file) {
         update_services_tree();
 
         foreach ($case->outputs as $output) {
-            $service = get_service(array('id' => $output->id));
+            $service = Service::get_record(array('id' => $output->id));
 
             if ($service->state === $output->state) {
                 $state = '✔';

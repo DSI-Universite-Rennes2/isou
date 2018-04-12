@@ -1,9 +1,9 @@
 <?php
 
-use UniversiteRennes2\Isou\State;
 use UniversiteRennes2\Isou\Dependency_Group;
+use UniversiteRennes2\Isou\State;
 
-$dependency_group = get_dependency_group(array('id' => $PAGE_NAME[5]));
+$dependency_group = Dependency_Group::get_record(array('id' => $PAGE_NAME[5]));
 
 if ($dependency_group === false) {
     $dependency_group = new Dependency_Group();
@@ -14,13 +14,15 @@ $options_redundants = array(
     1 => 'Oui',
     0 => 'Non',
     );
+
 $options_states = array(
     State::WARNING => State::$STATES[State::WARNING],
     State::CRITICAL => State::$STATES[State::CRITICAL],
     );
+
 $options_services = array($service->id => $service->name);
 
-if (isset($_POST['name'], $_POST['redundant'], $_POST['groupstate'], $_POST['message'])) {
+if (isset($_POST['name'], $_POST['redundant'], $_POST['groupstate'], $_POST['message']) === true) {
     $dependency_group->name = $_POST['name'];
     $dependency_group->redundant = $_POST['redundant'];
     $dependency_group->groupstate = $_POST['groupstate'];
@@ -28,9 +30,9 @@ if (isset($_POST['name'], $_POST['redundant'], $_POST['groupstate'], $_POST['mes
 
     $_POST['errors'] = $dependency_group->check_data($options_redundants, $options_states, $options_services);
 
-    if (!isset($_POST['errors'][0])) {
+    if (isset($_POST['errors'][0]) === false) {
         $_POST = array_merge($_POST, $dependency_group->save());
-        if (!isset($_POST['errors'][0])) {
+        if (isset($_POST['errors'][0]) === false) {
             $_SESSION['messages'] = $_POST;
 
             header('Location: '.URL.'/index.php/dependances/service/'.$service->id);

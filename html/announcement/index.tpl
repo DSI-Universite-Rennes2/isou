@@ -25,7 +25,7 @@
 		</div>
 	</dl>
 
-    <p class="well">Modifiée par {$announcement->autor}, le {$announcement->last_modification|date_format:'%d/%m/%Y %H:%M'}.</p>
+		<p class="well">Modifiée par {$announcement->author}, le {$announcement->last_modification|date_format:'%A %d %b %Y %H:%M'}.</p>
 
 	<ul class="list-inline">
 		<li>

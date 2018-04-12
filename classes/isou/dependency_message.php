@@ -2,55 +2,16 @@
 
 namespace UniversiteRennes2\Isou;
 
-class State {
-    const OK = '0';
-    const GREEN = '0';
-
-    const WARNING = '1';
-    const ORANGE = '1';
-
-    const CRITICAL = '2';
-    const RED = '2';
-
-    const UNKNOWN = '3';
-    const BLUE = '3';
-
-    const CLOSED = '4';
-    const WHITE = '4';
-
+class Dependency_Message {
     public $id;
-    public $name;
-    public $title;
-    public $alternate_text;
-    public $image;
-
-    public static $STATES = array(
-        self::OK => 'Fonctionne',
-        self::WARNING => 'Instable',
-        self::CRITICAL => 'Indisponible',
-        self::UNKNOWN => 'Indéterminé',
-        self::CLOSED => 'Fermé',
-        );
+    public $message;
 
     public function __construct() {
         if (isset($this->id) === false) {
             // Instance manuelle.
             $this->id = 0;
-            $this->name = '';
-            $this->title = '';
-            $this->alternate_text = '';
-            $this->image = '';
+            $this->message = '';
         }
-    }
-
-    public function __tostring() {
-        return $this->get_flag_html_renderer();
-    }
-
-    public function get_flag_html_renderer() {
-        global $CFG;
-
-        return '<img src="'.URL.'/themes/'.$CFG['theme'].'/images/'.$this->image.'" alt="'.$this->alternate_text.'" width="16px" height="16px" />';
     }
 
     public static function get_record($options = array()) {
@@ -66,13 +27,13 @@ class State {
     public static function get_records($options = array()) {
         global $DB;
 
-        $conditions = array();
         $parameters = array();
+        $conditions = array();
 
         // Parcours les options.
         if (isset($options['id']) === true) {
             if (ctype_digit($options['id']) === true) {
-                $conditions[] = 's.id = :id';
+                $conditions[] = 'dm.id = :id';
                 $parameters[':id'] = $options['id'];
             } else {
                 throw new \Exception(__METHOD__.': l\'option \'id\' doit être un entier. Valeur donnée : '.var_export($options['id'], $return = true));
@@ -98,13 +59,13 @@ class State {
         }
 
         // Construis la requête.
-        $sql = 'SELECT s.id, s.name, s.title, s.alternate_text, s.image'.
-           ' FROM states s'.
+        $sql = 'SELECT dm.id, dm.message'.
+            ' FROM dependencies_messages dm'.
             $sql_conditions;
         $query = $DB->prepare($sql);
         $query->execute($parameters);
 
-        $query->setFetchMode(\PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\State');
+        $query->setFetchMode(\PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Dependency_Message');
 
         if (isset($options['fetch_one']) === true) {
             return $query->fetch();

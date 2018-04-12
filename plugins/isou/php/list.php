@@ -1,18 +1,16 @@
 <?php
 
+use UniversiteRennes2\Isou\Category;
 use UniversiteRennes2\Isou\Service;
 
-require_once PRIVATE_PATH.'/libs/categories.php';
-
-$categories = get_categories_sorted_by_id();
-
-foreach ($categories as $idcategory => $category_name) {
-    $categories[$idcategory] = new stdClass();
-    $categories[$idcategory]->name = $category_name;
-    $categories[$idcategory]->services = array();
+$categories = array();
+foreach (Category::get_records() as $category) {
+    $categories[$category->id] = new stdClass();
+    $categories[$category->id]->name = $category->name;
+    $categories[$category->id]->services = array();
 }
 
-$services = get_services(array('plugin' => PLUGIN_ISOU));
+$services = Service::get_records(array('plugin' => PLUGIN_ISOU));
 foreach ($services as $service) {
     $service->notes = array();
 

@@ -17,12 +17,12 @@ switch ($PAGE_NAME[1]) {
         $subtemplate = 'events/list_plugins_events.tpl';
         break;
     case 'fermes':
-        $options['since'] = strftime('%FT%T', mktime(0, 0, 0) - 35 * 24 * 60 * 60);
+        $options['since'] = new DateTime(strftime('%FT%T', mktime(0, 0, 0) - 35 * 24 * 60 * 60));
         $options['type'] = Event::TYPE_CLOSED;
         $subtemplate = 'events/list_closed_events.tpl';
         break;
     case 'imprevus':
-        $options['since'] = strftime('%FT%T', mktime(0, 0, 0) - 35 * 24 * 60 * 60);
+        $options['since'] = new DateTime(strftime('%FT%T', mktime(0, 0, 0) - 35 * 24 * 60 * 60));
         $options['type'] = Event::TYPE_UNSCHEDULED;
         $subtemplate = 'events/list_default_events.tpl';
         break;
@@ -32,9 +32,9 @@ switch ($PAGE_NAME[1]) {
         break;
     case 'prevus':
     default:
-        $options['since'] = strftime('%FT%T', mktime(0, 0, 0) - 35 * 24 * 60 * 60);
+        $options['since'] = new DateTime(strftime('%FT%T', mktime(0, 0, 0) - 35 * 24 * 60 * 60));
         $options['type'] = Event::TYPE_SCHEDULED;
         $subtemplate = 'events/list_default_events.tpl';
 }
 
-$smarty->assign('events', get_events($options));
+$smarty->assign('events', Event::get_records($options));

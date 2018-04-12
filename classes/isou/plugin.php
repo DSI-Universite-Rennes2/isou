@@ -15,67 +15,87 @@ class Plugin {
         $this->set_settings();
     }
 
-    public static function get_plugin($options = array()) {
-        $options['single'] = true;
+    public static function get_record($options = array()) {
+        if (isset($options['id']) === false) {
+            throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] est requis.');
+        }
 
-        return self::get_plugins($options);
+        $options['fetch_one'] = true;
+
+        return self::get_records($options);
     }
 
-    public static function get_plugins($options = array()) {
-        global $DB, $LOGGER;
+    public static function get_records($options = array()) {
+        global $DB;
 
-        $params = array();
         $conditions = array();
+        $parameters = array();
 
+        // Parcours les options.
         if (isset($options['id']) === true) {
-            $conditions[] = 'p.id = :id';
-            $params[':id'] = $options['id'];
+            if (ctype_digit($options['id']) === true) {
+                $conditions[] = 'p.id = :id';
+                $parameters[':id'] = $options['id'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'id\' doit être un entier. Valeur donnée : '.var_export($options['id'], $return = true));
+            }
+
+            unset($options['id']);
         }
 
         if (isset($options['codename']) === true) {
-            $conditions[] = 'p.codename = :codename';
-            $params[':codename'] = $options['codename'];
+            if (is_string($options['codename']) === true) {
+                $conditions[] = 'p.codename = :codename';
+                $parameters[':codename'] = $options['codename'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'codename\' doit être une chaine de caractères. Valeur donnée : '.var_export($options['codename'], $return = true));
+            }
+
+            unset($options['codename']);
         }
 
         if (isset($options['active']) === true) {
-            if (is_bool($options['active'])) {
+            if (is_bool($options['active']) === true) {
                 $conditions[] = 'p.active = :active';
-                $params[':active'] = intval($options['active']);
+                $parameters[':active'] = intval($options['active']);
             } else {
-                $LOGGER->addInfo('L\'option \'active\' doit être un booléan.', array('value', $options['active']));
+                throw new \Exception(__METHOD__.': l\'option \'active\' doit être un booléan. Valeur donnée : '.var_export($options['active'], $return = true));
             }
+
+            unset($options['active']);
         }
 
+        // Construis le WHERE.
         if (isset($conditions[0]) === true) {
-            $sql_condition = ' WHERE '.implode(' AND ', $conditions);
+            $sql_conditions = ' WHERE '.implode(' AND ', $conditions);
         } else {
-            $sql_condition = '';
+            $sql_conditions = '';
         }
 
+        // Vérifie si toutes les options ont été utilisées.
+        foreach ($options as $key => $option) {
+            if (in_array($key, array('fetch_column', 'fetch_one'), $strict = true) === true) {
+                continue;
+            }
+
+            throw new \Exception(__METHOD__.': l\'option \''.$key.'\' n\'a pas été utilisée. Valeur donnée : '.var_export($option, $return = true));
+        }
+
+        // Construis la requête.
         $sql = 'SELECT p.id, p.name, p.codename, p.active, p.version'.
                 ' FROM plugins p'.
-                ' '.$sql_condition.
+                ' '.$sql_conditions.
                 ' ORDER BY UPPER(p.name)';
         $query = $DB->prepare($sql);
-        $query->execute($params);
+        $query->execute($parameters);
 
         $query->setFetchMode(\PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Plugin');
 
-        $records = $query->fetchAll();
-
-        if (isset($options['single']) === true) {
-            if (isset($records[0]) === true) {
-                if (isset($records[1]) === true) {
-                    $LOGGER->addInfo('Plusieurs valeurs ont été retournées par la méthode '.__METHOD__.' avec l\'option "single".');
-                }
-
-                return $records[0];
-            } else {
-                return false;
-            }
+        if (isset($options['fetch_one']) === true) {
+            return $query->fetch();
         }
 
-        return $records;
+        return $query->fetchAll();
     }
 
     public function set_settings() {
@@ -115,7 +135,7 @@ class Plugin {
     public function install_settings() {
         global $DB;
 
-        $sql = "INSERT INTO plugins_settings(key, value, type, idplugin) VALUES(:key, :value, :type, :idplugin)";
+        $sql = 'INSERT INTO plugins_settings(key, value, type, idplugin) VALUES(:key, :value, :type, :idplugin)';
         $query = $DB->prepare($sql);
 
         $settings = (array) $this->settings;
@@ -142,12 +162,12 @@ class Plugin {
             // Install.
             $params[':active'] = 0;
 
-            $sql = "INSERT INTO plugins(name, codename, active, version)".
-                " VALUES(:name, :codename, :active, :version)";
+            $sql = 'INSERT INTO plugins(name, codename, active, version)'.
+                ' VALUES(:name, :codename, :active, :version)';
         } else {
             $params[':active'] = $this->active;
 
-            $sql = "UPDATE plugins SET name = :name, active = :active, version = :version WHERE codename = :codename";
+            $sql = 'UPDATE plugins SET name = :name, active = :active, version = :version WHERE codename = :codename';
         }
 
         $query = $DB->prepare($sql);
@@ -170,15 +190,15 @@ class Plugin {
 
         $settings = (array) $this->settings;
         foreach ($settings as $key => $value) {
-            $sql = "SELECT id FROM plugins_settings WHERE key = :key AND idplugin = :idplugin";
+            $sql = 'SELECT id FROM plugins_settings WHERE key = :key AND idplugin = :idplugin';
             $query = $DB->prepare($sql);
             $query->execute(array(':key' => $key, ':idplugin' => $this->id));
             $setting = $query->fetch();
 
             if ($setting === false) {
-                $sql = "INSERT INTO plugins_settings(key, value, type, idplugin) VALUES(:key, :value, 'string', :idplugin)";
+                $sql = 'INSERT INTO plugins_settings(key, value, type, idplugin) VALUES(:key, :value, \'string\', :idplugin)';
             } elseif ($overwrite === true) {
-                $sql = "UPDATE plugins_settings SET value = :value WHERE key = :key AND idplugin = :idplugin";
+                $sql = 'UPDATE plugins_settings SET value = :value WHERE key = :key AND idplugin = :idplugin';
             } else {
                 continue;
             }

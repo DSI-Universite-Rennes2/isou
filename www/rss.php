@@ -1,5 +1,8 @@
 <?php
 
+use UniversiteRennes2\Isou\Event;
+use UniversiteRennes2\Isou\Service;
+
 header('content-type: application/xml');
 
 define('MAXFEED', 100);
@@ -29,7 +32,7 @@ $record = array();
 $items = array();
 
 try {
-    if (!is_file(substr(DB_PATH, 7))) {
+    if (is_file(substr(DB_PATH, 7)) === false) {
         throw new PDOException(DB_PATH.' n\'existe pas.');
     }
     $DB = new PDO(DB_PATH, '', '');
@@ -53,17 +56,16 @@ $CFG = get_configurations();
 // Charge les plugins.
 $plugins = get_plugins();
 
-require PRIVATE_PATH.'/libs/events.php';
-require PRIVATE_PATH.'/libs/services.php';
-
-$services = get_services_sorted_by_id(PLUGIN_ISOU);
-
 $items = array();
 $options = array();
 $options['since'] = new DateTime(strftime('%Y-%m-%d', TIME - (30 * 24 * 60 * 60)));
 
-foreach (get_events($options) as $event) {
-    if (!isset($services[$event->idservice])) {
+foreach (Event::get_records($options) as $event) {
+    if (isset($services[$event->idservice]) === false) {
+        $services[$event->idservice] = Service::get_record(array('id' => $event->idservice));
+    }
+
+    if ($services[$event->idservice] === false) {
         continue;
     }
 

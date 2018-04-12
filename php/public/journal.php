@@ -1,17 +1,17 @@
 <?php
 
+use UniversiteRennes2\Isou\Event;
 use UniversiteRennes2\Isou\Plugin;
-
-require_once PRIVATE_PATH.'/libs/events.php';
-require_once PRIVATE_PATH.'/libs/services.php';
+use UniversiteRennes2\Isou\Service;
 
 $TITLE .= ' - Journal';
 
-foreach (get_services(array('plugin' => PLUGIN_ISOU, 'visible' => true)) as $service) {
+$services = array();
+foreach (Service::get_records(array('plugin' => PLUGIN_ISOU, 'visible' => true)) as $service) {
     $services[$service->id] = $service->name;
 }
 
-$plugin = Plugin::get_plugin(array('codename' => 'isou'));
+$plugin = Plugin::get_record(array('id' => PLUGIN_ISOU));
 
 $options = array();
 $options['tolerance'] = $plugin->settings->tolerance;
@@ -25,15 +25,19 @@ for ($i = 0; $i < 7; $i++) {
     $options['since'] = $days[$i]->date;
     $options['before'] = clone $days[$i]->date;
     $options['before']->setTime(23, 59, 59);
-    $days[$i]->events = get_events($options);
-    foreach ($days[$i]->events as $j => $event) {
+    $days[$i]->events = array();
+    foreach (Event::get_records($options) as $event) {
         if ($event->enddate === null && $event->startdate->format('Y-m-d') > $days[$i]->date->format('Y-m-d')) {
-            unset($days[$i]->events[$j]);
-        } elseif (isset($services[$event->idservice]) === false) {
-            unset($days[$i]->events[$j]);
-        } else {
-            $event->service = $services[$event->idservice];
+            continue;
         }
+
+        if (isset($services[$event->idservice]) === false) {
+            continue;
+        }
+
+        $event->service = $services[$event->idservice];
+
+        $days[$i]->events[] = $event;
     }
 }
 

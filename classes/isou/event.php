@@ -2,7 +2,7 @@
 
 namespace UniversiteRennes2\Isou;
 
-class Event{
+class Event {
     const PERIOD_NONE = '0';
     const PERIOD_DAILY = '86400';
     const PERIOD_WEEKLY = '604800';
@@ -28,6 +28,7 @@ class Event{
         self::TYPE_REGULAR => 'Évènement régulier',
         self::TYPE_CLOSED => 'Service fermé',
         );
+
     public static $PERIODS = array(
         self::PERIOD_NONE => 'Aucune',
         self::PERIOD_DAILY => 'Tous les jours',
@@ -35,14 +36,14 @@ class Event{
         );
 
     public function __construct() {
-        if (isset($this->id)) {
-            // PDO instance
+        if (isset($this->id) === true) {
+            // Instance PDO.
             try {
                 $this->startdate = new \DateTime($this->startdate);
                 if ($this->enddate !== null) {
                     $this->enddate = new \DateTime($this->enddate);
                 }
-            } catch (Exception $exception) {
+            } catch (\Exception $exception) {
                 $this->startdate = new \DateTime();
                 $this->enddate = new \DateTime();
             }
@@ -51,7 +52,7 @@ class Event{
                 $this->period = self::PERIOD_NONE;
             }
         } else {
-            // manual instance
+            // Instance manuelle.
             $this->id = 0;
             $this->startdate = new \DateTime();
             $this->enddate = null;
@@ -64,12 +65,320 @@ class Event{
         }
     }
 
+    public function __tostring() {
+        $str = '';
+
+        if ($this->state === State::CLOSED) {
+            $str = 'Service fermé depuis le '.strftime('%A %d %B %Y', $this->startdate->getTimestamp()).'.';
+            if ($this->enddate !== null) {
+                $str .= ' Réouverture le '.strftime('%A %d %B %Y', $this->enddate->getTimestamp()).'.';
+            }
+        } elseif (empty($this->period) === false) {
+            $starttime = $this->startdate->format('H\hi');
+            $endtime = $this->enddate->format('H\hi');
+
+            switch ($this->period) {
+                case self::PERIOD_WEEKLY:
+                    $str = 'Tous les '.strftime('%A', $this->startdate->getTimestamp()).' de '.$starttime.' à '.$endtime.'.';
+                    break;
+                case self::PERIOD_DAILY:
+                default:
+                    $str = 'Tous les jours de '.$starttime.' à '.$endtime.'.';
+            }
+        } else {
+            $starttime = $this->startdate->format('H\hi');
+            $startday = strftime('%A %d %B', $this->startdate->getTimestamp());
+
+            if ($this->type === self::TYPE_SCHEDULED) {
+                $type = 'en maintenance';
+            } else {
+                $type = 'perturbé';
+            }
+
+            if ($this->startdate->getTimestamp() > TIME) {
+                // Évènement futur.
+                if ($this->enddate === null) {
+                    $str = 'Le service sera '.$type.' le '.$startday.' à partir de '.$starttime.'.';
+                } else {
+                    $endtime = $this->enddate->format('H\hi');
+                    $endday = strftime('%A %d %B', $this->enddate->getTimestamp());
+                    $str = 'Le service sera '.$type.' du '.$startday.' '.$starttime.' au '.$endday.' '.$endtime.'.';
+                }
+            } elseif ($this->enddate !== null && $this->enddate->getTimestamp() < TIME) {
+                $endtime = $this->enddate->format('H\hi');
+
+                // Évènement passé.
+                if (strftime('%A%d%B', $this->startdate->getTimestamp()) === strftime('%A%d%B', $this->enddate->getTimestamp())) {
+                    // Évènement qui s'est déroulé sur une journée.
+                    $str = 'Le service a été '.$type.' le '.$startday.' de '.$starttime.' à '.$endtime.'.';
+                } else {
+                    // Évènement qui s'est déroulé sur plusieurs journées.
+                    $endday = strftime('%A %d %B', $this->enddate->getTimestamp());
+                    $str = 'Le service a été '.$type.' du '.$startday.' '.$starttime.' au '.$endday.' '.$endtime.'.';
+                }
+            } else {
+                // Évènement en cours.
+                if (strftime('%A%d%B', $this->startdate->getTimestamp()) === strftime('%A%d%B')) {
+                    $str = 'Le service est '.$type.' depuis '.$starttime.'.';
+                } else {
+                    $str = 'Le service est '.$type.' depuis le '.$startday.' '.$starttime.'.';
+                }
+            }
+        }
+
+        return $str;
+    }
+
+    public static function get_record($options = array()) {
+        if (isset($options['id']) === false) {
+            throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] est requis.');
+        }
+
+        $options['fetch_one'] = true;
+
+        return self::get_records($options);
+    }
+
+    /**
+      * @param array $options Array in format:
+      *   after           => DateTime
+      *   before          => DateTime
+      *   idservice       => int
+      *   one_record      => bool
+      *   regular         => bool
+      *   plugin          => int : index key from UniversiteRennes2\Isou\Service::$TYPES
+      *   since           => DateTime
+      *   finished        => bool
+      *   state           => int : index key from UniversiteRennes2\Isou\State::$STATES
+      *   tolerance       => int : seconds
+      *   type            => int : index key from UniversiteRennes2\Isou\Event::$TYPES
+      *   sort            => Array of strings
+      *
+      * @return array of UniversiteRennes2\Isou\Events
+      */
+    public static function get_records($options = array()) {
+        global $DB;
+
+        $conditions = array();
+        $parameters = array();
+
+        // Parcours les options.
+        if (isset($options['id']) === true) {
+            if (ctype_digit($options['id']) === true) {
+                $conditions[] = 'e.id = :id';
+                $parameters[':id'] = $options['id'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'id\' doit être un entier. Valeur donnée : '.var_export($options['id'], $return = true));
+            }
+
+            unset($options['id']);
+        }
+
+        if (isset($options['after']) === true) {
+            if ($options['after'] instanceof \DateTime) {
+                $conditions[] = 'e.startdate >= :after';
+                $parameters[':after'] = $options['after']->format('Y-m-d\TH:i:s');
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'after\' doit être de type DateTime. Valeur donnée : '.var_export($options['after'], $return = true));
+            }
+
+            unset($options['after']);
+        }
+
+        if (isset($options['before']) === true) {
+            if ($options['before'] instanceof \DateTime) {
+                $conditions[] = 'e.startdate < :before';
+                $parameters[':before'] = $options['before']->format('Y-m-d\TH:i:s');
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'before\' doit être de type DateTime. Valeur donnée : '.var_export($options['before'], $return = true));
+            }
+
+            unset($options['before']);
+        }
+
+        if (isset($options['enddate_between']) === true) {
+            if (is_array($options['enddate_between']) === false) {
+                throw new \Exception(__METHOD__.': l\'option \'enddate_between\' doit être de type Array. Valeur donnée : '.var_export($options['enddate_between'], $return = true));
+            } else if (isset($options['enddate_between'][1]) === false) {
+                throw new \Exception(__METHOD__.': l\'option \'enddate_between\' doit contenir 2 éléments de type DateTime. Valeur donnée : '.var_export($options['enddate_between'], $return = true));
+            } else {
+                if (($options['enddate_between'][0] instanceof \DateTime) === false) {
+                    throw new \Exception('Le premier élément de \'option \'enddate_between\' doit être de type DateTime. Valeur donnée : '.var_export($options['enddate_between'][0], $return = true));
+                } else if (($options['enddate_between'][1] instanceof \DateTime) === false) {
+                    throw new \Exception('Le deuxième élément de \'option \'enddate_between\' doit être de type DateTime. Valeur donnée : '.var_export($options['enddate_between'][1], $return = true));
+                } else {
+                    $conditions[] = 'e.enddate BETWEEN :enddate_between0 AND :enddate_between1';
+                    $parameters[':enddate_between0'] = $options['enddate_between'][0]->format('Y-m-d\TH:i:s');
+                    $parameters[':enddate_between1'] = $options['enddate_between'][1]->format('Y-m-d\TH:i:s');
+                }
+            }
+
+            unset($options['enddate_between']);
+        }
+
+        if (isset($options['idservice']) === true) {
+            if (ctype_digit($options['idservice']) === true) {
+                $conditions[] = 's.id = :idservice';
+                $parameters[':idservice'] = $options['idservice'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'idservice\' doit être un entier. Valeur donnée : '.var_export($options['idservice'], $return = true));
+            }
+
+            unset($options['idservice']);
+        }
+
+        if (isset($options['regular']) === true) {
+            if (is_bool($options['regular']) === true) {
+                if ($options['regular'] === true) {
+                    $conditions[] = 'e.period IS NOT NULL';
+                } else {
+                    $conditions[] = 'e.period IS NULL';
+                }
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'regular\' doit être un booléen. Valeur donnée : '.var_export($options['regular'], $return = true));
+            }
+
+            unset($options['regular']);
+        }
+
+        if (isset($options['plugin']) === true) {
+            if (ctype_digit($options['plugin']) === true) {
+                $conditions[] = 's.idplugin = :idplugin';
+                $parameters[':idplugin'] = $options['plugin'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'plugin\' doit être un entier. Valeur donnée : '.var_export($options['plugin'], $return = true));
+            }
+
+            unset($options['plugin']);
+        }
+
+        if (isset($options['notplugin']) === true) {
+            if (ctype_digit($options['notplugin']) === true) {
+                $conditions[] = 's.idplugin != :idplugin';
+                $parameters[':idplugin'] = $options['notplugin'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'notplugin\' doit être un entier. Valeur donnée : '.var_export($options['notplugin'], $return = true));
+            }
+
+            unset($options['notplugin']);
+        }
+
+        if (isset($options['since']) === true) {
+            if ($options['since'] instanceof \DateTime) {
+                $conditions[] = '(e.enddate IS NULL OR e.startdate >= :since)';
+                $parameters[':since'] = $options['since']->format('Y-m-d\TH:i:s');
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'since\' doit être de type DateTime. Valeur donnée : '.var_export($options['since'], $return = true));
+            }
+
+            unset($options['since']);
+        }
+
+        if (isset($options['finished']) === true) {
+            if (is_bool($options['finished']) === true) {
+                if ($options['finished'] === true) {
+                    $conditions[] = 'e.enddate IS NOT NULL';
+                } else {
+                    $conditions[] = 'e.enddate IS NULL';
+                }
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'finished\' doit être un booléen. Valeur donnée : '.var_export($options['finished'], $return = true));
+            }
+
+            unset($options['finished']);
+        }
+
+        if (isset($options['state']) === true) {
+            if (isset(State::$STATES[$options['state']]) === true) {
+                $conditions[] = 'e.state = :state';
+                $parameters[':state'] = $options['state'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'state\' doit être un état valide. Valeur donnée : '.var_export($options['state'], $return = true));
+            }
+
+            unset($options['state']);
+        }
+
+        if (isset($options['tolerance']) === true) {
+            if (ctype_digit($options['tolerance']) === true) {
+                if ($options['tolerance'] > 0) {
+                    // Ne pas binder 'tolerance', car la requête ne fonctionne pas dans ce cas.
+                    $conditions[] = '(e.enddate IS NULL OR (strftime(\'%s\', e.enddate) - strftime(\'%s\', e.startdate) > '.$options['tolerance'].'))';
+                }
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'tolerance\' doit être un entier. Valeur donnée : '.var_export($options['tolerance'], $return = true));
+            }
+
+            unset($options['tolerance']);
+        }
+
+        if (isset($options['type']) === true) {
+            if (isset(Event::$TYPES[$options['type']]) === true) {
+                $conditions[] = 'e.type = :type';
+                $parameters[':type'] = $options['type'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'state\' doit être un type d\'évènement valide. Valeur donnée : '.var_export($options['state'], $return = true));
+            }
+
+            unset($options['type']);
+        }
+
+        // Construis le WHERE.
+        if (isset($conditions[0]) === true) {
+            $sql_conditions = ' WHERE '.implode(' AND ', $conditions);
+        } else {
+            $sql_conditions = '';
+        }
+
+        // Construis le ORDER BY.
+        if (isset($options['sort']) === true) {
+            if (is_array($options['sort']) === true) {
+                $sql_orders = ' ORDER BY '.implode(', ', $options['sort']);
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'sort\' doit être de type Array. Valeur donnée : '.var_export($options['sort'], $return = true));
+            }
+
+            unset($options['sort']);
+        }
+
+        if (isset($sql_orders) === false) {
+            $sql_orders = ' ORDER BY e.startdate, e.enddate';
+        }
+
+        // Vérifie si toutes les options ont été utilisées.
+        foreach ($options as $key => $option) {
+            if (in_array($key, array('fetch_column', 'fetch_one'), $strict = true) === true) {
+                continue;
+            }
+
+            throw new \Exception(__METHOD__.': l\'option \''.$key.'\' n\'a pas été utilisée. Valeur donnée : '.var_export($option, $return = true));
+        }
+
+        // Construis la requête.
+        $sql = 'SELECT e.id, e.startdate, e.enddate, e.state, e.type, e.period, e.ideventdescription, ed.description, e.idservice, s.name AS service_name'.
+            ' FROM events e'.
+            ' JOIN events_descriptions ed ON ed.id = e.ideventdescription'.
+            ' JOIN services s ON s.id = e.idservice'.
+            $sql_conditions.
+            $sql_orders;
+        $query = $DB->prepare($sql);
+        $query->execute($parameters);
+
+        $query->setFetchMode(\PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Event');
+
+        if (isset($options['fetch_one']) === true) {
+            return $query->fetch();
+        }
+
+        return $query->fetchAll();
+    }
+
     public function is_now($datetime = null) {
         global $LOGGER;
 
         try {
             $datetime = new \DateTime($datetime);
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $datetime = new \DateTime();
             $LOGGER->addInfo($exception->getMessage());
         }
@@ -86,21 +395,19 @@ class Event{
         $this->idservice = $idservice;
 
         if ($options_services === null) {
-            require_once PRIVATE_PATH.'/libs/services.php';
-
-            $options_services = get_isou_services_sorted_by_idtype();
+            $options_services = Service::get_records(array('fetch_column' => true, 'plugin' => PLUGIN_ISOU));
         }
 
         if (!isset($options_services[$this->idservice])) {
             throw new \Exception('Le service mis en maintenance n\'est pas valide.');
         } else {
-            $sql = "SELECT COUNT(E.id) AS total".
-                    " FROM events E".
-                " WHERE E.id != ?".
-                " AND E.idservice = ?".
-                " AND (E.enddate IS NULL OR (E.enddate >= ? AND E.startdate <= ?))";
+            $sql = 'SELECT COUNT(e.id) AS total'.
+                ' FROM events e'.
+                ' WHERE e.id != :id'.
+                ' AND e.idservice = :idservice'.
+                ' AND (e.enddate IS NULL OR (e.enddate >= :enddate AND e.startdate <= :startdate))';
             $query = $DB->prepare($sql);
-            $query->execute(array($this->id, $this->idservice, STR_TIME, STR_TIME));
+            $query->execute(array(':id' => $this->id, ':idservice' => $this->idservice, ':enddate' => STR_TIME, ':startdate' => STR_TIME));
             $count = $query->fetch(\PDO::FETCH_OBJ);
             if ($count->total !== '0') {
                 throw new \Exception('Un évènement est déjà en cours pour ce service. Veuillez modifier ou supprimer l\'ancien évènement.');
@@ -140,7 +447,7 @@ class Event{
     public function set_type($type) {
         $this->type = $type;
 
-        if (!isset(self::$TYPES[$this->type])) {
+        if (isset(self::$TYPES[$this->type]) === false) {
             throw new \Exception('Le type d\'opération n\'est pas valide.');
         }
     }
@@ -225,20 +532,20 @@ class Event{
         }
 
         $params = array(
-        $this->startdate->format('Y-m-d\TH:i:s'),
-        $enddate,
-        $this->state,
-        $this->type,
-        $this->period,
-        $this->ideventdescription,
-        $this->idservice,
-        );
+            ':startdate' => $this->startdate->format('Y-m-d\TH:i:s'),
+            ':enddate' => $enddate,
+            ':state' => $this->state,
+            ':type' => $this->type,
+            ':period' => $this->period,
+            ':ideventdescription' => $this->ideventdescription,
+            ':idservice' => $this->idservice,
+            );
 
         if ($this->id === 0) {
-            $sql = "INSERT INTO events(startdate, enddate, state, type, period, ideventdescription, idservice) VALUES(?,?,?,?,?,?,?)";
+            $sql = 'INSERT INTO events(startdate, enddate, state, type, period, ideventdescription, idservice) VALUES(:startdate, :enddate, :state, :type, :period, :ideventdescription, :idservice)';
         } else {
-            $sql = "UPDATE events SET startdate=?, enddate=?, state=?, type=?, period=?, ideventdescription=?, idservice=? WHERE id=?";
-            $params[] = $this->id;
+            $sql = 'UPDATE events SET startdate=:startdate, enddate=:enddate, state=:state, type=:type, period=:period, ideventdescription=:ideventdescription, idservice=:idservice WHERE id = :id';
+            $params[':id'] = $this->id;
         }
         $query = $DB->prepare($sql);
 
@@ -247,7 +554,7 @@ class Event{
                 $this->id = $DB->lastInsertId();
             }
         } else {
-            // log db errors
+            // Enregistre le message d'erreur.
             $LOGGER->addError(implode(', ', $query->errorInfo()));
 
             throw new \Exception('Une erreur est survenue lors de l\'enregistrement de l\'évènement.');
@@ -257,11 +564,11 @@ class Event{
     public function delete() {
         global $DB, $LOGGER;
 
-        $sql = "DELETE FROM events WHERE id=?";
+        $sql = 'DELETE FROM events WHERE id = :id';
         $query = $DB->prepare($sql);
 
-        if ($query->execute(array($this->id)) === false) {
-            // log db errors
+        if ($query->execute(array(':id' => $this->id)) === false) {
+            // Enregistre le message d'erreur.
             $LOGGER->addError(implode(', ', $query->errorInfo()));
 
             throw new \Exception('Une erreur est survenue lors de la suppression de l\'évènement.');
@@ -271,23 +578,10 @@ class Event{
     public function close() {
         global $DB, $LOGGER;
 
-        $sql = "UPDATE events SET enddate=? WHERE id=?";
+        $sql = 'UPDATE events SET enddate=:enddate WHERE id = :id';
         $query = $DB->prepare($sql);
-        if ($query->execute(array(STR_TIME, $this->id))) {
+        if ($query->execute(array(':enddate' => STR_TIME, ':id' => $this->id))) {
             $this->enddate = new \DateTime(STR_TIME);
-            return true;
-        } else {
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
-            return false;
-        }
-    }
-
-    public function close_all_other_events() {
-        global $DB, $LOGGER;
-
-        $sql = "UPDATE events SET enddate=? WHERE id != ? AND idservice=? AND startdate <= ? AND (enddate IS NULL OR enddate >= ?)";
-        $query = $DB->prepare($sql);
-        if ($query->execute(array(STR_TIME, $this->id, $this->idservice, STR_TIME, STR_TIME))) {
             return true;
         } else {
             $LOGGER->addError(implode(', ', $query->errorInfo()));
@@ -298,98 +592,22 @@ class Event{
     public function set_description($description = null, $autogen = 0) {
         global $DB, $LOGGER;
 
-        if ($description !== null) {
-            $this->description = $description;
+        if ($description === null) {
+            $description = $this->description;
         }
-        $description = get_event_description_by_content($this->description);
 
-        if ($description === false) {
-            $sql = "INSERT INTO events_descriptions(description, autogen) VALUES(?,?)";
-            $query = $DB->prepare($sql);
-            if ($query->execute(array($this->description, $autogen))) {
-                $this->ideventdescription = $DB->lastInsertId();
-                $this->description = $description;
-            } else {
-                // log db errors
-                $LOGGER->addError(implode(', ', $query->errorInfo()));
-                return false;
-            }
-        } else {
-            $this->ideventdescription = $description->ideventdescription;
-            $this->description = $description;
+        $event_description = Event_Description::get_record(array('description' => $this->description, 'autogen' => false));
+        if ($event_description === false) {
+            $event_description = new Event_Description();
+            $event_description->description = $description;
+            $event_description->autogen = $autogen;
+
+            $event_description->save();
         }
+
+        $this->ideventdescription = $event_description->id;
+        $this->description = $event_description;
 
         return true;
-    }
-
-    public function __toString() {
-        $str = '';
-
-        if ($this->state === State::CLOSED) {
-            $str = 'Service fermé depuis le '.strftime('%A %d %B %Y', $this->startdate->getTimestamp()).'.';
-            if ($this->enddate !== null) {
-                $str .= ' Réouverture le '.strftime('%A %d %B %Y', $this->enddate->getTimestamp()).'.';
-            }
-        } elseif (empty($this->period) === false) {
-            $starttime = $this->startdate->format('H\hi');
-            $endtime = $this->enddate->format('H\hi');
-
-            switch ($this->period) {
-                case self::PERIOD_WEEKLY:
-                    $str = 'Tous les '.strftime('%A', $this->startdate->getTimestamp()).' de '.$starttime.' à '.$endtime.'.';
-                    break;
-                case self::PERIOD_DAILY:
-                default:
-                    $str = 'Tous les jours de '.$starttime.' à '.$endtime.'.';
-            }
-        } else {
-            $starttime = $this->startdate->format('H\hi');
-            $startday = strftime('%A %d %B', $this->startdate->getTimestamp());
-
-            if ($this->type === self::TYPE_SCHEDULED) {
-                $type = 'en maintenance';
-            } else {
-                $type = 'perturbé';
-            }
-
-            if ($this->startdate->getTimestamp() > TIME) {
-                // Évènement futur.
-                if ($this->enddate === null) {
-                    $str = 'Le service sera '.$type.' le '.$startday.' à partir de '.$starttime.'.';
-                } else {
-                    $endtime = $this->enddate->format('H\hi');
-                    $endday = strftime('%A %d %B', $this->enddate->getTimestamp());
-                    $str = 'Le service sera '.$type.' du '.$startday.' '.$starttime.' au '.$endday.' '.$endtime.'.';
-                }
-            } elseif ($this->enddate !== null && $this->enddate->getTimestamp() < TIME) {
-                $endtime = $this->enddate->format('H\hi');
-
-                // Évènement passé.
-                if (strftime('%A%d%B', $this->startdate->getTimestamp()) === strftime('%A%d%B', $this->enddate->getTimestamp())) {
-                    // Évènement qui s'est déroulé sur une journée.
-                    $str = 'Le service a été '.$type.' le '.$startday.' de '.$starttime.' à '.$endtime.'.';
-                } else {
-                    // Évènement qui s'est déroulé sur plusieurs journées.
-                    $endday = strftime('%A %d %B', $this->enddate->getTimestamp());
-                    $str = 'Le service a été '.$type.' du '.$startday.' '.$starttime.' au '.$endday.' '.$endtime.'.';
-                }
-            } else {
-                // Évènement en cours.
-                if (strftime('%A%d%B', $this->startdate->getTimestamp()) === strftime('%A%d%B')) {
-                    $str = 'Le service est '.$type.' depuis '.$starttime.'.';
-                } else {
-                    $str = 'Le service est '.$type.' depuis le '.$startday.' '.$starttime.'.';
-                }
-            }
-        }
-
-        return $str;
-    }
-
-    /**
-      * @desc   Destruct instance
-      */
-    public function __destruct() {
-        // object destructed
     }
 }

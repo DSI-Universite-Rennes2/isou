@@ -17,7 +17,7 @@
 		<tr class="header">
 			<th colspan="5" class="thdate active">{$day->date|date_format:"%A %e %B"}</th>
 		</tr>
-		{if !isset($day->events[0])}
+		{if isset($day->events[0]) === false}
 		<tr><td colspan="5" class="info">Aucun évènement</td></tr>
 		{else}
 		{foreach $day->events as $event}
@@ -26,7 +26,7 @@
 				<td>{$event->service}</td>
 				<td>{$event->startdate|date_format:"%a %e %b %Hh%M"}</td>
 				{if $event->enddate === null}
-				<td>en cours</td>
+				<td class="danger">en cours</td>
 				{else}
 				<td>{$event->enddate|date_format:"%a %e %b %Hh%M"}</td>
 				{/if}

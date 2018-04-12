@@ -3,13 +3,11 @@
 use Isou\Helpers\SimpleMenu;
 use UniversiteRennes2\Isou\Plugin;
 
-require_once PRIVATE_PATH.'/libs/services.php';
-
 $TITLE .= ' - Administration des services';
 
 // Set up menu.
 $submenus = array();
-$plugins = Plugin::get_plugins();
+$plugins = Plugin::get_records();
 foreach ($plugins as $plugin) {
     $submenus[$plugin->codename] = new SimpleMenu('Services '.$plugin->name, '', URL.'/index.php/services/'.$plugin->codename);
 }
@@ -27,7 +25,7 @@ $plugin = constant('PLUGIN_'.strtoupper($PAGE_NAME[1]));
 
 $submenus[$PAGE_NAME[1]]->selected = true;
 
-$plugin = Plugin::get_plugin(array('id' => $plugin));
+$plugin = Plugin::get_record(array('id' => $plugin));
 require PRIVATE_PATH.'/plugins/'.$plugin->codename.'/index.php';
 
 $smarty->assign('submenus', $submenus);
