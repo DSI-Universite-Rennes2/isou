@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <meta http-equiv="refresh" content="5;URL=www/">
+    <meta http-equiv="refresh" content="5;URL=www/" />
 
     <title>ISOU - Problème de configuration</title>
 
@@ -20,7 +20,7 @@
             <h1 id="isou-header">ISOU</h1>
         </header>
 
-        <p class="alert alert-danger">Problème de configuration detecté !<br />Merci de faire pointer votre serveur web sur le répertoire <code><?php echo __DIR__;?>/www</code>.</p>
+        <p class="alert alert-danger"><strong>Problème de configuration détecté !</strong><br />Merci de faire pointer votre serveur web sur le répertoire <code><?php echo __DIR__;?>/www</code>.</p>
         <p>Vous devriez être automatiquement redirigé vers <a href="www/">cette page</a> d'ici quelques secondes.</p>
     </div>
 
