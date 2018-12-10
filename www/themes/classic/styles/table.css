@@ -21,6 +21,10 @@ th {
     background-color: #d6e1ec;
 }
 
+td[headers="column-2"] {
+    text-align: center;
+}
+
 /* seulement les entêtes en haut du tableau */
 .header th {
     text-align: center;

@@ -8,6 +8,11 @@
     padding: .3em 0em;
 }
 
+#calendar caption li {
+    display: inline-block;
+    margin: 0 1em;
+}
+
 #weekday th {
     width: 14%;
     text-align: center;

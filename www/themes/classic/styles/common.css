@@ -9,6 +9,7 @@ html {
 }
 
 body {
+    background: #F5F7FA;
     margin: 0em;
     padding: 0em .7em;
     font-family: "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -84,11 +85,23 @@ ul li {
     visibility: hidden;
 }
 
+.text-right {
+    text-align: right;
+}
+
+.btn {
+    border: 3px groove gray;
+    display: inline-block;
+    margin: .2em;
+    padding: .1em 1em;
+}
+
 /* * * * * * * * * *
     Tableau
 * * * * * * * * * * */
 table {
     margin-top:1em;
+    width: 100%;
 }
 
 table,td {
@@ -177,16 +190,26 @@ input, select, textarea {
     width: 1px;
 }
 
-#header {
+.list-inline,
+.list-unstyled {
+    list-style: none;
+    margin: 0;
+}
+
+.list-inline li {
+    display: inline-block;
+}
+
+.list-unstyled li {
+    margin: 0;
+}
+
+.isou-top-aside {
     text-align: right;
     text-decoration: none;
     font-size: .7em;
-    margin: .5em 0em;
+    margin: 0em;
     color: #505050;
-}
-
-#header p {
-    margin: .2em 0em;
 }
 
 #top-border {
@@ -213,7 +236,7 @@ input, select, textarea {
     padding-left: 1em;
 }
 
-#annonce {
+#announcement {
     background-color: #FFA07A;
     border: .1em #8B0000 solid;
     margin: .8em 0em;

@@ -2,7 +2,7 @@
 
 <p class="alert alert-info text-center">Liste des opérations de maintenance prévues.</p>
 
-<table id="calendrier" class="table table-bordered" summary="Calendrier répertoriant toutes les intervertions prévues">
+<table id="calendar" class="table table-bordered" summary="Calendrier répertoriant toutes les intervertions prévues">
 	{* Titre du calendrier. *}
 	<caption class="text-center">
 		<div class="sr-only">Calendrier des interventions</div>

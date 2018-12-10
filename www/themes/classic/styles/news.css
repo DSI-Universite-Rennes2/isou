@@ -1,12 +1,16 @@
-#legend {
-    border: 0.1em #AF3A6E dotted;
-    padding: 1em;
-    margin: 2em 5em;
+#isou-news-legend-aside {
     background-color: #FFFFFF;
+    border: 0.1em #AF3A6E dotted;
+    margin: 2em 5em;
+    padding: 1em;
+    position: fixed;
+    right: 0em;
 }
 
-#legend h2 {
+#isou-news-legend-h1 {
+    background: none;
     margin: 0.5em 0em;
+    text-align: left;
 }
 
 .legend-container {
@@ -18,14 +22,14 @@ dl {
 }
 
 dt, dd {
-    float: left;
+    display: inline-block;
 }
 
 dt {
     margin-right: 0.2em;
 }
 
-#summary {
+#content > p.alert-info {
     background-color: #E5ECF9;
     text-align: center;
     padding: .4em;

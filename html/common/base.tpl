@@ -87,7 +87,7 @@
 			{/if}
 
 			{if isset($ANNOUNCEMENT) === true}
-			<aside class="alert alert-warning text-center">
+			<aside id="announcement" class="alert alert-warning text-center">
 					<h1 class="sr-only">Annonce</h1>
 					{$ANNOUNCEMENT->message}
 			</aside>
@@ -100,7 +100,7 @@
 			</main>
 		</div> {* / .container *}
 
-		<footer class="footer text-center" role="contentinfo">
+		<footer class="footer text-center" id="footer" role="contentinfo">
 			<p><span id="footer-span">Isou {$CFG.version} - <a href="https://sourcesup.renater.fr/projects/isounagios/" title="Accéder à la page du projet libre Isou">Page officielle du projet</a></span></p>
 		</footer>
 
