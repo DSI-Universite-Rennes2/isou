@@ -35,7 +35,7 @@ function update_services_tree() {
 
         // Parcours chaque enfant.
         foreach ($parent_service->reverse_dependencies as $dependencies_group) {
-            $child_service = Service::get_record(array('id' => $dependencies_group->idservice, 'enabled' => true));
+            $child_service = Service::get_record(array('id' => $dependencies_group->idservice, 'enable' => true));
 
             // Si l'enfant n'existe plus ou n'est plus actif, on ne fait rien.
             if ($child_service === false) {
