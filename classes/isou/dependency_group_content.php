@@ -151,7 +151,7 @@ class Dependency_Group_Content {
     }
 
     public function change_state($state) {
-        global $DB;
+        global $DB, $LOGGER;
 
         $results = array(
             'successes' => array(),
@@ -180,7 +180,7 @@ class Dependency_Group_Content {
     }
 
     public function delete() {
-        global $DB;
+        global $DB, $LOGGER;
 
         $results = array(
             'successes' => array(),
