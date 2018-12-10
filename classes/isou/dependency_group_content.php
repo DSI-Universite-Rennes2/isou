@@ -135,6 +135,10 @@ class Dependency_Group_Content {
         $query = $DB->prepare($sql);
 
         if ($query->execute($params)) {
+            if ($this->id === 0) {
+                $this->id = $DB->lastInsertId();
+            }
+
             $results['successes'] = array('Les données ont été correctement enregistrées.');
         } else {
             // Enregistre le message d'erreur.
