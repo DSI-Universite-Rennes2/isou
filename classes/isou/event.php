@@ -596,7 +596,7 @@ class Event {
             $description = $this->description;
         }
 
-        $event_description = Event_Description::get_record(array('description' => $this->description, 'autogen' => false));
+        $event_description = Event_Description::get_record(array('description' => $description, 'autogen' => false));
         if ($event_description === false) {
             $event_description = new Event_Description();
             $event_description->description = $description;
