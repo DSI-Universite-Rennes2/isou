@@ -398,20 +398,20 @@ class Event {
             $options_services = Service::get_records(array('fetch_column' => true, 'plugin' => PLUGIN_ISOU));
         }
 
-        if (!isset($options_services[$this->idservice])) {
+        if (isset($options_services[$this->idservice]) === false) {
             throw new \Exception('Le service mis en maintenance n\'est pas valide.');
-        } else {
-            $sql = 'SELECT COUNT(e.id) AS total'.
-                ' FROM events e'.
-                ' WHERE e.id != :id'.
-                ' AND e.idservice = :idservice'.
-                ' AND (e.enddate IS NULL OR (e.enddate >= :enddate AND e.startdate <= :startdate))';
-            $query = $DB->prepare($sql);
-            $query->execute(array(':id' => $this->id, ':idservice' => $this->idservice, ':enddate' => STR_TIME, ':startdate' => STR_TIME));
-            $count = $query->fetch(\PDO::FETCH_OBJ);
-            if ($count->total !== '0') {
-                throw new \Exception('Un évènement est déjà en cours pour ce service. Veuillez modifier ou supprimer l\'ancien évènement.');
-            }
+        }
+
+        $sql = 'SELECT COUNT(e.id) AS total'.
+            ' FROM events e'.
+            ' WHERE e.id != :id'.
+            ' AND e.idservice = :idservice'.
+            ' AND (e.enddate IS NULL OR (e.enddate >= :enddate AND e.startdate <= :startdate))';
+        $query = $DB->prepare($sql);
+        $query->execute(array(':id' => $this->id, ':idservice' => $this->idservice, ':enddate' => STR_TIME, ':startdate' => STR_TIME));
+        $count = $query->fetch(\PDO::FETCH_OBJ);
+        if ($count !== false && $count->total !== '0') {
+            throw new \Exception('Un évènement est déjà en cours pour ce service. Veuillez modifier ou supprimer l\'ancien évènement.');
         }
     }
 
