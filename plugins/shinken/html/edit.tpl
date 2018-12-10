@@ -1,4 +1,4 @@
-<form action="{$smarty.const.URL}/index.php/services/shinken/edit/{$service->id}" method="post">
+<form action="{$smarty.const.URL}/index.php/services/shinken/edit/{$service->id}" class="form" method="post">
 	{if $service->id === 0}
 		<h2>Ajouter un service Shinken</h2>
 	{else}
@@ -11,8 +11,8 @@
 		<dt>
 			<label for="service">Service Shinken</label>
 		</dt>
-		<dd>
-			<input list="services" id="service" name="service" value="{$service->name}" />
+		<dd class="form-group">
+			<input class="form-control" list="services" id="service" name="service" value="{$service->name}" />
 			<datalist id="services">
 			{foreach $services as $service}
 				<option value="{$service}">
