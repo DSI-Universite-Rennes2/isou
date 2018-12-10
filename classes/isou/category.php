@@ -212,7 +212,7 @@ class Category {
         return $results;
     }
 
-    public function up() {
+    public function move_up() {
         global $DB, $LOGGER;
 
         $results = array(
@@ -252,7 +252,7 @@ class Category {
         return $results;
     }
 
-    public function down($limit = null) {
+    public function move_down($limit = null) {
         global $DB, $LOGGER;
 
         $results = array(

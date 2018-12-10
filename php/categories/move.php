@@ -7,9 +7,9 @@ if (isset($PAGE_NAME[2]) === true && ctype_digit($PAGE_NAME[2]) === true) {
 
     if ($category !== false) {
         if ($PAGE_NAME[1] === 'down') {
-            $_SESSION['messages'] = $category->down();
+            $_SESSION['messages'] = $category->move_down();
         } else {
-            $_SESSION['messages'] = $category->up();
+            $_SESSION['messages'] = $category->move_up();
         }
     }
 }

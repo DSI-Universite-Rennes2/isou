@@ -246,7 +246,7 @@ class Category extends atoum {
                         });
     }
 
-    public function test_up() {
+    public function test_move_up() {
         global $DB;
 
         $i = 1;
@@ -257,7 +257,7 @@ class Category extends atoum {
             ->and($this->testedInstance->name = 'foo')
             ->and($this->testedInstance->position = 2)
             ->then
-                ->array($this->testedInstance->up())
+                ->array($this->testedInstance->move_up())
                     ->child['successes'](function($child) {
                         $child->hasSize(1)
                             ->contains('Les données ont été correctement enregistrées.');
@@ -272,7 +272,7 @@ class Category extends atoum {
             ->and($this->testedInstance->name = 'foo')
             ->and($this->testedInstance->position = 1)
             ->then
-                ->array($this->testedInstance->up())
+                ->array($this->testedInstance->move_up())
                     ->child['successes'](function($child) {
                         $child->hasSize(0);
                         })
@@ -288,7 +288,7 @@ class Category extends atoum {
             ->and($this->testedInstance->name = 'foo')
             ->and($this->testedInstance->position = 2)
             ->then
-                ->array($this->testedInstance->up())
+                ->array($this->testedInstance->move_up())
                     ->child['successes'](function($child) {
                         $child->hasSize(0);
                         })
@@ -298,7 +298,7 @@ class Category extends atoum {
                         });
     }
 
-    public function test_down() {
+    public function test_move_down() {
         global $DB;
 
         $i = 1;
@@ -309,7 +309,7 @@ class Category extends atoum {
             ->and($this->testedInstance->name = 'foo')
             ->and($this->testedInstance->position = -1)
             ->then
-                ->array($this->testedInstance->down())
+                ->array($this->testedInstance->move_down())
                     ->child['successes'](function($child) {
                         $child->hasSize(1)
                             ->contains('Les données ont été correctement enregistrées.');
@@ -324,7 +324,7 @@ class Category extends atoum {
             ->and($this->testedInstance->name = 'foo')
             ->and($this->testedInstance->position = 0)
             ->then
-                ->array($this->testedInstance->down())
+                ->array($this->testedInstance->move_down())
                     ->child['successes'](function($child) {
                         $child->hasSize(0);
                         })
@@ -340,7 +340,7 @@ class Category extends atoum {
             ->and($this->testedInstance->name = 'foo')
             ->and($this->testedInstance->position = -1)
             ->then
-                ->array($this->testedInstance->down())
+                ->array($this->testedInstance->move_down())
                     ->child['successes'](function($child) {
                         $child->hasSize(0);
                         })
