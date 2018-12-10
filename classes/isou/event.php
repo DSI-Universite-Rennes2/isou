@@ -317,7 +317,7 @@ class Event {
                 $conditions[] = 'e.type = :type';
                 $parameters[':type'] = $options['type'];
             } else {
-                throw new \Exception(__METHOD__.': l\'option \'state\' doit être un type d\'évènement valide. Valeur donnée : '.var_export($options['state'], $return = true));
+                throw new \Exception(__METHOD__.': l\'option \'type\' doit être un type d\'évènement valide. Valeur donnée : '.var_export($options['type'], $return = true));
             }
 
             unset($options['type']);
