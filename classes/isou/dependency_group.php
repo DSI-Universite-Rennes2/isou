@@ -94,6 +94,7 @@ class Dependency_Group {
         return $groups;
     }
 
+    // TODO: remplacer par Dependency_Message::get_record
     public function get_message() {
         global $DB;
 

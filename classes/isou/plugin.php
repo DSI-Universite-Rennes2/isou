@@ -132,6 +132,7 @@ class Plugin {
         return $this->save();
     }
 
+    // TODO: retourner un truc.
     public function install_settings() {
         global $DB;
 
@@ -150,6 +151,7 @@ class Plugin {
         }
     }
 
+    // TODO: retourner un truc.
     public function save() {
         global $DB;
 
@@ -185,6 +187,7 @@ class Plugin {
         return $this->save();
     }
 
+    // TODO: retourner un truc.
     public function update_settings($overwrite = false) {
         global $DB;
 

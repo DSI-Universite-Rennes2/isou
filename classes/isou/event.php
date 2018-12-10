@@ -35,6 +35,7 @@ class Event {
         self::PERIOD_WEEKLY => 'Toutes les semaines',
         );
 
+    // TODO: à simplifier.
     public function __construct() {
         if (isset($this->id) === true) {
             // Instance PDO.

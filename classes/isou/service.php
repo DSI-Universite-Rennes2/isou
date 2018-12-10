@@ -72,6 +72,7 @@ class Service {
                 $this->url = null;
             }
 
+            // TODO: créer une fonction set_rsskey().
             if ($this->rsskey === null) {
                 global $DB;
 
