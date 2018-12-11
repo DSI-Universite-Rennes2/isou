@@ -75,7 +75,7 @@ class Service extends atoum {
                 ->isEmpty();
 
         // Teste lorsque les paramètres ne sont pas corrects.
-        $DB->test_pdostatement->test_execute = false;
+        $DB->test_pdostatement->test_fetch = false;
         $this->assert(__METHOD__.' : test #'.$i++)
             ->given($this->newTestedInstance)
             ->and($this->testedInstance->name = 'foo')
