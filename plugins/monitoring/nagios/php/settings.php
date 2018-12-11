@@ -1,6 +1,6 @@
 <?php
 
-$smarty->addTemplateDir(PRIVATE_PATH.'/plugins/nagios/html');
+$smarty->addTemplateDir(PRIVATE_PATH.'/plugins/monitoring/nagios/html');
 
 $options_yes_no = array(
     1 => 'Oui',
@@ -33,4 +33,4 @@ $smarty->assign('options_yes_no', $options_yes_no);
 
 $smarty->assign('plugin', $plugin);
 
-$PLUGIN_TEMPLATE = 'settings.tpl';
+$MONITORING_TEMPLATE = 'settings.tpl';

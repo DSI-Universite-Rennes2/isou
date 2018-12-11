@@ -82,7 +82,7 @@ function plugin_shinken_update($plugin) {
     }
 
     // Enregistre le cache.
-    $cache_path = PRIVATE_PATH.'/cache/plugins/shinken';
+    $cache_path = PRIVATE_PATH.'/cache/plugins/monitoring/shinken';
 
     if (is_dir($cache_path) === false) {
         if (mkdir($cache_path, 0755, $recursive = true) === false) {

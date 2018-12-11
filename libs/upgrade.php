@@ -222,72 +222,79 @@ function upgrade_090_to_095() {
 function upgrade_plugins($check_only = false) {
     global $DB, $LOGGER;
 
-    $plugins_path = PRIVATE_PATH.'/plugins';
+    $plugins_paths = array();
+    $plugins_paths['authentification'] = PRIVATE_PATH.'/plugins/authentification';
+    $plugins_paths['monitoring'] = PRIVATE_PATH.'/plugins/monitoring';
 
-    $entries = array();
-    if ($handle = opendir($plugins_path)) {
-        while (($entry = readdir($handle)) !== false) {
-            if ($entry[0] === '.') {
+    foreach ($plugins_paths as $plugintype => $plugins_path) {
+        $entries = array();
+
+        if ($handle = opendir($plugins_path)) {
+            while (($entry = readdir($handle)) !== false) {
+                if ($entry[0] === '.') {
+                    continue;
+                }
+
+                if (is_dir($plugins_path.'/'.$entry) === false) {
+                    continue;
+                }
+
+                if (is_file($plugins_path.'/'.$entry.'/version.php') === false) {
+                    $LOGGER->addInfo('Le fichier '.$entry.'/version.php n\'existe pas.');
+                    continue;
+                }
+
+                $entries[] = $entry;
+            }
+
+            closedir($handle);
+        }
+
+        foreach ($entries as $entry) {
+            $module = include($plugins_path.'/'.$entry.'/version.php');
+
+            if (is_object($module) === false) {
+                $LOGGER->addInfo('Le fichier '.$entry.'/version.php ne retourne pas un objet.');
                 continue;
             }
 
-            if (is_dir($plugins_path.'/'.$entry) === false) {
+            $module->codename = $entry;
+            $plugin = Plugin::get_record(array('codename' => $module->codename));
+
+            if ($plugin === false) {
+                // Install new plugin.
+                if ($check_only === true) {
+                    return true;
+                }
+
+                $plugin = new Plugin();
+                $plugin->name = $module->name;
+                $plugin->codename = $module->codename;
+                $plugin->type = $plugintype;
+                $plugin->version = $module->version;
+
+                $plugin->install();
+
+                $plugin->settings = $module->settings;
+                $plugin->install_settings();
+
                 continue;
             }
 
-            if (is_file($plugins_path.'/'.$entry.'/version.php') === false) {
-                $LOGGER->addInfo('Le fichier '.$entry.'/version.php n\'existe pas.');
-                continue;
+            if ($plugin->version !== $module->version) {
+                // Update plugin.
+                if ($check_only === true) {
+                    return true;
+                }
+
+                $plugin->name = $module->name;
+                $plugin->version = $module->version;
+
+                $plugin->update();
+
+                $plugin->settings = $module->settings;
+                $plugin->update_settings($overwrite = false);
             }
-
-            $entries[] = $entry;
-        }
-
-        closedir($handle);
-    }
-
-    foreach ($entries as $entry) {
-        $module = include($plugins_path.'/'.$entry.'/version.php');
-
-        if (is_object($module) === false) {
-            $LOGGER->addInfo('Le fichier '.$entry.'/version.php ne retourne pas un objet.');
-            continue;
-        }
-
-        $module->codename = $entry;
-        $plugin = Plugin::get_record(array('codename' => $module->codename));
-
-        if ($plugin === false) {
-            // Install new plugin.
-            if ($check_only === true) {
-                return true;
-            }
-
-            $plugin = new Plugin();
-            $plugin->name = $module->name;
-            $plugin->codename = $module->codename;
-            $plugin->version = $module->version;
-
-            $plugin->install();
-
-            $plugin->settings = $module->settings;
-            $plugin->install_settings();
-            continue;
-        }
-
-        if ($plugin->version !== $module->version) {
-            // Update plugin.
-            if ($check_only === true) {
-                return true;
-            }
-
-            $plugin->name = $module->name;
-            $plugin->version = $module->version;
-
-            $plugin->update();
-
-            $plugin->settings = $module->settings;
-            $plugin->update_settings($overwrite = false);
         }
     }
 

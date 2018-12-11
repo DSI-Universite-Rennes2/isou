@@ -9,7 +9,7 @@ $TITLE .= ' - Configuration de logiciels de monitoring utilisés en arrière-pla
 $submenus = array();
 $plugins = Plugin::get_records();
 foreach ($plugins as $plugin) {
-    $submenus[$plugin->codename] = new SimpleMenu($plugin->name, '', URL.'/index.php/configuration/plugins/'.$plugin->codename);
+    $submenus[$plugin->codename] = new SimpleMenu($plugin->name, '', URL.'/index.php/configuration/monitoring/'.$plugin->codename);
 }
 
 // Plugins.
@@ -26,10 +26,10 @@ $plugin = constant('PLUGIN_'.strtoupper($PAGE_NAME[2]));
 $submenus[$PAGE_NAME[2]]->selected = true;
 
 $plugin = Plugin::get_record(array('id' => $plugin));
-require PRIVATE_PATH.'/plugins/'.$plugin->codename.'/php/settings.php';
+require PRIVATE_PATH.'/plugins/monitoring/'.$plugin->codename.'/php/settings.php';
 
 $smarty->assign('submenus', $submenus);
 
-$smarty->assign('PLUGIN_TEMPLATE', $PLUGIN_TEMPLATE);
+$smarty->assign('MONITORING_TEMPLATE', $MONITORING_TEMPLATE);
 
-$SUBTEMPLATE = 'settings/plugins.tpl';
+$SUBTEMPLATE = 'settings/monitoring.tpl';

@@ -54,6 +54,17 @@ class Plugin {
             unset($options['codename']);
         }
 
+        if (isset($options['type']) === true) {
+            if (is_string($options['type']) === true) {
+                $conditions[] = 'p.type = :type';
+                $parameters[':type'] = $options['type'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'type\' doit être une chaine de caractères. Valeur donnée : '.var_export($options['type'], $return = true));
+            }
+
+            unset($options['type']);
+        }
+
         if (isset($options['active']) === true) {
             if (is_bool($options['active']) === true) {
                 $conditions[] = 'p.active = :active';
@@ -82,7 +93,7 @@ class Plugin {
         }
 
         // Construis la requête.
-        $sql = 'SELECT p.id, p.name, p.codename, p.active, p.version'.
+        $sql = 'SELECT p.id, p.name, p.codename, p.type, p.active, p.version'.
                 ' FROM plugins p'.
                 ' '.$sql_conditions.
                 ' ORDER BY UPPER(p.name)';
@@ -158,14 +169,15 @@ class Plugin {
         $params = array();
         $params[':name'] = $this->name;
         $params[':codename'] = $this->codename;
+        $params[':type'] = $this->type;
         $params[':version'] = $this->version;
 
         if (isset($this->id) === false) {
             // Install.
             $params[':active'] = 0;
 
-            $sql = 'INSERT INTO plugins(name, codename, active, version)'.
-                ' VALUES(:name, :codename, :active, :version)';
+            $sql = 'INSERT INTO plugins(name, codename, type, active, version)'.
+                ' VALUES(:name, :codename, :type, :active, :version)';
         } else {
             $params[':active'] = $this->active;
 

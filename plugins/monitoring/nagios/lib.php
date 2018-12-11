@@ -80,7 +80,7 @@ function plugin_nagios_update($plugin) {
     fclose($handle);
 
     // Enregistre le cache.
-    $cache_path = PRIVATE_PATH.'/cache/plugins/nagios';
+    $cache_path = PRIVATE_PATH.'/cache/plugins/monitoring/nagios';
 
     if (is_dir($cache_path) === false) {
         if (mkdir($cache_path, 0755, $recursive = true) === false) {

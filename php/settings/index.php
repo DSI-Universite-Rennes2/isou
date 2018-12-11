@@ -19,8 +19,8 @@ switch ($PAGE_NAME[1]) {
     case 'informations':
         require PRIVATE_PATH.'/php/settings/information.php';
         break;
-    case 'plugins':
-        require PRIVATE_PATH.'/php/settings/plugins.php';
+    case 'monitoring':
+        require PRIVATE_PATH.'/php/settings/monitoring.php';
         break;
     case 'notifications':
         require PRIVATE_PATH.'/php/settings/notifications.php';
@@ -33,7 +33,7 @@ switch ($PAGE_NAME[1]) {
 $services_menu = array();
 $services_menu['apparence'] = new Isou\Helpers\SimpleMenu('Apparence', 'Configuration de l\'apparence, des menus, etc', URL.'/index.php/configuration/apparence');
 $services_menu['authentification'] = new Isou\Helpers\SimpleMenu('Authentification', 'Gestion de l\'authentification', URL.'/index.php/configuration/authentification');
-$services_menu['plugins'] = new Isou\Helpers\SimpleMenu('Plugins', 'Gestion des plugins', URL.'/index.php/configuration/plugins');
+$services_menu['monitoring'] = new Isou\Helpers\SimpleMenu('Monitoring', 'Gestion des plugins de monitoring', URL.'/index.php/configuration/monitoring');
 $services_menu['notifications'] = new Isou\Helpers\SimpleMenu('Notifications', 'Gestion des notifications', URL.'/index.php/configuration/notifications');
 $services_menu['diagnostiques'] = new Isou\Helpers\SimpleMenu('Diagnostiques', 'Procédure de diagnostique', URL.'/index.php/configuration/diagnostiques');
 $services_menu['informations'] = new Isou\Helpers\SimpleMenu('Informations', 'Configuration avancée', URL.'/index.php/configuration/informations');

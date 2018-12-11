@@ -499,6 +499,7 @@ class Initialisation extends AbstractMigration {
         $table = $this->table('plugins');
         $table->addColumn('name', 'string')
             ->addColumn('codename', 'string')
+            ->addColumn('type', 'string')
             ->addColumn('active', 'integer')
             ->addColumn('version', 'string')
             ->addIndex(array('codename'), array('unique' => true))
@@ -512,6 +513,7 @@ class Initialisation extends AbstractMigration {
                     'id' => 1,
                     'name' => 'Isou',
                     'codename' => 'isou',
+                    'type' => 'monitoring',
                     'active' => 1,
                     'version' => '1.0.0',
                 ),
@@ -519,6 +521,7 @@ class Initialisation extends AbstractMigration {
                     'id' => 2,
                     'name' => 'Nagios',
                     'codename' => 'nagios',
+                    'type' => 'monitoring',
                     'active' => 0,
                     'version' => '1.0.0',
                 ),

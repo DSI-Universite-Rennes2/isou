@@ -13,7 +13,7 @@ if ($service === false) {
 }
 
 // Check cache.
-$cache_path = PRIVATE_PATH.'/cache/plugins/nagios';
+$cache_path = PRIVATE_PATH.'/cache/plugins/monitoring/nagios';
 if (is_readable($cache_path.'/services.json') === false) {
     $_SESSION['messages']['errors'][] = 'Le fichier "'.$cache_path.'/services.json" n\'existe pas ou ne peut être lu.<br />'.
        'Assurez-vous que le cron s\'exécute correctement.';

@@ -65,7 +65,7 @@ foreach ($plugins as $plugin) {
         continue;
     }
 
-    $plugin_library_file = PRIVATE_PATH.'/plugins/'.$plugin->codename.'/lib.php';
+    $plugin_library_file = PRIVATE_PATH.'/plugins/monitoring/'.$plugin->codename.'/lib.php';
     if (is_readable($plugin_library_file) === false) {
         $LOGGER->addWarning('Le fichier "'.$plugin_library_file.'" n\'existe pas.');
         continue;

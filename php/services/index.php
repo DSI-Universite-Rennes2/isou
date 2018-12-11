@@ -26,7 +26,7 @@ $plugin = constant('PLUGIN_'.strtoupper($PAGE_NAME[1]));
 $submenus[$PAGE_NAME[1]]->selected = true;
 
 $plugin = Plugin::get_record(array('id' => $plugin));
-require PRIVATE_PATH.'/plugins/'.$plugin->codename.'/index.php';
+require PRIVATE_PATH.'/plugins/monitoring/'.$plugin->codename.'/index.php';
 
 $smarty->assign('submenus', $submenus);
 

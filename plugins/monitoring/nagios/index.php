@@ -2,7 +2,7 @@
 
 use UniversiteRennes2\Isou\Plugin;
 
-$smarty->addTemplateDir(PRIVATE_PATH.'/plugins/nagios/html');
+$smarty->addTemplateDir(PRIVATE_PATH.'/plugins/monitoring/nagios/html');
 
 $plugin = Plugin::get_record(array('id' => PLUGIN_NAGIOS));
 
@@ -16,13 +16,13 @@ if (isset($PAGE_NAME[2]) === false) {
 
 switch ($PAGE_NAME[2]) {
     case 'edit':
-        require PRIVATE_PATH.'/plugins/nagios/php/edit.php';
+        require PRIVATE_PATH.'/plugins/monitoring/nagios/php/edit.php';
         break;
     case 'delete':
-        require PRIVATE_PATH.'/plugins/nagios/php/delete.php';
+        require PRIVATE_PATH.'/plugins/monitoring/nagios/php/delete.php';
         break;
     default:
-        require PRIVATE_PATH.'/plugins/nagios/php/list.php';
+        require PRIVATE_PATH.'/plugins/monitoring/nagios/php/list.php';
 }
 
 $smarty->assign('plugin', $plugin);

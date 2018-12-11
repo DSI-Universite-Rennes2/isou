@@ -6,4 +6,4 @@
 {/foreach}
 </ul>
 
-{include file=$PLUGIN_TEMPLATE}
+{include file=$MONITORING_TEMPLATE}
