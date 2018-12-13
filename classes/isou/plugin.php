@@ -190,11 +190,11 @@ class Plugin {
         $params = array();
         $params[':name'] = $this->name;
         $params[':codename'] = $this->codename;
-        $params[':type'] = $this->type;
         $params[':version'] = $this->version;
 
         if (isset($this->id) === false) {
             // Install.
+            $params[':type'] = $this->type;
             $params[':active'] = 0;
 
             $sql = 'INSERT INTO plugins(name, codename, type, active, version)'.
