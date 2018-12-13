@@ -123,12 +123,18 @@ class Plugin {
                 case 'array':
                     $this->settings->{$setting->key} = json_decode($setting->value);
                     break;
+                case 'boolean':
+                    $this->settings->{$setting->key} = boolval($setting->value);
+                    break;
                 case 'datetime':
                     try {
-                        $this->settings->{$setting->key} = new DateTime($setting->value);
+                        $this->settings->{$setting->key} = new \DateTime($setting->value);
                     } catch (Exception $exception) {
-                        $this->settings->{$setting->key} = new DateTime('1970-01-01');
+                        $this->settings->{$setting->key} = new \DateTime('1970-01-01');
                     }
+                    break;
+                case 'integer':
+                    $this->settings->{$setting->key} = intval($setting->value);
                     break;
                 case 'string':
                 default:
@@ -155,7 +161,22 @@ class Plugin {
             $params = array();
             $params[':key'] = $key;
             $params[':value'] = $value;
-            $params[':type'] = 'string';
+
+            if (is_array($value) === true) {
+                $params[':value'] = json_encode($value);
+                $params[':type'] = 'array';
+            } else if (is_bool($value) === true) {
+                $params[':value'] = intval($value);
+                $params[':type'] = 'boolean';
+            } else if ($value instanceof \DateTime) {
+                $params[':value'] = $value->format('Y-m-d\TH:i:s');
+                $params[':type'] = 'datetime';
+            } else if (is_integer($value) === true) {
+                $params[':type'] = 'integer';
+            } else {
+                $params[':type'] = 'string';
+            }
+
             $params[':idplugin'] = $this->id;
 
             $query->execute($params);
