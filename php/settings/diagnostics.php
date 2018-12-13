@@ -8,26 +8,17 @@ $errors['Base de données'] = array();
 $errors['Crons'] = array();
 
 // Vérification du fichier config.php.
-$config = file_get_contents(PRIVATE_PATH.'/config.php');
+$deprecated_constants = array();
+$deprecated_constants[] = 'NAME';
+$deprecated_constants[] = 'HEADER';
+$deprecated_constants[] = 'STATUSDAT_URL';
+$deprecated_constants[] = 'DB_STAT_PATH';
+$deprecated_constants[] = 'VERSION';
 
-if (preg_match('/define\(.NAME/', $config) === 1) {
-    $errors['Fichier config.php'][] = 'La constante <code>NAME</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
-}
-
-if (preg_match('/define\(.HEADER/', $config) === 1) {
-    $errors['Fichier config.php'][] = 'La constante <code>HEADER</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
-}
-
-if (preg_match('/define\(.STATUSDAT_URL/', $config) === 1) {
-    $errors['Fichier config.php'][] = 'La constante <code>STATUSDAT_URL</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
-}
-
-if (preg_match('/define\(.DB_STAT_PATH/', $config) === 1) {
-    $errors['Fichier config.php'][] = 'La constante <code>DB_STAT_PATH</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
-}
-
-if (preg_match('/define\(.VERSION/', $config) === 1) {
-    $errors['Fichier config.php'][] = 'La constante <code>VERSION</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
+foreach ($deprecated_constants as $deprecated_constant) {
+    if (defined($deprecated_constant) === true) {
+        $errors['Fichier config.php'][] = 'La constante <code>'.$deprecated_constant.'</code> est obsolète. Vous pouvez la supprimer du fichier config.php';
+    }
 }
 
 if (is_file(PUBLIC_PATH.'/config.php') === true) {
