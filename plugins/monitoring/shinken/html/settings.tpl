@@ -34,7 +34,7 @@
 					<label for="plugin-shinken-password">Mot de passe</label>
 				</dt>
 				<dd class="form-values-dd">
-					<input class="input-extra-large" size="40" type="password" name="plugin_shinken_password" id="plugin-shinken-password" value="{if $plugin->active === '1'}*****{/if}" />
+					<input class="input-extra-large" size="40" type="password" name="plugin_shinken_password" id="plugin-shinken-password" value="{if empty($plugin->settings->thruk_password) === false}* * * * *{/if}" />
 				</dd>
 			</div>
 		</dl>

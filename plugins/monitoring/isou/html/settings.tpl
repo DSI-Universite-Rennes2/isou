@@ -7,7 +7,7 @@
 
 		<dl>
 			<div class="form-group">
-				<dt class="form-topics-dt" id="plugin-isou-enable"i>Activer</dt>
+				<dt class="form-topics-dt" id="plugin-isou-enable">Activer</dt>
 				<dd class="form-values-dd">
 					{html_radios aria-labelledby="plugin-isou-enable" name="plugin_isou_enable" options=$options_yes_no selected=$plugin->active disabled="1"}
 				</dd>

@@ -1,4 +1,4 @@
-<h1 class="sr-only">Services</h1>
+<h2 class="sr-only">Monitoring</h2>
 
 <ul class="nav nav-tabs">
 {foreach $submenus as $menu}

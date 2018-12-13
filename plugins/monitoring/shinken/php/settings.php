@@ -39,7 +39,7 @@ if (isset($_POST['plugin_shinken_username']) === true) {
 }
 
 if (isset($_POST['plugin_shinken_password']) === true) {
-    if ($plugin->settings->thruk_password !== $_POST['plugin_shinken_password'] && $_POST['plugin_shinken_password'] !== '*****') {
+    if ($plugin->settings->thruk_password !== $_POST['plugin_shinken_password'] && $_POST['plugin_shinken_password'] !== '* * * * *') {
         $plugin->settings->thruk_password = $_POST['plugin_shinken_password'];
         $plugin->update_settings($overwrite = true);
 
