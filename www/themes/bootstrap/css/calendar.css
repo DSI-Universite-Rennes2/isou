@@ -1,3 +1,17 @@
 .events-li:target {
     background-color: #FFC0CB;
 }
+
+#calendar td,
+#calendar .panel-heading {
+    padding: 0;
+}
+
+#calendar .panel-body {
+    min-height: 70px;
+    padding: 5px;
+}
+
+#calendar .panel > .panel-heading {
+    border-color: #ddd;
+}

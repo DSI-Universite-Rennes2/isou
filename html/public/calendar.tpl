@@ -23,13 +23,13 @@
 	{* Entêtes du calendrier. *}
 	<thead>
 		<tr>
-			<th>Lundi</th>
-			<th>Mardi</th>
-			<th>Mercredi</th>
-			<th>Jeudi</th>
-			<th>Vendredi</th>
-			<th>Samedi</th>
-			<th>Dimanche</th>
+			<th class="col-md-1">Lundi</th>
+			<th class="col-md-1">Mardi</th>
+			<th class="col-md-1">Mercredi</th>
+			<th class="col-md-1">Jeudi</th>
+			<th class="col-md-1">Vendredi</th>
+			<th class="col-md-1">Samedi</th>
+			<th class="col-md-1">Dimanche</th>
 		</tr>
 	</thead>
 
@@ -38,28 +38,32 @@
 	{foreach $calendar as $week}
 		<tr>
 		{foreach $week as $day}
-			<td {if $day->datetime < $now}class="active"{else if $day->datetime === $now}class="info"{/if}">
-				<span id="date-{$day->datetime|date_format:'%d-%B-%Y'}">{$day->datetime|date_format:$day->strftime}</span>
-				{if isset($day->services[0]) === true}
-				<ul>
-					{foreach $day->services as $service}
-					<li>
-						{if $service->event->enddate === null}
-						<div>{$service->name} - à partir de {$service->event->startdate->format('H\hi')}.</div>
+			<td class="panel {if $day->datetime < $now}panel-default{else if $day->datetime === $now}panel-info{/if}">
+					<div class="panel-heading">
+						<span class="small" id="date-{$day->datetime|date_format:'%d-%B-%Y'}">{$day->datetime|date_format:$day->strftime}</span>
+					</div>
+					<div class="panel-body">
+						{if isset($day->services[0]) === true}
+						<ul>
+							{foreach $day->services as $service}
+							<li>
+								{if $service->event->enddate === null}
+								<div>{$service->name} - à partir de {$service->event->startdate->format('H\hi')}.</div>
+								{else}
+								<div>{$service->name} - de {$service->event->startdate->format('H\hi')} à {$service->event->enddate->format('H\hi')}.</div>
+								{/if}
+								{if empty($service->event->description) === false}
+								<div class="isou-calendar-description">{$service->event->description}</div>
+								{/if}
+							</li>
+							{/foreach}
+						</ul>
 						{else}
-						<div>{$service->name} - de {$service->event->startdate->format('H\hi')} à {$service->event->enddate->format('H\hi')}.</div>
+							{if $day->datetime === $now}
+								<p>Aucune intervention prévue</p>
+							{/if}
 						{/if}
-						{if empty($service->event->description) === false}
-						<div class="isou-calendar-description">{$service->event->description}</div>
-						{/if}
-					</li>
-					{/foreach}
-				</ul>
-				{else}
-					{if $day->datetime === $now}
-						<p>Aucune intervention prévue</p>
-					{/if}
-				{/if}
+					</div>
 			</td>
 		{/foreach}
 		</tr>
