@@ -12,16 +12,6 @@ define('DEBUG', false);
 // Définis si l'application est en mode developpement (désactive la phase d'authentification).
 define('DEV', false);
 
-// Définis le nom de domaine du serveur CAS (sans protocole le https://).
-define('CAS_URL', '');
-
-// Définis l'URI du serveur CAS.
-// Exemple: si votre hôte CAS est de type auth.example.com/CAS, saisir 'CAS'.
-define('CAS_URI', '');
-
-// Définis le port du serveur CAS.
-define('CAS_PORT', 443);
-
 // Définis la locale utilisée par l'application.
 setlocale(LC_TIME, 'fr_FR.UTF8');
 date_default_timezone_set('Europe/Paris');

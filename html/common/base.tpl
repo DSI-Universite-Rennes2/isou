@@ -28,14 +28,10 @@
 		<aside class="isou-top-aside text-right">
 			<h1 class="sr-only">Authentification</h1>
 			<p class="isou-top-aside-p">
-				{if isset($smarty.session.FIRSTNAME) === true || isset($smarty.session.phpCAS.user) === true}
-					{if isset($smarty.session.FIRSTNAME) === true}
-						<span>{$smarty.session.FIRSTNAME} {$smarty.session.LASTNAME} (<a href="{$smarty.const.URL}/index.php/deconnexion">déconnexion</a>)</span>
-					{else}
-						<span>{$smarty.session.phpCAS.user} (<a href="{$smarty.const.URL}/index.php/deconnexion">déconnexion</a>)</span>
-					{/if}
-				{else}
+				{if $USER === false}
 					<span>Non connecté (<a href="{$smarty.const.URL}/index.php/connexion">connexion</a>)</span>
+				{else}
+					<span>{$USER} (<a href="{$smarty.const.URL}/index.php/deconnexion">déconnexion</a>)</span>
 				{/if}
 			</p>
 		</aside>

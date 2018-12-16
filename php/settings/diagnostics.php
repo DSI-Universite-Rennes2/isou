@@ -11,6 +11,9 @@ $errors['Crons'] = array();
 $deprecated_constants = array();
 $deprecated_constants[] = 'NAME';
 $deprecated_constants[] = 'HEADER';
+$deprecated_constants[] = 'CAS_URL';
+$deprecated_constants[] = 'CAS_PORT';
+$deprecated_constants[] = 'CAS_URI';
 $deprecated_constants[] = 'STATUSDAT_URL';
 $deprecated_constants[] = 'DB_STAT_PATH';
 $deprecated_constants[] = 'VERSION';
@@ -29,7 +32,9 @@ if (is_file(PUBLIC_PATH.'/config.php') === true) {
 $old_databases = array();
 
 $db_path = dirname(substr(DB_PATH, strlen('sqlite:')));
-if ($handle = opendir($db_path)) {
+
+$handle = opendir($db_path);
+if ($handle !== false) {
     while (($entry = readdir($handle)) !== false) {
         if ($entry[0] === '.') {
             continue;

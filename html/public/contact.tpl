@@ -1,6 +1,6 @@
 <h1 class="sr-only">Contact</h1>
 
-{if isset($IS_ADMIN, $smarty.get.edit) === true}
+{if isset($USER->admin, $smarty.get.edit) === true && empty($USER->admin) === false}
 	<form id="contact" action="{$smarty.const.URL}/index.php/contact/edit#contact" method="post">
 		{include file="common/messages_form.tpl"}
 		<p>
@@ -13,7 +13,7 @@
 		</p>
 	</form>
 {else}
-	{if isset($IS_ADMIN) === true}
+	{if isset($USER->admin) === true && empty($USER->admin) === false}
 		<p class="text-right"><a class="btn btn-primary" href="{$smarty.const.URL}/index.php/contact/edit#contact">éditer la page</a></p>
 
 		{include file="common/messages_session.tpl"}

@@ -30,6 +30,9 @@ class Initialisation extends AbstractMigration {
         // Plugins table.
         $this->setup_plugins();
 
+        // Users table.
+        $this->setup_users();
+
         // Announcement table.
         $this->setup_announcement();
 
@@ -525,6 +528,14 @@ class Initialisation extends AbstractMigration {
                     'active' => 0,
                     'version' => '1.0.0',
                 ),
+                array(
+                    'id' => 3,
+                    'name' => 'Authentification locale',
+                    'codename' => 'manual',
+                    'type' => 'authentification',
+                    'active' => 1,
+                    'version' => '1.0.0',
+                ),
             );
         $table->insert($rows);
         $table->saveData();
@@ -654,4 +665,43 @@ class Initialisation extends AbstractMigration {
         $table->insert($rows);
         $table->saveData();
     }
+
+    public function setup_users() {
+        echo PHP_EOL.' **  Tables des utilisateurs...'.PHP_EOL;
+
+        // Create "users" table.
+        echo ' ==   - Crée la table "users".'.PHP_EOL;
+        $table = $this->table('users');
+        $table->addColumn('authentification', 'string')
+            ->addColumn('username', 'string')
+            ->addColumn('password', 'string')
+            ->addColumn('firstname', 'string')
+            ->addColumn('lastname', 'string')
+            ->addColumn('email', 'string')
+            ->addColumn('admin', 'integer')
+            ->addColumn('lastaccess', 'string')
+            ->addColumn('timecreated', 'string')
+            ->addIndex(array('authentification', 'username'), array('unique' => true))
+            ->create();
+
+        // Insert "users" data.
+        echo ' ==   - Insère les données dans la table "users".'.PHP_EOL;
+        $rows = array(
+                array(
+                    'id' => 1,
+                    'authentification' => 'manual',
+                    'username' => 'isou',
+                    'password' => '$2y$10$nSpMR6qncUyMSZfjrix5Du7Rzi1k5hCnDMPRse4mvDhWaZzYwnEV.', // Default: isou.
+                    'firstname' => '',
+                    'lastname' => 'Misou-Mizou',
+                    'email' => '',
+                    'admin' => 1,
+                    'lastaccess' => null,
+                    'timecreated' => strftime('%FT%T'),
+                ),
+            );
+        $table->insert($rows);
+        $table->saveData();
+    }
+
 }

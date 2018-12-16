@@ -1,54 +1,37 @@
 <?php
 
+use Isou\Helpers\SimpleMenu;
+use UniversiteRennes2\Isou\Plugin;
+
 $TITLE .= ' - Configuration de l\'authentification';
 
-$cas_admin_usernames = implode(PHP_EOL, $CFG['authentification_cas_admin_usernames']);
+if (isset($PAGE_NAME[2]) === false) {
+    $PAGE_NAME[2] = 'manual';
+}
 
-$options_yes_no = array(
-1 => 'yes',
-0 => 'no',
-);
+$submenus = array();
+$modules = Plugin::get_records(array('type' => 'authentification'));
+foreach ($modules as $module) {
+    // Set up menu.
+    $submenus[$module->codename] = new SimpleMenu($module->name, '', URL.'/index.php/configuration/authentification/'.$module->codename);
 
-$auth_cas = array(
-'authentification_cas_enabled',
-'authentification_cas_admin_usernames',
-);
-$auth_manual = array(
-'authentification_manual_enabled',
-'authentification_manual_path',
-'authentification_manual_password',
-);
-
-$auths = array_merge($auth_cas, $auth_manual);
-
-foreach ($auths as $key) {
-    if (isset($_POST[$key]) && $_POST[$key] !== $CFG[$key]) {
-        if ($key === 'authentification_cas_admin_usernames') {
-            $CFG['authentification_cas_admin_usernames'] = array();
-            foreach (explode(PHP_EOL, $_POST[$key]) as $user) {
-                $user = trim($user);
-                if (!empty($user)) {
-                    $CFG['authentification_cas_admin_usernames'][$user] = htmlentities($user, ENT_QUOTES, 'UTF-8');
-                }
-            }
-
-            $CFG['authentification_cas_admin_usernames'] = array_values($CFG['authentification_cas_admin_usernames']);
-
-            $value = json_encode($CFG['authentification_cas_admin_usernames']);
-
-            $cas_admin_usernames = implode(PHP_EOL, $CFG['authentification_cas_admin_usernames']);
-        } else {
-            $value = htmlentities($_POST[$key], ENT_QUOTES, 'UTF-8');
-        }
-
-        if (set_configuration($key, $value)) {
-            $CFG[$key] = $value;
-        }
+    // Set up page.
+    if ($module->codename === $PAGE_NAME[2]) {
+        $plugin = clone $module;
+        $submenus[$module->codename]->selected = true;
     }
 }
 
-$smarty->assign('options_yes_no', $options_yes_no);
-$smarty->assign('cas_admin_usernames', $cas_admin_usernames);
+// Set up fallback page.
+if (isset($plugin) === false) {
+    $plugin = Plugin::get_record(array('codename' => 'manual'));
+}
 
+// Load page.
+require PRIVATE_PATH.'/plugins/authentification/'.$plugin->codename.'/php/settings.php';
+
+$smarty->assign('submenus', $submenus);
+
+$smarty->assign('AUTHENTIFICATION_TEMPLATE', $AUTHENTIFICATION_TEMPLATE);
 
 $SUBTEMPLATE = 'settings/authentification.tpl';
