@@ -196,20 +196,24 @@ function cron_regenerate_json() {
 }
 
 /**
-  * Envoie une notification quotidienne des évènements ayant eu lieu.
+  * Envoie un rapport quotidien des évènements ayant eu lieu la veille.
   *
   * @return void
   */
-function cron_notify() {
-    global $DB, $LOGGER;
+function cron_report() {
+    global $CFG, $DB, $LOGGER;
+
+    if ($CFG['report_enabled'] === '0') {
+        return;
+    }
 
     $now = new DateTime();
 
-    $daily_cron_time = explode(':', $CFG['daily_cron_hour']);
+    $daily_cron_time = explode(':', $CFG['report_hour']);
     $daily_cron_time = mktime($daily_cron_time[0], $daily_cron_time[1]);
 
-    // Si on n'est pas le même jour que $CFG['last_daily_cron_update'].
-    if ($now->format('d') !== $CFG['last_daily_cron_update']->format('d') && $now->getTimestamp() >= $daily_cron_time) {
+    // Si on n'est pas le même jour que $CFG['last_daily_report'].
+    if ($now->format('d') !== $CFG['last_daily_report']->format('d') && $now->getTimestamp() >= $daily_cron_time) {
         // Liste des services forcés.
         $services = Service::get_records(array('locked' => true));
 
@@ -222,7 +226,7 @@ function cron_notify() {
         // Mets à jour le témoin de dernière notification dans la base de données.
         $sql = "UPDATE configuration SET value=? WHERE key=?";
         $query = $DB->prepare($sql);
-        $query->execute(array(strftime('%FT%T'), 'last_daily_cron_update'));
+        $query->execute(array(strftime('%FT%T'), 'last_daily_report'));
     }
 }
 

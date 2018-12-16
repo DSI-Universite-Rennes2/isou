@@ -45,7 +45,7 @@
 	</div>
 
 	<div class="form-information-dl-div">
-		<dt class="form-topics-dt">Dernier lancement du cron quotidien</dt>
-		<dd class="form-values-dd">{if $CFG.last_daily_cron_update->getTimestamp()|date_format:'%F' === '1970-01-01'}jamais{else}{$CFG.last_daily_cron_update->getTimestamp()|date_format:'%c'}{/if}</dd>
+		<dt class="form-topics-dt">Dernier rapport quotidien envoyé</dt>
+		<dd class="form-values-dd">{if $CFG.last_daily_report->getTimestamp()|date_format:'%F' === '1970-01-01'}jamais{else}{$CFG.last_daily_report->getTimestamp()|date_format:'%c'}{/if}</dd>
 	</div>
 </dl>

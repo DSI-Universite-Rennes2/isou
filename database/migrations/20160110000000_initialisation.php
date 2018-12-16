@@ -165,7 +165,7 @@ class Initialisation extends AbstractMigration {
                     'type' => 'datetime',
                 ),
                 array(
-                    'key' => 'last_daily_cron_update',
+                    'key' => 'last_daily_report',
                     'value' => 0,
                     'type' => 'datetime',
                 ),
@@ -180,22 +180,22 @@ class Initialisation extends AbstractMigration {
                     'type' => 'string',
                 ),
                 array(
-                    'key' => 'notification_enabled',
+                    'key' => 'report_enabled',
                     'value' => 0,
                     'type' => 'string',
                 ),
                 array(
-                    'key' => 'notification_hour',
+                    'key' => 'report_hour',
                     'value' => '06:00',
                     'type' => 'string',
                 ),
                 array(
-                    'key' => 'notification_receivers',
+                    'key' => 'report_receiver',
                     'value' => '',
-                    'type' => 'array',
+                    'type' => 'string',
                 ),
                 array(
-                    'key' => 'notification_sender',
+                    'key' => 'report_sender',
                     'value' => '',
                     'type' => 'string',
                 ),

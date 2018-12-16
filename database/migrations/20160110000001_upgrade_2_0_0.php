@@ -108,22 +108,31 @@ class Upgrade200 extends AbstractMigration {
 
                 switch ($row['key']) {
                     case 'admin_mails':
-                        $data[':key'] = 'notification_receivers';
+                        $data[':key'] = 'report_receiver';
+                        $data[':value'] = '';
+
+                        $admin_mails = json_decode($row['value']);
+                        if (isset($admin_mails[0]) === true && filter_var($admin_mails[0], FILTER_VALIDATE_EMAIL) !== false) {
+                            $data[':value'] = $admin_mails[0];
+                        }
                         break;
                     case 'admin_users':
                         $data[':key'] = 'authentification_cas_admin_usernames';
                         break;
                     case 'daily_cron_hour':
-                        $data[':key'] = 'notification_hour';
+                        $data[':key'] = 'report_hour';
                         break;
                     case 'last_check_update':
                     case 'last_cron_update':
-                    case 'last_daily_cron_update':
                     case 'last_update':
                         $data[':value'] = strftime('%FT%T', $row['value']);
                         break;
+                    case 'last_daily_cron_update':
+                        $data[':key'] = 'last_daily_report';
+                        $data[':value'] = strftime('%FT%T', $row['value']);
+                        break;
                     case 'local_mail':
-                        $data[':key'] = 'notification_sender';
+                        $data[':key'] = 'report_sender';
                         break;
                     case 'local_password':
                         $data[':key'] = 'authentification_manual_password';
