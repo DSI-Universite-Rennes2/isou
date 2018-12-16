@@ -210,6 +210,11 @@ class Initialisation extends AbstractMigration {
                     'type' => 'string',
                 ),
                 array(
+                    'key' => 'site_url',
+                    'value' => '',
+                    'type' => 'string',
+                ),
+                array(
                     'key' => 'theme',
                     'value' => 'bootstrap',
                     'type' => 'string',

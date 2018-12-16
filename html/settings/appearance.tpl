@@ -3,21 +3,28 @@
 	{include file="common/messages_form.tpl"}
 
 	<dl>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
+		<div class="form-group">
+			<dt>
 				<label for="site-name">Nom du service</label>
 			</dt>
-			<dd class="form-values-dd">
-				<input class="input-extra-large" type="text" name="site_name" id="site-name" value="{$CFG.site_name}" />
+			<dd>
+				<input class="form-control" id="site-name" name="site_name" type="text" value="{$CFG.site_name}" />
 			</dd>
 		</div>
-
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
+		<div class="form-group">
+			<dt>
 				<label for="site-header">Titre ou entête du service</label>
 			</dt>
-			<dd class="form-values-dd">
-				<input class="input-extra-large" type="text" name="site_header" id="site-header" value="{$CFG.site_header}" />
+			<dd>
+				<input class="form-control" id="site-header" name="site_header" type="text" value="{$CFG.site_header}" />
+			</dd>
+		</div>
+		<div class="form-group">
+			<dt>
+				<label for="site-url">URL du service</label>
+			</dt>
+			<dd>
+				<input class="form-control" id="site-url" name="site_url" type="text" value="{$CFG.site_url}" />
 			</dd>
 		</div>
 	</dl>
