@@ -41,11 +41,11 @@
 <dl>
 	<div class="form-information-dl-div">
 		<dt class="form-topics-dt">Dernier lancement du cron</dt>
-		<dd class="form-values-dd">{$CFG.last_cron_update->getTimestamp()|date_format:'%c'}</dd>
+		<dd class="form-values-dd">{if $CFG.last_cron_update->getTimestamp()|date_format:'%F' === '1970-01-01'}jamais{else}{$CFG.last_cron_update->getTimestamp()|date_format:'%c'}{/if}</dd>
 	</div>
 
 	<div class="form-information-dl-div">
 		<dt class="form-topics-dt">Dernier lancement du cron quotidien</dt>
-		<dd class="form-values-dd">{$CFG.last_daily_cron_update->getTimestamp()|date_format:'%c'}</dd>
+		<dd class="form-values-dd">{if $CFG.last_daily_cron_update->getTimestamp()|date_format:'%F' === '1970-01-01'}jamais{else}{$CFG.last_daily_cron_update->getTimestamp()|date_format:'%c'}{/if}</dd>
 	</div>
 </dl>

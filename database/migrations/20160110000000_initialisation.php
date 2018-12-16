@@ -156,7 +156,7 @@ class Initialisation extends AbstractMigration {
                 ),
                 array(
                     'key' => 'last_check_update',
-                    'value' => 0,
+                    'value' => strftime('%FT%T'),
                     'type' => 'datetime',
                 ),
                 array(
@@ -171,7 +171,7 @@ class Initialisation extends AbstractMigration {
                 ),
                 array(
                     'key' => 'last_update',
-                    'value' => 0,
+                    'value' => strftime('%FT%T'),
                     'type' => 'datetime',
                 ),
                 array(
