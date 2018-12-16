@@ -57,7 +57,7 @@ class Upgrade200 extends AbstractMigration {
                 $data = array(
                     'message' => $row['message'],
                     'visible' => $row['afficher'],
-                    'author' => '',
+                    'author' => 'isou',
                     'last_modification' => strftime('%FT%T'),
                     );
                 $table->insert($data);
