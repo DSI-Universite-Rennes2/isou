@@ -33,6 +33,9 @@ class Initialisation extends AbstractMigration {
         // Users table.
         $this->setup_users();
 
+        // Subscriptions table.
+        $this->setup_subscriptions();
+
         // Announcement table.
         $this->setup_announcement();
 
@@ -177,6 +180,11 @@ class Initialisation extends AbstractMigration {
                 array(
                     'key' => 'menu_default',
                     'value' => 'actualite',
+                    'type' => 'string',
+                ),
+                array(
+                    'key' => 'notifications_enabled',
+                    'value' => 0,
                     'type' => 'string',
                 ),
                 array(
@@ -671,6 +679,19 @@ class Initialisation extends AbstractMigration {
         $table->saveData();
     }
 
+    public function setup_subscriptions() {
+        echo PHP_EOL.' **  Tables des inscriptions aux notifications web...'.PHP_EOL;
+
+        // Create "subscriptions" table.
+        echo ' ==   - Crée la table "subscriptions".'.PHP_EOL;
+        $table = $this->table('subscriptions');
+        $table->addColumn('endpoint', 'string')
+            ->addColumn('public_key', 'string')
+            ->addColumn('authentification_token', 'string')
+            ->addColumn('content_encoding', 'string')
+            ->create();
+    }
+
     public function setup_users() {
         echo PHP_EOL.' **  Tables des utilisateurs...'.PHP_EOL;
 
@@ -708,5 +729,4 @@ class Initialisation extends AbstractMigration {
         $table->insert($rows);
         $table->saveData();
     }
-
 }

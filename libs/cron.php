@@ -196,6 +196,65 @@ function cron_regenerate_json() {
 }
 
 /**
+  * Envoie une notification quotidienne des évènements ayant eu lieu.
+  *
+  * @return void
+  */
+function cron_notify() {
+    global $CFG, $DB, $LOGGER;
+
+    if ($CFG['notifications_enabled'] === '0') {
+        return;
+    }
+
+    if (empty($CFG['site_url']) === true) {
+        return;
+    }
+
+    $services = Service::get_records(array('olderOrEqual' => TIME));
+
+    if (isset($services[0]) === true) {
+        return;
+    }
+
+    $messages = array();
+    foreach ($services as $service) {
+        if (in_array($service->state, array(State::OK, State::CLOSED), $strict = true) === true) {
+            continue;
+        }
+
+        $messages[] = '- '.$service->name;
+    }
+
+    if (isset($messages[0]) === false) {
+        return;
+    }
+
+    $message = 'Services perturbés :'.PHP_EOL.
+        implode(PHP_EOL, $messages);
+
+    $subscriptions = Subscription::get_records();
+    if (isset($subscriptions[0]) === true) {
+        return;
+    }
+
+    $title = $CFG['site_name'];
+    $url = $CFG['site_url'];
+    $icon = $CFG['site_url'].'/themes/'.$CFG['theme'].'/favicon.png';
+
+    $notification = new Notification($title, $message, $url, $icon);
+    $webpush = $notification->get_webpush();
+
+    foreach ($subscriptions as $subscription) {
+        $result = $subscription->notify($webpush);
+
+        if (isset($result['expired']) === true && $result['expired'] === true) {
+            $subscription->delete();
+        }
+    }
+}
+
+/**
   * Envoie un rapport quotidien des évènements ayant eu lieu la veille.
   *
   * @return void

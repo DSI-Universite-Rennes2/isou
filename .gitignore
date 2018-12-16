@@ -21,6 +21,8 @@ cache/
 config.php
 cron.pid
 database/*.sqlite3
+/database/vapid_private.key
+/database/vapid_public.key
 log/*
 upgrade/LOCK_UPDATE
 status.dat

@@ -28,6 +28,10 @@ define('CACHE_PATH', PRIVATE_PATH.'/cache');
 define('LOGS_PATH', PRIVATE_PATH.'/logs');
 define('DB_PATH', 'sqlite:'.PRIVATE_PATH.'/database/isou.sqlite3');
 
+// Définis les constantes contenant le chemin d'accès aux clés VAPID.
+define('VAPID_PRIVATE_KEY', PRIVATE_PATH.'/database/vapid_private.key');
+define('VAPID_PUBLIC_KEY', PRIVATE_PATH.'/database/vapid_public.key');
+
 // Charge les fonctions et bibliothèques tierces.
 require PRIVATE_PATH.'/common/functions.php';
 require PRIVATE_PATH.'/vendor/autoload.php';

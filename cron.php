@@ -97,6 +97,11 @@ $sql = "UPDATE configuration SET value = :value WHERE key = :key";
 $query = $DB->prepare($sql);
 $query->execute(array(':value' => strftime('%FT%T'), ':key' => 'last_cron_update'));
 
+// Notifications.
+if ($CFG['notifications_enabled'] === '1') {
+    cron_notify();
+}
+
 // Report.
 if ($CFG['report_enabled'] === '1') {
     cron_report();

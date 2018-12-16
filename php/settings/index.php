@@ -24,6 +24,9 @@ switch ($PAGE_NAME[1]) {
     case 'monitoring':
         require PRIVATE_PATH.'/php/settings/monitoring.php';
         break;
+    case 'notifications':
+        require PRIVATE_PATH.'/php/settings/notifications.php';
+        break;
     case 'rapport':
         require PRIVATE_PATH.'/php/settings/report.php';
         break;
@@ -40,6 +43,7 @@ $services_menu['apparence'] = new SimpleMenu('Apparence', 'Configuration de l\'a
 $services_menu['authentification'] = new SimpleMenu('Authentification', 'Gestion de l\'authentification', URL.'/index.php/configuration/authentification');
 $services_menu['utilisateurs'] = new SimpleMenu('Utilisateurs', 'Afficher les utilisateurs', URL.'/index.php/configuration/utilisateurs');
 $services_menu['monitoring'] = new SimpleMenu('Monitoring', 'Gestion des plugins de monitoring', URL.'/index.php/configuration/monitoring');
+$services_menu['notifications'] = new SimpleMenu('Notifications', 'Gestion des notifications', URL.'/index.php/configuration/notifications');
 $services_menu['rapport'] = new SimpleMenu('Rapport', 'Gestion du rapport quotidien', URL.'/index.php/configuration/rapport');
 $services_menu['diagnostiques'] = new SimpleMenu('Diagnostiques', 'Procédure de diagnostique', URL.'/index.php/configuration/diagnostiques');
 $services_menu['informations'] = new SimpleMenu('Informations', 'Configuration avancée', URL.'/index.php/configuration/informations');
