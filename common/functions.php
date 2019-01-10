@@ -47,7 +47,7 @@ function get_base_url($force_https = false) {
         $_SERVER['SERVER_NAME'] = $_SERVER["HTTP_X_FORWARDED_HOST"];
     }
 
-    if (isset($_SERVER['SERVER_PORT']) === true && in_array($_SERVER['SERVER_PORT'], array(80, 443), true) === false) {
+    if (isset($_SERVER['SERVER_PORT']) === true && in_array($_SERVER['SERVER_PORT'], array('80', '443'), $strict = true) === false) {
         $_SERVER['SERVER_NAME'] .= ':'.$_SERVER['SERVER_PORT'];
     }
 
