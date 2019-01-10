@@ -1,5 +1,5 @@
 {if empty($plugin->active) === true}
-	<p class="alert alert-info">Le plugin {$plugin->name} n'est pas activé dans la <a href="{$smarty.const.URL}/index.php/configuration/plugins/{$plugin->codename}">page de configuration</a>.</p>
+	<p class="alert alert-info">Le plugin {$plugin->name} n'est pas activé dans la <a href="{$smarty.const.URL}/index.php/configuration/monitoring/{$plugin->codename}">page de configuration</a>.</p>
 {else}
 	{include file="common/messages_session.tpl"}
 

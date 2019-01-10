@@ -3,7 +3,7 @@
 <p class="alert alert-info text-center">Liste des interruptions en cours.</p>
 
 {if count($categories) === 0}
-	<p class="alert alert-success">Aucun évènement à signaler</p>
+	<p class="alert alert-success">Aucun évènement en cours.</p>
 {else}
 	<aside id="isou-news-legend-aside">
 		<h1 id="isou-news-legend-h1">Légende</h1>
