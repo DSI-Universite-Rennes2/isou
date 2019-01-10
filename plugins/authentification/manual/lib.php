@@ -41,7 +41,7 @@ function authentification_login($plugin) {
   *
   * @return void
   */
-function authentification_logout() {
+function authentification_logout($plugin = null) {
     $_SESSION = array();
 
     if (isset($_COOKIE[session_name()]) === true) {

@@ -36,13 +36,15 @@ switch ($PAGE_NAME[0]) {
     case 'deconnexion':
         if (isset($USER) === true && $USER !== false) {
             $authentification_lib = PRIVATE_PATH.'/plugins/authentification/'.$USER->authentification.'/lib.php';
+
+            $plugin = Plugin::get_record(array('type' => 'authentification', 'codename' => $USER->authentification));
             if (is_file($authentification_lib) === true) {
                 require $authentification_lib;
             } else {
                 require PRIVATE_PATH.'/plugins/authentification/manual/lib.php';
             }
 
-            authentification_logout();
+            authentification_logout($plugin);
         }
         break;
 }

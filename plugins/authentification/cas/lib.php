@@ -1,5 +1,7 @@
 <?php
 
+use UniversiteRennes2\Isou\User;
+
 /**
   * Authentifie l'utilisateur ou redirige vers le formulaire d'authentification CAS.
   *
@@ -14,6 +16,12 @@ function authentification_login($plugin) {
     phpCAS::client($plugin->settings->cas_protocol, $plugin->settings->cas_host, $plugin->settings->cas_port, $plugin->settings->cas_path);
 
     if (isset($_SESSION['username']) === false) {
+        if (empty($plugin->settings->cas_certificate_path) === false) {
+            phpCAS::setCasServerCACert($plugin->settings->cas_certificate_path);
+        } else {
+            phpCAS::setNoCasServerValidation();
+        }
+
         phpCAS::forceAuthentication();
     }
 
@@ -25,6 +33,7 @@ function authentification_login($plugin) {
         $USER->authentification = 'cas';
         $USER->username = $_SESSION['username'];
         $USER->admin = '0';
+        $USER->lastaccess = $this->timecreated;
 
         try {
             $USER->save();
@@ -37,7 +46,7 @@ function authentification_login($plugin) {
     $settings = (empty($plugin->settings->cas_ldap_uri) === false && empty($plugin->settings->cas_ldap_dn) === false && empty($plugin->settings->cas_ldap_filter) === false);
     if (isset($_SESSION['username']) === true && $settings === true) {
         $ldap_connect = ldap_connect($plugin->settings->cas_ldap_uri);
-        if ($ldap !== false) {
+        if ($ldap_connect !== false) {
             if (empty($plugin->settings->cas_ldap_username) === false) {
                 if (empty($plugin->settings->cas_ldap_password) === true) {
                     $plugin->settings->cas_ldap_password = null;
@@ -84,6 +93,11 @@ function authentification_login($plugin) {
             }
         }
     }
+
+    if (isset($_POST['errors'][0]) === false) {
+        header('Location: '.URL);
+        exit(0);
+    }
 }
 
 /**
@@ -94,12 +108,16 @@ function authentification_login($plugin) {
   * @return void
   */
 function authentification_logout($plugin) {
-    $_SESSION = array();
+    phpCAS::setVerbose($plugin->settings->cas_verbose);
 
-    if (isset($_COOKIE[session_name()]) === true) {
-        setcookie(session_name(), '', time() - 42000, '/');
+    // Initialize phpCAS client.
+    phpCAS::client($plugin->settings->cas_protocol, $plugin->settings->cas_host, $plugin->settings->cas_port, $plugin->settings->cas_path);
+
+    if (empty($plugin->settings->cas_certificate_path) === false) {
+        phpCAS::setCasServerCACert($plugin->settings->cas_certificate_path);
+    } else {
+        phpCAS::setNoCasServerValidation();
     }
-    session_destroy();
 
     if (empty($plugin->settings->cas_logout_redirection) === true) {
         phpCAS::logout();

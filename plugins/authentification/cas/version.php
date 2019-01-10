@@ -12,6 +12,7 @@ $plugin->settings->cas_protocol = CAS_VERSION_2_0;
 $plugin->settings->cas_host = '';
 $plugin->settings->cas_path = '';
 $plugin->settings->cas_port = 443;
+$plugin->settings->cas_certificate_path = '';
 
 $plugin->settings->cas_ldap_uri = 'ldap://ldap.example.com:389';
 $plugin->settings->cas_ldap_username = '';

@@ -14,7 +14,7 @@
 			</div>
 			<div class="form-group">
 				<dt>
-					<label for="plugin-cas-host">Hôte</label>
+					<label for="plugin-cas-host">Hôte du serveur CAS</label>
 				</dt>
 				<dd>
 					<input class="form-control" id="plugin-cas-host" name="plugin_cas_host" type="text" value="{$plugin->settings->cas_host}" />
@@ -22,7 +22,7 @@
 			</div>
 			<div class="form-group">
 				<dt>
-					<label for="plugin-cas-port">Port</label>
+					<label for="plugin-cas-port">Port du serveur CAS</label>
 				</dt>
 				<dd>
 					<input class="form-control" id="plugin-cas-port" name="plugin_cas_port" type="text" value="{$plugin->settings->cas_port}" />
@@ -30,7 +30,7 @@
 			</div>
 			<div class="form-group">
 				<dt>
-					<label for="plugin-cas-path">Chemin</label>
+					<label for="plugin-cas-path">Chemin du serveur CAS</label>
 				</dt>
 				<dd>
 					<input class="form-control" id="plugin-cas-path" name="plugin_cas_path" type="text" value="{$plugin->settings->cas_path}" />
@@ -45,7 +45,16 @@
 			</div>
 			<div class="form-group">
 				<dt>
-					<label for="plugin-cas-logout-redirection">Adresse de redirection</label>
+					<label for="plugin-cas-certificate-path">Chemin d'accès au fichier CA chain (format PEM)</label>
+				</dt>
+				<dd>
+					<input class="form-control" id="plugin-cas-certificate-path" name="plugin_cas_certificate_path" type="string" value="{$plugin->settings->cas_certificate_path}" />
+					<p class="help-block small">Chemin pour valider le certificat du serveur CAS. Si vide, le certificat du serveur CAS ne sera pas vérifié.</p>
+				</dd>
+			</div>
+			<div class="form-group">
+				<dt>
+					<label for="plugin-cas-logout-redirection">Adresse de redirection après déconnexion</label>
 				</dt>
 				<dd>
 					<input class="form-control" id="plugin-cas-logout-redirection" name="plugin_cas_logout_redirection" type="url" value="{$plugin->settings->cas_logout_redirection}" />

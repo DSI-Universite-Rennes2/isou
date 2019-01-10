@@ -146,6 +146,18 @@ foreach (array('ldap_uri', 'logout_redirection') as $attribute) {
     }
 }
 
+// Teste les entrées de type chemin de fichier.
+if (isset($_POST['plugin_cas_certificate_path']) === true) {
+    if (empty($_POST['plugin_cas_certificate_path']) === false && is_readable($_POST['plugin_cas_certificate_path']) === false) {
+        $_POST['errors'][] = 'Le champ "certificate_path" ne contient pas un fichier lisible.';
+    } else {
+        $plugin->settings->cas_certificate_path = $_POST['plugin_cas_certificate_path'];
+        $plugin->update_settings($overwrite = true);
+
+        $_POST['successes'][] = 'Champ "certificate_path" enregistré.';
+    }
+}
+
 if (isset($_POST['plugin_cas_protocol'], $options_cas_protocols[$_POST['plugin_cas_protocol']]) === true) {
     if ($plugin->settings->cas_protocol !== $_POST['plugin_cas_protocol']) {
         $plugin->settings->cas_protocol = $_POST['plugin_cas_protocol'];
