@@ -59,7 +59,7 @@ file_put_contents($pid_file, getmypid());
 require_once PRIVATE_PATH.'/libs/cron.php';
 
 // Mets à jour les backends.
-$plugins = Plugin::get_records(array('active' => true));
+$plugins = Plugin::get_records(array('active' => true, 'type' => 'monitoring'));
 foreach ($plugins as $plugin) {
     if ($plugin->codename === 'isou') {
         continue;
