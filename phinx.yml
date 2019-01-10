@@ -7,6 +7,8 @@ environments:
     production:
         adapter: "sqlite"
         name: "%%PHINX_CONFIG_DIR%%/database/isou.sqlite3"
+        suffix: ""
     tests:
-        adapter: sqlite
+        adapter: "sqlite"
         name: "%%PHINX_CONFIG_DIR%%/database/tests.sqlite3"
+        suffix: ""
