@@ -7,7 +7,7 @@ $TITLE .= ' - Administration des services';
 
 // Set up menu.
 $submenus = array();
-$plugins = Plugin::get_records();
+$plugins = Plugin::get_records(array('type' => 'monitoring'));
 foreach ($plugins as $plugin) {
     $submenus[$plugin->codename] = new SimpleMenu('Services '.$plugin->name, '', URL.'/index.php/services/'.$plugin->codename);
 }
