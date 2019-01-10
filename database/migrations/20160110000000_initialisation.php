@@ -689,6 +689,8 @@ class Initialisation extends AbstractMigration {
             ->addColumn('public_key', 'string')
             ->addColumn('authentification_token', 'string')
             ->addColumn('content_encoding', 'string')
+            ->addColumn('lastnotification', 'string')
+            ->addColumn('iduser', 'integer')
             ->create();
     }
 

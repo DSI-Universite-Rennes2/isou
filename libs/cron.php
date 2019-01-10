@@ -196,7 +196,7 @@ function cron_regenerate_json() {
 }
 
 /**
-  * Envoie une notification quotidienne des évènements ayant eu lieu.
+  * Envoie une notification des nouveaux évènements en temps réel aux navigateurs des utilisateurs.
   *
   * @return void
   */
@@ -211,7 +211,7 @@ function cron_notify() {
         return;
     }
 
-    $services = Service::get_records(array('olderOrEqual' => TIME));
+    $services = Service::get_records(array('plugin' => PLUGIN_ISOU));
 
     if (isset($services[0]) === true) {
         return;
@@ -220,6 +220,19 @@ function cron_notify() {
     $messages = array();
     foreach ($services as $service) {
         if (in_array($service->state, array(State::OK, State::CLOSED), $strict = true) === true) {
+            continue;
+        }
+
+        if ($service->visible === '0') {
+            continue;
+        }
+
+        $event = $service->get_current_event();
+        if ($event === false) {
+            continue;
+        }
+
+        if ($event->startdate->getTimestamp() < TIME) {
             continue;
         }
 

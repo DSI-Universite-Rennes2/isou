@@ -29,9 +29,14 @@
 			<h1 class="sr-only">Authentification</h1>
 			<p class="isou-top-aside-p">
 				{if $USER === false}
-					<span>Non connecté (<a href="{$smarty.const.URL}/index.php/connexion">connexion</a>)</span>
+					<span id="isou-top-aside-nickname-span">Non connecté</span>
+					<span id="isou-top-aside-authentification-span">(<a href="{$smarty.const.URL}/index.php/connexion">connexion</a>)</span>
 				{else}
-					<span>{$USER} (<a href="{$smarty.const.URL}/index.php/deconnexion">déconnexion</a>)</span>
+					<span id="isou-top-aside-nickname-span">{$USER}</span>
+					{if $CFG.notifications_enabled === '1'}
+					<button class="btn btn-xs btn-default" id="isou-top-aside-notifications-button"></button>
+					{/if}
+					<span id="isou-top-aside-authentification-span">(<a href="{$smarty.const.URL}/index.php/deconnexion">déconnexion</a>)</span>
 				{/if}
 			</p>
 		</aside>
