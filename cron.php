@@ -35,22 +35,30 @@ $plugins = get_plugins();
 // Créé un fichier cron.pid.
 $pid_file = PRIVATE_PATH.'/cron.pid';
 if (is_file($pid_file) === true) {
-    echo 'Le fichier '.$pid_file.' existe déjà. Un processus du cron est en cours.'.PHP_EOL;
+    echo 'Le fichier '.$pid_file.' existe déjà. Un processus du cron est en cours ?';
     $pid = file_get_contents($pid_file);
 
-    // un cron est déjà en cours d'execution
-    $atime = fileatime($pid_file);
-    if ($atime !== false && $atime + (10 * 60) < TIME) {
-        // si le fichier existe depuis plus de 10 minutes, alerter les admins
-        if (file_exists('/proc/'.$pid) === false) {
-            unlink($pid_file);
-            echo 'Aucun processus en cours n\'a pour identifiant '.$pid.'.'.PHP_EOL;
-            echo 'Le fichier '.$pid_file.' a été supprimé.'.PHP_EOL;
-        } else {
+    if (file_exists('/proc/'.$pid) === true) {
+        // Le pid correspond à un processus en cours...
+        echo ' Oui !'.PHP_EOL;
+
+        // Si le fichier existe depuis plus de 10 minutes, alerter les admins.
+        $atime = fileatime($pid_file);
+        if ($atime !== false && $atime + (10 * 60) < TIME) {
             error_log('Le fichier \''.$pid_file.'\' a été créé depuis plus de 10 minutes.'.PHP_EOL.
                 'Il est probablement nécessaire de tuer le processus '.$pid.'.');
             exit(1);
         }
+
+        // On quitte ce processus pour ne pas interférer avec l'autre processus en cours.
+        exit(0);
+    } else {
+        // Le pid ne correspond à aucun processus en cours...
+        echo ' Non.'.PHP_EOL;
+
+        unlink($pid_file);
+        echo 'Aucun processus en cours n\'a pour identifiant '.$pid.'.'.PHP_EOL;
+        echo 'Le fichier '.$pid_file.' a été supprimé.'.PHP_EOL;
     }
 }
 
