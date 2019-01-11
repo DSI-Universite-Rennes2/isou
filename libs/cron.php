@@ -7,8 +7,10 @@
 use UniversiteRennes2\Isou\Dependency_Group;
 use UniversiteRennes2\Isou\Dependency_Message;
 use UniversiteRennes2\Isou\Event;
+use UniversiteRennes2\Isou\Notification;
 use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
+use UniversiteRennes2\Isou\Subscription;
 
 /**
   * Mets à jour Isou en fonction des changements d'état des services backend, des évènements prévues, fermés, etc...
@@ -212,8 +214,7 @@ function cron_notify() {
     }
 
     $services = Service::get_records(array('plugin' => PLUGIN_ISOU));
-
-    if (isset($services[0]) === true) {
+    if (isset($services[0]) === false) {
         return;
     }
 
@@ -247,7 +248,8 @@ function cron_notify() {
         implode(PHP_EOL, $messages);
 
     $subscriptions = Subscription::get_records();
-    if (isset($subscriptions[0]) === true) {
+    if (isset($subscriptions[0]) === false) {
+        $LOGGER->addInfo('Aucun utilisateur n\'a souscrit aux notifications web');
         return;
     }
 
@@ -258,11 +260,15 @@ function cron_notify() {
     $notification = new Notification($title, $message, $url, $icon);
     $webpush = $notification->get_webpush();
 
+    $LOGGER->addInfo('Envoi de '.count($subscriptions).' notification(s) web');
     foreach ($subscriptions as $subscription) {
-        $result = $subscription->notify($webpush);
+        $result = $subscription->notify($webpush, $notification);
 
         if (isset($result['expired']) === true && $result['expired'] === true) {
+            $LOGGER->addInfo('Souscription #'.$subscription->id.' expirée pour l\'utilisateur #'.$subscription->iduser);
             $subscription->delete();
+        } else if (isset($result['success']) === true && $result['success'] === false) {
+            $LOGGER->addInfo('Envoi de la souscription #'.$subscription->id.' pour l\'utilisateur #'.$subscription->iduser.' a échoué ('.$result['message'].')');
         }
     }
 }
