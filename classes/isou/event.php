@@ -356,7 +356,7 @@ class Event {
         }
 
         // Construis la requête.
-        $sql = 'SELECT e.id, e.startdate, e.enddate, e.state, e.type, e.period, e.ideventdescription, ed.description, e.idservice, s.name AS service_name'.
+        $sql = 'SELECT e.id, e.startdate, e.enddate, e.state, e.type, e.period, e.ideventdescription, ed.description, e.idservice, s.name AS service_name, s.idplugin'.
             ' FROM events e'.
             ' JOIN events_descriptions ed ON ed.id = e.ideventdescription'.
             ' JOIN services s ON s.id = e.idservice'.

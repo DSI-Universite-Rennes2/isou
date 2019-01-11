@@ -36,6 +36,12 @@ foreach ($groups as $group) {
     }
 }
 
+$plugins_ = array();
+foreach ($plugins as $plugin) {
+    $plugins_[$plugin->id] = $plugin;
+}
+$smarty->assign('plugins', $plugins_);
+
 $smarty->assign('events', $events);
 
 $subtemplate = 'events/more.tpl';

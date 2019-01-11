@@ -15,6 +15,12 @@ switch ($PAGE_NAME[1]) {
         unset($options['plugin']);
         $options['notplugin'] = PLUGIN_ISOU;
         $subtemplate = 'events/list_plugins_events.tpl';
+
+        $plugins_ = array();
+        foreach ($plugins as $plugin) {
+            $plugins_[$plugin->id] = $plugin;
+        }
+        $smarty->assign('plugins', $plugins_);
         break;
     case 'fermes':
         $options['since'] = new DateTime(strftime('%FT%T', mktime(0, 0, 0) - 35 * 24 * 60 * 60));
