@@ -22,6 +22,7 @@
     },
     "require": {
         "php": ">=7.0",
+        "ext-pdo_sqlite": "*",
         "ezyang/htmlpurifier": "4.*",
         "jasig/phpcas": "1.3.*",
         "minishlink/web-push": "2.*",

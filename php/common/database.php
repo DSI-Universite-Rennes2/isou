@@ -7,6 +7,7 @@ try {
     $DB = new PDO(DB_PATH, '', '');
 } catch (PDOException $exception) {
     if (defined('STDIN') === true) {
+        echo strftime('%c').': '.$exception->getMessage().PHP_EOL;
         exit(1);
     }
 
