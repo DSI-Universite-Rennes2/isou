@@ -66,7 +66,7 @@ function plugin_shinken_update($plugin) {
         if (isset($element->description) === true) {
             $service = new stdClass();
             $service->name = $element->description.'@'.$element->host_name;
-            $service->state = $element->state;
+            $service->state = (string) $element->state;
 
             if (empty($element->is_flapping) === false) {
                 $service->state = State::WARNING;
