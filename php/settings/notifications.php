@@ -21,6 +21,10 @@ if (isset($_POST['notifications_enabled']) === true) {
                 }
             }
 
+            if (empty($CFG['site_url']) === true) {
+                $_POST['errors'][] = 'Le champ <strong>URL du service</strong> de l\'onglet apparence doit être défini avant d\'activer les notifications.';
+            }
+
             if (isset($_POST['errors'][0]) === false) {
                 $keys = VAPID::createVapidKeys();
                 if (empty($keys) === false) {
