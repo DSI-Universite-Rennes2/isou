@@ -27,7 +27,7 @@ foreach ($groups as $group) {
         if ($event->enddate === null) {
             $dependency_events = Event::get_records(array('idservice' => $content->idservice, 'finished' => false));
         } else {
-            $dependency_events = Event::get_records(array('idservice' => $content->idservice, 'between' => array($event->startdate, $event->enddate)));
+            $dependency_events = Event::get_records(array('idservice' => $content->idservice, 'enddate_between' => array($event->startdate, $event->enddate)));
         }
 
         foreach ($dependency_events as $dependency_event) {
