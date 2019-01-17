@@ -209,12 +209,12 @@ class Initialisation extends AbstractMigration {
                 ),
                 array(
                     'key' => 'site_header',
-                    'value' => 'ISOU : État des services numériques offerts par l\'Université',
+                    'value' => 'État des services numériques',
                     'type' => 'string',
                 ),
                 array(
                     'key' => 'site_name',
-                    'value' => 'Isou',
+                    'value' => 'ISOU',
                     'type' => 'string',
                 ),
                 array(
