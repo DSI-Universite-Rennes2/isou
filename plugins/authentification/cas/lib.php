@@ -33,14 +33,15 @@ function authentification_login($plugin) {
         $USER->authentification = 'cas';
         $USER->username = $_SESSION['username'];
         $USER->admin = '0';
-        $USER->lastaccess = $this->timecreated;
+    }
 
-        try {
-            $USER->save();
-        } catch (\Exception $exception) {
-            unset($_SESSION['username'], $_SESSION['authentification']);
-            $_POST['errors'][] = $exception->getMessage();
-        }
+    $USER->lastaccess = new DateTime();
+
+    try {
+        $USER->save();
+    } catch (\Exception $exception) {
+        $_SESSION = array();
+        $_POST['errors'][] = $exception->getMessage();
     }
 
     $settings = (empty($plugin->settings->cas_ldap_uri) === false && empty($plugin->settings->cas_ldap_dn) === false && empty($plugin->settings->cas_ldap_filter) === false);
