@@ -1,89 +1,47 @@
 <?php
 
+use League\CommonMark\CommonMarkConverter;
+
 $TITLE .= ' - Changelog';
 
-$_POST['error'] = array();
-$newversion = array();
+$changelogs = array();
+$changelog_path = PRIVATE_PATH.'/changelogs';
 
-// vérification du formulaire général
-if (isset($_GET['version'])) {
-    if (strlen($CFG['version']) < 12) {
-        $intVersion = 1;
-    } else {
-        $intVersion = intval(str_replace('.', '', str_replace('-', '', $CFG['version'])));
-    }
-    if ($intVersion < 2012 - 02 - 16.1) {
-        if (isset($_POST['localmail'])) {
-            $_POST['error']['localmail'] = array();
-            $_POST['localmail'] = trim($_POST['localmail']);
-            if (!empty($_POST['localmail']) && !filter_var($_POST['localmail'], FILTER_VALIDATE_EMAIL)) {
-                $_POST['error']['localmail']['error_localmail'] = 'L\'adresse mail saisie n\'est pas valide';
-            } else {
-                $sql = "UPDATE configuration SET value=? WHERE key=?";
-                $query = $DB->prepare($sql);
-                if ($query->execute(array($_POST['localmail'], 'local_mail')) === false) {
-                    $_POST['error']['localmail']['error_localmail'] = 'La clé "local_mail" n\'a pas pu être insérée';
-                }
-            }
+$handle = opendir($changelog_path);
+if ($handle !== false) {
+
+    $converter = new CommonMarkConverter();
+
+    while (false !== ($file = readdir($handle))) {
+        if (in_array($file, array('.', '..', 'index.php', 'index.html', 'template.md'), $strict = true) === true) {
+            continue;
         }
 
-        if (isset($_POST['autobackup'])) {
-            $_POST['error']['autobackup'] = array();
-            $_POST['autobackup'] = intval($_POST['autobackup']);
-            if ($_POST['autobackup'] !== 1) {
-                $_POST['autobackup'] = 0;
-            }
-            $sql = "UPDATE configuration SET value=? WHERE key=?";
-            $query = $DB->prepare($sql);
-            if ($query->execute(array($_POST['autobackup'], 'auto_backup')) === false) {
-                $_POST['error']['autobackup']['error_autobackup'] = 'La clé "auto_backup" n\'a pas pu être insérée';
-            }
+        $filepath = $changelog_path.'/'.$file;
+
+        if (is_dir($filepath) === true) {
+            continue;
         }
 
-        $newversion['201202161'] = true;
-        $CFG['version'] = '2012-02-16.1';
-        $smarty->assign('autobackup', array('Non', 'Oui'));
+        if (is_readable($filepath) === false) {
+            continue;
+        }
+
+        if (substr($file, -3) !== '.md') {
+            continue;
+        }
+
+        $build = basename($file, '.md');
+
+        $content = file_get_contents($filepath);
+        $changelogs[$build] = $converter->convertToHtml($content);
     }
 
-    if (count($newversion) === 0) {
-        if (is_file(PRIVATE_PATH.'/upgrade/LOCK_UPDATE')) {
-            unlink(PRIVATE_PATH.'/upgrade/LOCK_UPDATE');
-        }
-        if (is_file(PRIVATE_PATH.'/upgrade/LOCK_CONFIG')) {
-            unlink(PRIVATE_PATH.'/upgrade/LOCK_CONFIG');
-        }
-
-        $sql = "UPDATE configuration SET value=? WHERE key='version'";
-        $version = $DB->prepare($sql);
-        $version->execute(array(CURRENT_VERSION));
-
-        header('Location: '.URL.'/index.php/configuration?type=changelog#'.CURRENT_VERSION);
-        exit();
-    }
-
-    if (count($_POST) > 2) {
-        $errors = 0;
-        foreach ($_POST['error'] as $error) {
-            $errors += count($error);
-        }
-
-        if ($errors === 0) {
-            if (is_file(PRIVATE_PATH.'/upgrade/LOCK_UPDATE')) {
-                unlink(PRIVATE_PATH.'/upgrade/LOCK_UPDATE');
-            }
-            if (is_file(PRIVATE_PATH.'/upgrade/LOCK_CONFIG')) {
-                unlink(PRIVATE_PATH.'/upgrade/LOCK_CONFIG');
-            }
-
-            $sql = "UPDATE configuration SET value=? WHERE key='version'";
-            $version = $DB->prepare($sql);
-            $version->execute(array(CURRENT_VERSION));
-
-            $_POST['success'] = 'La mise à jour est maintenant terminée';
-        }
-    }
+    closedir($handle);
 }
 
-$smarty->assign('newversion', $newversion);
+krsort($changelogs, SORT_NATURAL);
+
+$smarty->assign('changelogs', $changelogs);
 
 $SUBTEMPLATE = 'settings/changelog.tpl';
