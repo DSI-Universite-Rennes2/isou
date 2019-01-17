@@ -48,7 +48,10 @@
 
 		<div class="container">
 			<header class="page-header" role="banner">
-				<h1 id="isou-header">{$CFG.site_header}</h1>
+				<div class="jumbotron">
+					<h1 id="isou-header">{$CFG.site_name}</h1>
+					<p>{$CFG.site_header}</p>
+				</div>
 			</header>
 
 			{if count($MENU) > 1 || isset($ADMINISTRATION_MENU) === true}
@@ -102,11 +105,17 @@
 		</div> {* / .container *}
 
 		<footer class="footer text-center" id="footer" role="contentinfo">
-			<p><span id="footer-span">Isou {$CFG.version} - <a href="https://sourcesup.renater.fr/projects/isounagios/" title="Accéder à la page du projet libre Isou">Page officielle du projet</a></span></p>
+			<p id="isou-footer-p">
+				<span id="isou-footer-span">Isou {$CFG.version} - <a href="https://sourcesup.renater.fr/projects/isounagios/" title="Accéder à la page du projet libre Isou">Page officielle du projet</a></span>
+			</p>
 		</footer>
 
 		{foreach $SCRIPTS as $SCRIPT}
 			<script src="{$SCRIPT->src}" type="{$SCRIPT->type}"></script>
 		{/foreach}
+
+		{if $CFG.notifications_enabled === '1'}
+			<script src="{$smarty.const.URL}/scripts/notifications.js" type="text/javascript"></script>
+		{/if}
 	</body>
 </html>

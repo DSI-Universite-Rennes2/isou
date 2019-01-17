@@ -23,6 +23,13 @@ summary {
     margin: 0;
 }
 
+#isou-header {
+    background-image: url('../favicon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    padding-left: 80px;
+}
+
 .form-information-dl-div {
     margin: 1em;
 }
@@ -93,7 +100,7 @@ label > input[type=checkbox], label > input[type=radio] {
     padding: 2em 0 0 0;
 }
 
-#footer-span {
+#isou-footer-span {
     border-top: .1em solid #A0A0A0;
     padding: 1em 2em;
 }

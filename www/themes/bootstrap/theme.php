@@ -1,6 +1,5 @@
 <?php
 
-use Isou\Helpers\Script;
 use Isou\Helpers\Style;
 
 $theme_version = '1';
@@ -22,8 +21,4 @@ if (isset($current_page->url) === true) {
         case 'rss':
             $STYLES[] = new Style(URL.'/themes/bootstrap/css/rss.css?v='.$theme_version);
     }
-}
-
-if ($CFG['notifications_enabled'] === '1') {
-    $SCRIPTS[] = new Script(URL.'/scripts/notifications.js');
 }
