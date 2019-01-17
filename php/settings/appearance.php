@@ -15,6 +15,7 @@ if ($handle = opendir($themes_path)) {
     }
     closedir($handle);
 }
+ksort($themes);
 
 // Hack pour pré-initialiser la variable site_url.
 if (empty($CFG['site_url']) === true) {
