@@ -38,7 +38,7 @@ if (is_file($pid_file) === true) {
     echo 'Le fichier '.$pid_file.' existe déjà. Un processus du cron est en cours ?';
     $pid = file_get_contents($pid_file);
 
-    if (file_exists('/proc/'.$pid) === true) {
+    if (ctype_digit($pid) === true && file_exists('/proc/'.$pid) === true) {
         // Le pid correspond à un processus en cours...
         echo ' Oui !'.PHP_EOL;
 
