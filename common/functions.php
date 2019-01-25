@@ -51,5 +51,5 @@ function get_base_url($force_https = false) {
         $_SERVER['SERVER_NAME'] .= ':'.$_SERVER['SERVER_PORT'];
     }
 
-    return $scheme.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']);
+    return rtrim($scheme.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']), '/');
 }
