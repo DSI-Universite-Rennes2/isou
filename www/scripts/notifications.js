@@ -112,6 +112,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
+    if (!('serviceWorker' in navigator)) {
+        // Supprime la cloche lorsque les serviceworker ne sont pas activés sur le navigateur.
+        notificationsButton.remove();
+        return;
+    }
+
     try {
         // Essaye d'enregistrer le service-worker.
         navigator.serviceWorker.register(isou_url+'/service-worker.js')
