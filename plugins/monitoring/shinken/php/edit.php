@@ -37,29 +37,79 @@ if (count($cache) === 0) {
     exit(0);
 }
 
+$shinken = array();
+foreach (Service::get_records(array('plugin' => PLUGIN_SHINKEN)) as $record) {
+    $shinken[$record->name] = $record;
+}
+
 $services = array();
 foreach ($cache as $data) {
+    if (isset($shinken[$data['name']]) === true) {
+        continue;
+    }
+
     $services[] = $data['name'];
 }
 sort($services);
 
-if (isset($_POST['service']) === true) {
-    // Vérifie que le service existe.
-    if (in_array($_POST['service'], $services, true) === false) {
-        $_POST['errors'][] = 'Le service "'.$_POST['service'].'" n\'existe pas.';
-    }
+$previews = array();
+if (isset($_POST['service']) === true && empty($_POST['service']) === false) {
+    if ($service->id === 0) {
+        // On ajoute un ou des services... on active les regexp.
+        $found = false;
+        $regexp = str_replace('/', '\/', $_POST['service']);
+        foreach ($cache as $data) {
+            if (preg_match('/'.$regexp.'/i', $data['name']) === 1) {
+                if (isset($shinken[$data['name']]) === true) {
+                    continue;
+                }
 
-    if (isset($_POST['errors'][0]) === false) {
+                $found = true;
+                if (isset($_POST['preview']) === true) {
+                    $previews[] = $data['name'];
+                    continue;
+                }
+
+                $service->name = $data['name'];
+
+                $_POST = array_merge($_POST, $service->save());
+
+                if (isset($_POST['errors'][0]) === true) {
+                    break;
+                }
+
+                $service->id = 0;
+            }
+        }
+
         $service->name = $_POST['service'];
 
-        $_POST = array_merge($_POST, $service->save());
-        if (isset($_POST['errors'][0]) === false) {
-            $_SESSION['messages']['successes'] = $_POST['successes'];
+        if ($found === false) {
+            $_POST['errors'][] = 'Aucun service ne correspond à "'.$_POST['service'].'".';
+        }
+    } else {
+        // On modifie un service. On veut un nom strict.
+        if (in_array($_POST['service'], $services, true) === false) {
+            $_POST['errors'][] = 'Le service "'.$_POST['service'].'" n\'existe pas.';
+        }
 
-            header('Location: '.URL.'/index.php/services/shinken');
-            exit(0);
+        if (isset($_POST['errors'][0]) === false) {
+            $service->name = $_POST['service'];
+
+            $_POST = array_merge($_POST, $service->save());
         }
     }
+
+    if (isset($_POST['errors'][0]) === false && isset($_POST['preview']) === false) {
+        $_SESSION['messages']['successes'] = $_POST['successes'];
+
+        header('Location: '.URL.'/index.php/services/shinken');
+        exit(0);
+    }
+}
+
+if (isset($_POST['preview']) === true) {
+    $smarty->assign('previews', $previews);
 }
 
 $smarty->assign('service', $service);

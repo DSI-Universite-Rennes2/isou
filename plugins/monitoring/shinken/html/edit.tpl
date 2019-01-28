@@ -22,11 +22,31 @@
 	</dl>
 
 	<ul class="list-inline">
+		{if $service->id !== 0 || $smarty.post !== array()}
 		<li>
-			<input class="btn btn-primary" type="submit" value="enregistrer" />
+			<input class="btn btn-primary" name="submit" type="submit" value="enregistrer" />
 		</li>
+		{/if}
+
+		{if $service->id === 0}
+		<li>
+			<input class="btn {if $smarty.post === array()}btn-primary{else}btn-default{/if}" name="preview" type="submit" value="aperçu" />
+		</li>
+		{/if}
+
 		<li>
 			<a class="btn btn-default" href="{$smarty.const.URL}/index.php/services/shinken">annuler</a>
 		</li>
 	</ul>
+
+	{if isset($previews[0]) === true}
+	<div class="well">
+		<p>{count($previews)} services seront ajoutés :</p>
+		<ul>
+		{foreach $previews as $preview}
+			<li>{$preview}</li>
+		{/foreach}
+		</ul>
+	</div>
+	{/if}
 </form>
