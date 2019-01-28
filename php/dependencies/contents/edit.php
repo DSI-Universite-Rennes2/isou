@@ -57,16 +57,16 @@ if (isset($_POST['services'], $_POST['servicestate']) === true) {
     }
 
     if (empty($children) === true) {
-        $_POST['errors'][] = 'Le champ "État du service lié" est invalide.';
+        $_POST['errors'][] = 'Au moins un élément du champ "Nom du service lié" doit être sélectionné.';
     } else {
         foreach ($children as $child) {
             if (ctype_digit($child) === false) {
-                $_POST['errors'][] = 'Le champ "État du service lié" est invalide.';
+                $_POST['errors'][] = 'Le champ "Nom du service lié" est invalide.';
                 break;
             }
 
             if (Service::get_record(array('id' => $child)) === false) {
-                $_POST['errors'][] = 'Le champ "État du service lié" est invalide.';
+                $_POST['errors'][] = 'Le champ "Nom du service lié" est invalide.';
                 break;
             }
         }
@@ -75,12 +75,13 @@ if (isset($_POST['services'], $_POST['servicestate']) === true) {
     if (isset($_POST['errors'][0]) === false) {
         $update = ($dependency_group_content->idservice !== 0);
 
+        $contents = Dependency_Group_Content::get_records(array('group' => $dependency_group->id));
         foreach ($children as $child) {
-            if ($update === true) {
-                $dependency_group_content->old_values = new stdClass();
-                $dependency_group_content->old_values->idgroup = $dependency_group_content->idgroup;
-                $dependency_group_content->old_values->idservice = $dependency_group_content->idservice;
-                $dependency_group_content->old_values->servicestate = $dependency_group_content->servicestate;
+            foreach ($contents as $content) {
+                if ($content->idservice === $child) {
+                    $dependency_group_content->id = $content->id;
+                    break;
+                }
             }
 
             $dependency_group_content->idgroup = $dependency_group->id;
@@ -91,10 +92,10 @@ if (isset($_POST['services'], $_POST['servicestate']) === true) {
 
             if ($update === false) {
                 // Empêche un changement de type de formulaire si l'enregistrement des données se passe mal.
-                $dependency_group_content->idservice = 0;
+                $dependency_group_content->id = 0;
             }
 
-            if (isset($_POST['errors'][0]) !== false) {
+            if (isset($_POST['errors'][0]) === true) {
                 break;
             }
         }
