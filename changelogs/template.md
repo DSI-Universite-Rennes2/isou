@@ -1,4 +1,5 @@
 ## Numéro version
+**DD MMMMM YYYY**
 
 - Nouveautés
     - Lorem ipsum dolor sit amet, consectetur adipiscing elit.
