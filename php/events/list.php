@@ -34,6 +34,7 @@ switch ($PAGE_NAME[1]) {
         break;
     case 'reguliers':
         $options['type'] = Event::TYPE_REGULAR;
+        $options['sort'] = array('s.name', 'e.startdate', 'e.enddate');
         $subtemplate = 'events/list_regular_events.tpl';
         break;
     case 'prevus':
