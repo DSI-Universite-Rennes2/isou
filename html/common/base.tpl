@@ -43,7 +43,7 @@
 
 		<aside class="isou-top-aside text-right">
 			<h1 class="sr-only">Informations complémentaires sur le service</h1>
-			<p class="isou-top-aside-p"><span>Service mis à jour automatiquement toutes les minutes. Heure actuelle : {$smarty.now|date_format:"%H:%M:%S"}</span></p>
+			<p class="isou-top-aside-p small">Service mis à jour automatiquement toutes les minutes. Heure actuelle : {$smarty.now|date_format:"%H:%M:%S"}</p>
 		</aside>
 
 		<div class="container">

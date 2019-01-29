@@ -11,7 +11,7 @@
 			{continue}
 		{/if}
 
-		<details>
+		<details open>
 			<summary>{$category->name}</summary>
 			<table class="table table-condensed table-striped" summary="liste des services ISOU de la catégorie {$category->name}">
 			{* <!-- <caption class="services-caption"></caption> --> *}

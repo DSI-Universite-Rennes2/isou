@@ -6,7 +6,7 @@
 	<h1 class="sr-only">Dépendances</h1>
 
 	{foreach $categories as $i => $category}
-	<details>
+	<details open>
 		<summary>{$category->name}</summary>
 		<table class="table table-condensed table-striped">
 		<thead>

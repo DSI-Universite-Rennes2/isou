@@ -8,7 +8,7 @@ $submenu = array();
 $submenu['prevus'] = new SimpleMenu('interruptions prévues', '', URL.'/index.php/evenements/prevus');
 $submenu['imprevus'] = new SimpleMenu('interruptions non prévues', '', URL.'/index.php/evenements/imprevus');
 $submenu['reguliers'] = new SimpleMenu('interruptions régulières', '', URL.'/index.php/evenements/reguliers');
-$submenu['fermes'] = new SimpleMenu('service fermé', '', URL.'/index.php/evenements/fermes');
+$submenu['fermes'] = new SimpleMenu('services fermés', '', URL.'/index.php/evenements/fermes');
 $submenu['autres'] = new SimpleMenu('autres interruptions', '', URL.'/index.php/evenements/autres');
 
 if (isset($PAGE_NAME[1]) === false || isset($submenu[$PAGE_NAME[1]]) === false) {

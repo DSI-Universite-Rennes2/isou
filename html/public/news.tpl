@@ -5,22 +5,10 @@
 {if count($categories) === 0}
 	<p class="alert alert-success">Aucun évènement en cours.</p>
 {else}
-	<aside id="isou-news-legend-aside">
-		<h1 id="isou-news-legend-h1">Légende</h1>
-		<dl id="isou-news-legend-dl">
-		{foreach $STATES as $STATE}
-			<div>
-				<dt class="isou-news-legend-dt">{$STATE}</dt>
-				<dd class="isou-news-legend-dd">{$STATE->title}</dd>
-			</div>
-		{/foreach}
-		</dl>
-	</aside>
-
 	{foreach $categories as $category}
 		<h2 class="isou-news-categories">{$category->name}</h2>
 
-		<ul class="services-ul">
+		<ul class="services-ul list-unstyled">
 		{foreach $category->services as $service}
 			<li class="services-li" id="service-{$service->id}">
 				{$STATES[$service->state]}&nbsp;
