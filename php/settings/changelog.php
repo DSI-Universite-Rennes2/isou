@@ -5,7 +5,7 @@ use League\CommonMark\CommonMarkConverter;
 $TITLE .= ' - Changelog';
 
 $changelogs = array();
-$changelog_path = PRIVATE_PATH.'/changelogs';
+$changelog_path = PRIVATE_PATH.'/markdown/changelogs';
 
 $handle = opendir($changelog_path);
 if ($handle !== false) {
