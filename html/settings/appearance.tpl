@@ -31,17 +31,17 @@
 
 	<fieldset>
 		<legend>Affichage des menus</legend>
-		{html_checkboxes name="menus_active" options=$menus selected=$menus_active}
+		{html_checkboxes class="isou-checkboxes" name="menus_active" options=$menus selected=$menus_active}
 	</fieldset>
 
 	<fieldset>
 		<legend>Page d'accueil par défaut</legend>
-		{html_radios name="menu_default" options=$menus selected=$CFG.menu_default}
+		{html_radios class="isou-radios" name="menu_default" options=$menus selected=$CFG.menu_default}
 	</fieldset>
 
 	<fieldset>
 		<legend>Thèmes</legend>
-		{html_radios name="theme" options=$themes selected=$CFG.theme}
+		{html_radios class="isou-radios" name="theme" options=$themes selected=$CFG.theme}
 	</fieldset>
 
 	<ul class="list-inline">

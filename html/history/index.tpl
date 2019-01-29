@@ -1,54 +1,54 @@
 <h1 class="sr-only">Historique</h1>
 
-<form action="{$smarty.const.URL}/index.php/statistiques#resultat" method="post">
+<form action="{$smarty.const.URL}/index.php/statistiques#resultat" class="form-horizontal" method="post">
 
 	<dl>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="event-services">Services</label>
+		<div class="form-group">
+			<dt class="col-sm-2">
+				<label class="control-label" for="event-services">Services</label>
 			</dt>
-			<dd class="form-values-dd">
-				{html_options id="event-services" name="services[]" multiple="true" options=$options_services selected=$smarty.post.services|default:array()}
+			<dd class="col-sm-10">
+				{html_options class="form-control" id="event-services" name="services[]" multiple="true" options=$options_services selected=$smarty.post.services|default:array()}
 			</dd>
 		</div>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="event-type">Type d'interruptions</label>
+		<div class="form-group">
+			<dt class="col-sm-2">
+				<label class="control-label" for="event-type">Type d'interruptions</label>
 			</dt>
-			<dd class="form-values-dd">
-				{html_options id="event-type" name="event_type" options=$options_event_types selected=$smarty.post.event_type|default:-1}
+			<dd class="col-sm-10">
+				{html_options class="form-control" id="event-type" name="event_type" options=$options_event_types selected=$smarty.post.event_type|default:-1}
 			</dd>
 		</div>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="startdate">Date de début</label>
+		<div class="form-group">
+			<dt class="col-sm-2">
+				<label class="control-label" for="startdate">Date de début</label>
 			</dt>
-			<dd class="form-values-dd">
-				<input id="startdate" name="startdate" type="date" value="{$smarty.post.startdate}" required="1" />
+			<dd class="col-sm-10">
+				<input class="form-control" id="startdate" name="startdate" type="date" value="{$smarty.post.startdate}" required="1" />
 			</dd>
 		</div>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="enddate">Date de fin</label>
+		<div class="form-group">
+			<dt class="col-sm-2">
+				<label class="control-label" for="enddate">Date de fin</label>
 			</dt>
-			<dd class="form-values-dd">
-				<input id="enddate" name="enddate" type="date" value="{$smarty.post.enddate}" />
+			<dd class="col-sm-10">
+				<input class="form-control" id="enddate" name="enddate" type="date" value="{$smarty.post.enddate}" />
 			</dd>
 		</div>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="sort">Trier par date</label>
+		<div class="form-group">
+			<dt class="col-sm-2">
+				<label class="control-label" for="sort">Trier par date</label>
 			</dt>
-			<dd class="form-values-dd">
-				{html_options id=sort name=sort options=$options_sorts selected=$smarty.post.sort|default:1}
+			<dd class="col-sm-10">
+				{html_options class="form-control" id=sort name=sort options=$options_sorts selected=$smarty.post.sort|default:1}
 			</dd>
 		</div>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="paging">Nombre de résultat par page</label>
+		<div class="form-group">
+			<dt class="col-sm-2">
+				<label class="control-label" for="paging">Nombre de résultat par page</label>
 			</dt>
-			<dd class="form-values-dd">
-				{html_options id=paging name=paging options=$options_paging selected=$smarty.post.paging|default:20}
+			<dd class="col-sm-10">
+				{html_options class="form-control" id=paging name=paging options=$options_paging selected=$smarty.post.paging|default:20}
 			</dd>
 		</div>
 	</dl>

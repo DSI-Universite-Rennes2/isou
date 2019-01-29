@@ -9,7 +9,7 @@
 			<div class="form-group">
 				<dt id="plugin-cas-enable">Activer</dt>
 				<dd>
-					{html_radios aria-labelledby="plugin-cas-enable" name="plugin_cas_enable" options=$options_yes_no selected=$plugin->active}
+					{html_radios class="isou-radios" aria-labelledby="plugin-cas-enable" name="plugin_cas_enable" options=$options_yes_no selected=$plugin->active}
 				</dd>
 			</div>
 			<div class="form-group">
@@ -40,7 +40,7 @@
 			<div class="form-group">
 				<dt id="plugin-cas-protocol">Protocole</dt>
 				<dd>
-					{html_options aria-labelledby="plugin-cas-protocol" class="form-control" name="plugin_cas_protocol" options=$options_cas_protocols selected=$plugin->settings->cas_protocol}
+					{html_options class="form-control" aria-labelledby="plugin-cas-protocol" class="form-control" name="plugin_cas_protocol" options=$options_cas_protocols selected=$plugin->settings->cas_protocol}
 				</dd>
 			</div>
 			<div class="form-group">
@@ -64,7 +64,7 @@
 			<div class="form-group">
 				<dt id="plugin-cas-verbose">Activer le mode verbeux</dt>
 				<dd>
-					{html_radios aria-labelledby="plugin-cas-verbose" name="plugin_cas_verbose" options=$options_yes_no selected=$plugin->settings->cas_verbose}
+					{html_radios class="isou-radios" aria-labelledby="plugin-cas-verbose" name="plugin_cas_verbose" options=$options_yes_no selected=$plugin->settings->cas_verbose}
 				</dd>
 			</div>
 		</dl>

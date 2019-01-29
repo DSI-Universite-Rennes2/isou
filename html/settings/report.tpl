@@ -1,4 +1,4 @@
-<form action="{$smarty.const.URL}/index.php/configuration/rapport" class="form" method="post">
+<form action="{$smarty.const.URL}/index.php/configuration/rapport" method="post">
 
 	{include file="common/messages_form.tpl"}
 
@@ -6,10 +6,10 @@
 		<div class="form-group">
 			<dt id="report-enabled">Activer le rapport quotidien</dt>
 			<dd>
-				<p class="help-block small">Envoie un rapport quotidien des différents évènements de la veille.</p>
+				<span class="help-block small">Envoie un rapport quotidien des différents évènements de la veille.</span>
 			</dd>
 			<dd>
-				{html_radios aria-labelledby="report-enabled" name="report_enabled" options=$options_yes_no selected=$CFG.report_enabled}
+				{html_radios class="isou-radios" aria-labelledby="report-enabled" name="report_enabled" options=$options_yes_no selected=$CFG.report_enabled}
 			</dd>
 		</div>
 

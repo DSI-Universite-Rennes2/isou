@@ -1,4 +1,4 @@
-<form action="{$smarty.const.URL}/index.php/configuration/notifications" class="form" method="post">
+<form action="{$smarty.const.URL}/index.php/configuration/notifications" method="post">
 
 	{include file="common/messages_form.tpl"}
 
@@ -6,10 +6,10 @@
 		<div class="form-group">
 			<dt id="notification-enabled">Activer les notifications web</dt>
 			<dd>
-				<p class="help-block small">Autorise les utilisateurs connectés à s'abonner aux notifications web.</p>
+				<span class="help-block small">Autorise les utilisateurs connectés à s'abonner aux notifications web.</span>
 			</dd>
 			<dd>
-				{html_radios aria-labelledby="notification-enabled" name="notifications_enabled" options=$options_yes_no selected=$CFG.notifications_enabled}
+				{html_radios class="isou-radios" aria-labelledby="notification-enabled" name="notifications_enabled" options=$options_yes_no selected=$CFG.notifications_enabled}
 			</dd>
 		</div>
 	</dl>

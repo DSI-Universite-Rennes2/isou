@@ -1,4 +1,4 @@
-<form action="{$smarty.const.URL}/index.php/services/isou/edit/{$service->id}" method="post">
+<form action="{$smarty.const.URL}/index.php/services/isou/edit/{$service->id}" class="form-horizontal" method="post">
 	{if $service->id === 0}
 		<h2>Ajouter un service</h2>
 	{else}
@@ -8,46 +8,46 @@
 	{include file="common/messages_form.tpl"}
 
 	<dl>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="category">Nom de la catégorie du service</label>
+		<div class="form-group">
+			<dt class="col-sm-2">
+				<label class="control-label" for="category">Nom de la catégorie du service</label>
 			</dt>
-			<dd class="form-values-dd">
-				{html_options id=category name=category options=$categories selected=$service->idcategory}
+			<dd class="col-sm-10">
+				{html_options class="form-control" id=category name=category options=$categories selected=$service->idcategory}
 			</dd>
 		</div>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="name">Nom du service</label>
+		<div class="form-group">
+			<dt class="col-sm-2">
+				<label class="control-label" for="name">Nom du service</label>
 			</dt>
-			<dd class="form-values-dd">
-				<input type="text" name="name" id="name" maxlength="32" value="{$service->name}" />
+			<dd class="col-sm-10">
+				<input class="form-control" type="text" name="name" id="name" maxlength="32" value="{$service->name}" />
 			</dd>
 		</div>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="url">URL du service</label>
+		<div class="form-group">
+			<dt class="col-sm-2">
+				<label class="control-label" for="url">URL du service</label>
 			</dt>
-			<dd class="form-values-dd">
-				<input type="text" name="url" id="url" size="64" maxlength="64" value="{$service->url}" />
+			<dd class="col-sm-10">
+				<input class="form-control" type="text" name="url" id="url" size="64" maxlength="64" value="{$service->url}" />
 			</dd>
 		</div>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt" id="visible">Visibilité du service</dt>
-			<dd class="form-values-dd">
-				{html_radios aria-labelledby="visible" name="visible" options=$options_visible selected=$service->visible}
+		<div class="form-group">
+			<dt class="col-sm-2" id="visible">Visibilité du service</dt>
+			<dd class="col-sm-10">
+				{html_radios class="isou-radios" aria-labelledby="visible" name="visible" options=$options_visible selected=$service->visible}
 			</dd>
 		</div>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt" id="locked">Verrouillage</dt>
-			<dd class="form-values-dd">
-				{html_radios aria-labelledby="locked" name="locked" options=$options_locked selected=$service->locked}
+		<div class="form-group">
+			<dt class="col-sm-2" id="locked">Verrouillage</dt>
+			<dd class="col-sm-10">
+				{html_radios class="isou-radios" aria-labelledby="locked" name="locked" options=$options_locked selected=$service->locked}
 			</dd>
 		</div>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt" id="state">État</dt>
-			<dd class="form-values-dd">
-				{html_options aria-labelledby="state" name="state" options=$options_state selected=$service->state}
+		<div class="form-group">
+			<dt class="col-sm-2" id="state">État</dt>
+			<dd class="col-sm-10">
+				{html_options class="form-control" aria-labelledby="state" name="state" options=$options_state selected=$service->state}
 			</dd>
 		</div>
 	</dl>

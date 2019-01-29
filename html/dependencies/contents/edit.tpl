@@ -1,4 +1,4 @@
-<form action="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/group/{$dependency_group->id}/content/edit/{$dependency_group_content->id}" method="post">
+<form action="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/group/{$dependency_group->id}/content/edit/{$dependency_group_content->id}" class="form-horizontal" method="post">
 	{if $dependency_group_content->id === 0}
 	<h2>Ajouter des dépendances</h2>
 	{else}
@@ -8,48 +8,48 @@
 	{include file="common/messages_form.tpl"}
 
 	<dl>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="servicename">Nom du service ISOU</label>
+		<div class="form-group">
+			<dt class="col-sm-2">
+				<label class="control-label" for="servicename">Nom du service ISOU</label>
 			</dt>
-			<dd class="form-values-dd">
-				<input type="text" name="servicename" id="servicename" maxlength="32" value="{$service->name}" disabled="1" />
+			<dd class="col-sm-10">
+				<input class="form-control" type="text" name="servicename" id="servicename" maxlength="32" value="{$service->name}" disabled="1" />
 			</dd>
 		</div>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="groupname">Nom du groupe</label>
+		<div class="form-group">
+			<dt class="col-sm-2">
+				<label class="control-label" for="groupname">Nom du groupe</label>
 			</dt>
-			<dd class="form-values-dd">
-				<input type="text" name="groupname" id="groupname" maxlength="32" value="{$dependency_group->name}" disabled="1" />
+			<dd class="col-sm-10">
+				<input class="form-control" type="text" name="groupname" id="groupname" maxlength="32" value="{$dependency_group->name}" disabled="1" />
 			</dd>
 		</div>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="groupstate">État du groupe lié</label>
+		<div class="form-group">
+			<dt class="col-sm-2">
+				<label class="control-label" for="groupstate">État du groupe lié</label>
 			</dt>
-			<dd class="form-values-dd">
-				{html_options name="groupstate" id="groupstate" options=$options_states selected=$dependency_group->groupstate disabled="1"}
+			<dd class="col-sm-10">
+				{html_options class="form-control" name="groupstate" id="groupstate" options=$options_states selected=$dependency_group->groupstate disabled="1"}
 			</dd>
 		</div>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="services">Nom du service lié</label>
+		<div class="form-group">
+			<dt class="col-sm-2">
+				<label class="control-label" for="services">Nom du service lié</label>
 			</dt>
-			<dd class="form-values-dd">
+			<dd class="col-sm-10">
 				{if $dependency_group_content->id === 0}
-				{html_options class="isou-dependencies-contents-add-services" id="services" name="services[]" multiple="1" options=$options_services}
+				{html_options class="form-control isou-dependencies-contents-add-services" id="services" name="services[]" multiple="1" options=$options_services}
 				{else}
-				{html_options id="services" name="services" options=$options_services selected=$dependency_group_content->idservice}
+				{html_options class="form-control" id="services" name="services" options=$options_services selected=$dependency_group_content->idservice}
 				{/if}
 			</dd>
 		</div>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="servicestate">État du service lié</label>
+		<div class="form-group">
+			<dt class="col-sm-2">
+				<label class="control-label" for="servicestate">État du service lié</label>
 			</dt>
-			<dd class="form-values-dd">
-				{html_options name="servicestate" id="servicestate" options=$options_states selected=$dependency_group_content->servicestate}
+			<dd class="col-sm-10">
+				{html_options class="form-control" name="servicestate" id="servicestate" options=$options_states selected=$dependency_group_content->servicestate}
 			</dd>
 		</div>
 	</dl>

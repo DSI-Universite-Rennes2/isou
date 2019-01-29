@@ -1,4 +1,4 @@
-<form action="{$smarty.const.URL}/index.php/services/nagios/edit/{$service->id}" method="post">
+<form action="{$smarty.const.URL}/index.php/services/nagios/edit/{$service->id}" class="form-horizontal" method="post">
 	{if $service->id === 0}
 		<h2>Ajouter un service Nagios</h2>
 	{else}
@@ -11,8 +11,8 @@
 		<dt>
 			<label for="service">Service Nagios</label>
 		</dt>
-		<dd>
-			<input list="services" id="service" name="service" value="{$service->name}" />
+		<dd class="form-group">
+			<input class="form-control" list="services" id="service" name="service" value="{$service->name}" />
 			<datalist id="services">
 			{foreach $services as $service}
 				<option value="{$service}">

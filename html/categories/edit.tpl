@@ -1,4 +1,4 @@
-<form action="{$smarty.const.URL}/index.php/categories/edit/{$category->id}" method="post">
+<form action="{$smarty.const.URL}/index.php/categories/edit/{$category->id}" class="form-horizontal" method="post">
 	{if $category->id == 0}
 	<h2>Ajouter une catégorie</h2>
 	{else}
@@ -8,12 +8,12 @@
 	{include file="common/messages_form.tpl"}
 
 	<dl>
-		<div class="form-information-dl-div">
-			<dt class="form-topics-dt">
-				<label for="name">Nom de la catégorie</label>
+		<div class="form-group">
+			<dt class="col-sm-2">
+				<label class="control-label" for="name">Nom de la catégorie</label>
 			</dt>
-			<dd class="form-values-dd">
-				<input type="text" name="name" id="name" maxlength="32" value="{$category->name}" />
+			<dd class="col-sm-10">
+				<input class="form-control" type="text" name="name" id="name" maxlength="32" value="{$category->name}" />
 			</dd>
 		</div>
 	</dl>

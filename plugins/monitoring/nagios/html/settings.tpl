@@ -8,18 +8,18 @@
 
 		<dl>
 			<div class="form-group">
-				<dt class="form-topics-dt" id="plugin-nagios-enable">Activer</dt>
-				<dd class="form-values-dd">
-					{html_radios aria-labelledby="plugin-nagios-enable" name="plugin_nagios_enable" options=$options_yes_no selected=$plugin->active}
+				<dt id="plugin-nagios-enable">Activer</dt>
+				<dd>
+					{html_radios class="isou-radios" aria-labelledby="plugin-nagios-enable" name="plugin_nagios_enable" options=$options_yes_no selected=$plugin->active}
 				</dd>
 			</div>
 			<div class="form-group">
-				<dt class="form-topics-dt">
+				<dt>
 					<label for="plugin-nagios-path">Chemin du fichier status.dat</label>
 				</dt>
-				<dd class="form-values-dd">
-					<input class="input-extra-large" type="text" name="plugin_nagios_path" id="plugin-nagios-path" value="{$plugin->settings->statusdat_path}" /><br />
-					<span id="localauthentificationpath-aria-describedby">exemple : /var/share/nagios/status.dat</span>
+				<dd>
+					<input class="form-control" type="text" name="plugin_nagios_path" id="plugin-nagios-path" value="{$plugin->settings->statusdat_path}" />
+					<span class="help-block small" id="localauthentificationpath-aria-describedby">exemple : /var/share/nagios/status.dat</span>
 				</dd>
 			</div>
 		</dl>
