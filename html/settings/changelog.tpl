@@ -13,4 +13,5 @@
 			{$changelog}
 		</div>
 	{/foreach}
+	</div>
 </div>
