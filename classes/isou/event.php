@@ -49,7 +49,7 @@ class Event {
                 $this->enddate = new \DateTime();
             }
 
-            if (empty($this->period)) {
+            if (empty($this->period) === true) {
                 $this->period = self::PERIOD_NONE;
             }
         } else {
@@ -59,7 +59,7 @@ class Event {
             $this->enddate = null;
             $this->state = State::CRITICAL;
             $this->type = self::TYPE_SCHEDULED;
-            $this->period = '0';
+            $this->period = self::PERIOD_NONE;
             $this->ideventdescription = 1;
             $this->description = null;
             $this->idservice = 0;
@@ -231,10 +231,11 @@ class Event {
         if (isset($options['regular']) === true) {
             if (is_bool($options['regular']) === true) {
                 if ($options['regular'] === true) {
-                    $conditions[] = 'e.period IS NOT NULL';
+                    $conditions[] = 'e.period != :period';
                 } else {
-                    $conditions[] = 'e.period IS NULL';
+                    $conditions[] = 'e.period = :period';
                 }
+                $parameters[':period'] = self::PERIOD_NONE;
             } else {
                 throw new \Exception(__METHOD__.': l\'option \'regular\' doit être un booléen. Valeur donnée : '.var_export($options['regular'], $return = true));
             }

@@ -238,7 +238,7 @@ class Upgrade200 extends AbstractMigration {
                 if ($row['isScheduled'] === '2') {
                     $period = $row['period'];
                 } else {
-                    $period = null;
+                    $period = 0;
                 }
 
                 if ($row['isScheduled'] === '3') {
@@ -266,7 +266,7 @@ class Upgrade200 extends AbstractMigration {
                     'enddate' => $row['endDate'].':00',
                     'state' => $row['state'],
                     'type' => 0, // 0 = unscheduled events.
-                    'period' => null,
+                    'period' => 0,
                     'ideventdescription' => 0,
                     'idservice' => $row['idService'],
                     );
