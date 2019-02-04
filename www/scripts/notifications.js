@@ -2,17 +2,24 @@ const isou_url = window.location.href.split('/index.php')[0].replace(/\/+$/, '')
 
 function setIsouActiveNotificationImage(active = true) {
     var image = document.getElementById('isou-top-aside-notifications-image');
+    var submit = document.getElementById('modal-notifications-submit');
 
-    if (image === false) {
+    if (image === false || submit === false) {
         return;
     }
 
     if (active === true) {
         image.setAttribute('alt', 'notification activée');
         image.setAttribute('src', isou_url+'/themes/bootstrap/images/notifications-on.svg');
+
+        submit.className = 'btn btn-danger';
+        submit.textContent = 'Désactiver les notifications';
     } else {
         image.setAttribute('alt', 'notification désactivée');
         image.setAttribute('src', isou_url+'/themes/bootstrap/images/notifications-off.svg');
+
+        submit.className = 'btn btn-success';
+        submit.textContent = 'Activer les notifications';
     }
 }
 
@@ -148,6 +155,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     // Gère les inscriptions/désinscriptions aux notifications.
                     notificationsButton.addEventListener('click', function() {
+                        var modal = document.getElementById('modal-notifications');
+                        modal.style.display = 'unset';
+                        modal.classList.remove('hidden');
+
+                        document.getElementById('modal-backdrop').classList.remove('hidden');
+                    });
+
+                    // Gère le bouton de fermeture de la modal de notification.
+                    var close = document.getElementById('modal-notifications-close');
+                    close.addEventListener('click', function() {
+                        var modal = document.getElementById('modal-notifications');
+                        modal.style.display = 'none';
+                        modal.classList.add('hidden');
+
+                        document.getElementById('modal-backdrop').classList.add('hidden');
+                    });
+
+                    // Gère le bouton d'activation/désactivation de la modal de notification.
+                    var submit = document.getElementById('modal-notifications-submit');
+                    submit.addEventListener('click', function() {
                         navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
                             serviceWorkerRegistration.pushManager.getSubscription()
                                 .then(function(subscription) {

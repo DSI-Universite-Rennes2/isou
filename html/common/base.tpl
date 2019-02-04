@@ -39,6 +39,27 @@
 					<span id="isou-top-aside-authentification-span">(<a href="{$smarty.const.URL}/index.php/deconnexion">déconnexion</a>)</span>
 				{/if}
 			</p>
+
+			{if $CFG.notifications_enabled === '1'}
+			<div class="modal fade in text-left hidden" id="modal-notifications" tabindex="-1" role="dialog" aria-labelledby="modal-notifications-label">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header" id="modal-notifications-label">
+							<button type="button" class="close" id="modal-notifications-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title">Notifications web</h4>
+						</div>
+						<div class="modal-body">
+							<p>L'API de <em>Notifications Web</em> permet à une page web d'envoyer des notifications qui s'affichent hors de la page au niveau du système. Cela permet aux applications web d'envoyer des informations à un utilisateur, même si l'application est inactive.</p>
+							<p>Vous recevrez une notification sur votre téléphone ou sur votre ordinateur pour chaque interruption de services.</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary" id="modal-notifications-submit">Save changes</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-backdrop fade in hidden" id="modal-backdrop"></div>
+			{/if}
 		</aside>
 
 		<aside class="isou-top-aside text-right">
