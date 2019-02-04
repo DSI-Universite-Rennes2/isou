@@ -55,7 +55,7 @@ Pour fonctionner avec Nagios, Isou doit être en mesure de lire le fichier `stat
 - soit exposer le fichier `status.dat` en http
 
 ### Notifications Web
-Pour faire fonctionner les notifications web avec Firefox 60 ESR, il faut activer le flag `dom.serviceWorkers.enabled` sur la page `about:config`.
+Pour faire fonctionner les notifications web avec Firefox 60 ESR, il faut activer les flags `dom.serviceWorkers.enabled` et `dom.push.enabled` sur la page `about:config`.
 Voir aussi [https://caniuse.com/#feat=serviceworkers](https://caniuse.com/#feat=serviceworkers).
 
 ## Licence

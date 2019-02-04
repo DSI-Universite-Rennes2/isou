@@ -122,6 +122,16 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!('serviceWorker' in navigator)) {
         // Supprime la cloche lorsque les serviceworker ne sont pas activés sur le navigateur.
         notificationsButton.remove();
+
+        console.log('Les ServiceWorker ne sont pas gérés ou activés par votre navigateur.');
+        return;
+    }
+
+    if (!('PushManager' in window)) {
+        // Supprime la cloche lorsque les push ne sont pas activés sur le navigateur.
+        notificationsButton.remove();
+
+        console.log('Les Push ne sont pas gérés ou activés par votre navigateur.');
         return;
     }
 
