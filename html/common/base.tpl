@@ -79,7 +79,7 @@
 			<nav id="navigation" role="navigation">
 				<h1 class="sr-only">Navigation</h1>
 
-				{if count($MENU) > 1}
+				{if count($MENU) > 1 || isset($ADMINISTRATION_MENU) === true}
 				<div id="menu" class="container-fluid navbar navbar-default menu-div">
 					<ul class="nav navbar-nav menu-ul">
 						{foreach $MENU as $menu}
