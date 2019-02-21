@@ -15,17 +15,16 @@ CVS
 /.cache
 /composer.phar
 
-# fichiers ISOU
-backup/*
-cache/
-config.php
-cron.pid
-database/*.sqlite3
+# Fichiers ISOU.
+/backup/*
+/cache/
+/config.php
+/cron.pid
+/database/*.sqlite3
 /database/vapid_private.key
 /database/vapid_public.key
-log/*
-upgrade/LOCK_UPDATE
-status.dat
-www/isou.json
-vendor/
-units/units.sqlite3
+/log/*
+/status.dat
+/www/isou.json
+/vendor/
+/units/units.sqlite3
