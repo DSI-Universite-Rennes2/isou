@@ -94,6 +94,18 @@ input[type="date"].form-control {
     padding-left: 1em;
 }
 
+.isou-list-events-details {
+    margin: -10px 0 0 0;
+}
+
+.isou-list-events-details[open] .isou-list-hideable-summary {
+    display: none;
+}
+
+.isou-list-hideable-summary {
+    background: none;
+}
+
 #isou-board th.today {
     background-color: #c9edf9;
 }

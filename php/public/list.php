@@ -3,6 +3,7 @@
 use UniversiteRennes2\Isou\Category;
 use UniversiteRennes2\Isou\Event;
 use UniversiteRennes2\Isou\Service;
+use UniversiteRennes2\Isou\State;
 
 $TITLE .= ' - Liste';
 
@@ -10,8 +11,11 @@ $since = new DateTime();
 $since->sub(new DateInterval('P2D')); // TODO: create CFG variable.
 
 $categories = array();
-foreach (Category::get_records(array('non-empty' => true)) as $category) {
+foreach (Category::get_records(array('non-empty' => true, 'only-visible-services' => true)) as $category) {
     $categories[$category->id] = $category;
+    $categories[$category->id]->state = State::OK;
+    $categories[$category->id]->count_events = 0;
+
     $categories[$category->id]->services = array();
 }
 
@@ -31,8 +35,24 @@ foreach ($services as $service) {
     if ($service->is_closed === true) {
         $service->closed_event = $service->get_closed_event();
     } else {
-        $service->events = Event::get_records(array('since' => $since, 'idservice' => $service->id));
+        $service->events = array();
+        foreach (Event::get_records(array('since' => $since, 'idservice' => $service->id)) as $index => $event) {
+            if ($index < 3) {
+                $service->events[] = $event;
+            } else {
+                $service->more[] = $event;
+            }
+        }
+
         $service->regular_events = $service->get_regular_events();
+
+        if ($categories[$service->idcategory]->state < $service->state) {
+            $categories[$service->idcategory]->state = $service->state;
+        }
+
+        if ($service->state !== State::OK) {
+            $categories[$service->idcategory]->count_events++;
+        }
     }
 
     $categories[$service->idcategory]->services[] = $service;

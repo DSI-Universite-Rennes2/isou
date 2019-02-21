@@ -74,6 +74,18 @@ class Category {
             unset($options['id']);
         }
 
+        if (isset($options['only-visible-services']) === true) {
+            if (isset($options['non-empty']) === false) {
+                throw new \Exception(__METHOD__.': pour utiliser l\'option \'only-visible-services\, l\'option \'non-empty\' est requise.');
+            } else if (is_bool($options['only-visible-services']) === false) {
+                throw new \Exception(__METHOD__.': l\'option \'only-visible-services\' doit être un booléan. Valeur donnée : '.var_export($options['non-empty'], $return = true));
+            } else if ($options['only-visible-services'] === true) {
+                $conditions[] = 's.visible = 1';
+            }
+
+            unset($options['only-visible-services']);
+        }
+
         if (isset($options['non-empty']) === true) {
             if (is_bool($options['non-empty']) === false) {
                 throw new \Exception(__METHOD__.': l\'option \'non-empty\' doit être un booléan. Valeur donnée : '.var_export($options['non-empty'], $return = true));
