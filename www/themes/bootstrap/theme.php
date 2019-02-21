@@ -4,7 +4,7 @@ use Isou\Helpers\Style;
 
 $theme_version = '1';
 
-$STYLES[] = new Style(URL.'/themes/bootstrap/css/bootstrap.min.css?v='.$theme_version);
+$STYLES[] = new Style('//unpkg.com/bootstrap@3.3/dist/css/bootstrap.min.css');
 $STYLES[] = new Style(URL.'/themes/bootstrap/css/common.css?v='.$theme_version);
 
 if (isset($current_page->url) === true) {
