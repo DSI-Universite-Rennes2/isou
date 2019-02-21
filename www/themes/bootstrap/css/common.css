@@ -93,3 +93,19 @@ input[type="date"].form-control {
     font-style: italic;
     padding-left: 1em;
 }
+
+#isou-board th.today {
+    background-color: #c9edf9;
+}
+
+#isou-board td.today.success {
+    background-color: #bff0b8;
+}
+
+#isou-board td.today.warning {
+    background-color: #F6bC86;
+}
+
+#isou-board td.today.danger {
+    background-color: #ffa9a9;
+}

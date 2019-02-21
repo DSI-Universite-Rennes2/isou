@@ -17,7 +17,7 @@ foreach (Category::get_records(array('non-empty' => true)) as $category) {
 $services_events = array();
 
 $days = array();
-for ($i = 0; $i < 7; $i++) {
+for ($i = 6; $i >= 0; $i--) {
     $days[$i] = new DateTime(strftime('%Y-%m-%d', TIME - ($i * 24 * 60 * 60)));
 
     $since = clone $days[$i];
@@ -70,7 +70,7 @@ foreach ($services as $service) {
     $service->availabilities = array();
     $service->availabilities_total = 0;
 
-    for ($i = 0; $i < 7; $i++) {
+    for ($i = 6; $i >= 0; $i--) {
         if (isset($services_events[$service->id][$i]) === true) {
             if ($i === 0) {
                 $base = time() - mktime(0, 0, 0);
@@ -79,7 +79,7 @@ foreach ($services as $service) {
             }
 
             $elapsed_time = $base - $services_events[$service->id][$i];
-            $service->availabilities[$i] = ceil($elapsed_time / $base * 100);
+            $service->availabilities[$i] = abs(ceil($elapsed_time / $base * 100));
             if ($service->availabilities[$i] > 100) {
                 $service->availabilities[$i] = 100;
             }
