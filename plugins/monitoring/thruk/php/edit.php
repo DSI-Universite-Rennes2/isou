@@ -4,20 +4,20 @@ use UniversiteRennes2\Isou\Service;
 
 $service = false;
 if (isset($PAGE_NAME[3]) === true && ctype_digit($PAGE_NAME[3]) === true) {
-    $service = Service::get_record(array('id' => $PAGE_NAME[3], 'plugin' => PLUGIN_SHINKEN));
+    $service = Service::get_record(array('id' => $PAGE_NAME[3], 'plugin' => PLUGIN_THRUK));
 }
 
 if ($service === false) {
     $service = new Service();
-    $service->idplugin = PLUGIN_SHINKEN;
+    $service->idplugin = PLUGIN_THRUK;
 }
 
 // Check cache.
-$cache_path = PRIVATE_PATH.'/cache/plugins/monitoring/shinken';
+$cache_path = PRIVATE_PATH.'/cache/plugins/monitoring/thruk';
 if (is_readable($cache_path.'/services.json') === false) {
     $_SESSION['messages']['errors'][] = 'Le fichier "'.$cache_path.'/services.json" n\'existe pas ou ne peut être lu.<br />'.
        'Assurez-vous que le cron s\'exécute correctement.';
-    header('Location: '.URL.'/index.php/services/shinken');
+    header('Location: '.URL.'/index.php/services/thruk');
     exit(0);
 }
 
@@ -27,24 +27,24 @@ $cache = json_decode($cache, $array = true);
 
 if ($cache === null) {
     $_SESSION['messages']['errors'][] = 'Le fichier "'.$cache_path.'/services.json" est corrompu.';
-    header('Location: '.URL.'/index.php/services/shinken');
+    header('Location: '.URL.'/index.php/services/thruk');
     exit(0);
 }
 
 if (count($cache) === 0) {
-    $_SESSION['messages']['errors'][] = 'Le fichier "'.$cache_path.'/services.json" ne contient aucun service Shinken.';
-    header('Location: '.URL.'/index.php/services/shinken');
+    $_SESSION['messages']['errors'][] = 'Le fichier "'.$cache_path.'/services.json" ne contient aucun service Thruk.';
+    header('Location: '.URL.'/index.php/services/thruk');
     exit(0);
 }
 
-$shinken = array();
-foreach (Service::get_records(array('plugin' => PLUGIN_SHINKEN)) as $record) {
-    $shinken[$record->name] = $record;
+$thruk = array();
+foreach (Service::get_records(array('plugin' => PLUGIN_THRUK)) as $record) {
+    $thruk[$record->name] = $record;
 }
 
 $services = array();
 foreach ($cache as $data) {
-    if (isset($shinken[$data['name']]) === true) {
+    if (isset($thruk[$data['name']]) === true) {
         continue;
     }
 
@@ -60,7 +60,7 @@ if (isset($_POST['service']) === true && empty($_POST['service']) === false) {
         $regexp = str_replace('/', '\/', $_POST['service']);
         foreach ($cache as $data) {
             if (preg_match('/'.$regexp.'/i', $data['name']) === 1) {
-                if (isset($shinken[$data['name']]) === true) {
+                if (isset($thruk[$data['name']]) === true) {
                     continue;
                 }
 
@@ -103,7 +103,7 @@ if (isset($_POST['service']) === true && empty($_POST['service']) === false) {
     if (isset($_POST['errors'][0]) === false && isset($_POST['preview']) === false) {
         $_SESSION['messages']['successes'] = $_POST['successes'];
 
-        header('Location: '.URL.'/index.php/services/shinken');
+        header('Location: '.URL.'/index.php/services/thruk');
         exit(0);
     }
 }

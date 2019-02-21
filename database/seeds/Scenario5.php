@@ -49,7 +49,7 @@ class Scenario5 extends AbstractSeed {
                 'visible' => 0,
                 'locked' => 0,
                 'rsskey' => null,
-                'idplugin' => 3, // Plugin shinken.
+                'idplugin' => 3, // Plugin thruk.
                 'idcategory' => null,
                 ),
             );

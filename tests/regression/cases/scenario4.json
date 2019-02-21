@@ -1,10 +1,10 @@
 {
     "name": "Scenario 4",
-    "description": "Contexte du service :\n- 1 service isou\n- 1 service shinken",
+    "description": "Contexte du service :\n- 1 service isou\n- 1 service thruk",
     "cases": [
         {
             "name": "Case 1",
-            "description": "Le service shinken est instable. Le service final doit devenir instable.",
+            "description": "Le service thruk est instable. Le service final doit devenir instable.",
             "inputs": [
                 {
                     "id": "42",
@@ -44,7 +44,7 @@
         },
         {
             "name": "Case 3",
-            "description": "Le service isou est instable. Le service shinken est indisponible. Le service final doit devenir indisponible.",
+            "description": "Le service isou est instable. Le service thruk est indisponible. Le service final doit devenir indisponible.",
             "inputs": [
                 {
                     "id": "42",

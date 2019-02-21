@@ -16,7 +16,7 @@ class Scenario1 extends AbstractSeed {
     const ISOU_SEED_NAME = 'Scenario 1';
 
     public function run() {
-        // Active le service shinken.
+        // Active le service thruk.
         $connection = $this->getAdapter()->getConnection();
         $statement = $connection->prepare('UPDATE plugins SET active = 1');
         $statement->execute();
@@ -54,7 +54,7 @@ class Scenario1 extends AbstractSeed {
                 'visible' => 0,
                 'locked' => 0,
                 'rsskey' => null,
-                'idplugin' => 3, // Type shinken.
+                'idplugin' => 3, // Type thruk.
                 'idcategory' => null,
                 ),
             );

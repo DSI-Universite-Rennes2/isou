@@ -50,7 +50,7 @@ class Scenario2 extends AbstractSeed {
                 'visible' => 0,
                 'locked' => 0,
                 'rsskey' => null,
-                'idplugin' => 3, // Type shinken.
+                'idplugin' => 3, // Type thruk.
                 'idcategory' => null,
                 ),
             array(
@@ -61,7 +61,7 @@ class Scenario2 extends AbstractSeed {
                 'visible' => 0,
                 'locked' => 0,
                 'rsskey' => null,
-                'idplugin' => 3, // Type shinken.
+                'idplugin' => 3, // Type thruk.
                 'idcategory' => null,
                 ),
             );

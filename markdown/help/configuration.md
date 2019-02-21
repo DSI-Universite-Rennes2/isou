@@ -33,8 +33,8 @@ Le sous-onglets [isou](../configuration/monitoring/isou) permet de configurer le
 Le sous-onglets [nagios](../configuration/monitoring/nagios) permet d'activer l'échange de données entre le logiciel de monitoring [Nagios](https://www.nagios.org/) et Isou, par l'intermédiaire du fichier `status.dat`.
 Pour cela, il est impératif qu'Isou puisse lire ce fichier, soit en étant installé sur le même serveur que Nagios, soit en exposant via HTTP le fichier `status.dat`.
 
-### <span id="shinken"></span>Shinken
-Le sous-onglets [shinken](../configuration/monitoring/shinken) permet d'activer l'échange de données entre le logiciel de monitoring [Shinken](http://www.shinken-monitoring.org/) et Isou, par l'intermédiaire de l'API REST de [Thruk](https://www.thruk.org/).
+### <span id="thruk"></span>Thruk
+Le sous-onglets [thruk](../configuration/monitoring/thruk) permet d'activer l'échange de données entre le logiciel de monitoring [Thruk](http://www.thruk-monitoring.org/) et Isou, par l'intermédiaire de l'API REST de [Thruk](https://www.thruk.org/).
 
 ## <span id="notifications-web"></span>Notifications Web
 Le sous-onglets [notifications web](../configuration/notifications) permet d'activer les notifications web (web push). Cette fonctionnalité est réservée aux utilisateurs connectés.

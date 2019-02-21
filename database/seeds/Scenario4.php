@@ -4,7 +4,7 @@
   * Initialise le scénario 4.
   *      Contexte du service :
   *          - 1 service Isou
-  *          - 1 service Shinken
+  *          - 1 service Thruk
   */
 
 use Phinx\Seed\AbstractSeed;
@@ -33,7 +33,7 @@ class Scenario4 extends AbstractSeed {
             array(
                 'id' => self::ISOU_SEED_PREFIX_ID.'1',
                 'name' => 'service "'.self::ISOU_SEED_NAME."'",
-                'comment' => 'service dépendant d\'un service Shinken et d\'un service Isou',
+                'comment' => 'service dépendant d\'un service Thruk et d\'un service Isou',
                 'state' => '0',
                 'enable' => 1,
                 'visible' => 1,
@@ -55,13 +55,13 @@ class Scenario4 extends AbstractSeed {
                 ),
             array(
                 'id' => self::ISOU_SEED_PREFIX_ID.'3',
-                'name' => 'service shinken ('.self::ISOU_SEED_NAME.')',
+                'name' => 'service thruk ('.self::ISOU_SEED_NAME.')',
                 'state' => '0',
                 'enable' => 1,
                 'visible' => 0,
                 'locked' => 0,
                 'rsskey' => null,
-                'idplugin' => 3, // Type shinken.
+                'idplugin' => 3, // Type thruk.
                 'idcategory' => null,
                 ),
             );
@@ -88,7 +88,7 @@ class Scenario4 extends AbstractSeed {
                 ),
             array(
                 'id' => self::ISOU_SEED_PREFIX_ID.'3',
-                'name' => 'serveur shinken - warning',
+                'name' => 'serveur thruk - warning',
                 'redundant' => '0',
                 'groupstate' => '1',
                 'idservice' => self::ISOU_SEED_PREFIX_ID.'1',
@@ -96,7 +96,7 @@ class Scenario4 extends AbstractSeed {
                 ),
             array(
                 'id' => self::ISOU_SEED_PREFIX_ID.'4',
-                'name' => 'serveur shinken - critical',
+                'name' => 'serveur thruk - critical',
                 'redundant' => '0',
                 'groupstate' => '2',
                 'idservice' => self::ISOU_SEED_PREFIX_ID.'1',
@@ -120,12 +120,12 @@ class Scenario4 extends AbstractSeed {
             ),
             array(
                 'idgroup' => self::ISOU_SEED_PREFIX_ID.'3',
-                'idservice' => self::ISOU_SEED_PREFIX_ID.'3', // Service shinken.
+                'idservice' => self::ISOU_SEED_PREFIX_ID.'3', // Service thruk.
                 'servicestate' => 1,
             ),
             array(
                 'idgroup' => self::ISOU_SEED_PREFIX_ID.'4',
-                'idservice' => self::ISOU_SEED_PREFIX_ID.'3', // Service shinken.
+                'idservice' => self::ISOU_SEED_PREFIX_ID.'3', // Service thruk.
                 'servicestate' => 2,
             ),
         );
@@ -140,7 +140,7 @@ class Scenario4 extends AbstractSeed {
             ),
             array(
                 'id' => self::ISOU_SEED_PREFIX_ID.'2',
-                'message' => 'service shinken inaccessible',
+                'message' => 'service thruk inaccessible',
             ),
         );
         $table = $this->table('dependencies_messages');

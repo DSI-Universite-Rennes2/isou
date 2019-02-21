@@ -1,7 +1,7 @@
 <?php
 
 $plugin = new stdClass();
-$plugin->name = 'Shinken';
+$plugin->name = 'Thruk';
 $plugin->version = '1.0.0';
 
 $plugin->settings = new stdClass();

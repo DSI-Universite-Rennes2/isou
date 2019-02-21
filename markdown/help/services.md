@@ -2,7 +2,7 @@
 
 Il existe différents types de services. Seuls les services de type Isou peuvent être affichés sur les pages publiques.
 
-L'état des services Isou peuvent dépendre de l'état de d'autres services Isou, mais aussi Nagios ou Shinken.
+L'état des services Isou peuvent dépendre de l'état de d'autres services Isou, mais aussi Nagios ou Thruk.
 
 ## <span id="isou"></span>Services Isou
 
@@ -14,6 +14,6 @@ Par exemple, on peut définir un service "base de données", qui serait utilisé
 ### <span id="verrouillage"></span>Verrouillage
 Il est possible de forcer l'état d'un service Isou. Peu importe l'état de ses dépendances, c'est la valeur utilisée pour forcer l'état du service qui sera affichée sur les pages publiques.
 
-## <span id="shinken"></span>Services Shinken
+## <span id="thruk"></span>Services Thruk
 
-L'ajout de nouveaux services Shinken peut s'effectuer par une expression régulière.
+L'ajout de nouveaux services Thruk peut s'effectuer par une expression régulière.

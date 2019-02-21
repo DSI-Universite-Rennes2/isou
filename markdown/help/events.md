@@ -4,7 +4,7 @@
 Liste tous les événements concernant des services Isou dont l'instabilité ou l'indisponibilité étaient prévus et planifiés. Typiquement, il s'agit d'opérations de maintenance ou de mise à jour.
 
 ## <span id="imprevus"></span>Interruptions imprévues
-Liste tous les événements concernant des services Isou dont l'instabilité ou l'indisponibilité étaient imprévus. Généralement, ce type d'évènement est remonté par des dépendances à des services de monitoring comme Nagios ou Shinken.
+Liste tous les événements concernant des services Isou dont l'instabilité ou l'indisponibilité étaient imprévus. Généralement, ce type d'évènement est remonté par des dépendances à des services de monitoring comme Nagios ou Thruk.
 
 ## <span id="reguliers"></span>Interruptions régulières
 Liste tous les événements concernant des services Isou dont l'instabilité ou l'indisponibilité sont réguliers. Il peut s'agir d'opérations de maintenance, de redémarrage ou de sauvegarde quotidienne pendant laquelle le service est indisponible.

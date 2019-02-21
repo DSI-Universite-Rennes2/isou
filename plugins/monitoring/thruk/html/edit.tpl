@@ -1,6 +1,6 @@
-<form action="{$smarty.const.URL}/index.php/services/shinken/edit/{$service->id}" class="form" method="post">
+<form action="{$smarty.const.URL}/index.php/services/thruk/edit/{$service->id}" class="form" method="post">
 	{if $service->id === 0}
-		<h2>Ajouter un service Shinken</h2>
+		<h2>Ajouter un service Thruk</h2>
 	{else}
 		<h2>Remplacer le service {$service->name}</h2>
 	{/if}
@@ -9,7 +9,7 @@
 
 	<dl>
 		<dt>
-			<label for="service">Service Shinken</label>
+			<label for="service">Service Thruk</label>
 		</dt>
 		<dd class="form-group">
 			<input class="form-control" list="services" id="service" name="service" value="{$service->name}" />
@@ -35,7 +35,7 @@
 		{/if}
 
 		<li>
-			<a class="btn btn-default" href="{$smarty.const.URL}/index.php/services/shinken">annuler</a>
+			<a class="btn btn-default" href="{$smarty.const.URL}/index.php/services/thruk">annuler</a>
 		</li>
 	</ul>
 

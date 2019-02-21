@@ -1,20 +1,20 @@
 <?php
 
 /**
-  * Fonctions liées aux mises à jour des services du plugin Shinken.
+  * Fonctions liées aux mises à jour des services du plugin Thruk.
   */
 
 use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
 /**
-  * Mets l'état des services du plugin Shinken.
+  * Mets l'état des services du plugin Thruk.
   *
-  * @param UniversiteRennes2\Isou\Plugin $plugin Une instance du plugin Shinken.
+  * @param UniversiteRennes2\Isou\Plugin $plugin Une instance du plugin Thruk.
   *
   * @return boolean True si la mise à jour s'est déroulée correctement ; False si une erreur est survenue.
   */
-function plugin_shinken_update($plugin) {
+function plugin_thruk_update($plugin) {
     global $LOGGER;
 
     $url = $plugin->settings->thruk_path;
@@ -27,7 +27,7 @@ function plugin_shinken_update($plugin) {
     $username = $plugin->settings->thruk_username;
     $password = $plugin->settings->thruk_password;
 
-    // Appel le webservice de Shinken.
+    // Appel le webservice de Thruk.
     $url .= '?host=all&view_mode=json&columns=host_name,description,state,acknowledged,is_flapping';
 
     $params = array(
@@ -49,14 +49,14 @@ function plugin_shinken_update($plugin) {
     fclose($handle);
 
     if ($response === false) {
-        $LOGGER->addError('Les données de l\'API Shinken n\'ont pas pu être lues.');
+        $LOGGER->addError('Les données de l\'API Thruk n\'ont pas pu être lues.');
 
         return false;
     }
 
     $elements = json_decode($response);
     if ($elements === null) {
-        $LOGGER->addError('Le JSON reçu par l\'API Shinken n\'a pas pu être décodé.');
+        $LOGGER->addError('Le JSON reçu par l\'API Thruk n\'a pas pu être décodé.');
 
         return false;
     }
@@ -76,13 +76,13 @@ function plugin_shinken_update($plugin) {
             if (isset($services[$id]) === false) {
                 $services[$id] = $service;
             } else {
-                $LOGGER->addInfo('Un service Shinken porte déjà le nom "'.$service->name.'" (id: '.$id.').');
+                $LOGGER->addInfo('Un service Thruk porte déjà le nom "'.$service->name.'" (id: '.$id.').');
             }
         }
     }
 
     // Enregistre le cache.
-    $cache_path = PRIVATE_PATH.'/cache/plugins/monitoring/shinken';
+    $cache_path = PRIVATE_PATH.'/cache/plugins/monitoring/thruk';
 
     if (is_dir($cache_path) === false) {
         if (mkdir($cache_path, 0755, $recursive = true) === false) {
@@ -94,8 +94,8 @@ function plugin_shinken_update($plugin) {
         $LOGGER->addError('Le cache n\'a pas pu être écrit dans le répertoire "'.$cache_path.'".');
     }
 
-    // Mets à jour les états des services Shinken dans la base de données d'Isou.
-    foreach (Service::get_records(array('plugin' => PLUGIN_SHINKEN)) as $service) {
+    // Mets à jour les états des services Thruk dans la base de données d'Isou.
+    foreach (Service::get_records(array('plugin' => PLUGIN_THRUK)) as $service) {
         $id = md5($service->name);
 
         if (isset($services[$id]) === false) {

@@ -4,7 +4,7 @@ Isou est une application permettant d'informer de l'état des services numériqu
 
 ## Fonctionnalités
 - propose différentes vues des états passés, présents et à venir
-- s'interface avec un ou plusieurs logiciels de monitoring comme Nagios ou Shinken
+- s'interface avec un ou plusieurs logiciels de monitoring comme Nagios (en natif) ou Nagios, Icinga, Shinken et Naemon (via Thruk)
 - permet de regrouper les services en catégorie
 - dispose de plusieurs types d'évènements
 - garde un historique des incidents
@@ -21,7 +21,7 @@ Isou est une application permettant d'informer de l'état des services numériqu
 ### Configuration facultative
 - Un système d'authentification CAS/LDAP
 - Un système de monitoring Nagios
-- Un système de monitoring Shinken/Thruk
+- Un système de monitoring Thruk
 
 ## Installation et mise à jour
 ```bash
@@ -50,9 +50,9 @@ Les services Isou peuvent être associés à des services issus d'outils de moni
 
 ## Problèmes courants
 ### Isou et Nagios
-Pour fonctionner avec Nagios, Isou doit être en mesure de lire le fichier `status.dat` de Nagios. Il faut donc :
+Pour fonctionner avec Nagios (en natif), Isou doit être en mesure de lire le fichier `status.dat` de Nagios. Il faut donc :
 - soit installer Isou sur le même serveur que Nagios
-- soit exposer le fichier `status.dat` en http
+- soit exposer le fichier `status.dat` en http(s)
 
 ### Notifications Web
 Pour faire fonctionner les notifications web avec Firefox 60 ESR, il faut activer les flags `dom.serviceWorkers.enabled` et `dom.push.enabled` sur la page `about:config`.

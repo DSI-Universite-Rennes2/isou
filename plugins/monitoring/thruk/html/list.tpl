@@ -30,7 +30,7 @@
 				</ul>
 			</td>
 			<td headers="head-note">
-				{* <!-- ex: service SHINKEN non utilisé dans ISOU, service retiré de SHINKEN --> *}
+				{* <!-- ex: service THRUK non utilisé dans ISOU, service retiré de THRUK --> *}
 				{if isset($service->notes[0])}
 				<ul class="alert alert-warning list-unstyled">
 				{foreach $service->notes as $note}
