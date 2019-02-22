@@ -14,7 +14,7 @@ $categories = array();
 foreach (Category::get_records(array('non-empty' => true, 'only-visible-services' => true)) as $category) {
     $categories[$category->id] = $category;
     $categories[$category->id]->state = State::OK;
-    $categories[$category->id]->count_events = 0;
+    $categories[$category->id]->unstable_services = array();
 
     $categories[$category->id]->services = array();
 }
@@ -51,7 +51,7 @@ foreach ($services as $service) {
         }
 
         if ($service->state !== State::OK) {
-            $categories[$service->idcategory]->count_events++;
+            $categories[$service->idcategory]->unstable_services[] = $service;
         }
     }
 

@@ -94,15 +94,17 @@ input[type="date"].form-control {
     padding-left: 1em;
 }
 
-.isou-list-events-details {
+.isou-list-events-more-details {
     margin: -10px 0 0 0;
 }
 
-.isou-list-events-details[open] .isou-list-hideable-summary {
+.isou-list-events-details[open] > .isou-list-hideable-summary,
+.isou-list-events-details[open] .isou-list-hideable-table-div {
     display: none;
 }
 
-.isou-list-hideable-summary {
+.isou-list-hideable-summary,
+.isou-list-hideable-table-div {
     background: none;
 }
 
