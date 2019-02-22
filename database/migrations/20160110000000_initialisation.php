@@ -133,31 +133,6 @@ class Initialisation extends AbstractMigration {
         echo ' ==   - Insère les données dans la table "configuration".'.PHP_EOL;
         $rows = array(
                 array(
-                    'key' => 'authentification_cas_admin_usernames',
-                    'value' => '',
-                    'type' => 'array',
-                ),
-                array(
-                    'key' => 'authentification_cas_enabled',
-                    'value' => 0,
-                    'type' => 'string',
-                ),
-                array(
-                    'key' => 'authentification_manual_enabled',
-                    'value' => 0,
-                    'type' => 'string',
-                ),
-                array(
-                    'key' => 'authentification_manual_password',
-                    'value' => '',
-                    'type' => 'string',
-                ),
-                array(
-                    'key' => 'authentification_manual_path',
-                    'value' => '',
-                    'type' => 'string',
-                ),
-                array(
                     'key' => 'last_check_update',
                     'value' => strftime('%FT%T'),
                     'type' => 'datetime',

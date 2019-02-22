@@ -116,9 +116,6 @@ class Upgrade200 extends AbstractMigration {
                             $data[':value'] = $admin_mails[0];
                         }
                         break;
-                    case 'admin_users':
-                        $data[':key'] = 'authentification_cas_admin_usernames';
-                        break;
                     case 'daily_cron_hour':
                         $data[':key'] = 'report_hour';
                         break;
@@ -134,15 +131,14 @@ class Upgrade200 extends AbstractMigration {
                     case 'local_mail':
                         $data[':key'] = 'report_sender';
                         break;
-                    case 'local_password':
-                        $data[':key'] = 'authentification_manual_password';
-                        break;
                     case 'version':
                         $data[':value'] = '2.0.0';
                         break;
-                    case 'auto_backup';
-                    case 'ip_local';
-                    case 'ip_service';
+                    case 'admin_users':
+                    case 'auto_backup':
+                    case 'ip_local':
+                    case 'ip_service':
+                    case 'local_password':
                         continue 2;
                 }
 
