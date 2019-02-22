@@ -17,10 +17,10 @@
 			<table class="table table-bordered table-condensed">
 				<thead>
 					<tr>
-						<th class="col-md-3" id="column-1">Services</th>
+						<th class="col-md-5" id="column-1">Services</th>
 						<th class="col-md-1 text-center" id="column-2">États</th>
-						<th class="col-md-4 text-center" id="column-3">Interruptions passées ou à venir</th>
-						<th class="col-md-4 text-center" id="column-4">Interruptions régulières</th>
+						<th class="col-md-3 text-center" id="column-3">Interruptions passées ou à venir</th>
+						<th class="col-md-3 text-center" id="column-4">Interruptions régulières</th>
 					</tr>
 				</thead>
 				<tbody>
