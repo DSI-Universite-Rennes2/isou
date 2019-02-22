@@ -1,0 +1,52 @@
+body {
+    margin: 0;
+}
+
+.isou-top-aside {
+    margin: .2em 1em 0 0;
+}
+
+.page-header {
+    border: none;
+    margin: .5em 0 0 0;
+}
+
+.alert .btn {
+    text-decoration: none;
+}
+
+.isou-list-event-scheduled {
+    background-image: url('../images/calendar.gif');
+}
+
+.isou-list-event-unscheduled {
+    background-image: url('../images/caution.gif');
+}
+
+#administration-menu li:nth-child(-n+3) a {
+    background-color: darkgreen;
+    color: white;
+}
+
+#administration-menu li.active a,
+.navbar-inverse .navbar-nav > .active > a {
+    background-color: white;
+    color: black;
+}
+
+#isou-header {
+    background: none;
+    padding-left: 15px;
+}
+
+body > .container {
+    padding-bottom: 3em;
+}
+
+#isou-footer-p {
+    line-height: 3em;
+}
+
+#isou-footer-span {
+    border: none;
+}
