@@ -26,7 +26,7 @@ Isou est une application permettant d'informer de l'état des services numériqu
 ## Installation et mise à jour
 ```bash
 cd /chemin/installation
-git clone git://git.renater.fr/isounagios.git isou
+git clone git://git.renater.fr/isou.git
 cd isou
 cp -i distribution/config.php .
 php composer.phar install

@@ -3,7 +3,7 @@
     "type": "project",
     "description": "Application to show status of your services.",
     "keywords": ["monitoring", "status", "nagios", "shinken"],
-    "homepage": "https://sourcesup.renater.fr/projects/isounagios/",
+    "homepage": "https://sourcesup.renater.fr/projects/isou/",
     "license": "Public domain",
     "authors": [{
         "name": "Université Rennes 2 - DSI",

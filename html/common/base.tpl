@@ -127,7 +127,7 @@
 
 		<footer class="footer text-center" id="footer" role="contentinfo">
 			<p id="isou-footer-p">
-				<span id="isou-footer-span">Isou {$CFG.version} - <a href="https://sourcesup.renater.fr/projects/isounagios/" title="Accéder à la page du projet libre Isou">Page officielle du projet</a></span>
+				<span id="isou-footer-span">Isou {$CFG.version} - <a href="https://sourcesup.renater.fr/projects/isou/">Page officielle du projet</a></span>
 			</p>
 		</footer>
 
