@@ -138,5 +138,9 @@
 		{if $CFG.notifications_enabled === '1'}
 			<script src="{$smarty.const.URL}/scripts/notifications.js" type="text/javascript"></script>
 		{/if}
+
+		{if isset($ADDITIONAL_CONTENT) === true}
+			{$ADDITIONAL_CONTENT}
+		{/if}
 	</body>
 </html>
