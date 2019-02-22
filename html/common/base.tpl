@@ -75,6 +75,10 @@
 				</div>
 			</header>
 
+			{if isset($security_local_auth) === true && $security_local_auth === true}
+				<p class="alert alert-danger">Il est fortement recommandé de <strong>ne pas utiliser</strong> la <a href="{$smarty.const.URL}/index.php/configuration/authentification">méthode d'authentification locale</a> en production.</p>
+			{/if}
+
 			{if count($MENU) > 1 || isset($ADMINISTRATION_MENU) === true}
 			<nav id="navigation" role="navigation">
 				<h1 class="sr-only">Navigation</h1>

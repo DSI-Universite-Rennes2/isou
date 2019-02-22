@@ -68,6 +68,10 @@ if (has_new_version() === true) {
     $MENU = get_active_menu();
     if (isset($USER->admin) === true && empty($USER->admin) === false) {
         $ADMINISTRATION_MENU = get_administration_menu();
+
+        // TODO: À supprimer, lorsque l'implémentation du changement de mot de passe sera faite.
+        $local_auth = Plugin::get_record(array('codename' => 'manual', 'type' => 'authentification', 'active' => true));
+        $smarty->assign('security_local_auth', ($local_auth !== false));
     }
 
     // Routing.

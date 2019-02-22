@@ -1,5 +1,7 @@
 <form method="post" action="{$smarty.const.URL}/index.php/configuration/authentification/{$plugin->codename}">
 
+	<p class="alert alert-danger">La gestion de mot de passe n'étant pas encore implémentée, il est fortement recommandé de <strong>ne pas utiliser cette méthode d'authentification</strong> en phase de production.</p>
+
 	{include file="common/messages_form.tpl"}
 
 	<fieldset>
