@@ -344,7 +344,7 @@ class Event {
         }
 
         if (isset($sql_orders) === false) {
-            $sql_orders = ' ORDER BY e.startdate, e.enddate';
+            $sql_orders = ' ORDER BY e.startdate DESC, e.enddate DESC';
         }
 
         // Vérifie si toutes les options ont été utilisées.
