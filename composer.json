@@ -2,7 +2,7 @@
     "name": "universiterennes2/isou",
     "type": "project",
     "description": "Application to show status of your services.",
-    "keywords": ["monitoring", "status", "nagios", "shinken"],
+    "keywords": ["monitoring", "status", "nagios", "shinken", "icinga", "naemon", "thruk"],
     "homepage": "https://sourcesup.renater.fr/projects/isou/",
     "license": "Public domain",
     "authors": [{
