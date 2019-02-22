@@ -21,7 +21,7 @@
 				<label class="control-label" for="name">Nom du service</label>
 			</dt>
 			<dd class="col-sm-10">
-				<input class="form-control" type="text" name="name" id="name" maxlength="32" value="{$service->name}" />
+				<input class="form-control" type="text" name="name" id="name" value="{$service->name}" />
 			</dd>
 		</div>
 		<div class="form-group">
@@ -29,7 +29,7 @@
 				<label class="control-label" for="url">URL du service</label>
 			</dt>
 			<dd class="col-sm-10">
-				<input class="form-control" type="text" name="url" id="url" size="64" maxlength="64" value="{$service->url}" />
+				<input class="form-control" type="url" name="url" id="url" value="{$service->url}" />
 			</dd>
 		</div>
 		<div class="form-group">

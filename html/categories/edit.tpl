@@ -13,7 +13,7 @@
 				<label class="control-label" for="name">Nom de la catégorie</label>
 			</dt>
 			<dd class="col-sm-10">
-				<input class="form-control" type="text" name="name" id="name" maxlength="32" value="{$category->name}" />
+				<input class="form-control" type="text" name="name" id="name" value="{$category->name}" />
 			</dd>
 		</div>
 	</dl>

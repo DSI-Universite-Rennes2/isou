@@ -21,7 +21,7 @@
 				<label class="control-label" for="name">Nom du groupe</label>
 			</dt>
 			<dd class="col-sm-10">
-				<input class="form-control" type="text" name="name" id="name" maxlength="32" value="{$dependency_group->name}" />
+				<input class="form-control" type="text" name="name" id="name" value="{$dependency_group->name}" />
 			</dd>
 		</div>
 		<div class="form-group">

@@ -13,7 +13,7 @@
 				<label class="control-label" for="servicename">Nom du service ISOU</label>
 			</dt>
 			<dd class="col-sm-10">
-				<input class="form-control" type="text" name="servicename" id="servicename" maxlength="32" value="{$service->name}" disabled="1" />
+				<input class="form-control" type="text" name="servicename" id="servicename" value="{$service->name}" disabled="1" />
 			</dd>
 		</div>
 		<div class="form-group">
@@ -21,7 +21,7 @@
 				<label class="control-label" for="groupname">Nom du groupe</label>
 			</dt>
 			<dd class="col-sm-10">
-				<input class="form-control" type="text" name="groupname" id="groupname" maxlength="32" value="{$dependency_group->name}" disabled="1" />
+				<input class="form-control" type="text" name="groupname" id="groupname" value="{$dependency_group->name}" disabled="1" />
 			</dd>
 		</div>
 		<div class="form-group">
