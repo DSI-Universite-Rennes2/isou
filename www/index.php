@@ -1,6 +1,6 @@
 <?php
 
-use UniversiteRennes2\Isou\Announcement;
+use Isou\Helpers\SimpleMenu;
 use UniversiteRennes2\Isou\Plugin;
 use UniversiteRennes2\Isou\State;
 use UniversiteRennes2\Isou\User;
@@ -48,9 +48,9 @@ if (isset($_SESSION['username'], $_SESSION['authentification']) === true) {
 
 if (has_new_version() === true) {
     // Display maintenance page.
-    $TEMPLATE = 'public/update.tpl';
+    $TEMPLATE = 'common/update.tpl';
 
-    $MENU = array();
+    $MENUS = new stdClass();
     $STATES = array();
 } else {
     // Display default pages.
@@ -63,11 +63,12 @@ if (has_new_version() === true) {
     $STATES = State::get_records();
 
     // Load menu.
-    require PRIVATE_PATH.'/libs/menu.php';
+    $MENUS = new stdClass();
+    $MENUS->public = SimpleMenu::get_public_menus();
+    $MENUS->administration = array();
 
-    $MENU = get_active_menu();
     if (isset($USER->admin) === true && empty($USER->admin) === false) {
-        $ADMINISTRATION_MENU = get_administration_menu();
+        $MENUS->administration = SimpleMenu::get_adminitration_menus();
 
         // TODO: À supprimer, lorsque l'implémentation du changement de mot de passe sera faite.
         $local_auth = Plugin::get_record(array('codename' => 'manual', 'type' => 'authentification', 'active' => true));
@@ -76,25 +77,40 @@ if (has_new_version() === true) {
 
     // Routing.
     if (isset($TEMPLATE) === false) {
-        if (isset($MENU[$PAGE_NAME[0]]) === true) {
-            $current_page = $MENU[$PAGE_NAME[0]];
-        } elseif (isset($ADMINISTRATION_MENU[$PAGE_NAME[0]]) === true) {
-            $current_page = $ADMINISTRATION_MENU[$PAGE_NAME[0]];
-        } else {
-            if (isset($CFG['menu_default'], $MENU[$CFG['menu_default']]) === true) {
-                $current_page = $MENU[$CFG['menu_default']];
-            } else {
-                $current_page = current($MENU);
+        if (isset($MENUS->administration[$PAGE_NAME[0]]) === true) {
+            // Si l'utilisateur est admin.
+            $MENUS->administration[$PAGE_NAME[0]]->selected = true;
+
+            switch ($PAGE_NAME[0]) {
+                case 'evenements':
+                    require PRIVATE_PATH.'/php/events/index.php';
+                    break;
+                case 'annonce':
+                    require PRIVATE_PATH.'/php/announcement/index.php';
+                    break;
+                case 'statistiques':
+                    require PRIVATE_PATH.'/php/history/index.php';
+                    break;
+                case 'services':
+                    require PRIVATE_PATH.'/php/services/index.php';
+                    break;
+                case 'dependances':
+                    require PRIVATE_PATH.'/php/dependencies/index.php';
+                    break;
+                case 'categories':
+                    require PRIVATE_PATH.'/php/categories/index.php';
+                    break;
+                case 'configuration':
+                    require PRIVATE_PATH.'/php/settings/index.php';
+                    break;
+                case 'aide':
+                    require PRIVATE_PATH.'/php/help/index.php';
             }
         }
-        $current_page->selected = true;
 
-        // Load announcement.
-        if (isset($MENU[$current_page->url]) === true) {
-            $ANNOUNCEMENT = Announcement::get_record(array('empty' => false, 'visible' => true));
+        if (isset($TEMPLATE) === false) {
+            require PRIVATE_PATH.'/php/views/index.php';
         }
-
-        require PRIVATE_PATH.$current_page->model;
     }
 }
 
@@ -110,14 +126,10 @@ $smarty->assign('STYLES', $STYLES);
 $smarty->assign('USER', $USER);
 $smarty->assign('CFG', $CFG);
 $smarty->assign('STATES', $STATES);
-$smarty->assign('MENU', $MENU);
+$smarty->assign('MENUS', $MENUS);
 
 if (isset($ANNOUNCEMENT) === true && $ANNOUNCEMENT !== false) {
     $smarty->assign('ANNOUNCEMENT', $ANNOUNCEMENT);
-}
-
-if (isset($ADMINISTRATION_MENU) === true) {
-    $smarty->assign('ADMINISTRATION_MENU', $ADMINISTRATION_MENU);
 }
 
 $smarty->assign('TEMPLATE', $TEMPLATE);

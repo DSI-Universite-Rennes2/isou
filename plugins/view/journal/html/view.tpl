@@ -1,4 +1,4 @@
-<table id="list" class="table table-condensed" summary="Journal des perturbations et interruptions de services Rennes 2">
+<table id="list" class="table table-condensed" summary="Journal des perturbations et interruptions de services">
 	<caption class="text-center">Journal des services monitorés</caption>
 	<thead>
 		<tr class="header">

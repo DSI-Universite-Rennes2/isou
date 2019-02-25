@@ -225,6 +225,7 @@ function upgrade_plugins($check_only = false) {
     $plugins_paths = array();
     $plugins_paths['authentification'] = PRIVATE_PATH.'/plugins/authentification';
     $plugins_paths['monitoring'] = PRIVATE_PATH.'/plugins/monitoring';
+    $plugins_paths['view'] = PRIVATE_PATH.'/plugins/view';
 
     foreach ($plugins_paths as $plugintype => $plugins_path) {
         $entries = array();

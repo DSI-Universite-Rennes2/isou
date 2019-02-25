@@ -2,7 +2,7 @@
 
 <ul class="nav nav-tabs">
 {foreach $submenus as $menu}
-	<li{if $menu->selected === true} class="active"{/if}><a href="{$menu->url}" title="{$menu->title}">{$menu->label}</a></li>
+	<li{if $menu->selected === true} class="active"{/if}><a href="{$menu->url}">{$menu->label}</a></li>
 {/foreach}
 </ul>
 

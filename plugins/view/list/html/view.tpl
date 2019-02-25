@@ -17,12 +17,12 @@
 				{if isset($category->unstable_services[0]) === true}
 					{* Affiche seulement les services perturbés. *}
 					<div class="isou-list-hideable-table-div">
-						{include file="public/list_contents.tpl" services=$category->unstable_services}
+						{include file="subview.tpl" services=$category->unstable_services}
 					</div>
 				{/if}
 			</summary>
 
-			{include file="public/list_contents.tpl" services=$category->services}
+			{include file="subview.tpl" services=$category->services}
 		</details>
 		{/foreach}
 {/if}

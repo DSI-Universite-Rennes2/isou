@@ -1,12 +1,5 @@
 # Roadmap
 
-## Vues
-- [ ] corriger la vue 'journal'
-    - [ ] marquer comme en test
-- [x] corriger le thème classic
-    - [ ] marquer comme obsolete
-- [ ] rendre les vues modulables, comme l'authentification et le monitoring
-
 ## Administration
 ### Évènements
 - [ ] supprimer les descriptions en double

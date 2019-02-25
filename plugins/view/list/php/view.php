@@ -60,4 +60,5 @@ foreach ($services as $service) {
 
 $smarty->assign('categories', $categories);
 
-$TEMPLATE = 'public/list.tpl';
+$smarty->addTemplateDir(PRIVATE_PATH.'/plugins/view/list/html');
+$TEMPLATE = 'view.tpl';

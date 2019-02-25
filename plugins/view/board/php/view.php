@@ -98,4 +98,5 @@ foreach ($services as $service) {
 $smarty->assign('days', $days);
 $smarty->assign('categories', $categories);
 
-$TEMPLATE = 'public/board.tpl';
+$smarty->addTemplateDir(PRIVATE_PATH.'/plugins/view/board/html');
+$TEMPLATE = 'view.tpl';

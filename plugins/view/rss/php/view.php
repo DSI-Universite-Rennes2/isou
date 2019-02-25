@@ -50,4 +50,5 @@ if (isset($_POST['generer']) === true) {
 $smarty->assign('categories', $categories);
 $smarty->assign('rss_url', $rss_url);
 
-$TEMPLATE = 'public/rss_config.tpl';
+$smarty->addTemplateDir(PRIVATE_PATH.'/plugins/view/rss/html');
+$TEMPLATE = 'view.tpl';

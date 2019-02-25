@@ -43,4 +43,5 @@ for ($i = 0; $i < 7; $i++) {
 
 $smarty->assign('days', $days);
 
-$TEMPLATE = 'public/journal.tpl';
+$smarty->addTemplateDir(PRIVATE_PATH.'/plugins/view/journal/html');
+$TEMPLATE = 'view.tpl';

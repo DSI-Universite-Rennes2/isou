@@ -124,4 +124,4 @@ $smarty->assign('site_header', $CFG['site_header']);
 $smarty->assign('items', $items);
 $smarty->assign('last_build_date', gmdate('D, d M Y H:i:s', TIME));
 
-$smarty->display('public/rss.tpl');
+$smarty->display('common/rss.tpl');

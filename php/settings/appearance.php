@@ -1,64 +1,38 @@
 <?php
 
-$TITLE .= ' - Configuration de l\'apparence';
+use Isou\Helpers\SimpleMenu;
+use UniversiteRennes2\Isou\Plugin;
 
-$menus = get_menu_sorted_by_url();
-$menus_active = array_keys(get_active_menu_sorted_by_url());
+$TITLE .= ' - Configuration des vues';
 
-$themes = array();
-$themes_path = PUBLIC_PATH.'/themes';
-if ($handle = opendir($themes_path)) {
-    while (($entry = readdir($handle)) !== false) {
-        if (ctype_alnum($entry) === true && is_dir($themes_path.'/'.$entry) === true) {
-            $themes[$entry] = $entry;
-        }
-    }
-    closedir($handle);
-}
-ksort($themes);
-
-// Hack pour pré-initialiser la variable site_url.
-if (empty($CFG['site_url']) === true) {
-    $CFG['site_url'] = URL.'/';
+if (isset($PAGE_NAME[2]) === false) {
+    $PAGE_NAME[2] = $CFG['menu_default'];
 }
 
-foreach (array('site_name', 'site_header', 'site_url', 'tolerance', 'menu_default', 'theme') as $key) {
-    if (isset($_POST[$key]) === true) {
-        $value = htmlentities($_POST[$key], ENT_QUOTES, 'UTF-8');
-        if ($value !== $CFG[$key]) {
-            if (set_configuration($key, $value) === true) {
-                $CFG[$key] = $value;
-            }
-        }
+$submenus = array();
+$modules = Plugin::get_records(array('type' => 'view'));
+foreach ($modules as $module) {
+    // Set up menu.
+    $submenus[$module->codename] = new SimpleMenu($module->name, '', URL.'/index.php/configuration/apparence/'.$module->codename);
+
+    // Set up page.
+    if ($module->codename === $PAGE_NAME[2]) {
+        $plugin = clone $module;
+        $submenus[$module->codename]->selected = true;
     }
 }
 
-if (isset($_POST['menus_active']) && is_array($_POST['menus_active'])) {
-    $sql = "UPDATE menus SET active=0";
-    $query = $DB->prepare($sql);
-    $query->execute();
-
-    $active = array();
-
-    foreach ($_POST['menus_active'] as $menu_active) {
-        $sql = "UPDATE menus SET active=1 WHERE url=?";
-        $query = $DB->prepare($sql);
-        $query->execute(array($menu_active));
-
-        $active[] = $menu_active;
-    }
-
-    if ($active !== $menus_active) {
-        $menus_active = $active;
-
-        $_POST['successes'][] = 'Mise à jour des menus';
-    }
-
-    $MENU = get_active_menu();
+// Set up fallback page.
+if (isset($plugin) === false) {
+    $plugin = Plugin::get_record(array('codename' => 'list'));
+    $submenus[$plugin->codename]->selected = true;
 }
 
-$smarty->assign('menus', $menus);
-$smarty->assign('themes', $themes);
-$smarty->assign('menus_active', $menus_active);
+// Load page.
+require PRIVATE_PATH.'/plugins/view/'.$plugin->codename.'/php/settings.php';
+
+$smarty->assign('submenus', $submenus);
+
+$smarty->assign('VIEW_TEMPLATE', $VIEW_TEMPLATE);
 
 $SUBTEMPLATE = 'settings/appearance.tpl';

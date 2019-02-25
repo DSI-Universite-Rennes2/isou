@@ -24,9 +24,6 @@ class Initialisation extends AbstractMigration {
         // Configuration table.
         $this->setup_configuration();
 
-        // Menus table.
-        $this->setup_menus();
-
         // Plugins table.
         $this->setup_plugins();
 
@@ -154,7 +151,7 @@ class Initialisation extends AbstractMigration {
                 ),
                 array(
                     'key' => 'menu_default',
-                    'value' => 'actualite',
+                    'value' => 'list',
                     'type' => 'string',
                 ),
                 array(
@@ -324,164 +321,6 @@ class Initialisation extends AbstractMigration {
             ->create();
     }
 
-    public function setup_menus() {
-        echo PHP_EOL.' **  Table des menus...'.PHP_EOL;
-
-        // Create "menus" table.
-        echo ' ==   - Crée la table "menus".'.PHP_EOL;
-        $table = $this->table('menus');
-        $table->addColumn('label', 'string')
-            ->addColumn('title', 'string')
-            ->addColumn('url', 'string')
-            ->addColumn('model', 'string')
-            ->addColumn('type', 'string')
-            ->addColumn('position', 'integer')
-            ->addColumn('active', 'integer')
-            ->create();
-
-        // Insert "menus" data.
-        echo ' ==   - Insère les données dans la table "menus".'.PHP_EOL;
-        $rows = array(
-                array(
-                    'label' => 'actualité',
-                    'title' => 'afficher par actualité',
-                    'url' => 'actualite',
-                    'model' => '/php/public/news.php',
-                    'type' => 'guest',
-                    'position' => 1,
-                    'active' => 1,
-                ),
-                array(
-                    'label' => 'liste',
-                    'title' => 'afficher la liste des services',
-                    'url' => 'liste',
-                    'model' => '/php/public/list.php',
-                    'type' => 'guest',
-                    'position' => 2,
-                    'active' => 1,
-                ),
-                array(
-                    'label' => 'tableau',
-                    'title' => 'afficher le tableau des évènements',
-                    'url' => 'tableau',
-                    'model' => '/php/public/board.php',
-                    'type' => 'guest',
-                    'position' => 3,
-                    'active' => 1,
-                ),
-                array(
-                    'label' => 'journal',
-                    'title' => 'afficher le journal d\'évènements',
-                    'url' => 'journal',
-                    'model' => '/php/public/journal.php',
-                    'type' => 'guest',
-                    'position' => 4,
-                    'active' => 1,
-                ),
-                array(
-                    'label' => 'calendrier',
-                    'title' => 'afficher le calendrier des évènements',
-                    'url' => 'calendrier',
-                    'model' => '/php/public/calendar.php',
-                    'type' => 'guest',
-                    'position' => 5,
-                    'active' => 1,
-                ),
-                array(
-                    'label' => 'contact',
-                    'title' => 'nous contacter',
-                    'url' => 'contact',
-                    'model' => '/php/public/contact.php',
-                    'type' => 'guest',
-                    'position' => 6,
-                    'active' => 1,
-                ),
-                array(
-                    'label' => 'flux rss',
-                    'title' => 's\'abonner au flux rss',
-                    'url' => 'rss',
-                    'model' => '/php/public/rss_config.php',
-                    'type' => 'guest',
-                    'position' => 7,
-                    'active' => 1,
-                ),
-                array(
-                    'label' => 'évènements',
-                    'title' => 'ajouter un évenement',
-                    'url' => 'evenements',
-                    'model' => '/php/events/index.php',
-                    'type' => 'admin',
-                    'position' => 1,
-                    'active' => 1,
-                ),
-                array(
-                    'label' => 'annonce',
-                    'title' => 'ajouter une annonce',
-                    'url' => 'annonce',
-                    'model' => '/php/announcement/index.php',
-                    'type' => 'admin',
-                    'position' => 2,
-                    'active' => 1,
-                ),
-                array(
-                    'label' => 'statistiques',
-                    'title' => 'afficher les statistiques',
-                    'url' => 'statistiques',
-                    'model' => '/php/history/index.php',
-                    'type' => 'admin',
-                    'position' => 3,
-                    'active' => 1,
-                ),
-                array(
-                    'label' => 'services',
-                    'title' => 'ajouter un service',
-                    'url' => 'services',
-                    'model' => '/php/services/index.php',
-                    'type' => 'admin',
-                    'position' => 4,
-                    'active' => 1,
-                ),
-                array(
-                    'label' => 'dépendances',
-                    'title' => 'ajouter une dépendance',
-                    'url' => 'dependances',
-                    'model' => '/php/dependencies/index.php',
-                    'type' => 'admin',
-                    'position' => 5,
-                    'active' => 1,
-                ),
-                array(
-                    'label' => 'catégories',
-                    'title' => 'ajouter une catégorie',
-                    'url' => 'categories',
-                    'model' => '/php/categories/index.php',
-                    'type' => 'admin',
-                    'position' => 6,
-                    'active' => 1,
-                ),
-                array(
-                    'label' => 'configuration',
-                    'title' => 'configurer l\'application',
-                    'url' => 'configuration',
-                    'model' => '/php/settings/index.php',
-                    'type' => 'admin',
-                    'position' => 7,
-                    'active' => 1,
-                ),
-                array(
-                    'label' => 'aide',
-                    'title' => 'afficher l\'aide',
-                    'url' => 'aide',
-                    'model' => '/php/help/index.php',
-                    'type' => 'admin',
-                    'position' => 8,
-                    'active' => 1,
-                ),
-            );
-        $table->insert($rows);
-        $table->saveData();
-    }
-
     public function setup_plugins() {
         echo PHP_EOL.' **  Tables des plugins...'.PHP_EOL;
 
@@ -524,6 +363,14 @@ class Initialisation extends AbstractMigration {
                     'active' => 1,
                     'version' => '1.0.0',
                 ),
+                array(
+                    'id' => 4,
+                    'name' => 'Liste',
+                    'codename' => 'list',
+                    'type' => 'view',
+                    'active' => 1,
+                    'version' => '1.0.0',
+                ),
             );
         $table->insert($rows);
         $table->saveData();
@@ -555,6 +402,20 @@ class Initialisation extends AbstractMigration {
                     'value' => '/var/share/nagios/status.dat',
                     'type' => 'string',
                     'idplugin' => 2,
+                ),
+                array(
+                    'id' => 3,
+                    'key' => 'label',
+                    'value' => 'Liste',
+                    'type' => 'string',
+                    'idplugin' => 4,
+                ),
+                array(
+                    'id' => 4,
+                    'key' => 'route',
+                    'value' => 'liste',
+                    'type' => 'string',
+                    'idplugin' => 4,
                 ),
             );
         $table->insert($rows);

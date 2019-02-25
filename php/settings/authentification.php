@@ -25,6 +25,7 @@ foreach ($modules as $module) {
 // Set up fallback page.
 if (isset($plugin) === false) {
     $plugin = Plugin::get_record(array('codename' => 'manual'));
+    $submenus[$plugin->codename]->selected = true;
 }
 
 // Load page.

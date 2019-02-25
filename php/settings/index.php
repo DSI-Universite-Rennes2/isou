@@ -34,12 +34,16 @@ switch ($PAGE_NAME[1]) {
         require PRIVATE_PATH.'/php/settings/users.php';
         break;
     case 'apparence':
-    default:
         require PRIVATE_PATH.'/php/settings/appearance.php';
+        break;
+    case 'general':
+    default:
+        require PRIVATE_PATH.'/php/settings/general.php';
 }
 
 $services_menu = array();
-$services_menu['apparence'] = new SimpleMenu('Apparence', 'Configuration de l\'apparence, des menus, etc', URL.'/index.php/configuration/apparence');
+$services_menu['general'] = new SimpleMenu('Général', 'Configuration générale', URL.'/index.php/configuration/general');
+$services_menu['apparence'] = new SimpleMenu('Apparence', 'Configuration des vues', URL.'/index.php/configuration/apparence');
 $services_menu['authentification'] = new SimpleMenu('Authentification', 'Gestion de l\'authentification', URL.'/index.php/configuration/authentification');
 $services_menu['utilisateurs'] = new SimpleMenu('Utilisateurs', 'Afficher les utilisateurs', URL.'/index.php/configuration/utilisateurs');
 $services_menu['monitoring'] = new SimpleMenu('Monitoring', 'Gestion des plugins de monitoring', URL.'/index.php/configuration/monitoring');
@@ -52,7 +56,7 @@ $services_menu['changelog'] = new SimpleMenu('Changelog', 'Afficher le changelog
 if (isset($services_menu[$PAGE_NAME[1]]) === true) {
     $services_menu[$PAGE_NAME[1]]->selected = true;
 } else {
-    $services_menu['apparence']->selected = true;
+    $services_menu['general']->selected = true;
 }
 
 $smarty->assign('services_menu', $services_menu);

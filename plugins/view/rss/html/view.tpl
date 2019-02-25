@@ -6,7 +6,7 @@
 	<div class="row">
 		<div class="col-md-6">
 			<h2>Flux RSS sélectif</h2>
-			<p class="alert alert-info">Sélectionnez les services qui vous intéressent afin de ne recevoir, par flux RSS, que les informations à propos de ces services ou cliquez directement sur le bouton "Générer le flux RSS" en bas de page pour surveiller tous les services.</p>
+			<p class="alert alert-info">Sélectionnez les services qui vous intéressent afin de ne recevoir, par flux RSS, que les informations à propos de ces services.</p>
 
 			<form method="post" action="{$smarty.const.URL}/index.php/rss/config#rss-url">
 				<ul class="list-unstyled">

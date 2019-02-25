@@ -133,4 +133,5 @@ foreach ($events as $event) {
 $smarty->assign('calendar', $calendar);
 $smarty->assign('now', mktime(0, 0, 0));
 
-$TEMPLATE = 'public/calendar.tpl';
+$smarty->addTemplateDir(PRIVATE_PATH.'/plugins/view/calendar/html');
+$TEMPLATE = 'view.tpl';

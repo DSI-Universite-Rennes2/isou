@@ -1,4 +1,4 @@
-<table id="isou-board" class="table table-bordered table-condensed" summary="Tableau des perturbations et interruptions de services Rennes 2">
+<table id="isou-board" class="table table-bordered table-condensed" summary="Tableau des perturbations et interruptions de services">
 	<caption class="text-center">Tableau des services monitorés</caption>
 	<thead>
 		<tr class="header">

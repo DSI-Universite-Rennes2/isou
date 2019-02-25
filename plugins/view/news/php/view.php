@@ -73,4 +73,5 @@ foreach ($categories as $idcategory => $category) {
 
 $smarty->assign('categories', $categories);
 
-$TEMPLATE = 'public/news.tpl';
+$smarty->addTemplateDir(PRIVATE_PATH.'/plugins/view/news/html');
+$TEMPLATE = 'view.tpl';
