@@ -70,6 +70,7 @@ input[type="date"].form-control {
     height: 200px;
 }
 
+/* Vue liste. */
 .isou-list-event-scheduled {
     background-image: url('../images/calendar.gif');
     background-repeat: no-repeat;
@@ -108,6 +109,7 @@ input[type="date"].form-control {
     background: none;
 }
 
+/* Vue tableau. */
 #isou-board th.today {
     background-color: #c9edf9;
 }
@@ -122,4 +124,97 @@ input[type="date"].form-control {
 
 #isou-board td.today.danger {
     background-color: #ffa9a9;
+}
+
+/* Vue calendrier. */
+.events-li:target {
+    background-color: #FFC0CB;
+}
+
+#calendar td,
+#calendar .panel-heading {
+    padding: 0;
+}
+
+#calendar .panel-body {
+    min-height: 70px;
+    padding: 5px;
+}
+
+#calendar .panel > .panel-heading {
+    border-color: #ddd;
+}
+
+/* Vue actualité. */
+#isou-news-legend-aside {
+    float: right;
+}
+
+#isou-news-legend-h1 {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.isou-news-legend-dt,
+.isou-news-legend-dd {
+    display: inline;
+}
+
+.isou-news-categories {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.isou-news-categories:after {
+    content: ' : ';
+}
+
+/* Vue flux RSS. */
+.isou-rss-categories {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.isou-rss-categories:after {
+    content: ' : ';
+}
+
+/* Onglet dépendance. */
+.isou-dependencies-h1 {
+    font-size: 1.3em;
+    margin: 0;
+    padding: .5em 0;
+}
+
+.isou-dependencies-group-h2 {
+    font-size: 1.2em;
+    margin: .5em 0 0 0;
+    padding: 0;
+}
+
+.isou-dependencies-group-h3 {
+    border-bottom: .1em black solid;
+    font-size: 1.1em;
+    margin: 1em 0 .5em 0;
+    padding: 0;
+}
+
+.isou-dependencies-group-h4 {
+    border-bottom: .1em black solid;
+    font-size: 1em;
+    margin: 1em 0 .5em 0;
+    padding: 0;
+}
+
+.isou-dependencies-group-duplicate-preview-h2 {
+    font-size: 1.2em;
+    text-decoration: underline;
+}
+
+select.isou-dependencies-contents-add-services {
+    height: 20em;
+}
+
+.alert .btn {
+    text-decoration: none;
 }
