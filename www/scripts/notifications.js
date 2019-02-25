@@ -10,13 +10,13 @@ function setIsouActiveNotificationImage(active = true) {
 
     if (active === true) {
         image.setAttribute('alt', 'notification activée');
-        image.setAttribute('src', isou_url+'/themes/bootstrap/images/notifications-on.svg');
+        image.setAttribute('src', isou_url+'/themes/bootstrap3/images/notifications-on.svg');
 
         submit.className = 'btn btn-danger';
         submit.textContent = 'Désactiver les notifications';
     } else {
         image.setAttribute('alt', 'notification désactivée');
-        image.setAttribute('src', isou_url+'/themes/bootstrap/images/notifications-off.svg');
+        image.setAttribute('src', isou_url+'/themes/bootstrap3/images/notifications-off.svg');
 
         submit.className = 'btn btn-success';
         submit.textContent = 'Activer les notifications';

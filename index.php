@@ -9,9 +9,9 @@
 
     <title>ISOU - Problème de configuration</title>
 
-    <link rel="shortcut icon" type="image/png" href="www/themes/bootstrap/favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="www/themes/bootstrap3/favicon.png" />
 
-    <link href="www/themes/bootstrap/css/bootstrap.min.css" type="text/css" media="screen" rel="stylesheet" />
+    <link href="//unpkg.com/bootstrap@3.3/dist/css/bootstrap.min.css" type="text/css" media="screen" rel="stylesheet" />
 </head>
 <body role="document">
 

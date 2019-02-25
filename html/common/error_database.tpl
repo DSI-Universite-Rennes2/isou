@@ -7,9 +7,9 @@
 
 		<title>ISOU - Problème d'accès à la base de données</title>
 
-		<link rel="shortcut icon" type="image/png" href="{$smarty.const.URL}/themes/bootstrap/favicon.png" />
+		<link rel="shortcut icon" type="image/png" href="{$smarty.const.URL}/themes/bootstrap3/favicon.png" />
 
-		<link href="{$smarty.const.URL}/themes/bootstrap/css/bootstrap.min.css" type="text/css" media="screen" rel="stylesheet" />
+		<link href="{$smarty.const.URL}/themes/bootstrap3/css/bootstrap.min.css" type="text/css" media="screen" rel="stylesheet" />
 	</head>
 	<body role="document">
 
