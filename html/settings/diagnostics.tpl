@@ -1,5 +1,43 @@
+<h2>Diagnostics</h2>
+
+<h3>Informations</h3>
+<dl class="dl-horizontal">
+	<div>
+		<dt style="text-align: left;">Isou</dt>
+		<dd>{$CFG.version}</dd>
+	</div>
+
+	<div>
+		<dt style="text-align: left;">HTMLPurifier</dt>
+		<dd>{$HTMLPurifierVersion}</dd>
+	</div>
+
+	<div>
+		<dt style="text-align: left;">phpCAS</dt>
+		<dd>{$phpCASVersion}</dt>
+	</div>
+
+	<div>
+		<dt style="text-align: left;">Smarty</dt>
+		<dd>{$smarty.version}</dd>
+	</div>
+
+	<div>
+		<dt style="text-align: left;">Dernière mise à jour</dt>
+		<dd>{$CFG.last_update|date_format:'%c'}</dd>
+	</div>
+
+	{*
+	TODO: à implémenter.
+	<div>
+		<dt style="text-align: left;">Dernière vérification de mise à jour d'Isou.</dt>
+		<dd>{$CFG.last_check_update|date_format:'%c'}</dd>
+	</div>
+	*}
+</dl>
+
 {foreach $errors as $type => $details}
-	<h2>{$type}</h2>
+	<h3>{$type}</h3>
 	{if isset($details[0])}
 	<div class="alert alert-danger">
 		<ul>

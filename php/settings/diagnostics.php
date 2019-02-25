@@ -68,6 +68,11 @@ if (isset($CFG['last_cron_update']) === false || $CFG['last_cron_update'] === ne
         ' La dernière exécution du cron date du '.strftime('%c', $CFG['last_cron_update']->getTimestamp()).'.';
 }
 
+$HTMLPurifier = new HTMLPurifier();
+$smarty->assign('HTMLPurifierVersion', $HTMLPurifier->version);
+
+$smarty->assign('phpCASVersion', phpCAS::getVersion());
+
 $smarty->assign('errors', $errors);
 
 $SUBTEMPLATE = 'settings/diagnostics.tpl';

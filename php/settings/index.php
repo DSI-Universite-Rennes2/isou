@@ -18,9 +18,6 @@ switch ($PAGE_NAME[1]) {
     case 'diagnostics':
         require PRIVATE_PATH.'/php/settings/diagnostics.php';
         break;
-    case 'informations':
-        require PRIVATE_PATH.'/php/settings/information.php';
-        break;
     case 'monitoring':
         require PRIVATE_PATH.'/php/settings/monitoring.php';
         break;
@@ -50,7 +47,6 @@ $services_menu['monitoring'] = new SimpleMenu('Monitoring', 'Gestion des plugins
 $services_menu['notifications'] = new SimpleMenu('Notifications web', 'Gestion des notifications', URL.'/index.php/configuration/notifications');
 $services_menu['rapport'] = new SimpleMenu('Rapport', 'Gestion du rapport quotidien', URL.'/index.php/configuration/rapport');
 $services_menu['diagnostics'] = new SimpleMenu('Diagnostics', 'Diagnostics de l\'application ISOU', URL.'/index.php/configuration/diagnostics');
-$services_menu['informations'] = new SimpleMenu('Informations', 'Configuration avancée', URL.'/index.php/configuration/informations');
 $services_menu['changelog'] = new SimpleMenu('Changelog', 'Afficher le changelog', URL.'/index.php/configuration/changelog');
 
 if (isset($services_menu[$PAGE_NAME[1]]) === true) {
