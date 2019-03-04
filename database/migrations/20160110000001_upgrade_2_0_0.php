@@ -257,9 +257,15 @@ class Upgrade200 extends AbstractMigration {
 
             $rows = $this->query('SELECT * FROM events_old eo JOIN events_nagios_old eno ON eo.idEvent = eno.idEvent WHERE eo.typeEvent = 1');
             foreach ($rows as $row) {
+                if (empty($row['endDate']) === true) {
+                    $enddate = null;
+                } else {
+                    $enddate = $row['endDate'].':00';
+                }
+
                 $data = array(
                     'startdate' => $row['beginDate'].':00',
-                    'enddate' => $row['endDate'].':00',
+                    'enddate' => $enddate,
                     'state' => $row['state'],
                     'type' => 0, // 0 = unscheduled events.
                     'period' => 0,
