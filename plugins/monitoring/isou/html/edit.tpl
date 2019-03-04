@@ -1,4 +1,4 @@
-<form action="{$smarty.const.URL}/index.php/services/isou/edit/{$service->id}" class="form-horizontal" method="post">
+<form action="{$smarty.const.URL}/index.php/services/isou/edit/{$service->id}" class="form-horizontal" id="isou-plugin-isou-services-edit-form" method="post">
 	{if $service->id === 0}
 		<h2>Ajouter un service</h2>
 	{else}

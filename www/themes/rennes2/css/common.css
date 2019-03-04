@@ -50,3 +50,8 @@ body > .container {
 #isou-footer-span {
     border: none;
 }
+
+#isou-plugin-isou-services-edit-form label[for='url'],
+#isou-plugin-isou-services-edit-form input[name='url'] {
+    display: none;
+}
