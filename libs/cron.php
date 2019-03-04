@@ -32,8 +32,8 @@ function update_services_tree() {
         // Définis tous les enfants de ce service.
         $parent_service->set_reverse_dependencies($parent_service->state);
 
-        $LOGGER->addInfo('Recherche des dépendances pour le service '.$parent_service->name.' (id #'.$parent_service->id.')');
-        $LOGGER->addInfo('   '.count($parent_service->reverse_dependencies).' groupes dépendent du service "'.$parent_service->name.'" (avec l\'état: '.$parent_service->state.')');
+        $LOGGER->addDebug('Recherche des dépendances pour le service '.$parent_service->name.' (id #'.$parent_service->id.')');
+        $LOGGER->addDebug('   '.count($parent_service->reverse_dependencies).' groupes dépendent du service "'.$parent_service->name.'" (avec l\'état: '.$parent_service->state.')');
 
         // Parcours chaque enfant.
         foreach ($parent_service->reverse_dependencies as $dependencies_group) {
