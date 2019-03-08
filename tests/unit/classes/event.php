@@ -611,6 +611,23 @@ class Event extends atoum {
                     });
     }
 
+    /**
+     * Teste la méthode set_description().
+     *
+     * @return void
+     */
+    public function test_set_description() {
+        global $DB;
+
+        $i = 1;
+
+        $DB->test_pdostatement->test_fetch = false;
+        $this->assert(__METHOD__.' : test #'.$i++)
+            ->given($this->newTestedInstance)
+            ->then($this->testedInstance->set_description('foo'))
+                ->variable($this->testedInstance->description->description)->isEqualTo('foo');
+    }
+
     public function test_save() {
         global $DB;
 
@@ -680,16 +697,5 @@ class Event extends atoum {
             ->given($this->newTestedInstance)
             ->then
                 ->boolean($this->testedInstance->close())->isEqualTo(false);
-    }
-
-    public function test_set_description() {
-        $i = 1;
-
-        // Teste si un booléen est bien renvoyé.
-        $this->assert(__METHOD__.' : test #'.$i++)
-            ->given($this->newTestedInstance)
-            ->and($this->testedInstance->description = 'foo')
-            ->then
-                ->boolean($this->testedInstance->set_description())->isEqualTo(true);
     }
 }

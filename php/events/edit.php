@@ -79,22 +79,17 @@ if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['startt
         $_POST['errors'][] = $exception->getMessage();
     }
 
-    $event_description = Event_Description::get_record(array('description' => $_POST['description'], 'autogen' => false));
-    if ($event_description === false) {
-        $event_description = new Event_Description();
-        $event_description->description = $_POST['description'];
-        $event_description->autogen = 0;
+    try {
+        $event->set_description($_POST['description'], $autogen = false);
+    } catch (Exception $exception) {
+        $_POST['errors'][] = $exception->getMessage();
     }
 
     if (isset($_POST['errors'][0]) === false) {
         $DB->beginTransaction();
 
         try {
-            if ($event_description->id === 0) {
-                $event_description->save();
-                $event->ideventdescription = $event_description->id;
-            }
-
+            // Enregistre l'évènement en base de données et sa description.
             $event->save();
 
             if ($_POST['type'] === Event::TYPE_CLOSED && $event->is_now() === true) {

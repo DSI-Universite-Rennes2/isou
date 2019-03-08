@@ -18,7 +18,7 @@ use UniversiteRennes2\Isou\Subscription;
   * @return void
   */
 function update_services_tree() {
-    global $CFG, $LOGGER;
+    global $CFG, $DB, $LOGGER;
 
     // TODO: utilisé la propriété timemodified.
     $services = Service::get_records();
@@ -97,12 +97,26 @@ function update_services_tree() {
 
             // Si un évènement a été créé précédemment, on met à jour le message de l'évènement si nécessaire.
             $message = Dependency_Message::get_record(array('id' => $dependencies_group->idmessage));
+
+            $description = null;
             if (empty($event->description) === true) {
-                $event->set_description($message->message, 1);
-                $event->save();
-            } elseif (stripos($event->description, $message->message) === false) {
-                $event->set_description($event->description."\n".$message->message, 1);
-                $event->save();
+                $description = $message->message;
+            } elseif (stripos($event->description->description, $message->message) === false) {
+                $description = $event->description->description."\n".$message->message;
+            }
+
+            if ($description !== null) {
+                try {
+                    $DB->beginTransaction();
+
+                    $event->set_description($description, $autogen = true);
+                    $event->save();
+
+                    $DB->commit();
+                } catch (Exception $exception) {
+                    $DB->rollBack();
+                    $LOGGER->addError('Erreur lors de l\'enregistrement de l\'évènement: '.$exception->getMessage());
+                }
             }
 
             // Vérifions que ce service n'ait pas lui même des dépendances avec d'autres services.

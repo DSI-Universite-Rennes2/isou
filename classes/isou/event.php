@@ -524,8 +524,48 @@ class Event {
         }
     }
 
+    /**
+     * Permet de définir la description d'un évènement.
+     *
+     * @param string $description Contient le texte de la description.
+     * @param boolean $autogen Indique si la description a été saisie par un utilisateur ou automatiquement générée par Isou.
+     *
+     * @return void
+     */
+    public function set_description(string $description = '', bool $autogen = false) {
+        $event_description = Event_Description::get_record(array('description' => $description, 'autogen' => $autogen));
+        if ($event_description === false) {
+            $event_description = new Event_Description();
+            $event_description->description = $description;
+            $event_description->autogen = $autogen;
+        }
+
+        $this->ideventdescription = $event_description->id;
+        $this->description = $event_description;
+    }
+
+    /**
+     * Enregistre l'objet Event et Event_Description en base de données.
+     *
+     * @throws \Exception Lève une exception en cas d'erreur lors de l'enregistrement.
+     *
+     * @return void
+     */
     public function save() {
         global $DB, $LOGGER;
+
+        if ($DB->inTransaction() === false) {
+            $LOGGER->addWarning('Il est recommandé de démarrer une transaction lorsqu\'on enregistre un évènement.');
+        }
+
+        if ($this->description === null) {
+            $this->set_description();
+        }
+
+        if ($this->description->id === 0) {
+            $this->description->save();
+            $this->ideventdescription = $DB->lastInsertId();
+        }
 
         if ($this->enddate === null) {
             $enddate = null;
@@ -589,31 +629,5 @@ class Event {
             $LOGGER->addError(implode(', ', $query->errorInfo()));
             return false;
         }
-    }
-
-    public function set_description($description = null, $autogen = 0) {
-        global $DB, $LOGGER;
-
-        if ($description === null) {
-            $description = $this->description;
-        }
-
-        if (empty($description) === true) {
-            $description = '';
-        }
-
-        $event_description = Event_Description::get_record(array('description' => $description, 'autogen' => false));
-        if ($event_description === false) {
-            $event_description = new Event_Description();
-            $event_description->description = $description;
-            $event_description->autogen = $autogen;
-
-            $event_description->save();
-        }
-
-        $this->ideventdescription = $event_description->id;
-        $this->description = $event_description;
-
-        return true;
     }
 }
