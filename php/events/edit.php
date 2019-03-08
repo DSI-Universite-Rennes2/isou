@@ -92,10 +92,19 @@ if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['startt
             // Enregistre l'évènement en base de données et sa description.
             $event->save();
 
-            if ($_POST['type'] === Event::TYPE_CLOSED && $event->is_now() === true) {
-                $service = Service::get_record(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
-                $service->state = State::CLOSED;
-                $service->save();
+            if ($event->is_now() === true) {
+                switch ($_POST['type']) {
+                    case Event::TYPE_CLOSED:
+                        $service = Service::get_record(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
+                        $service->state = State::CLOSED;
+                        $service->save();
+                        break;
+                    case Event::TYPE_SCHEDULED:
+                    case Event::TYPE_UNSCHEDULED:
+                        $service = Service::get_record(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
+                        $service->lock($event->state);
+                        $service->save();
+                }
             }
 
             $DB->commit();

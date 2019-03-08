@@ -4,6 +4,8 @@
 ### Évènements
 - [ ] supprimer les descriptions en double
 - [ ] permettre de réutiliser les descriptions d'évènements
+- [ ] si on ajoute un évènement non prévu, et qu'il a lieu en ce moment, on FORCE le service.
+- [ ] lorsqu'un évènement se termine, et que le service est bloqué, penser à le débloquer.
 
 ### Annonce
 - [ ] remplacer le module annonce par un type d'évènements

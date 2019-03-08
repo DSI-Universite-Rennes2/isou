@@ -48,6 +48,8 @@ function update_services_tree() {
 
             // Si le service enfant est verrouillé, on ne fait rien.
             if ($child_service->locked === '1') {
+                // TODO: vérifier qu'un évènement est en cours pour ce service.
+                // Si non, on unlock le service, et on continue.
                 $LOGGER->addInfo('   Le service "'.$child_service->name.'" (id #'.$child_service->id.') est actuellement en mode forcé. Il ne peut pas être mis à jour.');
                 continue;
             }
