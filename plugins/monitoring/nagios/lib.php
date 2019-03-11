@@ -1,19 +1,19 @@
 <?php
 
 /**
-  * Fonctions liées aux mises à jour des services du plugin Nagios.
-  */
+ * Fonctions liées aux mises à jour des services du plugin Nagios.
+ */
 
 use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
 /**
-  * Mets l'état des services du plugin Nagios.
-  *
-  * @param UniversiteRennes2\Isou\Plugin $plugin Une instance du plugin Nagios.
-  *
-  * @return boolean True si la mise à jour s'est déroulée correctement ; False si une erreur est survenue.
-  */
+ * Mets l'état des services du plugin Nagios.
+ *
+ * @param UniversiteRennes2\Isou\Plugin $plugin Une instance du plugin Nagios.
+ *
+ * @return boolean True si la mise à jour s'est déroulée correctement ; False si une erreur est survenue.
+ */
 function plugin_nagios_update($plugin) {
     global $LOGGER;
 

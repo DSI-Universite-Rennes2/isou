@@ -8,13 +8,13 @@ use Isou\Helpers\SimpleMenu;
 
 $TITLE .= ' - Historique des évènements';
 
-if (isset($PAGE_NAME[2]) && ctype_digit($PAGE_NAME[2])) {
+if (isset($PAGE_NAME[2]) === true && ctype_digit($PAGE_NAME[2]) === true) {
     $page = $PAGE_NAME[2];
 } else {
     $page = 1;
 }
 
-if (isset($PAGE_NAME[4])) {
+if (isset($PAGE_NAME[4]) === true) {
     $options_filter = explode(';', $PAGE_NAME[4]);
     if (count($options_filter) === 6) {
         $_POST['services'] = explode(',', $options_filter[0]);
@@ -40,7 +40,7 @@ $smarty->assign('options_event_types', $options_event_types);
 $options_sorts = array(
     'Décroissant',
     'Croissant',
-    );
+);
 $smarty->assign('options_sorts', $options_sorts);
 
 // max result
@@ -57,9 +57,9 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
 
     // services
     $sql_services = array();
-    if (is_array($_POST['services'])) {
+    if (is_array($_POST['services']) === true) {
         foreach ($_POST['services'] as $service) {
-            if (ctype_digit($service)) {
+            if (ctype_digit($service) === true) {
                 $sql_services[] = $service;
             }
         }
@@ -67,7 +67,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
         $_POST['services'] = array();
     }
 
-    if (isset($sql_services[0])) {
+    if (isset($sql_services[0]) === true) {
         $params = $sql_services;
         $sql_services = " AND s.id IN(?".str_repeat(',?', count($params) - 1).")";
     } else {
@@ -75,7 +75,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
     }
 
     // event type
-    if (!isset($options_event_types[$_POST['event_type']])) {
+    if (isset($options_event_types[$_POST['event_type']]) === false) {
         $_POST['event_type'] = '-1';
     }
 
@@ -118,7 +118,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
 
     // paging
     if ($_POST['paging'] !== '-1') {
-        if (!isset($options_paging[$_POST['paging']])) {
+        if (isset($options_paging[$_POST['paging']]) === false) {
             $_POST['paging'] = '10';
         }
 
@@ -138,7 +138,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
         " AND s.idplugin=?".
         $sql_sort;
 
-    if (!isset($_POST['export'])) {
+    if (isset($_POST['export']) === false) {
         $sql .= $sql_limit;
 
         $count_events = 0;
@@ -211,7 +211,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
 
     $smarty->assign('events', $events);
 
-    if (isset($_POST['export'])) {
+    if (isset($_POST['export']) === true) {
         header('Cache-Control: public');
         header('Content-Description: File Transfer');
         header('Content-Disposition: attachment; filename=isou_export.csv');

@@ -27,13 +27,13 @@ class Event {
         self::TYPE_UNSCHEDULED => 'Évènement imprévu',
         self::TYPE_REGULAR => 'Évènement régulier',
         self::TYPE_CLOSED => 'Service fermé',
-        );
+    );
 
     public static $PERIODS = array(
         self::PERIOD_NONE => 'Aucune',
         self::PERIOD_DAILY => 'Tous les jours',
         self::PERIOD_WEEKLY => 'Toutes les semaines',
-        );
+    );
 
     // TODO: à simplifier.
     public function __construct() {
@@ -141,22 +141,22 @@ class Event {
     }
 
     /**
-      * @param array $options Array in format:
-      *   after           => DateTime
-      *   before          => DateTime
-      *   idservice       => int
-      *   one_record      => bool
-      *   regular         => bool
-      *   plugin          => int : index key from UniversiteRennes2\Isou\Service::$TYPES
-      *   since           => DateTime
-      *   finished        => bool
-      *   state           => int : index key from UniversiteRennes2\Isou\State::$STATES
-      *   tolerance       => int : seconds
-      *   type            => int : index key from UniversiteRennes2\Isou\Event::$TYPES
-      *   sort            => Array of strings
-      *
-      * @return array of UniversiteRennes2\Isou\Events
-      */
+     * @param array $options Array in format:
+     *   after           => DateTime
+     *   before          => DateTime
+     *   idservice       => int
+     *   one_record      => bool
+     *   regular         => bool
+     *   plugin          => int : index key from UniversiteRennes2\Isou\Service::$TYPES
+     *   since           => DateTime
+     *   finished        => bool
+     *   state           => int : index key from UniversiteRennes2\Isou\State::$STATES
+     *   tolerance       => int : seconds
+     *   type            => int : index key from UniversiteRennes2\Isou\Event::$TYPES
+     *   sort            => Array of strings
+     *
+     * @return array of UniversiteRennes2\Isou\Events
+     */
     public static function get_records($options = array()) {
         global $DB;
 
@@ -200,12 +200,12 @@ class Event {
         if (isset($options['enddate_between']) === true) {
             if (is_array($options['enddate_between']) === false) {
                 throw new \Exception(__METHOD__.': l\'option \'enddate_between\' doit être de type Array. Valeur donnée : '.var_export($options['enddate_between'], $return = true));
-            } else if (isset($options['enddate_between'][1]) === false) {
+            } elseif (isset($options['enddate_between'][1]) === false) {
                 throw new \Exception(__METHOD__.': l\'option \'enddate_between\' doit contenir 2 éléments de type DateTime. Valeur donnée : '.var_export($options['enddate_between'], $return = true));
             } else {
                 if (($options['enddate_between'][0] instanceof \DateTime) === false) {
                     throw new \Exception('Le premier élément de \'option \'enddate_between\' doit être de type DateTime. Valeur donnée : '.var_export($options['enddate_between'][0], $return = true));
-                } else if (($options['enddate_between'][1] instanceof \DateTime) === false) {
+                } elseif (($options['enddate_between'][1] instanceof \DateTime) === false) {
                     throw new \Exception('Le deuxième élément de \'option \'enddate_between\' doit être de type DateTime. Valeur donnée : '.var_export($options['enddate_between'][1], $return = true));
                 } else {
                     $conditions[] = 'e.enddate BETWEEN :enddate_between0 AND :enddate_between1';
@@ -315,7 +315,7 @@ class Event {
         }
 
         if (isset($options['type']) === true) {
-            if (isset(Event::$TYPES[$options['type']]) === true) {
+            if (isset(self::$TYPES[$options['type']]) === true) {
                 $conditions[] = 'e.type = :type';
                 $parameters[':type'] = $options['type'];
             } else {
@@ -581,7 +581,7 @@ class Event {
             ':period' => $this->period,
             ':ideventdescription' => $this->ideventdescription,
             ':idservice' => $this->idservice,
-            );
+        );
 
         if ($this->id === 0) {
             $sql = 'INSERT INTO events(startdate, enddate, state, type, period, ideventdescription, idservice) VALUES(:startdate, :enddate, :state, :type, :period, :ideventdescription, :idservice)';
@@ -591,7 +591,7 @@ class Event {
         }
         $query = $DB->prepare($sql);
 
-        if ($query->execute($params)) {
+        if ($query->execute($params) === true) {
             if ($this->id === 0) {
                 $this->id = $DB->lastInsertId();
             }
@@ -622,7 +622,7 @@ class Event {
 
         $sql = 'UPDATE events SET enddate=:enddate WHERE id = :id';
         $query = $DB->prepare($sql);
-        if ($query->execute(array(':enddate' => STR_TIME, ':id' => $this->id))) {
+        if ($query->execute(array(':enddate' => STR_TIME, ':id' => $this->id)) === true) {
             $this->enddate = new \DateTime(STR_TIME);
             return true;
         } else {

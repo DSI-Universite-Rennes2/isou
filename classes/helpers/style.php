@@ -2,7 +2,7 @@
 
 namespace Isou\Helpers;
 
-class Style{
+class Style {
     public $url;
     public $media;
     public $rel;

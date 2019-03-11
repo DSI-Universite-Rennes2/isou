@@ -3,12 +3,12 @@
 use UniversiteRennes2\Isou\User;
 
 /**
-  * Authentifie l'utilisateur ou retourne le template d'authentification.
-  *
-  * @param Plugin $plugin Instance du plugin manual.
-  *
-  * @return string|void
-  */
+ * Authentifie l'utilisateur ou retourne le template d'authentification.
+ *
+ * @param Plugin $plugin Instance du plugin manual.
+ *
+ * @return string|void
+ */
 function authentification_login($plugin) {
     global $smarty;
 
@@ -37,10 +37,10 @@ function authentification_login($plugin) {
 }
 
 /**
-  * Déconnecte l'utilisateur.
-  *
-  * @return void
-  */
+ * Déconnecte l'utilisateur.
+ *
+ * @return void
+ */
 function authentification_logout($plugin = null) {
     $_SESSION = array();
 

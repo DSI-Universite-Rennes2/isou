@@ -23,7 +23,7 @@ foreach ($services as $service) {
     }
 
     $service->get_dependencies();
-    if (!isset($service->dependencies[0])) {
+    if (isset($service->dependencies[0]) === false) {
         $service->notes[] = 'Service sans dépendance';
     }
 

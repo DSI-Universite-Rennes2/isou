@@ -5,7 +5,7 @@ $smarty->addTemplateDir(PRIVATE_PATH.'/plugins/monitoring/isou/html');
 $options_yes_no = array(
     1 => 'Oui',
     0 => 'Non',
-    );
+);
 
 if (isset($_POST['plugin_isou_tolerance']) === true) {
     if ($plugin->settings->tolerance !== $_POST['plugin_isou_tolerance'] && ctype_digit($_POST['plugin_isou_tolerance']) === true) {

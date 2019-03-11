@@ -10,12 +10,12 @@ $options_cas_protocols = array(
     CAS_VERSION_2_0 => 'CAS 2.0',
     CAS_VERSION_3_0 => 'CAS 3.0',
     SAML_VERSION_1_1 => 'SAML 1.1',
-    );
+);
 
 $options_yes_no = array(
     1 => 'Oui',
     0 => 'Non',
-    );
+);
 
 $plugin->settings->cas_verbose = strval(intval($plugin->settings->cas_verbose));
 

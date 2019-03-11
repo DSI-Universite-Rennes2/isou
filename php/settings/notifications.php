@@ -7,7 +7,7 @@ $TITLE .= ' - Configuration des notifications par webpush';
 $options_yes_no = array(
     1 => 'yes',
     0 => 'no',
-    );
+);
 
 if (isset($_POST['notifications_enabled']) === true) {
     if (set_configuration('notifications_enabled', $_POST['notifications_enabled']) === true) {

@@ -56,19 +56,25 @@ try {
         case '':
         case '0.9.0':
             upgrade_090_to_095();
+            // Pas de break. On enchaine sur l'upgrade de la version 0.9.0 à 0.9.5.
         case '0.9.5':
             upgrade_095_to_096();
+            // Pas de break. On enchaine sur l'upgrade de la version 0.9.5 à 0.9.6.
         case '0.9.6':
             upgrade_096_to_0100();
+            // Pas de break. On enchaine sur l'upgrade de la version 0.9.6 à 0.10.0.
         case '0.10.0':
         case '2012-02-16.1':
             upgrade_0100_to_0110();
+            // Pas de break. On enchaine sur l'upgrade de la version 0.10.0 à 0.11.0.
         case '0.11.0':
         case '2012-03-16.1':
             upgrade_0110_to_100();
+            // Pas de break. On enchaine sur l'upgrade de la version 0.11.0 à 1.0.0.
         case '1.0.0':
         case '2013-00-00.1':
             upgrade_100_to_200();
+            // Pas de break. On enchaine sur l'upgrade de la version 1.0.0 à 2.0.0.
         default:
             // Finally, upgrade plugins.
             echo PHP_EOL;

@@ -66,7 +66,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_record();
-                    });
+                    }
+                );
     }
 
     public function test_get_records() {
@@ -180,7 +181,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('id' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -189,7 +191,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('after' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -198,7 +201,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('before' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -207,7 +211,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('enddate_between' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -217,7 +222,8 @@ class Event extends atoum {
                     function() {
                         $datetime = new \DateTime();
                         $this->testedInstance->get_records(array('enddate_between' => array()));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -227,7 +233,8 @@ class Event extends atoum {
                     function() {
                         $datetime = new \DateTime();
                         $this->testedInstance->get_records(array('enddate_between' => array(1, $datetime)));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -237,7 +244,8 @@ class Event extends atoum {
                     function() {
                         $datetime = new \DateTime();
                         $this->testedInstance->get_records(array('enddate_between' => array($datetime, 1)));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -246,7 +254,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('idservice' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -255,7 +264,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('regular' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -264,7 +274,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('plugin' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -273,7 +284,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('notplugin' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -282,7 +294,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('since' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -291,7 +304,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('finished' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -300,7 +314,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('state' => 42));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -309,7 +324,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('tolerance' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -318,7 +334,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('type' => 42));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -327,7 +344,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('sort' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -336,7 +354,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('fetch_one' => true, 'foo' => '1'));
-                    });
+                    }
+                );
 
         // TODO: Teste lorsque la requête SQL échoue.
         $DB->test_pdostatement->test_execute = false;
@@ -421,7 +440,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->set_service(1);
-                    });
+                    }
+                );
     }
 
     public function test_set_period() {
@@ -442,7 +462,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->set_period('');
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres sont corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -460,7 +481,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->set_period('42');
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -470,7 +492,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->set_period(IsouEvent::PERIOD_DAILY);
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -481,7 +504,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->set_period(IsouEvent::PERIOD_DAILY);
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -493,7 +517,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->set_period(IsouEvent::PERIOD_DAILY);
-                    });
+                    }
+                );
     }
 
     public function test_set_type() {
@@ -512,7 +537,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->set_type(42);
-                    });
+                    }
+                );
     }
 
     public function test_set_startdate() {
@@ -531,7 +557,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->set_startdate('foo', 'bar');
-                    });
+                    }
+                );
     }
 
     public function test_set_enddate() {
@@ -557,7 +584,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->set_enddate('foo', 'bar');
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -567,7 +595,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->set_enddate('', '');
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -577,8 +606,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->set_enddate('2000-01-01', '00:00');
-                    });
-
+                    }
+                );
     }
 
     public function test_set_state() {
@@ -598,7 +627,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->set_state('foo');
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -608,7 +638,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->set_state(State::OK);
-                    });
+                    }
+                );
     }
 
     /**
@@ -656,7 +687,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->save();
-                    });
+                    }
+                );
     }
 
     public function test_delete() {
@@ -677,7 +709,8 @@ class Event extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->delete();
-                    });
+                    }
+                );
     }
 
     public function test_close() {

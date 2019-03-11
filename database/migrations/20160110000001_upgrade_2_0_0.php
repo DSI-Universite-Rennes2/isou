@@ -1,22 +1,22 @@
 <?php
 
 /**
-  * Migre le schéma de données d'Isou en version 2.0.0.
-  */
+ * Migre le schéma de données d'Isou en version 2.0.0.
+ */
 
 use Phinx\Migration\AbstractMigration;
 
 /**
-  * Classe de migration pour Phinx
-  */
+ * Classe de migration pour Phinx
+ */
 class Upgrade200 extends AbstractMigration {
     /**
-      * Modifie la structure du schéma de la base de données.
-      *
-      * @throws Exception if any errors occur.
-      *
-      * @return void
-      */
+     * Modifie la structure du schéma de la base de données.
+     *
+     * @throws Exception if any errors occur.
+     *
+     * @return void
+     */
     public function change() {
         echo PHP_EOL.' #';
         echo PHP_EOL.' ## Migration du schéma en version 2.0.0.'.PHP_EOL;
@@ -59,7 +59,7 @@ class Upgrade200 extends AbstractMigration {
                     'visible' => $row['afficher'],
                     'author' => 'isou',
                     'last_modification' => strftime('%FT%T'),
-                    );
+                );
                 $table->insert($data);
             }
             $table->saveData();
@@ -81,7 +81,7 @@ class Upgrade200 extends AbstractMigration {
                     'id' => $row['idCategory'],
                     'name' => $row['name'],
                     'position' => $row['position'],
-                    );
+                );
                 $table->insert($data);
             }
             $table->saveData();
@@ -102,8 +102,8 @@ class Upgrade200 extends AbstractMigration {
             $rows = $this->query('SELECT * FROM configuration_old');
             foreach ($rows as $row) {
                 $data = array(
-                ':key' => $row['key'],
-                ':value' => $row['value'],
+                    ':key' => $row['key'],
+                    ':value' => $row['value'],
                 );
 
                 switch ($row['key']) {
@@ -174,14 +174,14 @@ class Upgrade200 extends AbstractMigration {
 
                 $group_key = $row['idService'].'-'.$row['newStateForChild'];
                 if (isset($dependencies_groups[$group_key]) === false) {
-                    $dependencies_groups[$group_key] = [
+                    $dependencies_groups[$group_key] = array(
                         'id' => count($dependencies_groups) + 1,
                         'name' => 'Groupe non redondé',
                         'redundant' => 0,
                         'groupstate' => $row['newStateForChild'],
                         'idservice' => $row['idService'],
                         'idmessage' => $idmessage + 1,
-                    ];
+                    );
                 }
 
                 $key = $dependencies_groups[$group_key]['id'].'-'.$row['idServiceParent'].'-'.$row['stateOfParent'];
@@ -189,7 +189,7 @@ class Upgrade200 extends AbstractMigration {
                     'idgroup' => $dependencies_groups[$group_key]['id'],
                     'idservice' => $row['idServiceParent'],
                     'servicestate' => $row['stateOfParent'],
-                    );
+                );
             }
 
             // Migrate "dependencies_groups" data.
@@ -251,7 +251,7 @@ class Upgrade200 extends AbstractMigration {
                     'period' => $period,
                     'ideventdescription' => $row['idEventDescription'],
                     'idservice' => $row['idService'],
-                    );
+                );
                 $table->insert($data);
             }
 
@@ -271,7 +271,7 @@ class Upgrade200 extends AbstractMigration {
                     'period' => 0,
                     'ideventdescription' => 0,
                     'idservice' => $row['idService'],
-                    );
+                );
                 $table->insert($data);
             }
             $table->saveData();
@@ -285,7 +285,7 @@ class Upgrade200 extends AbstractMigration {
                     'id' => $row['idEventDescription'],
                     'description' => $row['description'],
                     'autogen' => $row['autogen'],
-                    );
+                );
                 $table->insert($data);
             }
             $table->saveData();
@@ -349,7 +349,7 @@ class Upgrade200 extends AbstractMigration {
                     'timemodified' => strftime('%FT%T'),
                     'idplugin' => $idplugin,
                     'idcategory' => $row['idCategory'],
-                    );
+                );
                 $table->insert($data);
             }
             $table->saveData();

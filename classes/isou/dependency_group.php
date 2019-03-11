@@ -34,15 +34,15 @@ class Dependency_Group {
             $errors[] = 'Le nom du groupe ne peut pas être vide.';
         }
 
-        if (!isset($redundants[$this->redundant])) {
+        if (isset($redundants[$this->redundant]) === false) {
             $errors[] = 'La valeur "redondée" choisie est invalide.';
         }
 
-        if (!isset($states[$this->groupstate])) {
+        if (isset($states[$this->groupstate]) === false) {
             $errors[] = 'L\'état choisi est invalide.';
         }
 
-        if (!isset($services[$this->idservice])) {
+        if (isset($services[$this->idservice]) === false) {
             $errors[] = 'Le service choisi est invalide.';
         }
 
@@ -73,7 +73,7 @@ class Dependency_Group {
         $query->execute(array(':idservice' => $idservice));
         $query->setFetchMode(\PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Dependency_Group');
 
-        while ($group = $query->fetch()) {
+        foreach ($query->fetchAll() as $group) {
             if (isset($groups[$group->groupstate]) === false) {
                 $groups[$group->groupstate] = array();
             }
@@ -102,7 +102,9 @@ class Dependency_Group {
         $sql = 'SELECT id FROM dependencies_messages WHERE message = :message';
         $query = $DB->prepare($sql);
         $query->execute(array(':message' => $this->message));
-        if ($message = $query->fetch(\PDO::FETCH_OBJ)) {
+
+        $message = $query->fetch(\PDO::FETCH_OBJ);
+        if (isset($message->id) === true) {
             return $message->id;
         } else {
             return false;
@@ -212,7 +214,7 @@ class Dependency_Group {
 
         $sql = 'INSERT INTO dependencies_messages(message) VALUES(:message)';
         $query = $DB->prepare($sql);
-        if ($query->execute(array(':message' => $this->message))) {
+        if ($query->execute(array(':message' => $this->message)) === true) {
             return $DB->lastInsertId();
         } else {
             // Enregistre le message d'erreur.
@@ -228,7 +230,7 @@ class Dependency_Group {
         $results = array(
             'successes' => array(),
             'errors' => array(),
-            );
+        );
 
         $params = array(
             ':name' => $this->name,
@@ -236,7 +238,7 @@ class Dependency_Group {
             ':groupstate' => $this->groupstate,
             ':idservice' => $this->idservice,
             ':idmessage' => $this->idmessage,
-            );
+        );
 
         if ($this->id === 0) {
             $sql = 'INSERT INTO dependencies_groups(name, redundant, groupstate, idservice, idmessage) VALUES(:name, :redundant, :groupstate, :idservice, :idmessage)';
@@ -246,7 +248,7 @@ class Dependency_Group {
         }
         $query = $DB->prepare($sql);
 
-        if ($query->execute($params)) {
+        if ($query->execute($params) === true) {
             if ($this->id === 0) {
                 $this->id = $DB->lastInsertId();
             }
@@ -300,7 +302,7 @@ class Dependency_Group {
         $results = array(
             'successes' => array(),
             'errors' => array(),
-            );
+        );
 
         $commit = 1;
 

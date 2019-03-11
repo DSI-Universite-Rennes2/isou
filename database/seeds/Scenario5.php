@@ -1,16 +1,16 @@
 <?php
 
 /**
-  * Initialise le scénario 5.
-  *      Contexte du service :
-  *          - 1 serveur web
-  */
+ * Initialise le scénario 5.
+ *      Contexte du service :
+ *          - 1 serveur web
+ */
 
 use Phinx\Seed\AbstractSeed;
 
 /**
-  * Classe de remplissage de données pour Phinx.
-  */
+ * Classe de remplissage de données pour Phinx.
+ */
 class Scenario5 extends AbstractSeed {
     const ISOU_SEED_PREFIX_ID = '5';
     const ISOU_SEED_NAME = 'Scenario '.self::ISOU_SEED_PREFIX_ID;
@@ -22,8 +22,8 @@ class Scenario5 extends AbstractSeed {
                 'id' => self::ISOU_SEED_PREFIX_ID.'1',
                 'name' => self::ISOU_SEED_NAME,
                 'position' => self::ISOU_SEED_PREFIX_ID.'1',
-                ),
-            );
+            ),
+        );
         $table = $this->table('categories');
         $table->insert($data)->save();
 
@@ -40,7 +40,7 @@ class Scenario5 extends AbstractSeed {
                 'rsskey' => self::ISOU_SEED_PREFIX_ID.'1',
                 'idplugin' => 1, // Plugin isou.
                 'idcategory' => self::ISOU_SEED_PREFIX_ID.'1',
-                ),
+            ),
             array(
                 'id' => self::ISOU_SEED_PREFIX_ID.'2',
                 'name' => 'serveur web ('.self::ISOU_SEED_NAME.')',
@@ -51,8 +51,8 @@ class Scenario5 extends AbstractSeed {
                 'rsskey' => null,
                 'idplugin' => 3, // Plugin thruk.
                 'idcategory' => null,
-                ),
-            );
+            ),
+        );
         $table = $this->table('services');
         $table->insert($data)->save();
 
@@ -65,7 +65,7 @@ class Scenario5 extends AbstractSeed {
                 'groupstate' => '1',
                 'idservice' => self::ISOU_SEED_PREFIX_ID.'1',
                 'idmessage' => self::ISOU_SEED_PREFIX_ID.'1',
-                ),
+            ),
             array(
                 'id' => self::ISOU_SEED_PREFIX_ID.'2',
                 'name' => 'service - critical',
@@ -73,8 +73,8 @@ class Scenario5 extends AbstractSeed {
                 'groupstate' => '2',
                 'idservice' => self::ISOU_SEED_PREFIX_ID.'1',
                 'idmessage' => self::ISOU_SEED_PREFIX_ID.'1',
-                ),
-            );
+            ),
+        );
         $table = $this->table('dependencies_groups');
         $table->insert($data)->save();
 

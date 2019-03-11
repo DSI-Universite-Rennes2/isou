@@ -89,7 +89,8 @@ class Dependency_Group extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_record();
-                    });
+                    }
+                );
     }
 
     public function test_get_records() {
@@ -122,7 +123,8 @@ class Dependency_Group extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('id' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -131,7 +133,8 @@ class Dependency_Group extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('service' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -140,7 +143,8 @@ class Dependency_Group extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('fetch_one' => true, 'foo' => '1'));
-                    });
+                    }
+                );
 
         // TODO: Teste lorsque la requête SQL échoue.
         $DB->test_pdostatement->test_execute = false;
@@ -189,10 +193,10 @@ class Dependency_Group extends atoum {
                     ->child['successes'](function($child) {
                         $child->hasSize(1)
                             ->contains('Les données ont été correctement enregistrées.');
-                        })
+                    })
                     ->child['errors'](function($child) {
                         $child->hasSize(0);
-                        })
+                    })
                 ->variable($this->testedInstance->id)->isNotEqualTo(0);
 
         // Teste si un tableau est bien renvoyé et que l'id existant n'a pas été incrémenté.
@@ -204,10 +208,10 @@ class Dependency_Group extends atoum {
                     ->child['successes'](function($child) {
                         $child->hasSize(1)
                             ->contains('Les données ont été correctement enregistrées.');
-                        })
+                    })
                     ->child['errors'](function($child) {
                         $child->hasSize(0);
-                        })
+                    })
                 ->variable($this->testedInstance->id)->isEqualTo(42);
 
         // Teste lorsque la requête SQL échoue.
@@ -219,11 +223,11 @@ class Dependency_Group extends atoum {
                 ->array($this->testedInstance->save())
                     ->child['successes'](function($child) {
                         $child->hasSize(0);
-                        })
+                    })
                     ->child['errors'](function($child) {
                         $child->hasSize(1)
                             ->contains('Une erreur est survenue lors de l\'enregistrement des données.');
-                        })
+                    })
                 ->variable($this->testedInstance->id)->isEqualTo(0);
     }
 
@@ -260,10 +264,10 @@ class Dependency_Group extends atoum {
                     ->child['successes'](function($child) {
                         $child->hasSize(1)
                             ->contains('Les données ont été correctement supprimées.');
-                        })
+                    })
                     ->child['errors'](function($child) {
                         $child->hasSize(0);
-                        });
+                    });
 
         // Teste lorsque la requête SQL échoue.
         $DB->test_pdostatement->test_execute = false;
@@ -273,11 +277,11 @@ class Dependency_Group extends atoum {
                 ->array($this->testedInstance->delete())
                     ->child['successes'](function($child) {
                         $child->hasSize(0);
-                        })
+                    })
                     ->child['errors'](function($child) {
                         $child->hasSize(1)
                             ->contains('Une erreur est survenue lors de la suppression des données.');
-                        });
+                    });
     }
 
     public function test_is_up() {

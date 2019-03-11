@@ -41,7 +41,8 @@ class Plugin extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_record();
-                    });
+                    }
+                );
     }
 
     public function test_get_records() {
@@ -80,7 +81,8 @@ class Plugin extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('id' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -89,7 +91,8 @@ class Plugin extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('codename' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -98,7 +101,8 @@ class Plugin extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('active' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -107,7 +111,8 @@ class Plugin extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('fetch_one' => true, 'foo' => '1'));
-                    });
+                    }
+                );
 
         // TODO: Teste lorsque la requête SQL échoue.
         $DB->test_pdostatement->test_execute = false;

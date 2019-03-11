@@ -8,7 +8,7 @@ $STYLES[] = new Style(URL.'/themes/classic/styles/common.css?v='.$theme_version)
 $STYLES[] = new Style(URL.'/themes/classic/styles/menu.css?v='.$theme_version);
 
 switch ($PAGE_NAME[0]) {
-    // public
+    // Vues publiques.
     case 'actualite':
         $STYLES[] = new Style(URL.'/themes/classic/styles/news.css?v='.$theme_version);
         break;
@@ -32,7 +32,7 @@ switch ($PAGE_NAME[0]) {
     case 'rss':
         $STYLES[] = new Style(URL.'/themes/classic/styles/rss_config.css?v='.$theme_version);
         break;
-    // private
+    // Vues privées.
     case 'evenements':
         $STYLES[] = new Style(URL.'/themes/classic/styles/events.css?v='.$theme_version);
         break;

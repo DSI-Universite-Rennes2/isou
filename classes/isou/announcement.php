@@ -24,7 +24,7 @@ class Announcement {
 
         if (isset($options_visible[$this->visible]) === false) {
             $errors[] = 'La valeur du champ "afficher l\'annonce" n\'est pas valide.';
-        } elseif (empty($this->message)) {
+        } elseif (empty($this->message) === true) {
             $this->visible = '0';
         }
 
@@ -97,14 +97,14 @@ class Announcement {
         $results = array(
             'successes' => array(),
             'errors' => array(),
-            );
+        );
 
         $parameters = array(
             ':message' => $this->message,
             ':visible' => $this->visible,
             ':author' => $this->author,
             ':last_modification' => $this->last_modification->format(\DateTime::ATOM),
-            );
+        );
 
         $sql = 'UPDATE announcement SET message=:message, visible=:visible, author=:author, last_modification=:last_modification';
         $query = $DB->prepare($sql);

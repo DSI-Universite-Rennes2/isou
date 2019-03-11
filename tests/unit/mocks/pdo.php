@@ -39,15 +39,6 @@ class PDO extends \PDO {
         return $this->test_pdostatement;
     }
 
-    public function errorInfo() {
-        /*
-        try {
-            parent::errorInfo();
-        } catch (Exception $exception) {
-            return $exception;
-        }*/
-    }
-
     public function inTransaction() {
         return $this->test_transaction;
     }

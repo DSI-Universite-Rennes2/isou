@@ -47,7 +47,8 @@ class Event_Description extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_record();
-                    });
+                    }
+                );
     }
 
     public function test_get_records() {
@@ -86,7 +87,8 @@ class Event_Description extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('id' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -95,7 +97,8 @@ class Event_Description extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('description' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -104,7 +107,8 @@ class Event_Description extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('autogen' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -113,7 +117,8 @@ class Event_Description extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('fetch_one' => true, 'foo' => '1'));
-                    });
+                    }
+                );
 
         // TODO: Teste lorsque la requête SQL échoue.
         $DB->test_pdostatement->test_execute = false;
@@ -146,7 +151,8 @@ class Event_Description extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->save();
-                    });
+                    }
+                );
     }
 
     public function test_delete() {
@@ -167,6 +173,7 @@ class Event_Description extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->delete();
-                    });
+                    }
+                );
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
 /**
-  * Fonctions liées aux procédures de mise à jour.
-  */
+ * Fonctions liées aux procédures de mise à jour.
+ */
 
 use Phinx\Console\PhinxApplication;
 use Symfony\Component\Console\Input\StringInput;
@@ -10,12 +10,12 @@ use Symfony\Component\Console\Output\NullOutput;
 use UniversiteRennes2\Isou\Plugin;
 
 /**
-  * Procède à la migration de la version 1.0.0 (2013-00-00.1) à la version 2.0.0.
-  *
-  * @throws Exception if any errors occur.
-  *
-  * @return void
-  */
+ * Procède à la migration de la version 1.0.0 (2013-00-00.1) à la version 2.0.0.
+ *
+ * @throws Exception Lève une exception lorsqu'une erreur survient.
+ *
+ * @return void
+ */
 function upgrade_100_to_200() {
     echo 'Mise à jour de la version 1.0.0 (2013-00-00.1). vers la version 2.0.0.'.PHP_EOL;
 
@@ -38,7 +38,9 @@ function upgrade_100_to_200() {
     $old_databases = array();
 
     $db_path = dirname(substr(DB_PATH, strlen('sqlite:')));
-    if ($handle = opendir($db_path)) {
+
+    $handle = opendir($db_path);
+    if ($handle !== false) {
         while (($entry = readdir($handle)) !== false) {
             if ($entry[0] === '.') {
                 continue;
@@ -148,12 +150,12 @@ function upgrade_100_to_200() {
 }
 
 /**
-  * Procède à la migration de la version 0.11.0 (2012-03-16.1) à la version 1.0.0 (2013-00-00.1).
-  *
-  * @throws Exception if any errors occur.
-  *
-  * @return void
-  */
+ * Procède à la migration de la version 0.11.0 (2012-03-16.1) à la version 1.0.0 (2013-00-00.1).
+ *
+ * @throws Exception Lève une exception lorsqu'une erreur survient.
+ *
+ * @return void
+ */
 function upgrade_0110_to_100() {
     echo 'Mise à jour de la version 0.11.0 (2012-03-16.1) vers la version 1.0.0 (2013-00-00.1).'.PHP_EOL;
 
@@ -161,12 +163,12 @@ function upgrade_0110_to_100() {
 }
 
 /**
-  * Procède à la migration de la version 0.10.0 (2012-02-16.1) à la version 0.11.0 (2012-03-16.1).
-  *
-  * @throws Exception if any errors occur.
-  *
-  * @return void
-  */
+ * Procède à la migration de la version 0.10.0 (2012-02-16.1) à la version 0.11.0 (2012-03-16.1).
+ *
+ * @throws Exception Lève une exception lorsqu'une erreur survient.
+ *
+ * @return void
+ */
 function upgrade_0100_to_0110() {
     echo 'Mise à jour de la version 0.10.0 (2012-02-16.1) vers la version 0.11.0 (2012-03-16.1).'.PHP_EOL;
 
@@ -174,12 +176,12 @@ function upgrade_0100_to_0110() {
 }
 
 /**
-  * Procède à la migration de la version 0.9.6 à la version 0.10.0 (2012-02-16.1).
-  *
-  * @throws Exception if any errors occur.
-  *
-  * @return void
-  */
+ * Procède à la migration de la version 0.9.6 à la version 0.10.0 (2012-02-16.1).
+ *
+ * @throws Exception Lève une exception lorsqu'une erreur survient.
+ *
+ * @return void
+ */
 function upgrade_096_to_0100() {
     echo 'Mise à jour de la version 0.9.6 vers la version 0.10.0 (2012-02-16.1).'.PHP_EOL;
 
@@ -187,12 +189,12 @@ function upgrade_096_to_0100() {
 }
 
 /**
-  * Procède à la migration de la version 0.9.5 à la version 0.9.6.
-  *
-  * @throws Exception if any errors occur.
-  *
-  * @return void
-  */
+ * Procède à la migration de la version 0.9.5 à la version 0.9.6.
+ *
+ * @throws Exception Lève une exception lorsqu'une erreur survient.
+ *
+ * @return void
+ */
 function upgrade_095_to_096() {
     echo 'Mise à jour de la version 0.9.5 vers la version 0.9.6.'.PHP_EOL;
 
@@ -200,12 +202,12 @@ function upgrade_095_to_096() {
 }
 
 /**
-  * Procède à la migration de la version 0.9.0 à la version 0.9.5.
-  *
-  * @throws Exception if any errors occur.
-  *
-  * @return void
-  */
+ * Procède à la migration de la version 0.9.0 à la version 0.9.5.
+ *
+ * @throws Exception Lève une exception lorsqu'une erreur survient.
+ *
+ * @return void
+ */
 function upgrade_090_to_095() {
     echo 'Mise à jour de la version 0.9.0 vers la version 0.9.5.'.PHP_EOL;
 
@@ -213,12 +215,12 @@ function upgrade_090_to_095() {
 }
 
 /**
-  * Détermine si un plugin doit être mis à jour ou applique les mises à jour.
-  *
-  * @var boolean $check_only Indique si les mises à jour doivent être signalées ou appliquées.
-  *
-  * @return boolean Retourne true si une mise à jour est disponible ou si les mises à jour ont été faites correctement.
-  */
+ * Détermine si un plugin doit être mis à jour ou applique les mises à jour.
+ *
+ * @var boolean $check_only Indique si les mises à jour doivent être signalées ou appliquées.
+ *
+ * @return boolean Retourne true si une mise à jour est disponible ou si les mises à jour ont été faites correctement.
+ */
 function upgrade_plugins($check_only = false) {
     global $DB, $LOGGER;
 
@@ -230,7 +232,8 @@ function upgrade_plugins($check_only = false) {
     foreach ($plugins_paths as $plugintype => $plugins_path) {
         $entries = array();
 
-        if ($handle = opendir($plugins_path)) {
+        $handle = opendir($plugins_path);
+        if ($handle !== false) {
             while (($entry = readdir($handle)) !== false) {
                 if ($entry[0] === '.') {
                     continue;
@@ -309,12 +312,12 @@ function upgrade_plugins($check_only = false) {
 }
 
 /**
-  * Initialise la création de la base de données.
-  *
-  * @throws Exception if any errors occur.
-  *
-  * @return void
-  */
+ * Initialise la création de la base de données.
+ *
+ * @throws Exception Lève une exception lorsqu'une erreur survient.
+ *
+ * @return void
+ */
 function initialize_phinx() {
     echo 'Initialise la base de donnnées'.PHP_EOL;
 

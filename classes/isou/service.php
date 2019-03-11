@@ -78,7 +78,9 @@ class Service {
 
                 $sql = 'SELECT rsskey FROM services WHERE rsskey IS NOT NULL ORDER BY rsskey DESC';
                 $query = $DB->query($sql);
-                if ($key = $query->fetch(\PDO::FETCH_OBJ)) {
+
+                $key = $query->fetch(\PDO::FETCH_OBJ);
+                if (isset($key->rsskey) === true) {
                     $this->rsskey = ++$key->rsskey;
                 } else {
                     $this->rsskey = 1;
@@ -102,12 +104,13 @@ class Service {
     }
 
     /**
-      * @param array $options Array in format:
-      * @see function get_records()
-      * Note : fetch_one param is always set at true
-      *
-      * @return UniversiteRennes2\Isou\Service|false
-      */
+     * @param array $options Array in format:
+     *
+     * @see function get_records()
+     * Note : fetch_one param is always set at true
+     *
+     * @return UniversiteRennes2\Isou\Service|false
+     */
     public static function get_record($options = array()) {
         if (isset($options['id']) === false) {
             throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] est requis.');
@@ -119,17 +122,17 @@ class Service {
     }
 
     /**
-      * @param array $options Array in format:
-      *   category        => int : category id
-      *   enable          => bool
-      *   id              => int : service id
-      *   locked          => bool
-      *   fetch_one      => bool
-      *   visible         => bool
-      *   type            => int : index key from UniversiteRennes2\Isou\Service::$TYPES
-      *
-      * @return UniversiteRennes2\Isou\Service[]|UniversiteRennes2\Isou\Service|false
-      */
+     * @param array $options Array in format:
+     *   category => int : category id
+     *   enable => bool
+     *   id => int : service id
+     *   locked => bool
+     *   fetch_one => bool
+     *   visible => bool
+     *   type => int : index key from UniversiteRennes2\Isou\Service::$TYPES
+     *
+     * @return UniversiteRennes2\Isou\Service[]|UniversiteRennes2\Isou\Service|false
+     */
     public static function get_records($options = array()) {
         global $DB;
 
@@ -281,7 +284,7 @@ class Service {
         $results = array(
             'successes' => array(),
             'errors' => array(),
-            );
+        );
 
         $params = array(
             ':name' => $this->name,
@@ -295,7 +298,7 @@ class Service {
             ':timemodified' => $this->timemodified,
             ':idplugin' => $this->idplugin,
             ':idcategory' => $this->idcategory,
-            );
+        );
 
         if ($this->id === 0) {
             $sql = 'INSERT INTO services(name, url, state, comment, enable, visible, locked, rsskey, timemodified, idplugin, idcategory)'.
@@ -307,7 +310,7 @@ class Service {
         }
         $query = $DB->prepare($sql);
 
-        if ($query->execute($params)) {
+        if ($query->execute($params) === true) {
             if ($this->id === 0) {
                 $this->id = $DB->lastInsertId();
             }
@@ -328,7 +331,7 @@ class Service {
         $results = array(
             'successes' => array(),
             'errors' => array(),
-            );
+        );
 
         $commit = 1;
 
@@ -405,7 +408,7 @@ class Service {
 
         $sql = 'UPDATE services SET state=:state, enable=:enable, timemodified=:timemodified WHERE id = :id';
         $query = $DB->prepare($sql);
-        if ($query->execute(array(':state' => State::OK, ':enable' => $enable, ':timemodified' => strftime('%FT%T'), ':id' => $this->id))) {
+        if ($query->execute(array(':state' => State::OK, ':enable' => $enable, ':timemodified' => strftime('%FT%T'), ':id' => $this->id)) === true) {
             $this->enable = $enable;
             return true;
         } else {
@@ -423,7 +426,7 @@ class Service {
 
         $sql = 'UPDATE services SET visible=:visible WHERE id = :id';
         $query = $DB->prepare($sql);
-        if ($query->execute(array(':visible' => $visible, ':id' => $this->id))) {
+        if ($query->execute(array(':visible' => $visible, ':id' => $this->id)) === true) {
             $this->visible = '1';
             return true;
         } else {
@@ -441,7 +444,7 @@ class Service {
 
         $sql = 'UPDATE services SET state=:state, locked=1 WHERE id = :id';
         $query = $DB->prepare($sql);
-        if ($query->execute(array(':state' => $state, ':id' => $this->id))) {
+        if ($query->execute(array(':state' => $state, ':id' => $this->id)) === true) {
             $this->state = $state;
             $this->locked = '1';
             return true;
@@ -456,7 +459,7 @@ class Service {
 
         $sql = 'UPDATE services SET locked=0 WHERE id = :id';
         $query = $DB->prepare($sql);
-        if ($query->execute(array(':id' => $this->id))) {
+        if ($query->execute(array(':id' => $this->id)) === true) {
             $this->locked = '0';
             return true;
         } else {

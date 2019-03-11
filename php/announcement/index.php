@@ -9,7 +9,7 @@ $announcement = Announcement::get_record();
 $options_visible = array(
     1 => 'Oui',
     0 => 'Non',
-    );
+);
 
 if (isset($_POST['message'], $_POST['visible']) === true) {
     $announcement->message = $_POST['message'];

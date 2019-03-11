@@ -10,12 +10,12 @@ define('MAXFEED', 100);
 require __DIR__.'/../config.php';
 
 // find filter on rss url
-if (isset($_GET['key'])) {
+if (isset($_GET['key']) === true) {
     $maxKey = pow(2, 100);
     $key = hexdec($_GET['key']);
     $keys = array();
     $i = 100;
-    while ($key != 0) {
+    while ($key !== 0) {
         if ($key >= $maxKey) {
             $keys[$i] = $i;
             $key = $key - $maxKey;
@@ -69,7 +69,7 @@ foreach (Event::get_records($options) as $event) {
         continue;
     }
 
-    if ($keys !== null && !isset($keys[$event->idservice])) {
+    if ($keys !== null && isset($keys[$event->idservice]) === false) {
         continue;
     }
 
@@ -90,7 +90,7 @@ foreach (Event::get_records($options) as $event) {
         $enddate = $event->enddate->format('d/m/Y H:i');
     }
 
-    if (empty($items[$opening_event_id]->description)) {
+    if (empty($items[$opening_event_id]->description) === true) {
         $description = 'n/a';
     } else {
         $description = $items[$opening_event_id]->description;

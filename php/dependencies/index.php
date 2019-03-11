@@ -32,7 +32,7 @@ if ($PAGE_NAME[1] === 'service' && isset($PAGE_NAME[2]) === true && ctype_digit(
                 default:
                     require PRIVATE_PATH.'/php/dependencies/contents/edit.php';
             }
-        } else if (isset($PAGE_NAME[5]) === true && ctype_digit($PAGE_NAME[5]) === true) {
+        } elseif (isset($PAGE_NAME[5]) === true && ctype_digit($PAGE_NAME[5]) === true) {
             // Groups.
             switch ($PAGE_NAME[4]) {
                 case 'delete':

@@ -3,63 +3,63 @@
 namespace UniversiteRennes2\Isou;
 
 /**
-  * Classe gérant les souscriptions aux notifications web.
-  */
+ * Classe gérant les souscriptions aux notifications web.
+ */
 class Subscription {
     /**
-      * Identifiant de la souscription.
-      *
-      * @var integer
-      */
+     * Identifiant de la souscription.
+     *
+     * @var integer
+     */
     public $id;
 
     /**
-      * Adresse vers laquelle sera acheminé le message.
-      *
-      * @var string
-      */
+     * Adresse vers laquelle sera acheminé le message.
+     *
+     * @var string
+     */
     public $endpoint;
 
     /**
-      * Uncompressed public key P-256 encoded in Base64-URL.
-      *
-      * @var string
-      */
+     * Uncompressed public key P-256 encoded in Base64-URL.
+     *
+     * @var string
+     */
     public $public_key;
 
     /**
-      * Jeton d'authentification encodé en base64 de 24 caractères.
-      *
-      * @var string
-      */
+     * Jeton d'authentification encodé en base64 de 24 caractères.
+     *
+     * @var string
+     */
     public $authentification_token;
 
     /**
-      * Algorythme d'encodage du message.
-      *
-      * @var string
-      */
+     * Algorythme d'encodage du message.
+     *
+     * @var string
+     */
     public $content_encoding;
 
     /**
-      * Date de la dernière notification.
-      *
-      * @var string
-      */
+     * Date de la dernière notification.
+     *
+     * @var string
+     */
     public $lastnotification;
 
     /**
-      * Identifiant de l'utilisateur.
-      *
-      * @var integer
-      */
+     * Identifiant de l'utilisateur.
+     *
+     * @var integer
+     */
     public $iduser;
 
     /**
-      * Constructeur.
-      *
-      * @return void
-      */
+     * Constructeur.
+     *
+     * @return void
+     */
     public function __construct() {
         if (isset($this->id) === true) {
             if ($this->lastnotification !== null) {
@@ -81,12 +81,12 @@ class Subscription {
     }
 
     /**
-      * Supprime l'objet de la base de données.
-      *
-      * @throws \Exception Lève une exception en cas d'erreur lors de l'écriture en base de données.
-      *
-      * @return void
-      */
+     * Supprime l'objet de la base de données.
+     *
+     * @throws \Exception Lève une exception en cas d'erreur lors de l'écriture en base de données.
+     *
+     * @return void
+     */
     public function delete() {
         global $DB, $LOGGER;
 
@@ -102,12 +102,13 @@ class Subscription {
     }
 
     /**
-      * @param array $options Array in format:
-      * @see function get_records()
-      * Note : fetch_one param is always set at true
-      *
-      * @return UniversiteRennes2\Isou\Subscription|false
-      */
+     * @param array $options Array in format:
+     *
+     * @see function get_records()
+     * Note : fetch_one param is always set at true
+     *
+     * @return UniversiteRennes2\Isou\Subscription|false
+     */
     public static function get_record($options = array()) {
         $options['fetch_one'] = true;
 
@@ -115,14 +116,14 @@ class Subscription {
     }
 
     /**
-      * Retourne un tableau des souscriptions en fonction des critères sélectionnés.
-      *
-      * @param array $options Liste des critères de sélection.
-      *
-      * @throws \Exception Lève une exception si certains critères minimum sont absents ou invalides.
-      *
-      * @return array of Subscription
-      */
+     * Retourne un tableau des souscriptions en fonction des critères sélectionnés.
+     *
+     * @param array $options Liste des critères de sélection.
+     *
+     * @throws \Exception Lève une exception si certains critères minimum sont absents ou invalides.
+     *
+     * @return array of Subscription
+     */
     public static function get_records($options = array()) {
         global $DB;
 
@@ -218,24 +219,24 @@ class Subscription {
     }
 
     /**
-      * Envoie une notification web.
-      *
-      * @param Webpush $webpush Objet webpush prêt à envoyer des notifications.
-      * @param Notification $notification Object notification à envoyer contenant l'authentification, les entêtes, les options et le corps du message.
-      *
-      * @return true|array Retourne true en cas de succès, ou un tableau contenant les erreurs rencontrées à l'envoi du message.
-      */
+     * Envoie une notification web.
+     *
+     * @param Webpush      $webpush      Objet webpush prêt à envoyer des notifications.
+     * @param Notification $notification Object notification à envoyer contenant l'authentification, les entêtes, les options et le corps du message.
+     *
+     * @return true|array Retourne true en cas de succès, ou un tableau contenant les erreurs rencontrées à l'envoi du message.
+     */
     public function notify($webpush, $notification) {
         return $webpush->sendNotification($this->endpoint, $notification->payload, $this->public_key, $this->authentification_token, $notification->flush, $notification->options);
     }
 
     /**
-      * Enregistre l'objet en base de données.
-      *
-      * @throws \Exception Lève une exception en cas d'erreur lors de l'écriture en base de données.
-      *
-      * @return void
-      */
+     * Enregistre l'objet en base de données.
+     *
+     * @throws \Exception Lève une exception en cas d'erreur lors de l'écriture en base de données.
+     *
+     * @return void
+     */
     public function save() {
         global $DB, $LOGGER;
 
@@ -245,7 +246,7 @@ class Subscription {
             ':authentification_token' => $this->authentification_token,
             ':content_encoding' => $this->content_encoding,
             ':iduser' => $this->iduser,
-            );
+        );
 
         if ($this->lastnotification instanceof \DateTime) {
             $params[':lastnotification'] = $this->lastnotification->format('Y-m-d\TH:i:s');

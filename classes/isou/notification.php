@@ -5,8 +5,8 @@ namespace UniversiteRennes2\Isou;
 use Minishlink\WebPush\WebPush;
 
 /**
-  * Classe gérant les notifications web.
-  */
+ * Classe gérant les notifications web.
+ */
 class Notification {
     /**
       * Définis le TTL des messages à 5 minutes.
@@ -14,60 +14,60 @@ class Notification {
     const TTL = 5 * 60;
 
     /**
-      * Adresse vers laquelle sera acheminé le message.
-      *
-      * @var boolean
-      */
+     * Adresse vers laquelle sera acheminé le message.
+     *
+     * @var boolean
+     */
     public $flush;
 
     /**
-      * Tableau d'options des notifications web.
-      *
-      * @var array
-      */
+     * Tableau d'options des notifications web.
+     *
+     * @var array
+     */
     public $options;
 
     /**
-      * Tableau d'informations encodé en JSON qui sera envoyé au client.
-      * Le tableau contient notamment le titre et le contenu du message de la notification web.
-      *
-      * @var string
-      */
+     * Tableau d'informations encodé en JSON qui sera envoyé au client.
+     * Le tableau contient notamment le titre et le contenu du message de la notification web.
+     *
+     * @var string
+     */
     public $payload;
 
     /**
-      * Clé publique VAPID.
-      *
-      * @var boolean
-      */
+     * Clé publique VAPID.
+     *
+     * @var boolean
+     */
     public $public_key;
 
     /**
-      * Clé privée VAPID.
-      *
-      * @var string
-      */
+     * Clé privée VAPID.
+     *
+     * @var string
+     */
     public $private_key;
 
     /**
-      * Adresse du site hébergeant l'application.
-      *
-      * @var string
-      */
+     * Adresse du site hébergeant l'application.
+     *
+     * @var string
+     */
     public $website_address;
 
     /**
-      * Constructeur.
-      *
-      * @param string $title   Titre de la notification web.
-      * @param string $message Contenu du message de la notification web.
-      * @param string $url     Url du site envoyant la notification web.
-      * @param string $icon    Icône du site envoyant la notification web.
-      *
-      * @throws \Exception   Lève une exception si les clés de chiffrement ne sont pas lisisbles.
-      *
-      * @return void
-      */
+     * Constructeur.
+     *
+     * @param string $title Titre de la notification web.
+     * @param string $message Contenu du message de la notification web.
+     * @param string $url Url du site envoyant la notification web.
+     * @param string $icon Icône du site envoyant la notification web.
+     *
+     * @throws \Exception Lève une exception si les clés de chiffrement ne sont pas lisisbles.
+     *
+     * @return void
+     */
     public function __construct($title, $message, $url, $icon) {
         $payload = array();
         $payload['url'] = $url;
@@ -94,10 +94,10 @@ class Notification {
     }
 
     /**
-      * Retourne un objet Webpush prêt à envoyer des notifications.
-      *
-      * @return WebPush
-      */
+     * Retourne un objet Webpush prêt à envoyer des notifications.
+     *
+     * @return WebPush
+     */
     public function get_webpush() {
         // Paramètres d'authentification du message.
         $authentification = array(

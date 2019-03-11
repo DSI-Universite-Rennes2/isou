@@ -1,17 +1,17 @@
 <?php
 
 /**
-  * Initialise le scénario 4.
-  *      Contexte du service :
-  *          - 1 service Isou
-  *          - 1 service Thruk
-  */
+ * Initialise le scénario 4.
+ *      Contexte du service :
+ *          - 1 service Isou
+ *          - 1 service Thruk
+ */
 
 use Phinx\Seed\AbstractSeed;
 
 /**
-  * Classe de remplissage de données pour Phinx.
-  */
+ * Classe de remplissage de données pour Phinx.
+ */
 class Scenario4 extends AbstractSeed {
     const ISOU_SEED_PREFIX_ID = '4';
     const ISOU_SEED_NAME = 'Scenario '.self::ISOU_SEED_PREFIX_ID;
@@ -23,8 +23,8 @@ class Scenario4 extends AbstractSeed {
                 'id' => self::ISOU_SEED_PREFIX_ID.'1',
                 'name' => self::ISOU_SEED_NAME,
                 'position' => self::ISOU_SEED_PREFIX_ID.'1',
-                ),
-            );
+            ),
+        );
         $table = $this->table('categories');
         $table->insert($data)->save();
 
@@ -41,7 +41,7 @@ class Scenario4 extends AbstractSeed {
                 'rsskey' => self::ISOU_SEED_PREFIX_ID.'1',
                 'idplugin' => 1, // Type isou.
                 'idcategory' => self::ISOU_SEED_PREFIX_ID.'1',
-                ),
+            ),
             array(
                 'id' => self::ISOU_SEED_PREFIX_ID.'2',
                 'name' => 'service isou ('.self::ISOU_SEED_NAME.')',
@@ -52,7 +52,7 @@ class Scenario4 extends AbstractSeed {
                 'rsskey' => self::ISOU_SEED_PREFIX_ID.'2',
                 'idplugin' => 1, // Type isou.
                 'idcategory' => self::ISOU_SEED_PREFIX_ID.'1',
-                ),
+            ),
             array(
                 'id' => self::ISOU_SEED_PREFIX_ID.'3',
                 'name' => 'service thruk ('.self::ISOU_SEED_NAME.')',
@@ -63,8 +63,8 @@ class Scenario4 extends AbstractSeed {
                 'rsskey' => null,
                 'idplugin' => 3, // Type thruk.
                 'idcategory' => null,
-                ),
-            );
+            ),
+        );
         $table = $this->table('services');
         $table->insert($data)->save();
 
@@ -77,7 +77,7 @@ class Scenario4 extends AbstractSeed {
                 'groupstate' => '1',
                 'idservice' => self::ISOU_SEED_PREFIX_ID.'1',
                 'idmessage' => self::ISOU_SEED_PREFIX_ID.'1',
-                ),
+            ),
             array(
                 'id' => self::ISOU_SEED_PREFIX_ID.'2',
                 'name' => 'serveur isou - critical',
@@ -85,7 +85,7 @@ class Scenario4 extends AbstractSeed {
                 'groupstate' => '2',
                 'idservice' => self::ISOU_SEED_PREFIX_ID.'1',
                 'idmessage' => self::ISOU_SEED_PREFIX_ID.'1',
-                ),
+            ),
             array(
                 'id' => self::ISOU_SEED_PREFIX_ID.'3',
                 'name' => 'serveur thruk - warning',
@@ -93,7 +93,7 @@ class Scenario4 extends AbstractSeed {
                 'groupstate' => '1',
                 'idservice' => self::ISOU_SEED_PREFIX_ID.'1',
                 'idmessage' => self::ISOU_SEED_PREFIX_ID.'2',
-                ),
+            ),
             array(
                 'id' => self::ISOU_SEED_PREFIX_ID.'4',
                 'name' => 'serveur thruk - critical',
@@ -101,8 +101,8 @@ class Scenario4 extends AbstractSeed {
                 'groupstate' => '2',
                 'idservice' => self::ISOU_SEED_PREFIX_ID.'1',
                 'idmessage' => self::ISOU_SEED_PREFIX_ID.'2',
-                ),
-            );
+            ),
+        );
         $table = $this->table('dependencies_groups');
         $table->insert($data)->save();
 

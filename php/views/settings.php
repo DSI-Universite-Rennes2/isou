@@ -5,7 +5,7 @@ use Isou\Helpers\SimpleMenu;
 $options_yes_no = array(
     '1' => 'Oui',
     '0' => 'Non',
-    );
+);
 
 if (isset($_POST['plugin_view_enable'], $options_yes_no[$_POST['plugin_view_enable']]) === true) {
     if ($_POST['plugin_view_enable'] !== $plugin->active) {

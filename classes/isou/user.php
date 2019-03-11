@@ -3,84 +3,84 @@
 namespace UniversiteRennes2\Isou;
 
 /**
-  * Classe gérant les utilisateurs.
-  */
+ * Classe gérant les utilisateurs.
+ */
 class User {
     /**
-      * Identifiant de l'utilisateur.
-      *
-      * @var integer
-      */
+     * Identifiant de l'utilisateur.
+     *
+     * @var integer
+     */
     public $id;
 
     /**
-      * Nom du module d'authentification.
-      *
-      * @var string
-      */
+     * Nom du module d'authentification.
+     *
+     * @var string
+     */
     public $authentification;
 
     /**
-      * Identifiant de connexion.
-      *
-      * @var string
-      */
+     * Identifiant de connexion.
+     *
+     * @var string
+     */
     public $username;
 
     /**
-      * Mot de passe haché.
-      *
-      * @var string
-      */
+     * Mot de passe haché.
+     *
+     * @var string
+     */
     public $password;
 
     /**
-      * Prénom de l'utilisateur.
-      *
-      * @var string
-      */
+     * Prénom de l'utilisateur.
+     *
+     * @var string
+     */
     public $firstname;
 
     /**
-      * Nom de l'utilisateur.
-      *
-      * @var string
-      */
+     * Nom de l'utilisateur.
+     *
+     * @var string
+     */
     public $lastname;
 
     /**
-      * Email de l'utilisateur.
-      *
-      * @var string
-      */
+     * Email de l'utilisateur.
+     *
+     * @var string
+     */
     public $email;
 
     /**
-      * Témoin du droit d'administration.
-      *
-      * @var integer
-      */
+     * Témoin du droit d'administration.
+     *
+     * @var integer
+     */
     public $admin;
 
     /**
-      * Date de dernière accès à Isou.
-      *
-      * @var \DateTime
-      */
+     * Date de dernière accès à Isou.
+     *
+     * @var \DateTime
+     */
     public $lastaccess;
 
     /**
-      * Date de création du compte.
-      *
-      * @var \DateTime
-      */
+     * Date de création du compte.
+     *
+     * @var \DateTime
+     */
     public $timecreated;
 
     /**
-      * Constructeur.
-      *
-      * @return void
-      */
+     * Constructeur.
+     *
+     * @return void
+     */
     public function __construct() {
         if (isset($this->id) === true) {
             // Instance PDO.
@@ -113,10 +113,10 @@ class User {
     }
 
     /**
-      * Retourne si renseigné le prénom et le nom de l'utilisateur, sinon son identifiant.
-      *
-      * @return string
-      */
+     * Retourne si renseigné le prénom et le nom de l'utilisateur, sinon son identifiant.
+     *
+     * @return string
+     */
     public function __tostring() {
         if (empty($this->firstname) === true && empty($this->lastname) === true) {
             return $this->username;
@@ -126,14 +126,14 @@ class User {
     }
 
     /**
-      * Retourne un utilisateur en fonction des critères sélectionnés.
-      *
-      * @param array $options Liste des critères de sélection.
-      *
-      * @throws \Exception Lève une exception si certains critères minimum sont absents ou invalides.
-      *
-      * @return User|false
-      */
+     * Retourne un utilisateur en fonction des critères sélectionnés.
+     *
+     * @param array $options Liste des critères de sélection.
+     *
+     * @throws \Exception Lève une exception si certains critères minimum sont absents ou invalides.
+     *
+     * @return User|false
+     */
     public static function get_record($options = array()) {
         if (isset($options['id']) === false && isset($options['username'], $options['authentification']) === false) {
             throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] ou les deux paramètres $options[\'username\'] et $options[\'authentification\'] sont requis.');
@@ -145,14 +145,14 @@ class User {
     }
 
     /**
-      * Retourne un tableau d'utilisateurs en fonction des critères sélectionnés.
-      *
-      * @param array $options Liste des critères de sélection.
-      *
-      * @throws \Exception Lève une exception si certains critères minimum sont absents ou invalides.
-      *
-      * @return array of User
-      */
+     * Retourne un tableau d'utilisateurs en fonction des critères sélectionnés.
+     *
+     * @param array $options Liste des critères de sélection.
+     *
+     * @throws \Exception Lève une exception si certains critères minimum sont absents ou invalides.
+     *
+     * @return array of User
+     */
     public static function get_records($options = array()) {
         global $DB;
 
@@ -226,12 +226,12 @@ class User {
     }
 
     /**
-      * Enregistre ou mets à jour un utilisateur en base de données.
-      *
-      * @throws \Exception Lève une exception en cas d'erreur lors de l'écriture en base de données.
-      *
-      * @return void
-      */
+     * Enregistre ou mets à jour un utilisateur en base de données.
+     *
+     * @throws \Exception Lève une exception en cas d'erreur lors de l'écriture en base de données.
+     *
+     * @return void
+     */
     public function save() {
         global $DB, $LOGGER;
 
@@ -251,7 +251,7 @@ class User {
             ':admin' => $this->admin,
             ':lastaccess' => $lastaccess,
             ':timecreated' => $this->timecreated->format('Y-m-d\TH:i:s'),
-            );
+        );
 
         if ($this->id === 0) {
             $sql = 'INSERT INTO users(authentification, username, password, firstname, lastname, email, admin, lastaccess, timecreated)'.

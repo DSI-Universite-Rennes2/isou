@@ -9,7 +9,9 @@ foreach ($MENUS->public as $menu) {
 
 $themes = array();
 $themes_path = PUBLIC_PATH.'/themes';
-if ($handle = opendir($themes_path)) {
+
+$handle = opendir($themes_path);
+if ($handle !== false) {
     while (($entry = readdir($handle)) !== false) {
         if (ctype_alnum($entry) === true && is_dir($themes_path.'/'.$entry) === true) {
             $themes[$entry] = $entry;

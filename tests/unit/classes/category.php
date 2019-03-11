@@ -96,7 +96,8 @@ class Category extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_record();
-                    });
+                    }
+                );
     }
 
     public function test_get_records() {
@@ -135,7 +136,8 @@ class Category extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('id' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -144,7 +146,8 @@ class Category extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('non-empty' => 1));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -153,7 +156,8 @@ class Category extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('fetch_one' => true, 'foo' => '1'));
-                    });
+                    }
+                );
 
         // TODO: Teste lorsque la requête SQL échoue.
         $DB->test_pdostatement->test_execute = false;
@@ -173,10 +177,10 @@ class Category extends atoum {
                     ->child['successes'](function($child) {
                         $child->hasSize(1)
                             ->contains('Les données ont été correctement enregistrées.');
-                        })
+                    })
                     ->child['errors'](function($child) {
                         $child->hasSize(0);
-                        })
+                    })
                 ->variable($this->testedInstance->id)->isNotEqualTo(0);
 
         // Teste si un tableau est bien renvoyé et que l'id existant n'a pas été incrémenté.
@@ -188,10 +192,10 @@ class Category extends atoum {
                     ->child['successes'](function($child) {
                         $child->hasSize(1)
                             ->contains('Les données ont été correctement enregistrées.');
-                        })
+                    })
                     ->child['errors'](function($child) {
                         $child->hasSize(0);
-                        })
+                    })
                 ->variable($this->testedInstance->id)->isEqualTo(42);
 
         // Teste lorsque la requête SQL échoue.
@@ -203,11 +207,11 @@ class Category extends atoum {
                 ->array($this->testedInstance->save())
                     ->child['successes'](function($child) {
                         $child->hasSize(0);
-                        })
+                    })
                     ->child['errors'](function($child) {
                         $child->hasSize(1)
                             ->contains('Une erreur est survenue lors de l\'enregistrement des données.');
-                        })
+                    })
                 ->variable($this->testedInstance->id)->isEqualTo(0);
     }
 
@@ -225,10 +229,10 @@ class Category extends atoum {
                     ->child['successes'](function($child) {
                         $child->hasSize(1)
                             ->contains('Les données ont été correctement supprimées.');
-                        })
+                    })
                     ->child['errors'](function($child) {
                         $child->hasSize(0);
-                        });
+                    });
 
         // Teste lorsque la requête SQL échoue.
         $DB->test_pdostatement->test_execute = false;
@@ -239,11 +243,11 @@ class Category extends atoum {
                 ->array($this->testedInstance->delete())
                     ->child['successes'](function($child) {
                         $child->hasSize(0);
-                        })
+                    })
                     ->child['errors'](function($child) {
                         $child->hasSize(1)
                             ->contains('Une erreur est survenue lors de la suppression des données.');
-                        });
+                    });
     }
 
     public function test_move_up() {
@@ -261,10 +265,10 @@ class Category extends atoum {
                     ->child['successes'](function($child) {
                         $child->hasSize(1)
                             ->contains('Les données ont été correctement enregistrées.');
-                        })
+                    })
                     ->child['errors'](function($child) {
                         $child->hasSize(0);
-                        });
+                    });
 
         // Teste lorsque la catégorie est déjà au plus haut.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -275,11 +279,11 @@ class Category extends atoum {
                 ->array($this->testedInstance->move_up())
                     ->child['successes'](function($child) {
                         $child->hasSize(0);
-                        })
+                    })
                     ->child['errors'](function($child) {
                         $child->hasSize(1)
                             ->contains('La catégorie "'.$this->testedInstance->name.'" ne peut pas être montée davantage.');
-                        });
+                    });
 
         // Teste lorsque la requête SQL échoue.
         $DB->test_pdostatement->test_execute = false;
@@ -291,11 +295,11 @@ class Category extends atoum {
                 ->array($this->testedInstance->move_up())
                     ->child['successes'](function($child) {
                         $child->hasSize(0);
-                        })
+                    })
                     ->child['errors'](function($child) {
                         $child->hasSize(1)
                             ->contains('Une erreur est survenue lors de l\'enregistrement des données.');
-                        });
+                    });
     }
 
     public function test_move_down() {
@@ -313,10 +317,10 @@ class Category extends atoum {
                     ->child['successes'](function($child) {
                         $child->hasSize(1)
                             ->contains('Les données ont été correctement enregistrées.');
-                        })
+                    })
                     ->child['errors'](function($child) {
                         $child->hasSize(0);
-                        });
+                    });
 
         // Teste lorsque la catégorie est déjà au plus bas.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -327,11 +331,11 @@ class Category extends atoum {
                 ->array($this->testedInstance->move_down())
                     ->child['successes'](function($child) {
                         $child->hasSize(0);
-                        })
+                    })
                     ->child['errors'](function($child) {
                         $child->hasSize(1)
                             ->contains('La catégorie "'.$this->testedInstance->name.'" ne peut pas être descendue davantage.');
-                        });
+                    });
 
         // Teste lorsque la requête SQL échoue.
         $DB->test_pdostatement->test_execute = false;
@@ -343,10 +347,10 @@ class Category extends atoum {
                 ->array($this->testedInstance->move_down())
                     ->child['successes'](function($child) {
                         $child->hasSize(0);
-                        })
+                    })
                     ->child['errors'](function($child) {
                         $child->hasSize(1)
                             ->contains('Une erreur est survenue lors de l\'enregistrement des données.');
-                        });
+                    });
     }
 }

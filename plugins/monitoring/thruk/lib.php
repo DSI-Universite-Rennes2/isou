@@ -1,19 +1,19 @@
 <?php
 
 /**
-  * Fonctions liées aux mises à jour des services du plugin Thruk.
-  */
+ * Fonctions liées aux mises à jour des services du plugin Thruk.
+ */
 
 use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
 /**
-  * Mets l'état des services du plugin Thruk.
-  *
-  * @param UniversiteRennes2\Isou\Plugin $plugin Une instance du plugin Thruk.
-  *
-  * @return boolean True si la mise à jour s'est déroulée correctement ; False si une erreur est survenue.
-  */
+ * Mets l'état des services du plugin Thruk.
+ *
+ * @param UniversiteRennes2\Isou\Plugin $plugin Une instance du plugin Thruk.
+ *
+ * @return boolean True si la mise à jour s'est déroulée correctement ; False si une erreur est survenue.
+ */
 function plugin_thruk_update($plugin) {
     global $LOGGER;
 
@@ -34,8 +34,8 @@ function plugin_thruk_update($plugin) {
         'http' => array(
             'method' => 'GET',
             'header' => 'Authorization: Basic '.base64_encode($username.':'.$password),
-            ),
-        );
+        ),
+    );
 
     // Vérifie si le fichier peut être ouvert.
     $handle = @fopen($url, $mode = 'rb', $use_include_path = false, stream_context_create($params));

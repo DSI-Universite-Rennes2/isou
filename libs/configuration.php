@@ -3,10 +3,10 @@
 use UniversiteRennes2\Isou\Plugin;
 
 /**
-  * Détermine si l'application doit être mise à jour.
-  *
-  * @return boolean Retourne true si une mise à jour est disponible.
-  */
+ * Détermine si l'application doit être mise à jour.
+ *
+ * @return boolean Retourne true si une mise à jour est disponible.
+ */
 function has_new_version() {
     global $CFG;
 
@@ -28,7 +28,7 @@ function get_configurations() {
     $configurations = array();
     if ($query !== false) {
         $query->execute();
-        while ($config = $query->fetch(PDO::FETCH_OBJ)) {
+        while (($config = $query->fetch(PDO::FETCH_OBJ)) !== false) {
             switch ($config->type) {
                 case 'array':
                     $configurations[$config->key] = json_decode($config->value);
@@ -64,7 +64,7 @@ function set_configuration($key, $value, $field = null) {
 
     $sql = "UPDATE configuration SET value=? WHERE key=?";
     $query = $DB->prepare($sql);
-    if ($query->execute(array($value, $key))) {
+    if ($query->execute(array($value, $key)) === true) {
         if ($field === null) {
             $_POST['successes'][] = 'Mise à jour de la clé "'.$key.'".';
         } else {

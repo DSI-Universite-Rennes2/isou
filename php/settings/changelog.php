@@ -9,7 +9,6 @@ $changelog_path = PRIVATE_PATH.'/markdown/changelogs';
 
 $handle = opendir($changelog_path);
 if ($handle !== false) {
-
     $converter = new CommonMarkConverter();
 
     while (false !== ($file = readdir($handle))) {

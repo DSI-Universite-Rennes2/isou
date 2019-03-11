@@ -165,13 +165,13 @@ class Plugin {
             if (is_array($value) === true) {
                 $params[':value'] = json_encode($value);
                 $params[':type'] = 'array';
-            } else if (is_bool($value) === true) {
+            } elseif (is_bool($value) === true) {
                 $params[':value'] = intval($value);
                 $params[':type'] = 'boolean';
-            } else if ($value instanceof \DateTime) {
+            } elseif ($value instanceof \DateTime) {
                 $params[':value'] = $value->format('Y-m-d\TH:i:s');
                 $params[':type'] = 'datetime';
-            } else if (is_integer($value) === true) {
+            } elseif (is_integer($value) === true) {
                 $params[':type'] = 'integer';
             } else {
                 $params[':type'] = 'string';

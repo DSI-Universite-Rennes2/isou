@@ -30,7 +30,7 @@ class State {
         self::CRITICAL => 'Indisponible',
         self::UNKNOWN => 'Indéterminé',
         self::CLOSED => 'Fermé',
-        );
+    );
 
     public function __construct() {
         if (isset($this->id) === false) {

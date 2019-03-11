@@ -3,12 +3,12 @@
 use UniversiteRennes2\Isou\User;
 
 /**
-  * Authentifie l'utilisateur ou redirige vers le formulaire d'authentification CAS.
-  *
-  * @param Plugin $plugin Instance du plugin CAS.
-  *
-  * @return void
-  */
+ * Authentifie l'utilisateur ou redirige vers le formulaire d'authentification CAS.
+ *
+ * @param Plugin $plugin Instance du plugin CAS.
+ *
+ * @return void
+ */
 function authentification_login($plugin) {
     phpCAS::setVerbose($plugin->settings->cas_verbose);
 
@@ -102,12 +102,12 @@ function authentification_login($plugin) {
 }
 
 /**
-  * Déconnecte l'utilisateur.
-  *
-  * @param Plugin $plugin Instance du plugin CAS.
-  *
-  * @return void
-  */
+ * Déconnecte l'utilisateur.
+ *
+ * @param Plugin $plugin Instance du plugin CAS.
+ *
+ * @return void
+ */
 function authentification_logout($plugin) {
     phpCAS::setVerbose($plugin->settings->cas_verbose);
 

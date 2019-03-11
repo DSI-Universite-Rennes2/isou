@@ -2,7 +2,7 @@
 
 namespace Isou\Helpers;
 
-class Script{
+class Script {
     public $src;
     public $type;
 

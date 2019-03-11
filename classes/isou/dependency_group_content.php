@@ -34,7 +34,7 @@ class Dependency_Group_Content {
             $errors[] = 'Le service choisi est invalide.';
         }
 
-        if (!isset($states[$this->servicestate])) {
+        if (isset($states[$this->servicestate]) === false) {
             $errors[] = 'L\'état choisi est invalide.';
         }
 
@@ -118,13 +118,13 @@ class Dependency_Group_Content {
         $results = array(
             'successes' => array(),
             'errors' => array(),
-            );
+        );
 
         $params = array(
             ':idgroup' => $this->idgroup,
             ':idservice' => $this->idservice,
             ':state' => $this->servicestate,
-            );
+        );
 
         if ($this->id === 0) {
             $sql = 'INSERT INTO dependencies_groups_content(idgroup, idservice, servicestate) VALUES(:idgroup, :idservice, :state)';
@@ -134,7 +134,7 @@ class Dependency_Group_Content {
         }
         $query = $DB->prepare($sql);
 
-        if ($query->execute($params)) {
+        if ($query->execute($params) === true) {
             if ($this->id === 0) {
                 $this->id = $DB->lastInsertId();
             }
@@ -156,18 +156,18 @@ class Dependency_Group_Content {
         $results = array(
             'successes' => array(),
             'errors' => array(),
-            );
+        );
 
         $params = array(
             ':state' => $state,
             ':idgroup' => $this->idgroup,
             ':idservice' => $this->idservice,
-            );
+        );
 
         $sql = 'UPDATE dependencies_groups_content SET servicestate=:state WHERE idgroup = :idgroup AND idservice = :idservice';
         $query = $DB->prepare($sql);
 
-        if ($query->execute($params)) {
+        if ($query->execute($params) === true) {
             $results['successes'] = array('Les données ont été correctement enregistrées.');
         } else {
             // Enregistre le message d'erreur.
@@ -185,11 +185,11 @@ class Dependency_Group_Content {
         $results = array(
             'successes' => array(),
             'errors' => array(),
-            );
+        );
 
         $sql = 'DELETE FROM dependencies_groups_content WHERE idgroup = :idgroup AND idservice = :idservice';
         $query = $DB->prepare($sql);
-        if ($query->execute(array(':idgroup' => $this->idgroup, ':idservice' => $this->idservice))) {
+        if ($query->execute(array(':idgroup' => $this->idgroup, ':idservice' => $this->idservice)) === true) {
             $results['successes'] = array('Les données ont été correctement supprimées.');
         } else {
             // Enregistre le message d'erreur.

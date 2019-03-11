@@ -23,10 +23,10 @@ if ($dependency_group_content === false) {
 $options_states = array(
     State::WARNING => State::$STATES[State::WARNING],
     State::CRITICAL => State::$STATES[State::CRITICAL],
-    );
+);
 
 $plugins = array();
-foreach (Plugin::get_records(['active' => true]) as $plugin) {
+foreach (Plugin::get_records(array('active' => true)) as $plugin) {
     $plugins[$plugin->id] = $plugin->name;
 }
 

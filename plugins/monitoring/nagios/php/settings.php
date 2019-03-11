@@ -5,7 +5,7 @@ $smarty->addTemplateDir(PRIVATE_PATH.'/plugins/monitoring/nagios/html');
 $options_yes_no = array(
     1 => 'Oui',
     0 => 'Non',
-    );
+);
 
 if (isset($_POST['plugin_nagios_enable'], $options_yes_no[$_POST['plugin_nagios_enable']]) === true) {
     if ($plugin->active !== $_POST['plugin_nagios_enable']) {

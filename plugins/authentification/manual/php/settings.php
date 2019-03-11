@@ -5,7 +5,7 @@ $smarty->addTemplateDir(PRIVATE_PATH.'/plugins/authentification/manual/html');
 $options_yes_no = array(
     1 => 'Oui',
     0 => 'Non',
-    );
+);
 
 if (isset($_POST['plugin_manual_enable'], $options_yes_no[$_POST['plugin_manual_enable']]) === true) {
     if ($plugin->active !== $_POST['plugin_manual_enable']) {

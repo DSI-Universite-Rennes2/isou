@@ -1,8 +1,8 @@
 <?php
 
 /**
-  * Fonctions liées aux procédures du crontab.
-  */
+ * Fonctions liées aux procédures du crontab.
+ */
 
 use UniversiteRennes2\Isou\Dependency_Group;
 use UniversiteRennes2\Isou\Dependency_Message;
@@ -13,10 +13,10 @@ use UniversiteRennes2\Isou\State;
 use UniversiteRennes2\Isou\Subscription;
 
 /**
-  * Mets à jour Isou en fonction des changements d'état des services backend, des évènements prévues, fermés, etc...
-  *
-  * @return void
-  */
+ * Mets à jour Isou en fonction des changements d'état des services backend, des évènements prévues, fermés, etc...
+ *
+ * @return void
+ */
 function update_services_tree() {
     global $CFG, $DB, $LOGGER;
 
@@ -166,10 +166,10 @@ function update_services_tree() {
 }
 
 /**
-  * Régénère le fichier public isou.json listant les interruptions en cours.
-  *
-  * @return void
-  */
+ * Régénère le fichier public isou.json listant les interruptions en cours.
+ *
+ * @return void
+ */
 function cron_regenerate_json() {
     $json_data = array();
     $json_data['fisou'] = array();
@@ -212,10 +212,10 @@ function cron_regenerate_json() {
 }
 
 /**
-  * Envoie une notification des nouveaux évènements en temps réel aux navigateurs des utilisateurs.
-  *
-  * @return void
-  */
+ * Envoie une notification des nouveaux évènements en temps réel aux navigateurs des utilisateurs.
+ *
+ * @return void
+ */
 function cron_notify() {
     global $CFG, $DB, $LOGGER;
 
@@ -281,17 +281,17 @@ function cron_notify() {
         if (isset($result['expired']) === true && $result['expired'] === true) {
             $LOGGER->addInfo('Souscription #'.$subscription->id.' expirée pour l\'utilisateur #'.$subscription->iduser);
             $subscription->delete();
-        } else if (isset($result['success']) === true && $result['success'] === false) {
+        } elseif (isset($result['success']) === true && $result['success'] === false) {
             $LOGGER->addInfo('Envoi de la souscription #'.$subscription->id.' pour l\'utilisateur #'.$subscription->iduser.' a échoué ('.$result['message'].')');
         }
     }
 }
 
 /**
-  * Envoie un rapport quotidien des évènements ayant eu lieu la veille.
-  *
-  * @return void
-  */
+ * Envoie un rapport quotidien des évènements ayant eu lieu la veille.
+ *
+ * @return void
+ */
 function cron_report() {
     global $CFG, $DB, $LOGGER;
 
@@ -323,10 +323,10 @@ function cron_report() {
 }
 
 /**
-  * Supprime les anciens évènements des plugins autres qu'Isou.
-  *
-  * @return void
-  */
+ * Supprime les anciens évènements des plugins autres qu'Isou.
+ *
+ * @return void
+ */
 function cron_delete_old_plugin_events() {
     global $LOGGER;
 

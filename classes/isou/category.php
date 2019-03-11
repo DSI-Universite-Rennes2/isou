@@ -30,7 +30,7 @@ class Category {
     public function check_data() {
         $errors = array();
 
-        if (empty($this->name)) {
+        if (empty($this->name) === true) {
             $errors[] = 'Le nom de la catégorie ne peut pas être vide.';
         } else {
             $this->name = htmlentities($this->name, ENT_QUOTES, 'UTF-8');
@@ -77,9 +77,9 @@ class Category {
         if (isset($options['only-visible-services']) === true) {
             if (isset($options['non-empty']) === false) {
                 throw new \Exception(__METHOD__.': pour utiliser l\'option \'only-visible-services\, l\'option \'non-empty\' est requise.');
-            } else if (is_bool($options['only-visible-services']) === false) {
+            } elseif (is_bool($options['only-visible-services']) === false) {
                 throw new \Exception(__METHOD__.': l\'option \'only-visible-services\' doit être un booléan. Valeur donnée : '.var_export($options['non-empty'], $return = true));
-            } else if ($options['only-visible-services'] === true) {
+            } elseif ($options['only-visible-services'] === true) {
                 $conditions[] = 's.visible = 1';
             }
 
@@ -89,7 +89,7 @@ class Category {
         if (isset($options['non-empty']) === true) {
             if (is_bool($options['non-empty']) === false) {
                 throw new \Exception(__METHOD__.': l\'option \'non-empty\' doit être un booléan. Valeur donnée : '.var_export($options['non-empty'], $return = true));
-            } else if ($options['non-empty'] === true) {
+            } elseif ($options['non-empty'] === true) {
                 $joins[] = ' JOIN services s ON c.id = s.idcategory';
             }
 
@@ -149,12 +149,12 @@ class Category {
         $results = array(
             'successes' => array(),
             'errors' => array(),
-            );
+        );
 
         $parameters = array(
             ':name' => $this->name,
             ':position' => $this->position,
-            );
+        );
 
         if ($this->id === 0) {
             $sql = 'INSERT INTO categories(name, position) VALUES(:name, :position)';
@@ -186,7 +186,7 @@ class Category {
         $results = array(
             'successes' => array(),
             'errors' => array(),
-            );
+        );
         $commit = 1;
 
         $DB->beginTransaction();
@@ -230,9 +230,9 @@ class Category {
         $results = array(
             'successes' => array(),
             'errors' => array(),
-            );
+        );
 
-        if ($this->position == 1) {
+        if ((int) $this->position === 1) {
             $results['errors'][] = 'La catégorie "'.$this->name.'" ne peut pas être montée davantage.';
         } else {
             $commit = 1;
@@ -270,13 +270,13 @@ class Category {
         $results = array(
             'successes' => array(),
             'errors' => array(),
-            );
+        );
 
         if ($limit === null) {
             $limit = count(self::get_records());
         }
 
-        if ($this->position == $limit) {
+        if ((int) $this->position === $limit) {
             $results['errors'][] = 'La catégorie "'.$this->name.'" ne peut pas être descendue davantage.';
         } else {
             $commit = 1;

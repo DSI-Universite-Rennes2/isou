@@ -22,7 +22,7 @@ $LOGGER = new Logger();
  */
 class Announcement extends atoum {
     public function test_construct() {
-       $i = 1;
+        $i = 1;
 
         // Instance manuelle.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -83,7 +83,8 @@ class Announcement extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_record(array('empty' => '1'));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -92,7 +93,8 @@ class Announcement extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_record(array('visible' => '1'));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -101,7 +103,8 @@ class Announcement extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_record(array('fetch_one' => true, 'foo' => '1'));
-                    });
+                    }
+                );
     }
 
     public function test_save() {

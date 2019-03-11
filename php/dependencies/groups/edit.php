@@ -13,12 +13,12 @@ if ($dependency_group === false) {
 $options_redundants = array(
     1 => 'Oui',
     0 => 'Non',
-    );
+);
 
 $options_states = array(
     State::WARNING => State::$STATES[State::WARNING],
     State::CRITICAL => State::$STATES[State::CRITICAL],
-    );
+);
 
 $options_services = array($service->id => $service->name);
 

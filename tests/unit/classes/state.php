@@ -69,7 +69,8 @@ class State extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_record();
-                    });
+                    }
+                );
     }
 
     public function test_get_records() {
@@ -94,7 +95,8 @@ class State extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('id' => 'a'));
-                    });
+                    }
+                );
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -103,6 +105,7 @@ class State extends atoum {
                 ->exception(
                     function() {
                         $this->testedInstance->get_records(array('foo' => '1'));
-                    });
+                    }
+                );
     }
 }

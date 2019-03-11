@@ -103,7 +103,7 @@ class Event_Description {
         $params = array(
             ':description' => $this->description,
             ':autogen' => $this->autogen,
-            );
+        );
 
         if ($this->id === 0) {
             $sql = 'INSERT INTO events_descriptions(description, autogen) VALUES(:description, :autogen)';
@@ -114,7 +114,7 @@ class Event_Description {
 
         $query = $DB->prepare($sql);
 
-        if ($query->execute($params)) {
+        if ($query->execute($params) === true) {
             if ($this->id === 0) {
                 $this->id = $DB->lastInsertId();
             }
