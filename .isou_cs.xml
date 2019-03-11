@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="ISOU_CS">
+    <description>The coding standard for ISOU.</description>
+
+    <!-- Fichiers/répertoires à contrôler. -->
+    <file>.</file>
+
+    <!-- Fichiers/répertoires à ignorer. -->
+    <exclude-pattern>cache</exclude-pattern>
+    <exclude-pattern>config.php</exclude-pattern>
+    <exclude-pattern>index.php</exclude-pattern>
+    <exclude-pattern>vendor</exclude-pattern>
+
+    <!-- OPTIONS -->
+
+    <!-- Affiche un chemin relatif à "." dans les rapports. -->
+    <arg name="basepath" value="." />
+
+    <!-- Active le cache. -->
+    <arg name="cache" value="cache/php_codesniffer/cache.json" />
+
+    <!-- Active la couleur à l'affichage. -->
+    <arg name="colors" />
+
+    <!-- Liste des extensions de fichiers à contrôler (séparés par des virgules). -->
+    <arg name="extensions" value="php" />
+
+    <!-- Nombre d'analyses en parallèle. -->
+    <arg name="parallel" value="75" />
+
+    <!-- Affiche la progression. -->
+    <arg value="p" />
+
+    <!-- Affiche la progression. -->
+    <arg value="s" />
+
+    <!-- Affiche les warnings. -->
+    <arg name="warning-severity" value="1" />
+
+    <!-- Affiche les errors. -->
+    <arg name="error-severity" value="1" />
+
+    <!-- RULESET -->
+
+    <rule ref="Generic">
+        <exclude name="Generic.Arrays.DisallowLongArraySyntax.Found" />
+        <exclude name="Generic.CodeAnalysis.AssignmentInCondition.Found" />
+        <exclude name="Generic.Commenting.DocComment.TagValueIndent" />
+        <exclude name="Generic.Files.EndFileNoNewline.Found" />
+        <exclude name="Generic.Formatting.MultipleStatementAlignment.NotSameWarning" />
+        <exclude name="Generic.Formatting.NoSpaceAfterCast.SpaceFound" />
+        <exclude name="Generic.Formatting.SpaceBeforeCast.NoSpace" />
+        <exclude name="Generic.Functions.OpeningFunctionBraceBsdAllman.BraceOnSameLine" />
+        <exclude name="Generic.Metrics.CyclomaticComplexity" />
+        <exclude name="Generic.NamingConventions.CamelCapsFunctionName.NotCamelCaps" />
+        <exclude name="Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps" />
+        <exclude name="Generic.PHP.ClosingPHPTag.NotFound" />
+        <exclude name="Generic.PHP.UpperCaseConstant.Found" />
+        <exclude name="Generic.Strings.UnnecessaryStringConcat.Found" />
+        <exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
+    </rule>
+
+    <rule ref="Generic.Files.LowercasedFilename.NotFound">
+        <exclude-pattern>/database/migrations/*.php</exclude-pattern>
+        <exclude-pattern>/database/seeds/*.php</exclude-pattern>
+    </rule>
+
+    <!-- Applique les règles de la PSR2 (https://www.php-fig.org/psr/psr-2/). -->
+    <rule ref="PSR2">
+        <!-- Ignore les règles suivantes: -->
+
+        <!-- Line exceeds 120 characters; contains XXXX characters. -->
+        <exclude name="Generic.Files.LineLength.TooLong" />
+
+        <!-- Method name "XXXX" is not in camel caps format. -->
+        <exclude name="PSR1.Methods.CamelCapsMethodName" />
+
+        <!-- Opening brace of a class must be on the line after the definition. -->
+        <exclude name="PSR2.Classes.ClassDeclaration" />
+
+        <!-- Class name "Event_Description" is not in PascalCase format. -->
+        <exclude name="Squiz.Classes.ValidClassName.NotCamelCaps" />
+
+        <!-- Opening brace should be on a new line. -->
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine" />
+
+        <!-- Expected 1 space after FUNCTION keyword; 0 found. -->
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction" />
+    </rule>
+
+    <!-- Ignore la règle "Each class must be in a namespace of at least one level (a top-level vendor name)" pour les fichiers de migrations Phinx. -->
+    <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
+        <exclude-pattern>/database/migrations/*.php</exclude-pattern>
+        <exclude-pattern>/database/seeds/*.php</exclude-pattern>
+    </rule>
+
+    <!-- Transforme le warning "Private properties MUST not be prefixed with an underscore" en error. -->
+    <rule ref="PSR2.Classes.PropertyDeclaration.Underscore">
+        <type>error</type>
+    </rule>
+
+    <!-- Transforme le warning "PSR2.ControlStructures.ElseIfDeclaration.NotAllowed" en error. -->
+    <rule ref="PSR2.ControlStructures.ElseIfDeclaration.NotAllowed">
+         <type>error</type>
+    </rule>
+
+    <!-- Transforme le warning "Private methods MUST not be prefixed with an underscore" en error. -->
+    <rule ref="PSR2.Methods.MethodDeclaration.Underscore">
+        <type>error</type>
+    </rule>
+
+    <!-- Active la règle "Must use "self::" for local static member reference". -->
+    <rule ref="Squiz.Classes.SelfMemberReference" />
+
+    <!-- Active la règle "Operator == prohibited; use === instead". -->
+    <!-- Active la règle "Operator ! prohibited; use === FALSE instead". -->
+    <!-- Active la règle "Implicit true comparisons prohibited; use === TRUE instead". -->
+    <rule ref="Squiz.Operators.ComparisonOperatorUsage" />
+
+    <!-- Active la règle "Logical operator "and" is prohibited; use && instead". -->
+    <rule ref="Squiz.Operators.ValidLogicalOperators" />
+
+    <!-- Active la règle "Visibility must be declared on method "XXXX"". -->
+    <rule ref="Squiz.Scope.MethodScope" />
+
+    <!-- Active la règle "Concat operator must not be surrounded by spaces". -->
+    <rule ref="Squiz.Strings.ConcatenationSpacing">
+        <properties>
+            <property name="ignoreNewlines" value="true" />
+        </properties>
+    </rule>
+
+    <!-- Active la règle "No blank line found after control structure". -->
+    <rule ref="Squiz.WhiteSpace.ControlStructureSpacing" />
+
+    <!-- Active la règle "Expected 1 space before/after "="". -->
+    <rule ref="Squiz.WhiteSpace.OperatorSpacing" />
+
+    <!-- Supprime les trailing whitespaces et les lignes blanches consécutives. -->
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace" />
+
+    <!-- Active la règle "A closing tag is not permitted at the end of a PHP file". -->
+    <rule ref="Zend.Files.ClosingTag" />
+
+    <!-- Don't hide tokenizer exceptions. -->
+    <rule ref="Internal.Tokenizer.Exception">
+        <type>error</type>
+    </rule>
+
+    <!-- DOCUMENTATION -->
+
+    <!-- Active la règle "Doc comment short description must start with a capital letter". -->
+    <rule ref="Squiz.Commenting.DocCommentAlignment" />
+
+    <!-- Vérifie la qualité de la documentation du fichier. -->
+    <!-- <rule ref="Squiz.Commenting.FileComment" /> -->
+
+    <!-- Vérifie la qualité de la documentation d'une classe. -->
+    <rule ref="Squiz.Commenting.ClassComment" />
+
+    <!-- Vérifie la qualité de la documentation d'une propriété de classe. -->
+    <rule ref="Squiz.Commenting.VariableComment" />
+
+    <!-- Vérifie la qualité de la documentation d'une fonction/méthode. -->
+    <rule ref="Squiz.Commenting.FunctionComment">
+        <exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamName" />
+        <exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamType" />
+    </rule>
+    <rule ref="Squiz.Commenting.FunctionCommentThrowTag" />
+
+    <!-- Active la règle "Empty CATCH statement must have a comment to explain why the exception is not handled". -->
+    <rule ref="Squiz.Commenting.EmptyCatchComment" />
+
+    <!-- Vérifie la qualité d'un commentaire en bloc (plus d'une lignes, etc). -->
+    <rule ref="Squiz.Commenting.BlockComment" />
+
+    <!-- Active la règle "Inline comments must end in full-stops, exclamation marks, or question marks". -->
+    <rule ref="Squiz.Commenting.InlineComment">
+        <!-- Ignore la règle qui force l'absence d'une ligne blanche. -->
+        <exclude name="Squiz.Commenting.InlineComment.SpacingAfter" />
+    </rule>
+</ruleset>
