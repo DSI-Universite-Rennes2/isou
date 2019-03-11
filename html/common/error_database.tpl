@@ -9,7 +9,8 @@
 
 		<link rel="shortcut icon" type="image/png" href="{$smarty.const.URL}/themes/bootstrap3/favicon.png" />
 
-		<link href="{$smarty.const.URL}/themes/bootstrap3/css/bootstrap.min.css" type="text/css" media="screen" rel="stylesheet" />
+		<link href="//unpkg.com/bootstrap@3.3/dist/css/bootstrap.min.css" type="text/css" media="screen" rel="stylesheet" />
+		<link href="{$smarty.const.URL}/themes/bootstrap3/css/common.css" type="text/css" media="screen" rel="stylesheet" />
 	</head>
 	<body role="document">
 
