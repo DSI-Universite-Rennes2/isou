@@ -8,7 +8,7 @@
 			<th id="lth5">Fin</th>
 			<th id="lth6">Prochaine interruption</th>
 			<th id="lth7">Description</th>
-			<th id="lth8">Actions</th>
+			<th id="lth8" class="col-sm-2">Actions</th>
 		</tr>
 	</thead>
 	<tbody>

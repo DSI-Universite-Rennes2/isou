@@ -6,7 +6,7 @@
 			<th id="lth3">Date de début</th>
 			<th id="lth4">Date de fin</th>
 			<th id="lth5">Description</th>
-			<th id="lth6">Actions</th>
+			<th id="lth6" class="col-sm-3">Actions</th>
 		</tr>
 	</thead>
 	<tbody>
