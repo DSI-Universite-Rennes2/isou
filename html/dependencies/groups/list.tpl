@@ -14,15 +14,17 @@
 {else}
 	{foreach $groups as $state => $grps}
 	<div class="col-md-6">
-		<h2 class="isou-dependencies-group-h1 text-center">Groupes {$STATES[$state]::$STATES[$state]|lower}s</h2>
+		<h2 class="isou-dependencies-group-h1 alert alert-{if (string) $state === UniversiteRennes2\Isou\State::WARNING}warning{else}danger{/if} text-center">
+			<span aria-hidden="true">{$STATES[$state]}</span> Groupes {UniversiteRennes2\Isou\State::$STATES[$state]|lower}s
+		</h2>
 		<ul class="list-unstyled">
 		{foreach $grps as $group}
 		<li class="well">
 			<h3 class="isou-dependencies-group-h3">{$STATES[$state]} {$group->name}</h2>
 			{if $group->redundant === "0"}
-			<p class="small isou-non-redundant-groups">groupe de services non-redondés</p>
+			<p class="small isou-non-redundant-groups">Groupe de services non-redondés</p>
 			{else}
-			<p class="small isou-redundant-groups">groupe de services redondés</p>
+			<p class="small isou-redundant-groups">Groupe de services redondés</p>
 			{/if}
 
 			<h4 class="isou-dependencies-group-h4">Contenu du groupe</h4>
@@ -30,21 +32,24 @@
 				<li><a class="btn btn-xs btn-success" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/group/{$group->id}/content/edit/0">ajouter du contenu</a></li>
 			</ul>
 
-			{if count($group->contents) === 0}
-			<p class="alert alert-danger">Groupe vide.</p>
-			{else}
-			<ul class="alert list-unstyled isou-dependencies-content-ul">
-			{foreach $group->contents as $content}
-				<li class="clearfix">
-				<ul class="pull-left list-inline">
-					<li><a class="btn btn-xs btn-primary" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/group/{$group->id}/content/edit/{$content->id}">modifier</a></li>
-					<li><a class="btn btn-xs btn-danger" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/group/{$group->id}/content/delete/{$content->id}">supprimer</a></li>
+			<div class="isou-dependencies-content-div">
+				{if count($group->contents) === 0}
+				<p class="alert alert-danger">Groupe vide.</p>
+				{else}
+				<ul class="alert list-unstyled isou-dependencies-content-ul">
+				{foreach $group->contents as $content}
+					<li class="isou-dependencies-content-ul-li clearfix">
+					{$STATES[$content->servicestate]} {$content->name} <span class="small">(plugin {$content->pluginname})</span>
+					<ul class="pull-right list-inline">
+						<li><a class="btn btn-xs btn-primary" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/group/{$group->id}/content/edit/{$content->id}">modifier</a></li>
+						<li><a class="btn btn-xs btn-danger" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/group/{$group->id}/content/delete/{$content->id}">supprimer</a></li>
+					</ul>
+
+					</li>
+				{/foreach}
 				</ul>
-				{$STATES[$content->servicestate]} {$content->name}
-				</li>
-			{/foreach}
-			</ul>
-			{/if}
+				{/if}
+			</div>
 
 			<h4 class="isou-dependencies-group-h4">Message affiché en cas d'erreur</h4>
 			{if empty($group->message) === true}

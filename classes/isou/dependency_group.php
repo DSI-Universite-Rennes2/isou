@@ -79,9 +79,10 @@ class Dependency_Group {
             }
 
             // Load content.
-            $sql = 'SELECT dgc.id, dgc.idgroup, dgc.idservice, s.name, dgc.servicestate'.
+            $sql = 'SELECT dgc.id, dgc.idgroup, dgc.idservice, s.name, p.name AS pluginname, dgc.servicestate'.
                 ' FROM dependencies_groups_content dgc'.
                 ' JOIN services s ON s.id = dgc.idservice'.
+                ' JOIN plugins p ON p.id = s.idplugin'.
                 ' WHERE dgc.idgroup = :idgroup'.
                 ' ORDER BY dgc.servicestate DESC, s.name';
             $contents = $DB->prepare($sql);
