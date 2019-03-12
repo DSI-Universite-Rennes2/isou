@@ -14,7 +14,7 @@
 				<label class="control-label" for="type">Type d'évènement</label>
 			</dt>
 			<dd class="col-sm-10">
-				{html_options class="form-control" id="type" name="type" options=$options_types selected=$event->type}
+				{html_options class="form-control" id="type" name="type" options=$options_types selected=$event->type disabled="1"}
 			</dd>
 		</div>
 		<div class="form-group">
@@ -30,7 +30,11 @@
 				<label class="control-label" for="state">État du service lors de l'interruption</label>
 			</dt>
 			<dd class="col-sm-10">
+			{if $event->type === UniversiteRennes2\Isou\Event::TYPE_CLOSED}
+				{html_options class="form-control" id="state" name="state" options=$options_states selected=UniversiteRennes2\Isou\State::CLOSED disabled="1"}
+			{else}
 				{html_options class="form-control" id="state" name="state" options=$options_states selected=$event->state}
+			{/if}
 			</dd>
 		</div>
 		<div class="form-group">
@@ -73,12 +77,14 @@
 				{/if}
 			</dd>
 		</div>
+		{if $event->type === UniversiteRennes2\Isou\Event::TYPE_REGULAR}
 		<div class="form-group">
 			<dt class="col-sm-2" id="period">Périodicité</dt>
 			<dd class="col-sm-10">
 				{html_radios aria-labelledby="period" name="period" options=$options_periods selected=$event->period}
 			</dd>
 		</div>
+		{/if}
 		<div class="form-group">
 			<dt class="col-sm-2">
 				<label class="control-label" for="description">Raison de l'interruption (html autorisé)</label>

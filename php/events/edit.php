@@ -17,16 +17,23 @@ if ($event === false) {
     if (isset($_POST['type']) === false) {
         switch ($PAGE_NAME[1]) {
             case 'fermes':
+                $_POST['type'] = Event::TYPE_CLOSED;
                 $event->set_type(Event::TYPE_CLOSED);
+
+                $_POST['state'] = State::CLOSED;
+                $event->set_state(State::CLOSED);
                 break;
             case 'imprevus':
+                $_POST['type'] = Event::TYPE_UNSCHEDULED;
                 $event->set_type(Event::TYPE_UNSCHEDULED);
                 break;
             case 'reguliers':
+                $_POST['type'] = Event::TYPE_REGULAR;
                 $event->set_type(Event::TYPE_REGULAR);
                 break;
             case 'prevus':
             default:
+                $_POST['type'] = Event::TYPE_SCHEDULED;
                 $event->set_type(Event::TYPE_SCHEDULED);
         }
     }
@@ -40,7 +47,7 @@ $options_services = Service::get_records(array('fetch_column' => true, 'plugin' 
 
 $options_types = Event::$TYPES;
 
-if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['starttime'], $_POST['enddate'], $_POST['endtime'], $_POST['period'], $_POST['description']) === true) {
+if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['starttime'], $_POST['enddate'], $_POST['endtime'], $_POST['state'], $_POST['description']) === true) {
     $_POST['errors'] = array();
 
     try {
@@ -71,6 +78,10 @@ if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['startt
         $event->set_enddate($_POST['enddate'], $_POST['endtime']);
     } catch (Exception $exception) {
         $_POST['errors'][] = $exception->getMessage();
+    }
+
+    if (isset($_POST['period']) === false) {
+        $_POST['period'] = Event::PERIOD_NONE;
     }
 
     try {
@@ -121,6 +132,7 @@ if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['startt
                 default:
                     header('Location: '.URL.'/index.php/evenements/prevus');
             }
+
             exit(0);
         }
     }

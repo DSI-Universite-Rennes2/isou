@@ -15,6 +15,10 @@ class Event_Description {
         }
     }
 
+    public function __tostring() {
+        return $this->description;
+    }
+
     public static function get_record($options = array()) {
         if (isset($options['id']) === false && isset($options['description']) === false) {
             throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] ou $options[\'description\'] est requis.');
