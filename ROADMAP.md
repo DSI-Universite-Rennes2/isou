@@ -1,7 +1,13 @@
 # Roadmap
 
+## Vues
+### Liste
+- [ ] simplifier l'affichage des dates (ex: si un évènement a lieu le même jour, afficher une seule fois la date)
+- [ ] mettre un indice visuel pour afficher les évènements passés et à venir
+
 ## Administration
 ### Évènements
+- [ ] ajouter le javascript pour pouvoir changer de type d'évènements à la volée
 - [ ] supprimer les descriptions en double
 - [ ] permettre de réutiliser les descriptions d'évènements
 
@@ -28,6 +34,7 @@
 
 ### Code
 - [ ] utiliser pimple
+- [ ] remplacer la bibliothèque `monolog` par les fonctions natives `openlog()`/`syslog()`
 
 ### Internationalisation
 - [ ] utiliser gettext()
