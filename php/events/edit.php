@@ -14,29 +14,27 @@ if ($event === false) {
     $event = new Event();
 
     // Essaye de positionner correctement le type d'évènement dans le ménu déroulant.
-    if (isset($_POST['type']) === false) {
-        switch ($PAGE_NAME[1]) {
-            case 'fermes':
-                $_POST['type'] = Event::TYPE_CLOSED;
-                $event->set_type(Event::TYPE_CLOSED);
+    switch ($PAGE_NAME[1]) {
+        case 'fermes':
+            $event->set_type(Event::TYPE_CLOSED);
 
-                $_POST['state'] = State::CLOSED;
-                $event->set_state(State::CLOSED);
-                break;
-            case 'imprevus':
-                $_POST['type'] = Event::TYPE_UNSCHEDULED;
-                $event->set_type(Event::TYPE_UNSCHEDULED);
-                break;
-            case 'reguliers':
-                $_POST['type'] = Event::TYPE_REGULAR;
-                $event->set_type(Event::TYPE_REGULAR);
-                break;
-            case 'prevus':
-            default:
-                $_POST['type'] = Event::TYPE_SCHEDULED;
-                $event->set_type(Event::TYPE_SCHEDULED);
-        }
+            $event->set_state(State::CLOSED);
+            $_POST['state'] = State::CLOSED;
+            break;
+        case 'imprevus':
+            $event->set_type(Event::TYPE_UNSCHEDULED);
+            break;
+        case 'reguliers':
+            $event->set_type(Event::TYPE_REGULAR);
+            break;
+        case 'prevus':
+        default:
+            $event->set_type(Event::TYPE_SCHEDULED);
     }
+}
+
+if (isset($_POST['type']) === false) {
+    $_POST['type'] = $event->type;
 }
 
 $options_states = State::$STATES;
