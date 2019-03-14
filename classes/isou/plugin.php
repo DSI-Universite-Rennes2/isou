@@ -119,27 +119,7 @@ class Plugin {
         $query->execute(array(':idplugin' => $this->id));
 
         foreach ($query->fetchAll(\PDO::FETCH_OBJ) as $setting) {
-            switch ($setting->type) {
-                case 'array':
-                    $this->settings->{$setting->key} = json_decode($setting->value);
-                    break;
-                case 'boolean':
-                    $this->settings->{$setting->key} = boolval($setting->value);
-                    break;
-                case 'datetime':
-                    try {
-                        $this->settings->{$setting->key} = new \DateTime($setting->value);
-                    } catch (Exception $exception) {
-                        $this->settings->{$setting->key} = new \DateTime('1970-01-01');
-                    }
-                    break;
-                case 'integer':
-                    $this->settings->{$setting->key} = intval($setting->value);
-                    break;
-                case 'string':
-                default:
-                    $this->settings->{$setting->key} = $setting->value;
-            }
+            $this->settings->{$setting->key} = self::decode_settings($setting->value, $setting->type);
         }
     }
 
@@ -148,6 +128,49 @@ class Plugin {
 
         return $this->save();
     }
+
+    public static function decode_settings($value, $type) {
+        switch ($type) {
+            case 'array':
+                return json_decode($value);
+            case 'boolean':
+                return boolval($value);
+            case 'datetime':
+                try {
+                    return new \DateTime($value);
+                } catch (Exception $exception) {
+                    return new \DateTime('1970-01-01');
+                }
+            case 'integer':
+                return intval($value);
+            case 'string':
+            default:
+                return $value;
+        }
+    }
+
+    public static function encode_settings($value) {
+        $settings = array();
+        $settings[0] = $value;
+
+        if (is_array($value) === true) {
+            $settings[0] = json_encode($value);
+            $settings[1] = 'array';
+        } elseif (is_bool($value) === true) {
+            $settings[0] = intval($value);
+            $settings[1] = 'boolean';
+        } elseif ($value instanceof \DateTime) {
+            $settings[0] = $value->format('Y-m-d\TH:i:s');
+            $settings[1] = 'datetime';
+        } elseif (is_integer($value) === true) {
+            $settings[1] = 'integer';
+        } else {
+            $settings[1] = 'string';
+        }
+
+        return $settings;
+    }
+
 
     // TODO: retourner un truc.
     public function install_settings() {
@@ -158,25 +181,12 @@ class Plugin {
 
         $settings = (array) $this->settings;
         foreach ($settings as $key => $value) {
+            list($value, $type) = self::encode_settings($value);
+
             $params = array();
             $params[':key'] = $key;
             $params[':value'] = $value;
-
-            if (is_array($value) === true) {
-                $params[':value'] = json_encode($value);
-                $params[':type'] = 'array';
-            } elseif (is_bool($value) === true) {
-                $params[':value'] = intval($value);
-                $params[':type'] = 'boolean';
-            } elseif ($value instanceof \DateTime) {
-                $params[':value'] = $value->format('Y-m-d\TH:i:s');
-                $params[':type'] = 'datetime';
-            } elseif (is_integer($value) === true) {
-                $params[':type'] = 'integer';
-            } else {
-                $params[':type'] = 'string';
-            }
-
+            $params[':type'] = $type;
             $params[':idplugin'] = $this->id;
 
             $query->execute($params);
@@ -232,18 +242,21 @@ class Plugin {
             $setting = $query->fetch();
 
             if ($setting === false) {
-                $sql = 'INSERT INTO plugins_settings(key, value, type, idplugin) VALUES(:key, :value, \'string\', :idplugin)';
+                $sql = 'INSERT INTO plugins_settings(key, value, type, idplugin) VALUES(:key, :value, :type, :idplugin)';
             } elseif ($overwrite === true) {
-                $sql = 'UPDATE plugins_settings SET value = :value WHERE key = :key AND idplugin = :idplugin';
+                $sql = 'UPDATE plugins_settings SET value = :value, type = :type WHERE key = :key AND idplugin = :idplugin';
             } else {
                 continue;
             }
 
             $query = $DB->prepare($sql);
 
+            list($value, $type) = self::encode_settings($value);
+
             $params = array();
             $params[':key'] = $key;
             $params[':value'] = $value;
+            $params[':type'] = $type;
             $params[':idplugin'] = $this->id;
 
             $query->execute($params);
