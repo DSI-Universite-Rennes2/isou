@@ -470,10 +470,14 @@ class Service {
 
     public function get_dependencies() {
         if ($this->dependencies === null) {
-            $this->dependencies = Dependency_Group::get_records(array('service' => $this->id));
+            $this->set_dependencies();
         }
 
         return $this->dependencies;
+    }
+
+    public function set_dependencies() {
+        $this->dependencies = Dependency_Group::get_records(array('service' => $this->id));
     }
 
     public function get_reverse_dependencies($state = null) {
