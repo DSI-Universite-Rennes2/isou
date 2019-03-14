@@ -33,6 +33,12 @@ foreach (Plugin::get_records(array('active' => true)) as $plugin) {
 $options_services = array();
 foreach (Service::get_records() as $option) {
     if (isset($plugins[$option->idplugin]) === false) {
+        // On ne propose pas des services en provenance d'un plugin désactivé.
+        continue;
+    }
+
+    if ($option->id === $PAGE_NAME[2]) {
+        // On ne propose pas d'ajouter à un service dans ses propres dépendances.
         continue;
     }
 
@@ -67,6 +73,11 @@ if (isset($_POST['services'], $_POST['servicestate']) === true) {
 
             if (Service::get_record(array('id' => $child)) === false) {
                 $_POST['errors'][] = 'Le champ "Nom du service lié" est invalide.';
+                break;
+            }
+
+            if ($child === $PAGE_NAME[2]) {
+                $_POST['errors'][] = 'Le champ "Nom du service lié" ne peut pas contenir le service pour lequel on définit une dépendance.';
                 break;
             }
         }
