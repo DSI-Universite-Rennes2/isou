@@ -404,16 +404,34 @@ class Event {
             throw new \Exception('Le service mis en maintenance n\'est pas valide.');
         }
 
-        $sql = 'SELECT COUNT(e.id) AS total'.
+        // Contrôle si un évènement est déjà en cours pour ce service.
+        $sql = 'SELECT e.id, e.type'.
             ' FROM events e'.
             ' WHERE e.id != :id'.
             ' AND e.idservice = :idservice'.
             ' AND (e.enddate IS NULL OR (e.enddate >= :enddate AND e.startdate <= :startdate))';
         $query = $DB->prepare($sql);
         $query->execute(array(':id' => $this->id, ':idservice' => $this->idservice, ':enddate' => STR_TIME, ':startdate' => STR_TIME));
-        $count = $query->fetch(\PDO::FETCH_OBJ);
-        if ($count !== false && $count->total !== '0') {
-            throw new \Exception('Un évènement est déjà en cours pour ce service. Veuillez modifier ou supprimer l\'ancien évènement.');
+        $event = $query->fetch(\PDO::FETCH_OBJ);
+
+        if ($event !== false) {
+            // Lève une exception si un autre évènement est déjà en cours.
+            switch ($event->type) {
+                case self::TYPE_SCHEDULED:
+                    $type = 'prevus';
+                    break;
+                case self::TYPE_REGULAR:
+                    $type = 'reguliers';
+                    break;
+                case self::TYPE_CLOSED:
+                    $type = 'fermes';
+                    break;
+                case self::TYPE_UNSCHEDULED:
+                default:
+                   $type = 'imprevus';
+            }
+
+            throw new \Exception('Un évènement est déjà en cours pour ce service. Veuillez modifier ou supprimer l\'<a href="'.URL.'/index.php/evenements/'.$type.'/edit/'.$event->id.'"> ancien évènement</a>.');
         }
     }
 
