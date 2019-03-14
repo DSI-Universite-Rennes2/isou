@@ -12,7 +12,7 @@ $submenu['fermes'] = new SimpleMenu('services fermés', '', URL.'/index.php/even
 $submenu['autres'] = new SimpleMenu('autres interruptions', '', URL.'/index.php/evenements/autres');
 
 if (isset($PAGE_NAME[1]) === false || isset($submenu[$PAGE_NAME[1]]) === false) {
-    $PAGE_NAME[1] = 'prevus';
+    $PAGE_NAME[1] = 'imprevus';
 }
 $submenu[$PAGE_NAME[1]]->selected = true;
 
