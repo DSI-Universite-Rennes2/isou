@@ -24,6 +24,8 @@ class Dependency_Group {
             $this->idmessage = 1;
             $this->message = null;
         }
+
+        $this->contents = null;
     }
 
     public function check_data($redundants, $states, $services) {
@@ -56,6 +58,18 @@ class Dependency_Group {
         }
 
         return $errors;
+    }
+
+    public function get_contents() {
+        if ($this->contents === null) {
+            $this->set_contents();
+        }
+
+        return $this->contents;
+    }
+
+    public function set_contents() {
+        $this->contents = Dependency_Group_Content::get_records(array('group' => $this->id));
     }
 
     // TODO: split this function
