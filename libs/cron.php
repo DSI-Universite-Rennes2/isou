@@ -195,6 +195,7 @@ function cron_regenerate_json() {
         }
 
         $data = array();
+        $data['id'] = $service->id;
         $data['name'] = $service->name;
         $data['state'] = $service->state;
         $data['date'] = $event->startdate->getTimestamp();
