@@ -9,7 +9,7 @@
 		{foreach $items as $item}
 		<item>
 			<guid>{$item->guid}</guid>
-			<title>{$item->title}</title>
+			<title><![CDATA[{$item->title}]]></title>
 			<description><![CDATA[{$item->description|nl2br}]]></description>
 			<pubDate>{$item->pubdate} GMT</pubDate>
 			<link>{$item->link}</link>
