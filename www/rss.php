@@ -69,16 +69,17 @@ foreach (Event::get_records($options) as $event) {
         continue;
     }
 
-    if ($keys !== null && isset($keys[$event->idservice]) === false) {
+    $rsskey = intval($services[$event->idservice]->rsskey);
+    if ($keys !== null && in_array($rsskey, $keys, $strict = true) === false) {
         continue;
     }
 
     $opening_event_id = $event->startdate->format('Y-m-d\TH:i:s').'_'.$event->id;
     $items[$opening_event_id] = clone $event;
     if ($event->type === UniversiteRennes2\Isou\Event::TYPE_SCHEDULED) {
-        $items[$opening_event_id]->title = 'Interruption : '.$services[$event->idservice];
+        $items[$opening_event_id]->title = 'Interruption : '.$services[$event->idservice]->name;
     } else {
-        $items[$opening_event_id]->title = 'Interruption non prévue : '.$services[$event->idservice];
+        $items[$opening_event_id]->title = 'Interruption non prévue : '.$services[$event->idservice]->name;
     }
     $items[$opening_event_id]->link = URL.'#'.$opening_event_id;
     $items[$opening_event_id]->guid = $opening_event_id;
@@ -103,7 +104,7 @@ foreach (Event::get_records($options) as $event) {
     if ($event->enddate !== null) {
         $ending_event_id = $event->enddate->format('Y-m-d\TH:i:s').'_'.$event->id;
         $items[$ending_event_id] = clone $event;
-        $items[$ending_event_id]->title = 'Remise en route : '.$services[$event->idservice];
+        $items[$ending_event_id]->title = 'Remise en route : '.$services[$event->idservice]->name;
         $items[$ending_event_id]->link = URL.'#'.$ending_event_id;
         $items[$ending_event_id]->guid = $ending_event_id;
         $items[$ending_event_id]->pubdate = gmdate('D, d M Y H:i:s', $event->enddate->getTimestamp());
