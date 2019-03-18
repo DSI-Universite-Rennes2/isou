@@ -62,7 +62,7 @@ $options['since'] = new DateTime(strftime('%Y-%m-%d', TIME - (30 * 24 * 60 * 60)
 
 foreach (Event::get_records($options) as $event) {
     if (isset($services[$event->idservice]) === false) {
-        $services[$event->idservice] = Service::get_record(array('id' => $event->idservice));
+        $services[$event->idservice] = Service::get_record(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
     }
 
     if ($services[$event->idservice] === false) {
