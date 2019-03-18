@@ -10,12 +10,12 @@ define('MAXFEED', 100);
 require __DIR__.'/../config.php';
 
 // find filter on rss url
-if (isset($_GET['key']) === true) {
+if (isset($_GET['key']) === true && ctype_xdigit($_GET['key']) === true) {
     $maxKey = pow(2, 100);
     $key = hexdec($_GET['key']);
     $keys = array();
     $i = 100;
-    while ($key !== 0) {
+    while ($key > 0) {
         if ($key >= $maxKey) {
             $keys[$i] = $i;
             $key = $key - $maxKey;
