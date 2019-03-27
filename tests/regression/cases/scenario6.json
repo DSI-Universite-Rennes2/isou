@@ -1,0 +1,28 @@
+{
+    "name": "Scenario 6",
+    "description": "Contexte: un évènement prévu est en cours.",
+    "cases": [
+        {
+            "name": "Case 1",
+            "description": "Le service \"serveur (Scenario6)\" fonctionne. Un évènement prévu est en cours. Le service final doit prendre l'état de l'évènement.",
+            "inputs": [
+                {
+                    "id": "61",
+                    "state": "0"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "61",
+                    "state": "2"
+                }
+            ]
+        }
+    ],
+    "reset" : [
+        {
+            "id": "61",
+            "state": "0"
+        }
+    ]
+}

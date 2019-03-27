@@ -25,11 +25,12 @@ function update_services_tree() {
 
     $LOGGER->addInfo('Mise à jour de l\'arbre des dépendances');
 
-    // Vérifie tous les services.
+    // Parcours tous les services.
+    // Pour chaque service, nous mettons à jour les services qui dépendent de ce service.
     while (current($services) !== false) {
         $parent_service = array_shift($services);
 
-        // Définis tous les enfants de ce service.
+        // Définis tous les enfants de ce service et de son état courant.
         $parent_service->set_reverse_dependencies($parent_service->state);
 
         // $LOGGER->addDebug('Recherche des dépendances pour le service '.$parent_service->name.' (id #'.$parent_service->id.')');
@@ -41,13 +42,14 @@ function update_services_tree() {
 
             // Si l'enfant n'existe plus ou n'est plus actif, on ne fait rien.
             if ($child_service === false) {
-                $LOGGER->addError('   Le service avec l\'id #'.$dependencies_group->idservice.' n\'existe pas.'.
+                $LOGGER->addError('   Le service avec l\'id #'.$dependencies_group->idservice.' n\'existe pas ou plus.'.
                     ' Il est pourtant lié avec le service "'.$parent_service->name.'" (id #'.$parent_service->id.') dans le groupe "'.$dependencies_group->name.'" (id #'.$dependencies_group->id.')');
                 continue;
             }
 
             // Si le service enfant est verrouillé, on ne fait rien.
             if ($child_service->locked === '1') {
+                // TODO: vérifier si un évènement existe... sinon, le créer.
                 $LOGGER->addInfo('   Le service "'.$child_service->name.'" (id #'.$child_service->id.') est actuellement en mode forcé. Il ne peut pas être mis à jour.');
                 continue;
             }
@@ -125,9 +127,32 @@ function update_services_tree() {
         }
     }
 
-    // Vérifie les évènements Isou non terminés.
-    $events = Event::get_records(array('plugin' => PLUGIN_ISOU, 'finished' => false, 'type' => Event::TYPE_UNSCHEDULED));
-    foreach ($events as $event) {
+    // À ce stade, tous les évènements automatiques ont été enregistrés.
+    // Il reste à traiter les évènements non automatiques (prévus, fermés, réguliers) et remettre en route les services isou.
+    $services = Service::get_records(array('enable' => true, 'locked' => false, 'plugin' => PLUGIN_ISOU));
+    foreach ($services as $service) {
+        $event = $service->get_current_event();
+        if ($event === false) {
+            if ($service->state !== State::OK) {
+                $LOGGER->addInfo('   Le service "'.$service->name.'" (id #'.$service->id.') revient à l\'état OK.');
+
+                // Change l'état du service, et clos l'évènement en cours.
+                $service->change_state(State::OK);
+            }
+            continue;
+        }
+
+        if ($event->state !== $service->state) {
+            $LOGGER->addInfo('   Le service "'.$service->name.'" (id #'.$service->id.') passe de l\'état '.$service->state.' à '.$event->state.'.');
+
+            $service->change_state($event->state);
+            continue;
+        }
+
+        if ($event->type !== Event::TYPE_UNSCHEDULED) {
+            continue;
+        }
+
         $error = false;
 
         $groups = Dependency_Group::get_records(array('service' => $event->idservice));
@@ -138,28 +163,20 @@ function update_services_tree() {
             }
         }
 
-        // Si il n'y a pas de services en erreur dans les dépendances, on peut tenter de fermer l'évènement.
-        if ($error === false) {
-            $service = Service::get_record(array('id' => $event->idservice, 'enable' => true, 'locked' => false, 'plugin' => PLUGIN_ISOU));
-            if ($service !== false) {
-                $LOGGER->addInfo('   L\'évènement du service "'.$service->name.'" (id #'.$event->id.') a été fermé.');
-                $service->change_state(State::OK);
-            }
-        }
-    }
-
-    // Ajoute le témoin de fermeture lorsqu'un évènement de fermeture démarre.
-    $events = Event::get_records(array('plugin' => PLUGIN_ISOU, 'type' => Event::TYPE_CLOSED));
-    foreach ($events as $event) {
-        if ($event->is_now() === false) {
+        if ($error === true) {
+            // Si l'évènement est justifié, on continue.
             continue;
         }
 
-        $service = Service::get_record(array('id' => $event->idservice, 'locked' => false, 'plugin' => PLUGIN_ISOU));
-        if ($service !== false && $service->state !== State::CLOSED) {
-            $LOGGER->addInfo('   Le service "'.$service->name.'" (id #'.$service->id.') passe de l\'état '.$service->state.' à '.State::CLOSED.'.');
-            $event = $service->change_state(State::CLOSED);
+        if ($service->state === State::OK) {
+            // Si le service a déjà l'état OK, on continue.
+            continue;
         }
+
+        $LOGGER->addInfo('   L\'évènement du service "'.$service->name.'" (id #'.$event->id.') a été fermé.');
+
+        // Change l'état du service, et clos l'évènement en cours.
+        $service->change_state(State::OK);
     }
 
     $LOGGER->addInfo('Fin de la mise à jour de l\'arbre des dépendances');

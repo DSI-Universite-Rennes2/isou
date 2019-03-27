@@ -278,10 +278,11 @@ class Event {
 
         if (isset($options['finished']) === true) {
             if (is_bool($options['finished']) === true) {
+                $parameters[':now'] = strftime('%FT%T');
                 if ($options['finished'] === true) {
-                    $conditions[] = 'e.enddate IS NOT NULL';
+                    $conditions[] = '(e.enddate IS NOT NULL AND e.enddate <= :now)';
                 } else {
-                    $conditions[] = 'e.enddate IS NULL';
+                    $conditions[] = 'e.startdate <= :now AND (e.enddate IS NULL OR e.enddate >= :now)';
                 }
             } else {
                 throw new \Exception(__METHOD__.': l\'option \'finished\' doit être un booléen. Valeur donnée : '.var_export($options['finished'], $return = true));
@@ -315,13 +316,23 @@ class Event {
         }
 
         if (isset($options['type']) === true) {
-            if (isset(self::$TYPES[$options['type']]) === true) {
-                $conditions[] = 'e.type = :type';
-                $parameters[':type'] = $options['type'];
-            } else {
-                throw new \Exception(__METHOD__.': l\'option \'type\' doit être un type d\'évènement valide. Valeur donnée : '.var_export($options['type'], $return = true));
+            if (is_array($options['type']) === false) {
+                $options['type'] = array($options['type']);
             }
 
+            $in = array();
+            foreach ($options['type'] as $i => $type) {
+                if (isset(self::$TYPES[$type]) === true) {
+                    $key = ':type'.$i;
+
+                    $in[] = $key;
+                    $parameters[$key] = $type;
+                } else {
+                    throw new \Exception(__METHOD__.': l\'option \'type\' doit être un type d\'évènement valide. Valeur donnée : '.var_export($options['type'], $return = true));
+                }
+            }
+
+            $conditions[] = 'e.type IN ('.implode(', ', $in).')';
             unset($options['type']);
         }
 
