@@ -2,8 +2,8 @@
 
 /**
  * Initialise le scénario 1.
- *      Contexte du service :
- *          - 1 serveur web
+ *      Contexte du service isou :
+ *          - 1 serveur web (service thruk)
  */
 
 use Phinx\Seed\AbstractSeed;

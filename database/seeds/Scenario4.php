@@ -2,7 +2,7 @@
 
 /**
  * Initialise le scénario 4.
- *      Contexte du service :
+ *      Contexte du service isou :
  *          - 1 service Isou
  *          - 1 service Thruk
  */

@@ -2,8 +2,10 @@
 
 /**
  * Initialise le scénario 5.
- *      Contexte du service :
- *          - 1 serveur web
+ *      Contexte du service isou :
+ *          - 1 serveur web thruk
+ *
+ * Note: le service isou est verrouillé. Son état ne doit jamais changer.
  */
 
 use Phinx\Seed\AbstractSeed;

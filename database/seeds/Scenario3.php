@@ -2,9 +2,9 @@
 
 /**
  * Initialise le scénario 3.
- *      Contexte du service :
- *          - 1 serveur de base de données
- *          - 2 serveur web redondés
+ *      Contexte du service isou :
+ *          - 1 serveur de base de données (service thruk)
+ *          - 2 serveur web redondés (service thruk)
  */
 
 use Phinx\Seed\AbstractSeed;

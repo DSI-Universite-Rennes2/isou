@@ -479,7 +479,7 @@ class Event {
         $this->type = $type;
 
         if (isset(self::$TYPES[$this->type]) === false) {
-            throw new \Exception('Le type d\'opération n\'est pas valide.');
+            throw new \Exception('Le type d\'évènement n\'est pas valide.');
         }
     }
 
