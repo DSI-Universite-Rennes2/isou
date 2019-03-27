@@ -44,13 +44,19 @@ $cases_path = __DIR__.'/cases';
 
 $handle = opendir($cases_path);
 if ($handle !== false) {
+    $scenarios = array();
     while (($entry = readdir($handle)) !== false) {
         if (preg_match('/^scenario([0-9]+)\.json$/', $entry, $matches) !== 1) {
             continue;
         }
 
-        $i = $matches[1];
+        $scenarios[] = $matches[1];
+    }
+    closedir($handle);
 
+    sort($scenarios);
+
+    foreach ($scenarios as $i) {
         echo '* Charge le Scénario '.$i.PHP_EOL;
 
         $arguments = new StringInput('--environment=tests --seed=Scenario'.$i.' seed:run');
@@ -66,7 +72,6 @@ if ($handle !== false) {
             exit(1);
         }
     }
-    closedir($handle);
 }
 
 // Run cases.
@@ -132,17 +137,17 @@ foreach ($scenarios as $scenario_file) {
             $service = Service::get_record(array('id' => $output->id));
 
             if ($service->state === $output->state) {
-                $state = '✔';
+                $state = "\e[0;32m ✔ \e[0m";
                 $successes_count++;
             } else {
-                $state = '✘';
+                $state = "\e[0;31m ✘ \e[0m";
                 $errors_count++;
             }
 
             $event = $service->get_current_event();
 
             echo str_repeat(' ', 6).$state.' '.$service->name.' : '.State::$STATES[$service->state].PHP_EOL;
-            if ($event !== false) {
+            if ($event !== false && empty($event->description) === false) {
                 echo str_repeat(' ', 6).$state.' évènement associé : '.implode(', ', explode(PHP_EOL, $event->description)).PHP_EOL;
             }
 
@@ -159,8 +164,8 @@ foreach ($scenarios as $scenario_file) {
 echo PHP_EOL;
 
 if ($errors_count === 0) {
-    echo '✔ Tests réussis ! '.$successes_count.'/'.$successes_count.' tests.'.PHP_EOL.PHP_EOL;
+    echo "\e[0;32m ✔ Tests réussis !\e[0m ".$successes_count.'/'.$successes_count.' tests.'.PHP_EOL.PHP_EOL;
 } else {
-    echo '✘ Tests ratés ! '.$successes_count.'/'.($successes_count + $errors_count).' tests.'.PHP_EOL.PHP_EOL;
+    echo "\e[0;31m ✘ Tests ratés !\e[0m ".$successes_count.'/'.($successes_count + $errors_count).' tests.'.PHP_EOL.PHP_EOL;
     exit(1);
 }
