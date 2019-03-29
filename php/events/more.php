@@ -20,6 +20,7 @@ if ($event === false) {
 
 $events = array($event);
 
+// TODO: récupérer les services de services (Isou)
 $groups = Dependency_Group::get_records(array('service' => $event->idservice));
 foreach ($groups as $group) {
     $contents = Dependency_Group_Content::get_records(array('group' => $group->id));

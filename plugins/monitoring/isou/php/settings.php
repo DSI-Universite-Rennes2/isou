@@ -20,6 +20,21 @@ if (isset($_POST['plugin_isou_tolerance']) === true) {
     }
 }
 
+if (isset($_POST['plugin_isou_grouping']) === true) {
+    if ($plugin->settings->grouping !== (bool) $_POST['plugin_isou_grouping'] && ctype_digit($_POST['plugin_isou_grouping']) === true) {
+        $plugin->settings->grouping = (empty($_POST['plugin_isou_grouping']) === false);
+
+        $plugin->update_settings($overwrite = true);
+
+        $_POST['successes'][] = 'Paramétrage de groupement enregistré.';
+
+        if ($plugin->settings->grouping === true) {
+            require PRIVATE_PATH.'/plugins/monitoring/isou/lib.php';
+            plugin_isou_update_grouping();
+        }
+    }
+}
+
 $smarty->assign('options_yes_no', $options_yes_no);
 
 $smarty->assign('plugin', $plugin);

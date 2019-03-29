@@ -160,6 +160,7 @@ class Event {
     public static function get_records($options = array()) {
         global $DB;
 
+        $joins = array();
         $conditions = array();
         $parameters = array();
 
@@ -263,6 +264,20 @@ class Event {
             }
 
             unset($options['notplugin']);
+        }
+
+        if (isset($options['has_category']) === true) {
+            if (is_bool($options['has_category']) === true) {
+                if ($options['has_category'] === true) {
+                    $joins[] = 'JOIN categories c ON c.id = s.idcategory';
+                } else {
+                    $conditions[] = 's.idcategory IS NULL';
+                }
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'has_category\' doit être un booléan. Valeur donnée : '.var_export($options['has_category'], $return = true));
+            }
+
+            unset($options['has_category']);
         }
 
         if (isset($options['since']) === true) {
@@ -372,6 +387,7 @@ class Event {
             ' FROM events e'.
             ' JOIN events_descriptions ed ON ed.id = e.ideventdescription'.
             ' JOIN services s ON s.id = e.idservice'.
+            ' '.implode(' ', $joins).
             $sql_conditions.
             $sql_orders;
         $query = $DB->prepare($sql);

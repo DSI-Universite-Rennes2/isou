@@ -2,6 +2,13 @@
 	<p class="alert alert-danger">Vous n'avez pas encore défini de catégorie. Avant d'ajouter un service Isou, vous devez créer une catégorie.</p>
 	<p class="text-right"><a class="btn btn-primary" href="{$smarty.const.URL}/index.php/categories/edit/0">Ajouter une catégorie</a></p>
 {else}
+	{if $isou->settings->grouping === true}
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="{$smarty.const.URL}/index.php/services/isou">Liste des services</a></li>
+		<li><a class="btn btn-default" href="{$smarty.const.URL}/index.php/services/isou/grouping">Liste des groupements de services</a></li>
+	</ul>
+	{/if}
+
 	<p class="text-right"><a class="btn btn-primary" href="{$smarty.const.URL}/index.php/services/isou/edit/0">Ajouter un service ISOU</a></p>
 
 	{include file="common/messages_session.tpl"}

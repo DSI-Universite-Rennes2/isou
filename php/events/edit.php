@@ -41,7 +41,7 @@ $options_states = State::$STATES;
 
 $options_periods = Event::$PERIODS;
 
-$options_services = Service::get_records(array('fetch_column' => true, 'plugin' => PLUGIN_ISOU));
+$options_services = Service::get_records(array('fetch_column' => true, 'plugin' => PLUGIN_ISOU, 'has_category' => true));
 
 $options_types = Event::$TYPES;
 

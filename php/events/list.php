@@ -4,6 +4,7 @@ use UniversiteRennes2\Isou\Event;
 
 $options = array();
 $options['plugin'] = PLUGIN_ISOU;
+$options['has_category'] = true;
 $options['sort'] = array(
     'e.enddate IS NULL DESC',
     'e.enddate DESC',
@@ -13,7 +14,7 @@ $options['sort'] = array(
 switch ($PAGE_NAME[1]) {
     case 'autres':
         unset($options['plugin']);
-        $options['notplugin'] = PLUGIN_ISOU;
+        $options['has_category'] = false;
         $subtemplate = 'events/list_plugins_events.tpl';
 
         $plugins_ = array();

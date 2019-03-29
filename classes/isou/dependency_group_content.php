@@ -97,9 +97,11 @@ class Dependency_Group_Content {
         }
 
         // Construis la requête.
-        $sql = 'SELECT dgc.id, dgc.idgroup, dgc.idservice, dgc.servicestate'.
+        $sql = 'SELECT dgc.id, dgc.idgroup, dgc.idservice, dgc.servicestate, s.name, s.idplugin'.
             ' FROM dependencies_groups_content dgc'.
-            $sql_conditions;
+            ' JOIN services s ON s.id = dgc.idservice'.
+            $sql_conditions.
+            ' ORDER BY s.name';
         $query = $DB->prepare($sql);
         $query->execute($parameters);
 

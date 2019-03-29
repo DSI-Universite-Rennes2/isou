@@ -21,6 +21,13 @@
 					<span class="help-block small" id="plugin-isou-tolerance-aria-describedby">exemple : ne pas afficher sur les pages publiques les interruptions inférieures à 2 minutes (faux positifs)</span>
 				</dd>
 			</div>
+			<div class="form-group">
+				<dt id="plugin-isou-grouping">Créer et grouper automatiquement les différents services de monitoring par nom de domaine</dt>
+				<dd>
+					{html_radios class="isou-radios" aria-labelledby="plugin-isou-grouping" name="plugin_isou_grouping" options=$options_yes_no selected=intval($plugin->settings->grouping)}
+					<span class="help-block small" id="plugin-isou-grouping-aria-describedby">Si cette option est activée, un service Nagios nommé <code>test1@serveur-1</code> et un autre service nommé <code>test2@server-1</code> engendre la création automatique d'un service Isou publiquement invisible <code>serveur-1</code> qui aurait des dépendances avec ces 2 services Nagios. Cette option permet de faciliter la gestion des dépendances avec redondances.</span>
+				</dd>
+			</div>
 		</dl>
 	</fieldset>
 

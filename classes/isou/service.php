@@ -112,8 +112,8 @@ class Service {
      * @return UniversiteRennes2\Isou\Service|false
      */
     public static function get_record($options = array()) {
-        if (isset($options['id']) === false) {
-            throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] est requis.');
+        if (isset($options['id']) === false && isset($options['name'], $options['plugin']) === false) {
+            throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] ou les paramètres $options[\'name\'] et $options[\'plugin\'] sont requis.');
         }
 
         $options['fetch_one'] = true;
@@ -150,6 +150,17 @@ class Service {
             }
 
             unset($options['id']);
+        }
+
+        if (isset($options['name']) === true) {
+            if (is_string($options['name']) === true) {
+                $conditions[] = 's.name = :name';
+                $parameters[':name'] = $options['name'];
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'name\' doit être une chaîne de caractères. Valeur donnée : '.var_export($options['name'], $return = true));
+            }
+
+            unset($options['name']);
         }
 
         if (isset($options['enable']) === true) {
@@ -207,6 +218,20 @@ class Service {
             unset($options['category']);
         }
 
+        if (isset($options['has_category']) === true) {
+            if (is_bool($options['has_category']) === true) {
+                if ($options['has_category'] === true) {
+                    $joins[] = 'JOIN categories c ON c.id = s.idcategory';
+                } else {
+                    $conditions[] = 's.idcategory IS NULL';
+                }
+            } else {
+                throw new \Exception(__METHOD__.': l\'option \'has_category\' doit être un booléan. Valeur donnée : '.var_export($options['has_category'], $return = true));
+            }
+
+            unset($options['has_category']);
+        }
+
         if (isset($options['plugin']) === true) {
             if (ctype_digit($options['plugin']) === true) {
                 $conditions[] = 's.idplugin = :plugin';
@@ -250,6 +275,7 @@ class Service {
         if (isset($options['fetch_column']) === true) {
             $sql = 'SELECT s.id, s.name'.
                 ' FROM services s'.
+                ' '.implode(' ', $joins).
                 $sql_conditions.
                 ' ORDER BY UPPER(s.name)';
 

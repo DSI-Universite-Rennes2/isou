@@ -103,6 +103,10 @@ if (isset($_POST['service']) === true && empty($_POST['service']) === false) {
     if (isset($_POST['errors'][0]) === false && isset($_POST['preview']) === false) {
         $_SESSION['messages']['successes'] = $_POST['successes'];
 
+        // On force la mise à jour des groupements de service Isou.
+        require PRIVATE_PATH.'/plugins/monitoring/isou/lib.php';
+        plugin_isou_update_grouping();
+
         header('Location: '.URL.'/index.php/services/thruk');
         exit(0);
     }

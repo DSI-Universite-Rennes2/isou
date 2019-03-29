@@ -16,6 +16,9 @@ switch ($PAGE_NAME[2]) {
     case 'inspect':
         require PRIVATE_PATH.'/plugins/monitoring/isou/php/inspect.php';
         break;
+    case 'grouping':
+        require PRIVATE_PATH.'/plugins/monitoring/isou/php/grouping.php';
+        break;
     default:
         require PRIVATE_PATH.'/plugins/monitoring/isou/php/list.php';
 }

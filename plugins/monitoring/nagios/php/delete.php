@@ -20,6 +20,10 @@ if (isset($_POST['delete']) === true) {
     if (isset($_POST['successes'][0]) === true) {
         $_SESSION['messages'] = $_POST;
 
+        // On force la mise à jour des groupements de service Isou.
+        require PRIVATE_PATH.'/plugins/monitoring/isou/lib.php';
+        plugin_isou_update_grouping();
+
         header('Location: '.URL.'/index.php/services/'.$plugin->codename);
         exit(0);
     }

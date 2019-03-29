@@ -1,6 +1,7 @@
 <?php
 
 use UniversiteRennes2\Isou\Category;
+use UniversiteRennes2\Isou\Plugin;
 use UniversiteRennes2\Isou\Service;
 
 $categories = array();
@@ -10,7 +11,7 @@ foreach (Category::get_records() as $category) {
     $categories[$category->id]->services = array();
 }
 
-$services = Service::get_records(array('plugin' => PLUGIN_ISOU));
+$services = Service::get_records(array('plugin' => PLUGIN_ISOU, 'has_category' => true));
 foreach ($services as $service) {
     $service->notes = array();
 
@@ -31,5 +32,6 @@ foreach ($services as $service) {
 }
 
 $smarty->assign('categories', $categories);
+$smarty->assign('isou', Plugin::get_record(array('id' => PLUGIN_ISOU)));
 
 $SUBTEMPLATE = 'list.tpl';
