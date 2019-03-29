@@ -318,7 +318,7 @@ class Event {
         }
 
         if (isset($options['tolerance']) === true) {
-            if (ctype_digit($options['tolerance']) === true) {
+            if (is_int($options['tolerance']) === true) {
                 if ($options['tolerance'] > 0) {
                     // Ne pas binder 'tolerance', car la requête ne fonctionne pas dans ce cas.
                     $conditions[] = '(e.enddate IS NULL OR (strftime(\'%s\', e.enddate) - strftime(\'%s\', e.startdate) > '.$options['tolerance'].'))';

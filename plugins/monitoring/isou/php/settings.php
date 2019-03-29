@@ -8,9 +8,11 @@ $options_yes_no = array(
 );
 
 if (isset($_POST['plugin_isou_tolerance']) === true) {
-    if ($plugin->settings->tolerance !== $_POST['plugin_isou_tolerance'] && ctype_digit($_POST['plugin_isou_tolerance']) === true) {
+    if ((string) ($plugin->settings->tolerance / 60) !== $_POST['plugin_isou_tolerance'] && ctype_digit($_POST['plugin_isou_tolerance']) === true) {
         if ($_POST['plugin_isou_tolerance'] > 10) {
             $_POST['plugin_isou_tolerance'] = 10;
+        } else if ($_POST['plugin_isou_tolerance'] < 1) {
+            $_POST['plugin_isou_tolerance'] = 1;
         }
 
         $plugin->settings->tolerance = $_POST['plugin_isou_tolerance'] * 60;
