@@ -22,6 +22,7 @@ foreach ($services as $service) {
     }
 }
 
+$smarty->assign('plugins', Plugin::get_records(array('fetch_column' => true)));
 $smarty->assign('services', $services);
 
 $SUBTEMPLATE = 'grouping.tpl';

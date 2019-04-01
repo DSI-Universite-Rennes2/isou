@@ -93,6 +93,18 @@ class Plugin {
         }
 
         // Construis la requête.
+        if (isset($options['fetch_column']) === true) {
+            $sql = 'SELECT p.id, p.name'.
+                ' FROM plugins p'.
+                $sql_conditions.
+                ' ORDER BY UPPER(p.name)';
+
+            $query = $DB->prepare($sql);
+            $query->execute($parameters);
+
+            return $query->fetchAll(\PDO::FETCH_COLUMN | \PDO::FETCH_UNIQUE);
+        }
+
         $sql = 'SELECT p.id, p.name, p.codename, p.type, p.active, p.version'.
                 ' FROM plugins p'.
                 ' '.$sql_conditions.

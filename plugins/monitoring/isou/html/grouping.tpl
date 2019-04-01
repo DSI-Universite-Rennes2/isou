@@ -24,7 +24,7 @@
 			<td>
 					<ul>
 					{foreach $service->dependencies_content as $content}
-						<li>{$content->name}</li>
+						<li>{$content->name} ({$plugins[$content->idplugin]})</li>
 					{/foreach}
 					</ul>
 			</td>

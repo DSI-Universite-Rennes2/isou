@@ -26,8 +26,13 @@ $options_states = array(
 );
 
 $plugins = array();
+$isou_grouping = false;
 foreach (Plugin::get_records(array('active' => true)) as $plugin) {
     $plugins[$plugin->id] = $plugin->name;
+
+    if ($plugin->id === PLUGIN_ISOU) {
+        $isou_grouping = $plugin->settings->grouping;
+    }
 }
 
 $options_services = array();
@@ -42,7 +47,15 @@ foreach (Service::get_records() as $option) {
         continue;
     }
 
-    $plugin_name = $plugins[$option->idplugin];
+    if ($option->idplugin === PLUGIN_ISOU && $option->idcategory === null) {
+        if ($isou_grouping === false) {
+            continue;
+        }
+        $plugin_name = 'Isou (groupement)';
+    } else {
+        $plugin_name = $plugins[$option->idplugin];
+    }
+
     if (isset($options_services[$plugin_name]) === false) {
         $options_services[$plugin_name] = array();
     }
