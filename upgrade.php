@@ -86,10 +86,16 @@ try {
     exit(1);
 }
 
-// Mets à jour la date de dernière mise à jour.
-$sql = "UPDATE configuration SET value = :value WHERE key = :key";
-$query = $DB->prepare($sql);
-$query->execute(array(':value' => strftime('%FT%T'), ':key' => 'last_update'));
+// Mets à jour la date de dernière mise à jour et le numéro de version d'isou.
+$update = array();
+$update['last_update'] = strftime('%FT%T');
+$update['version'] = CURRENT_VERSION;
+
+foreach ($update as $key => $value) {
+    $sql = "UPDATE configuration SET value = :value WHERE key = :key";
+    $query = $DB->prepare($sql);
+    $query->execute(array(':value' => $value, ':key' => $key));
+}
 
 echo PHP_EOL;
 echo 'Mise à jour terminée.'.PHP_EOL;
