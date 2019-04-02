@@ -12,8 +12,23 @@
 
 	{foreach $categories as $category}
 		<details class="isou-list-events-details">
-			<summary>{$STATES[$category->state]} {$category->name}
-
+			<summary><span>{$STATES[$category->state]} {$category->name}</span>
+				<ul class="list-inline text-right">
+					{if $category->scheduled_events_count > 0}
+						{if $category->scheduled_events_count === 1}
+						<li><span class="isou-list-event-scheduled">{$category->scheduled_events_count} évènement prévu</span></li>
+						{else}
+						<li><span class="isou-list-event-scheduled">{$category->scheduled_events_count} évènements prévus</span></li>
+						{/if}
+					{/if}
+					{if $category->past_events_count > 0}
+						{if $category->past_events_count === 1}
+						<li><span class="isou-list-event-unscheduled">{$category->past_events_count} évènement passé</span></li>
+						{else}
+						<li><span class="isou-list-event-unscheduled">{$category->past_events_count} évènements passés</span></li>
+						{/if}
+					{/if}
+				</ul>
 				{if isset($category->unstable_services[0]) === true}
 					{* Affiche seulement les services perturbés. *}
 					<div class="isou-list-hideable-table-div">

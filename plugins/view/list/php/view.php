@@ -7,6 +7,7 @@ use UniversiteRennes2\Isou\State;
 
 $TITLE .= ' - Liste';
 
+$now = new DateTime();
 $since = new DateTime();
 $since->sub(new DateInterval('P2D')); // TODO: create CFG variable.
 
@@ -15,6 +16,8 @@ foreach (Category::get_records(array('non-empty' => true, 'only-visible-services
     $categories[$category->id] = $category;
     $categories[$category->id]->state = State::OK;
     $categories[$category->id]->unstable_services = array();
+    $categories[$category->id]->past_events_count = 0;
+    $categories[$category->id]->scheduled_events_count = 0;
 
     $categories[$category->id]->services = array();
 }
@@ -37,6 +40,12 @@ foreach ($services as $service) {
     } else {
         $service->events = array();
         foreach (Event::get_records(array('since' => $since, 'idservice' => $service->id)) as $index => $event) {
+            if ($event->startdate >= $now && $event->type === Event::TYPE_SCHEDULED) {
+                $categories[$service->idcategory]->scheduled_events_count++;
+            } else if ($event->enddate < $now && $event->type === Event::TYPE_UNSCHEDULED) {
+                $categories[$service->idcategory]->past_events_count++;
+            }
+
             if ($index < 3) {
                 $service->events[] = $event;
             } else {
