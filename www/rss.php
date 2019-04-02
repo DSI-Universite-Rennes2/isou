@@ -59,6 +59,8 @@ $plugins = get_plugins();
 $items = array();
 $options = array();
 $options['since'] = new DateTime(strftime('%Y-%m-%d', TIME - (30 * 24 * 60 * 60)));
+$options['has_category'] = true;
+$options['plugin'] = PLUGIN_ISOU;
 
 foreach (Event::get_records($options) as $event) {
     if (isset($services[$event->idservice]) === false) {
