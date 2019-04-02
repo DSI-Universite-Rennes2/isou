@@ -62,7 +62,7 @@ if (isset($TEMPLATE) === false) {
         $categories[$category->id]->services = array();
     }
 
-    $services = Service::get_records(array('plugin' => PLUGIN_ISOU));
+    $services = Service::get_records(array('plugin' => PLUGIN_ISOU, 'has_category' => true));
     foreach ($services as $service) {
         $service->count_warning_groups = 0;
         $service->count_critical_groups = 0;
