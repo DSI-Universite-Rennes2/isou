@@ -179,6 +179,29 @@ function update_services_tree() {
         $service->change_state(State::OK);
     }
 
+    // On mets à jour les dates des évènements de type régulier.
+    $now = new DateTime();
+
+    $options = array();
+    $options['plugin'] = PLUGIN_ISOU;
+    $options['has_category'] = true;
+    $options['type'] = Event::TYPE_REGULAR;
+
+    $events = Event::get_records($options);
+    foreach ($events as $event) {
+        if ($event->enddate > $now) {
+            continue;
+        }
+
+        if (ctype_digit($event->period) === false) {
+            continue;
+        }
+
+        $event->startdate->add(new DateInterval('PT'.$event->period.'S'));
+        $event->enddate->add(new DateInterval('PT'.$event->period.'S'));
+        $event->save();
+    }
+
     $LOGGER->addInfo('Fin de la mise à jour de l\'arbre des dépendances');
 }
 

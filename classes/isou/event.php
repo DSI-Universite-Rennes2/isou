@@ -607,7 +607,7 @@ class Event {
             $this->set_description();
         }
 
-        if ($this->description->id === 0) {
+        if (isset($this->description->id) === true && $this->description->id === 0) {
             $this->description->save();
             $this->ideventdescription = $DB->lastInsertId();
         }
