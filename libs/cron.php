@@ -101,10 +101,20 @@ function update_services_tree() {
             $message = Dependency_Message::get_record(array('id' => $dependencies_group->idmessage));
 
             $description = null;
-            if (empty($event->description) === true) {
-                $description = $message->message;
-            } elseif (stripos($event->description->description, $message->message) === false) {
-                $description = $event->description->description."\n".$message->message;
+            if (empty($message->message) === false) {
+                if (isset($event->description->description) === true) {
+                    $description = $event->description->description;
+                } else {
+                    $description = $event->description;
+                }
+
+                if (empty($description) === true) {
+                    $description = $message->message;
+                } else if (stripos($description, $message->message) === false) {
+                    $description .= "\n".$message->message;
+                } else {
+                    $description = null;
+                }
             }
 
             if ($description !== null) {
