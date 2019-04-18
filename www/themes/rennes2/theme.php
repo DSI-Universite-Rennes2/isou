@@ -10,6 +10,10 @@ $STYLES[] = new Style('//static.univ-rennes2.fr/bootstrap/3.3/rennes2/bootstrap.
 $STYLES[] = new Style(URL.'/themes/bootstrap3/css/common.css?v='.$theme_version);
 $STYLES[] = new Style(URL.'/themes/rennes2/css/common.css?v='.$theme_version);
 
+if (preg_match('#^dependances/service/[0-9]+/group/[0-9]+/content/edit/0$#', implode('/', $PAGE_NAME)) === 1) {
+    $SCRIPTS[] = new Script(URL.'/scripts/dependencies.js');
+}
+
 $SCRIPTS[] = new Script('//static.univ-rennes2.fr/barre-ent/script.min.js');
 
 $ADDITIONAL_CONTENT = <<<EOF

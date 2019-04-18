@@ -36,10 +36,22 @@
 			<dt class="col-sm-2">
 				<label class="control-label" for="services">Nom du service lié</label>
 			</dt>
-			<dd class="col-sm-10">
+			<dd class="col-sm-10" id="isou-dependencies-contents-backends-dd">
 				{if $dependency_group_content->id === 0}
-				{html_options class="form-control isou-dependencies-contents-add-services" id="services" name="services[]" multiple="1" options=$options_services}
+				<ul class="nav nav-tabs" role="tablist">
+					{foreach $options_services as $plugin => $services}
+						<li role="presentation"><a href="#tab-{$plugin|lower|escape:'url'}" aria-controls="tab-{$plugin|lower|escape:'url'}" role="tab" data-toggle="tab">{$plugin}</a></li>
+					{/foreach}
+				</ul>
+				<div class="tab-content">
+					{foreach $options_services as $plugin => $services}
+						<div role="tabpanel" class="tab-pane" id="tab-{$plugin|lower|escape:'url'}">
+							{html_options class="form-control isou-dependencies-contents-add-services" id="services" name="services[]" multiple="1" options=$services}
+						</div>
+					{/foreach}
+				</div>
 				{else}
+				{* TODO: faire la même interface pour ajouter/supprimer une dépendance *}
 				{html_options class="form-control" id="services" name="services" options=$options_services selected=$dependency_group_content->idservice}
 				{/if}
 			</dd>
