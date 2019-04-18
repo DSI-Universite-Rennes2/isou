@@ -4,7 +4,9 @@ use UniversiteRennes2\Isou\Category;
 use UniversiteRennes2\Isou\Event;
 use UniversiteRennes2\Isou\Service;
 
-$TITLE .= ' - Tableau';
+if (count($MENUS->public) > 1) {
+    $TITLE .= ' - Tableau';
+}
 
 $today = new DateTime();
 

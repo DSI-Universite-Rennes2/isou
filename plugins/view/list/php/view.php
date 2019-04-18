@@ -6,7 +6,9 @@ use UniversiteRennes2\Isou\Plugin;
 use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
-$TITLE .= ' - Liste';
+if (count($MENUS->public) > 1) {
+    $TITLE .= ' - Liste';
+}
 
 $now = new DateTime();
 $since = new DateTime();

@@ -6,7 +6,9 @@ use UniversiteRennes2\Isou\Plugin;
 use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
-$TITLE .= ' - Actualité';
+if (count($MENUS->public) > 1) {
+    $TITLE .= ' - Actualité';
+}
 
 $services = array();
 $categories = array();

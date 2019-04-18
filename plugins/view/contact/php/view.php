@@ -2,7 +2,9 @@
 
 use UniversiteRennes2\Isou\Plugin;
 
-$TITLE .= ' - Contact';
+if (count($MENUS->public) > 1) {
+    $TITLE .= ' - Contact';
+}
 
 $plugin = Plugin::get_record(array('codename' => 'contact', 'type' => 'view'));
 

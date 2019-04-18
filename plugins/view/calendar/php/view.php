@@ -5,7 +5,9 @@ use UniversiteRennes2\Isou\Plugin;
 use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
-$TITLE .= ' - Calendrier';
+if (count($MENUS->public) > 1) {
+    $TITLE .= ' - Calendrier';
+}
 
 $_GET['page'] = '1';
 if (isset($PAGE_NAME[1]) === true && ctype_digit($PAGE_NAME[1]) === true) {

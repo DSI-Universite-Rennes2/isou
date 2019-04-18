@@ -3,7 +3,9 @@
 use UniversiteRennes2\Isou\Category;
 use UniversiteRennes2\Isou\Service;
 
-$TITLE .= ' - Configuration Flux RSS';
+if (count($MENUS->public) > 1) {
+    $TITLE .= ' - Configuration Flux RSS';
+}
 
 $key = 0;
 

@@ -4,7 +4,9 @@ use UniversiteRennes2\Isou\Event;
 use UniversiteRennes2\Isou\Plugin;
 use UniversiteRennes2\Isou\Service;
 
-$TITLE .= ' - Journal';
+if (count($MENUS->public) > 1) {
+    $TITLE .= ' - Journal';
+}
 
 $services = array();
 foreach (Service::get_records(array('plugin' => PLUGIN_ISOU, 'visible' => true)) as $service) {
