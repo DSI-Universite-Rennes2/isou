@@ -2,6 +2,7 @@
 
 use UniversiteRennes2\Isou\Category;
 use UniversiteRennes2\Isou\Event;
+use UniversiteRennes2\Isou\Plugin;
 use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
@@ -10,6 +11,9 @@ $TITLE .= ' - Liste';
 $now = new DateTime();
 $since = new DateTime();
 $since->sub(new DateInterval('P2D')); // TODO: create CFG variable.
+
+$plugin = Plugin::get_record(array('id' => PLUGIN_ISOU));
+$tolerance = intval($plugin->settings->tolerance);
 
 $categories = array();
 foreach (Category::get_records(array('non-empty' => true, 'only-visible-services' => true)) as $category) {
@@ -39,7 +43,7 @@ foreach ($services as $service) {
         $service->closed_event = $service->get_closed_event();
     } else {
         $service->events = array();
-        foreach (Event::get_records(array('since' => $since, 'idservice' => $service->id)) as $index => $event) {
+        foreach (Event::get_records(array('since' => $since, 'idservice' => $service->id, 'tolerance' => $tolerance)) as $index => $event) {
             if ($event->startdate >= $now && $event->type === Event::TYPE_SCHEDULED) {
                 $categories[$service->idcategory]->scheduled_events_count++;
             } else if ($event->enddate < $now && $event->type === Event::TYPE_UNSCHEDULED) {
