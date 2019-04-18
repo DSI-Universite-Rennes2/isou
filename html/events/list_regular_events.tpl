@@ -16,7 +16,7 @@
 		<tr>
 			<td headers="lth1">{$STATES[$event->state]}</td>
 			<td headers="lth2">{$event->service_name}</td>
-			<td headers="lth3">{if $event->period === UniversiteRennes2\Isou\Event::PERIOD_DAILY}Quotidienne{else if $event->period === UniversiteRennes2\Isou\Event::PERIOD_DAILY}Hebdomadaire{/if}</td>
+			<td headers="lth3">{if $event->period === UniversiteRennes2\Isou\Event::PERIOD_DAILY}Quotidienne{else if $event->period === UniversiteRennes2\Isou\Event::PERIOD_WEEKLY}Hebdomadaire{/if}</td>
 			<td headers="lth4">{$event->startdate|date_format:"%H:%M"}</td>
 			<td headers="lth5">{$event->enddate|date_format:"%H:%M"}</td>
 			<td headers="lth6">{$event->startdate|date_format:"%a %d %B %Y %H:%M"}</td>
