@@ -244,6 +244,10 @@ function cron_regenerate_json() {
             continue;
         }
 
+        if ($event->type === Event::TYPE_REGULAR) {
+            continue;
+        }
+
         $data = array();
         $data['id'] = $service->id;
         $data['name'] = $service->name;
