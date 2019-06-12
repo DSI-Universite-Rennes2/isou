@@ -27,7 +27,7 @@ if (isset($PAGE_NAME[4]) === true) {
 }
 
 // services
-$options_services = Service::get_records(array('fetch_column' => true, 'plugin' => PLUGIN_ISOU));
+$options_services = Service::get_records(array('fetch_column' => true, 'plugin' => PLUGIN_ISOU, 'has_category' => true));
 $smarty->assign('options_services', $options_services);
 $options_event_types = array(
     -1 => 'Tous',
