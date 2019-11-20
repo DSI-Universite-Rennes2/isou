@@ -44,6 +44,8 @@ if (isset($CFG['site_name']) === true) {
 $USER = false;
 if (isset($_SESSION['username'], $_SESSION['authentification']) === true) {
     $USER = User::get_record(array('username' => $_SESSION['username'], 'authentification' => $_SESSION['authentification']));
+} else if (defined('DEV') === true && DEV === true) {
+    $USER = User::get_record(array('username' => 'isou', 'authentification' => 'manual'));
 }
 
 if (has_new_version() === true) {
