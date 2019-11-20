@@ -10,6 +10,27 @@ use Symfony\Component\Console\Output\NullOutput;
 use UniversiteRennes2\Isou\Plugin;
 
 /**
+ * Mets à jour la date de dernière mise à jour et le numéro de version d'isou.
+ *
+ * @return void
+ */
+function isou_update_version() {
+    global $DB;
+
+    echo 'Votre version d\'isou est '.CURRENT_VERSION.'.'.PHP_EOL;
+
+    $update = array();
+    $update['last_update'] = strftime('%FT%T');
+    $update['version'] = CURRENT_VERSION;
+
+    foreach ($update as $key => $value) {
+        $sql = "UPDATE configuration SET value = :value WHERE key = :key";
+        $query = $DB->prepare($sql);
+        $query->execute(array(':value' => $value, ':key' => $key));
+    }
+}
+
+/**
  * Procède à la migration de la version 1.0.0 (2013-00-00.1) à la version 2.0.0.
  *
  * @throws Exception Lève une exception lorsqu'une erreur survient.

@@ -21,6 +21,9 @@ if (is_file($db_file_path) === false) {
     upgrade_plugins();
 
     echo PHP_EOL;
+    isou_update_version();
+
+    echo PHP_EOL;
     echo 'Installation terminée.'.PHP_EOL;
     exit(0);
 }
@@ -87,15 +90,8 @@ try {
 }
 
 // Mets à jour la date de dernière mise à jour et le numéro de version d'isou.
-$update = array();
-$update['last_update'] = strftime('%FT%T');
-$update['version'] = CURRENT_VERSION;
-
-foreach ($update as $key => $value) {
-    $sql = "UPDATE configuration SET value = :value WHERE key = :key";
-    $query = $DB->prepare($sql);
-    $query->execute(array(':value' => $value, ':key' => $key));
-}
+echo PHP_EOL;
+isou_update_version();
 
 echo PHP_EOL;
 echo 'Mise à jour terminée.'.PHP_EOL;
