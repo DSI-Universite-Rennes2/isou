@@ -4,8 +4,8 @@
 phpCAS::getVersion();
 
 $plugin = new stdClass();
-$plugin->name = 'Compte Sésame';
-$plugin->version = '1.0.0';
+$plugin->name = 'Authentification CAS';
+$plugin->version = '1.0.1';
 
 $plugin->settings = new stdClass();
 $plugin->settings->cas_protocol = CAS_VERSION_2_0;
