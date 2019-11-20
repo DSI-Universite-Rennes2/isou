@@ -25,18 +25,19 @@ Isou est une application permettant d'informer de l'état des services numériqu
 
 ## Installation et mise à jour
 ```bash
+# Installer composer (https://getcomposer.org/)
 cd /chemin/installation
 git clone git://git.renater.fr/isou.git
 cd isou
 cp -i distribution/config.php .
-php composer.phar install
+composer install
 php upgrade.php
 ```
 
 ### Mise à jour
 ```bash
 git pull origin master
-php composer.phar install
+composer install
 php upgrade.php
 ```
 
@@ -45,8 +46,11 @@ Isou permet de définir différents services numériques. Chaque service Isou pe
 Les services Isou peuvent être associés à des services issus d'outils de monitoring comme Nagios ou Shinken. Un script exécuté aussi régulièrement
  que possible se charge de mettre à jour l'état d'un service Isou en fonction de ses dépendances associées.
 
+## Utilisateur par défaut
+Par défaut, l'application génère un utilisateur local nommé `isou` dont le mot de passe est `isou`. Une fois l'authentification CAS configurée, il est fortement recommandé de ne pas utiliser la méthode d'authentification locale.
+
 ## Développements à venir
-(ROADMAP)[ROADMAP.md]
+[ROADMAP](ROADMAP.md)
 
 ## Problèmes courants
 ### Isou et Nagios
