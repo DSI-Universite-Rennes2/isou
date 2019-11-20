@@ -10,7 +10,7 @@ session_start();
 
 if (is_file(__DIR__.'/../config.php') === false) {
     echo 'L\'application ne semble pas être installée.'.
-        ' Merci d\'exécuter en ligne de commande le script install.php qui se trouve dans ./sources/private/upgrade.';
+        ' Veuillez suivre la <a href="https://github.com/DSI-Universite-Rennes2/isou#installation-et-mise-%C3%A0-jour" target="_blank">procédure d\'installation</a>.';
     exit(1);
 }
 
