@@ -46,14 +46,17 @@ foreach ($services as $service) {
         $service->closed_event = $service->get_closed_event();
         $service->events = Event::get_records(array('finished' => false, 'idservice' => $service->id, 'type' => Event::TYPE_CLOSED));
     } else {
+        $service->count_unscheduled_events = 0;
         foreach (Event::get_records(array('since' => $since, 'idservice' => $service->id, 'tolerance' => $tolerance)) as $index => $event) {
             if ($event->startdate >= $now && $event->type === Event::TYPE_SCHEDULED) {
                 $categories[$service->idcategory]->scheduled_events_count++;
             } else if ($event->enddate < $now && $event->type === Event::TYPE_UNSCHEDULED) {
                 $categories[$service->idcategory]->past_events_count++;
+                $service->count_unscheduled_events++;
             }
 
-            if ($index < 3) {
+            // Limite à 3, le nombre d'évènements affichés par défaut.
+            if ($service->count_unscheduled_events <= 3) {
                 $service->events[] = $event;
             } else {
                 $service->more[] = $event;
