@@ -50,6 +50,11 @@ foreach ($services as $service) {
         foreach (Event::get_records(array('since' => $since, 'idservice' => $service->id, 'tolerance' => $tolerance)) as $index => $event) {
             if ($event->startdate >= $now && $event->type === Event::TYPE_SCHEDULED) {
                 $categories[$service->idcategory]->scheduled_events_count++;
+
+                // Un évènement prévu en cours ou à venir.
+                if (empty($event->enddate) === true || $event->enddate > $now) {
+                    $service->scheduled_events = true;
+                }
             } else if ($event->enddate < $now && $event->type === Event::TYPE_UNSCHEDULED) {
                 $categories[$service->idcategory]->past_events_count++;
                 $service->count_unscheduled_events++;
@@ -65,11 +70,13 @@ foreach ($services as $service) {
 
         $service->regular_events = $service->get_regular_events();
 
+        // Modifie le drapeau de la catégorie au plus haut niveau d'alerte.
         if ($categories[$service->idcategory]->state < $service->state) {
             $categories[$service->idcategory]->state = $service->state;
         }
 
-        if ($service->state !== State::OK) {
+        // Affiche par défaut uniquement les service instables et les évènements en cours ou à venir.
+        if ($service->state !== State::OK || isset($service->scheduled_events) === true) {
             $categories[$service->idcategory]->unstable_services[] = $service;
         }
     }
