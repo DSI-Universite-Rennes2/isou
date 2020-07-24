@@ -72,6 +72,10 @@ function plugin_thruk_update($plugin) {
                 $service->state = State::WARNING;
             }
 
+            if (empty($element->acknowledged) === false) {
+                $service->state = State::OK;
+            }
+
             $id = md5($service->name);
             if (isset($services[$id]) === false) {
                 $services[$id] = $service;
