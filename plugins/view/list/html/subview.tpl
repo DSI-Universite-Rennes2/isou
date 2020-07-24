@@ -29,6 +29,8 @@
 							<li class="isou-list-event-scheduled">{$event}{if empty($event->description) === false}<div class="isou-list-event-description">{$event->description|nl2br}</div>{/if}</li>
 						{else if $event->type === UniversiteRennes2\Isou\Event::TYPE_UNSCHEDULED}
 							<li class="isou-list-event-unscheduled">{$event}{if empty($event->description) === false}<div class="isou-list-event-description">{$event->description|nl2br}</div>{/if}</li>
+						{else if $event->type === UniversiteRennes2\Isou\Event::TYPE_CLOSED}
+							<li class="isou-list-event-closed">{if empty($event->description) === false}<div class="isou-list-event-description">{$event->description|nl2br}</div>{/if}</li>
 						{/if}
 					{/foreach}
 					</ul>

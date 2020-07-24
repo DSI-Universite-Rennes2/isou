@@ -41,10 +41,11 @@ foreach ($services as $service) {
     }
 
     // Ajout des évènements.
+    $service->events = array();
     if ($service->is_closed === true) {
         $service->closed_event = $service->get_closed_event();
+        $service->events = Event::get_records(array('finished' => false, 'idservice' => $service->id, 'type' => Event::TYPE_CLOSED));
     } else {
-        $service->events = array();
         foreach (Event::get_records(array('since' => $since, 'idservice' => $service->id, 'tolerance' => $tolerance)) as $index => $event) {
             if ($event->startdate >= $now && $event->type === Event::TYPE_SCHEDULED) {
                 $categories[$service->idcategory]->scheduled_events_count++;
