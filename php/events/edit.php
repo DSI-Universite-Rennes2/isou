@@ -45,6 +45,10 @@ $options_services = Service::get_records(array('fetch_column' => true, 'plugin' 
 
 $options_types = Event::$TYPES;
 
+if ($_POST['type'] === Event::TYPE_CLOSED) {
+    $_POST['state'] = State::CLOSED;
+}
+
 if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['starttime'], $_POST['enddate'], $_POST['endtime'], $_POST['state'], $_POST['description']) === true) {
     $_POST['errors'] = array();
 
