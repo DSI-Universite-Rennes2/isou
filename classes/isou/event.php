@@ -100,6 +100,9 @@ class Event {
                 // Évènement futur.
                 if ($this->enddate === null) {
                     $str = 'Le service sera '.$type.' le '.$startday.' à partir de '.$starttime.'.';
+                } else if ($this->startdate->format('Ymd') === $this->enddate->format('Ymd')) {
+                    // Même journée.
+                    $str = 'Le service sera '.$type.' le '.$startday.' de '.$this->startdate->format('G\hi').' à '.$this->enddate->format('G\hi').'.';
                 } else {
                     $endtime = $this->enddate->format('H\hi');
                     $endday = strftime('%A %d %B', $this->enddate->getTimestamp());
