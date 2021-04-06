@@ -217,7 +217,45 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
         header('Content-Disposition: attachment; filename=isou_export.csv');
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Transfer-Encoding: binary');
-        $smarty->display('history/export.tpl');
+
+        $headers = array();
+        $headers[] = 'Service';
+        $headers[] = 'État';
+        $headers[] = 'Date de début';
+        $headers[] = 'Date de fin';
+        $headers[] = 'Durée';
+        $headers[] = 'Durée en minutes';
+        $headers[] = 'Description';
+        $headers[] = 'Type d\'interruption';
+
+        $file = fopen('php://output', 'w');
+        fputcsv($file, $headers);
+
+        foreach ($events as $event) {
+            $data = array();
+            $data[] = $event->name;
+            $data[] = $event->state_alt;
+            $data[] = strftime('%A %e %B %Y %H:%M', $event->startdate->getTimestamp());
+            $data[] = strftime('%A %e %B %Y %H:%M', $event->enddate->getTimestamp());
+            $data[] = $event->total;
+            $data[] = $event->total_minutes;
+
+            if (empty($event->description) === true) {
+                $data[] = '';
+            } else {
+                $data[] = $event->description;
+            }
+
+            if ($event->type === Event::TYPE_SCHEDULED) {
+                $data[] = 'Prévues';
+            } else {
+                $data[] = 'Non prévues';
+            }
+
+            fputcsv($file, $data);
+        }
+
+        fclose($file);
         exit(0);
     } else {
         $smarty->assign('count_events', $count_events);
