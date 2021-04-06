@@ -1,0 +1,40 @@
+# Title of the workflow.
+name: Atoum
+
+# Run this workflow every time a new commit pushed to your repository or PR created.
+on: [push, pull_request]
+
+jobs:
+  # Set the job key. The key is displayed as the job name
+  # when a job name is not provided.
+  test:
+    # Virtual environment to use.
+    runs-on: ubuntu-18.04
+
+    # Determines build matrix.
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.3']
+
+    steps:
+      # Check out this repository code in ./plugin directory
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      # Install PHP of required version. For possible options see https://github.com/shivammathur/setup-php
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      # Initialise composer.
+      - name: Initialise composer
+        run: |
+          composer install
+
+      # Run atoum.
+      - name: Run Atoum.
+        run: |
+          php vendor/bin/atoum -d tests/unit/classes/ -af .atoum.php
