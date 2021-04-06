@@ -160,7 +160,7 @@ class Event extends atoum {
         $this->assert(__METHOD__.' : test #'.$i++)
             ->given($this->newTestedInstance)
             ->then
-                ->array($this->testedInstance->get_records(array('tolerance' => '1')));
+                ->array($this->testedInstance->get_records(array('tolerance' => 1)));
 
         // Teste lorsque les paramètres sont corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -323,7 +323,7 @@ class Event extends atoum {
             ->then
                 ->exception(
                     function() {
-                        $this->testedInstance->get_records(array('tolerance' => 1));
+                        $this->testedInstance->get_records(array('tolerance' => '1'));
                     }
                 );
 
