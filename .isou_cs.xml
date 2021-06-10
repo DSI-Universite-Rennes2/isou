@@ -6,10 +6,13 @@
     <file>.</file>
 
     <!-- Fichiers/répertoires à ignorer. -->
-    <exclude-pattern>cache</exclude-pattern>
-    <exclude-pattern>config.php</exclude-pattern>
-    <exclude-pattern>index.php</exclude-pattern>
-    <exclude-pattern>vendor</exclude-pattern>
+    <exclude-pattern>^cache</exclude-pattern>
+    <exclude-pattern>^config.php$</exclude-pattern>
+    <exclude-pattern>^index.php$</exclude-pattern>
+    <exclude-pattern>^vendor</exclude-pattern>
+
+    <!-- Retourne un exit code à 0 même si des warnings sont détectés. -->
+    <config name="ignore_warnings_on_exit" value="1" />
 
     <!-- OPTIONS -->
 
