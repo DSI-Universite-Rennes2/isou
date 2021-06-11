@@ -48,26 +48,25 @@ if (isset($_SESSION['username'], $_SESSION['authentification']) === true) {
     $USER = User::get_record(array('username' => 'isou', 'authentification' => 'manual'));
 }
 
+// Calcule la route de la page.
+$PAGE_NAME = explode('/', get_page_name());
+
+// Load states.
+$STATES = State::get_records();
+
+// Load menu.
+$MENUS = new stdClass();
+$MENUS->public = SimpleMenu::get_public_menus();
+$MENUS->administration = array();
+
 if (has_new_version() === true) {
     // Display maintenance page.
     $TEMPLATE = 'common/update.tpl';
-
-    $MENUS = new stdClass();
-    $STATES = array();
 } else {
     // Display default pages.
-    $PAGE_NAME = explode('/', get_page_name());
     if (in_array($PAGE_NAME[0], array('connexion', 'deconnexion'), $strict = true) === true) {
         require PRIVATE_PATH.'/php/authentification/index.php';
     }
-
-    // Load states.
-    $STATES = State::get_records();
-
-    // Load menu.
-    $MENUS = new stdClass();
-    $MENUS->public = SimpleMenu::get_public_menus();
-    $MENUS->administration = array();
 
     if (isset($USER->admin) === true && empty($USER->admin) === false) {
         $MENUS->administration = SimpleMenu::get_adminitration_menus();
