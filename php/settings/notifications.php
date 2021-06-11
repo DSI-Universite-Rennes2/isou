@@ -5,8 +5,8 @@ use Minishlink\WebPush\VAPID;
 $TITLE .= ' - Configuration des notifications par webpush';
 
 $options_yes_no = array(
-    1 => 'yes',
-    0 => 'no',
+    1 => 'Oui',
+    0 => 'Non',
 );
 
 if (isset($_POST['notifications_enabled']) === true) {
