@@ -1,6 +1,17 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou;
+
+use Minishlink\WebPush\Notification;
+use Minishlink\WebPush\WebPush;
 
 /**
  * Classe gérant les souscriptions aux notifications web.
@@ -70,13 +81,13 @@ class Subscription {
                 }
             }
         } else {
-            $this->id = 0;
+            $this->id = '0';
             $this->endpoint = '';
             $this->public_key = '';
             $this->authentification_token = '';
             $this->content_encoding = '';
             $this->lastnotification = null;
-            $this->iduser = 0;
+            $this->iduser = '0';
         }
     }
 
@@ -102,35 +113,38 @@ class Subscription {
     }
 
     /**
-     * @param array $options Array in format:
+     * Récupère un objet en base de données en fonction des options passées en paramètre.
      *
-     * @see function get_records()
-     * Note : fetch_one param is always set at true
+     * @param array $options Tableau d'options. @see get_records.
      *
-     * @return UniversiteRennes2\Isou\Subscription|false
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
+     *
+     * @return Subscription|false
      */
-    public static function get_record($options = array()) {
+    public static function get_record(array $options = array()) {
         $options['fetch_one'] = true;
 
         return self::get_records($options);
     }
 
     /**
-     * Retourne un tableau des souscriptions en fonction des critères sélectionnés.
+     * Récupère un tableau d'objets en base de données en fonction des options passées en paramètre.
+     *
+     * Liste des options disponibles : TODO.
      *
      * @param array $options Liste des critères de sélection.
      *
-     * @throws \Exception Lève une exception si certains critères minimum sont absents ou invalides.
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
      *
-     * @return array of Subscription
+     * @return Subscription[]|Subscription|false
      */
-    public static function get_records($options = array()) {
+    public static function get_records(array $options = array()) {
         global $DB;
 
         $conditions = array();
         $parameters = array();
 
-        // Parcours les options.
+        // Parcourt les options.
         if (isset($options['id']) === true) {
             if (ctype_digit($options['id']) === true) {
                 $conditions[] = 's.id = :id';
@@ -186,7 +200,7 @@ class Subscription {
             unset($options['userid']);
         }
 
-        // Construis le WHERE.
+        // Construit le WHERE.
         if (isset($conditions[0]) === true) {
             $sql_conditions = ' WHERE '.implode(' AND ', $conditions);
         } else {
@@ -202,7 +216,7 @@ class Subscription {
             throw new \Exception(__METHOD__.': l\'option \''.$key.'\' n\'a pas été utilisée. Valeur donnée : '.var_export($option, $return = true));
         }
 
-        // Construis la requête.
+        // Construit la requête.
         $sql = 'SELECT s.id, s.endpoint, s.public_key, s.authentification_token, s.content_encoding, s.lastnotification, s.iduser'.
                 ' FROM subscriptions s'.
                 ' '.$sql_conditions;
@@ -221,12 +235,12 @@ class Subscription {
     /**
      * Envoie une notification web.
      *
-     * @param Webpush      $webpush      Objet webpush prêt à envoyer des notifications.
+     * @param WebPush $webpush Objet webpush prêt à envoyer des notifications.
      * @param Notification $notification Object notification à envoyer contenant l'authentification, les entêtes, les options et le corps du message.
      *
      * @return true|array Retourne true en cas de succès, ou un tableau contenant les erreurs rencontrées à l'envoi du message.
      */
-    public function notify($webpush, $notification) {
+    public function notify(WebPush $webpush, Notification $notification) {
         return $webpush->sendNotification($this->endpoint, $notification->payload, $this->public_key, $this->authentification_token, $notification->flush, $notification->options);
     }
 
@@ -254,7 +268,7 @@ class Subscription {
             $params[':lastnotification'] = null;
         }
 
-        if ($this->id === 0) {
+        if (empty($this->id) === true) {
             $sql = 'INSERT INTO subscriptions(endpoint, public_key, authentification_token, content_encoding, lastnotification, iduser)'.
                 ' VALUES(:endpoint, :public_key, :authentification_token, :content_encoding, :lastnotification, :iduser)';
         } else {
@@ -271,7 +285,7 @@ class Subscription {
             throw new \Exception('Une erreur est survenue lors de l\'enregistrement de la souscription.');
         }
 
-        if ($this->id === 0) {
+        if (empty($this->id) === true) {
             $this->id = $DB->lastInsertId();
         }
     }

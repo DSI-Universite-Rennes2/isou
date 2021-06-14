@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou;
 
@@ -99,7 +107,7 @@ class User {
             }
         } else {
             // Instance manuelle.
-            $this->id = 0;
+            $this->id = '0';
             $this->authentification = 'manual';
             $this->username = 'anonymous';
             $this->password = '';
@@ -126,15 +134,15 @@ class User {
     }
 
     /**
-     * Retourne un utilisateur en fonction des critères sélectionnés.
+     * Récupère un objet en base de données en fonction des options passées en paramètre.
      *
-     * @param array $options Liste des critères de sélection.
+     * @param array $options Tableau d'options. @see get_records.
      *
-     * @throws \Exception Lève une exception si certains critères minimum sont absents ou invalides.
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
      *
      * @return User|false
      */
-    public static function get_record($options = array()) {
+    public static function get_record(array $options = array()) {
         if (isset($options['id']) === false && isset($options['username'], $options['authentification']) === false) {
             throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] ou les deux paramètres $options[\'username\'] et $options[\'authentification\'] sont requis.');
         }
@@ -145,21 +153,23 @@ class User {
     }
 
     /**
-     * Retourne un tableau d'utilisateurs en fonction des critères sélectionnés.
+     * Récupère un tableau d'objets en base de données en fonction des options passées en paramètre.
+     *
+     * Liste des options disponibles : TODO.
      *
      * @param array $options Liste des critères de sélection.
      *
-     * @throws \Exception Lève une exception si certains critères minimum sont absents ou invalides.
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
      *
-     * @return array of User
+     * @return User[]|User|false
      */
-    public static function get_records($options = array()) {
+    public static function get_records(array $options = array()) {
         global $DB;
 
         $conditions = array();
         $parameters = array();
 
-        // Parcours les options.
+        // Parcourt les options.
         if (isset($options['id']) === true) {
             if (ctype_digit($options['id']) === true) {
                 $conditions[] = 'u.id = :id';
@@ -193,7 +203,7 @@ class User {
             unset($options['authentification']);
         }
 
-        // Construis le WHERE.
+        // Construit le WHERE.
         if (isset($conditions[0]) === true) {
             $sql_conditions = ' WHERE '.implode(' AND ', $conditions);
         } else {
@@ -209,7 +219,7 @@ class User {
             throw new \Exception(__METHOD__.': l\'option \''.$key.'\' n\'a pas été utilisée. Valeur donnée : '.var_export($option, $return = true));
         }
 
-        // Construis la requête.
+        // Construit la requête.
         $sql = 'SELECT u.id, u.authentification, u.username, u.password, u.firstname, u.lastname, u.email, u.admin, u.lastaccess, u.timecreated'.
            ' FROM users u'.
             $sql_conditions;
@@ -253,7 +263,7 @@ class User {
             ':timecreated' => $this->timecreated->format('Y-m-d\TH:i:s'),
         );
 
-        if ($this->id === 0) {
+        if (empty($this->id) === true) {
             $sql = 'INSERT INTO users(authentification, username, password, firstname, lastname, email, admin, lastaccess, timecreated)'.
                 ' VALUES(:authentification, :username, :password, :firstname, :lastname, :email, :admin, :lastaccess, :timecreated)';
         } else {
@@ -264,7 +274,7 @@ class User {
         $query = $DB->prepare($sql);
 
         if ($query->execute($params) === true) {
-            if ($this->id === 0) {
+            if (empty($this->id) === true) {
                 $this->id = $DB->lastInsertId();
             }
         } else {

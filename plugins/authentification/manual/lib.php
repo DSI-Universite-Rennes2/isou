@@ -1,5 +1,14 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
 
+declare(strict_types=1);
+
+use UniversiteRennes2\Isou\Plugin;
 use UniversiteRennes2\Isou\User;
 
 /**
@@ -9,7 +18,7 @@ use UniversiteRennes2\Isou\User;
  *
  * @return string|void
  */
-function authentification_login($plugin) {
+function authentification_login(Plugin $plugin) {
     global $smarty;
 
     if (isset($_POST['username'], $_POST['password']) === true) {
@@ -39,9 +48,11 @@ function authentification_login($plugin) {
 /**
  * Déconnecte l'utilisateur.
  *
+ * @param Plugin $plugin Instance du plugin manual.
+ *
  * @return void
  */
-function authentification_logout($plugin = null) {
+function authentification_logout(Plugin $plugin = null) {
     $_SESSION = array();
 
     if (isset($_COOKIE[session_name()]) === true) {

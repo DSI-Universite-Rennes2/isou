@@ -1,17 +1,56 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou;
 
+/**
+ * Classe décrivant une catégorie.
+ */
 class Category {
+    /**
+     * Identifiant de l'objet.
+     *
+     * @var integer
+     */
     public $id;
+
+    /**
+     * Nom de la catégorie.
+     *
+     * @var string
+     */
     public $name;
+
+    /**
+     * Position de la catégorie.
+     *
+     * @var integer
+     */
     public $position;
+
+    /**
+     * Tableau des services associés à cette catégorie.
+     *
+     * @var Service[]
+     */
     public $services;
 
+    /**
+     * Constructeur de la classe.
+     *
+     * @return void
+     */
     public function __construct() {
         if (isset($this->id) === false) {
             // Instance manuelle.
-            $this->id = 0;
+            $this->id = '0';
             $this->name = '';
             $this->position = null;
         }
@@ -19,6 +58,11 @@ class Category {
         $services = null;
     }
 
+    /**
+     * Retourne tous les services associés à cette catégorie.
+     *
+     * @return Service[]
+     */
     public function get_services() {
         if ($this->services === null) {
             $this->services = Service::get_records(array('category' => $this->id));
@@ -27,6 +71,11 @@ class Category {
         return $this->services;
     }
 
+    /**
+     * Contrôle les données avant de les enregistrer en base de données.
+     *
+     * @return string[] Retourne un tableau d'erreurs.
+     */
     public function check_data() {
         $errors = array();
 
@@ -45,7 +94,16 @@ class Category {
         return $errors;
     }
 
-    public static function get_record($options = array()) {
+    /**
+     * Récupère un objet en base de données en fonction des options passées en paramètre.
+     *
+     * @param array $options Tableau d'options. @see get_records.
+     *
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
+     *
+     * @return Category|false
+     */
+    public static function get_record(array $options = array()) {
         if (isset($options['id']) === false) {
             throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] est requis.');
         }
@@ -55,14 +113,25 @@ class Category {
         return self::get_records($options);
     }
 
-    public static function get_records($options = array()) {
+    /**
+     * Récupère un tableau d'objets en base de données en fonction des options passées en paramètre.
+     *
+     * Liste des options disponibles : TODO.
+     *
+     * @param array $options Tableau d'options.
+     *
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
+     *
+     * @return Category[]
+     */
+    public static function get_records(array $options = array()) {
         global $DB;
 
         $joins = array();
         $conditions = array();
         $parameters = array();
 
-        // Parcours les options.
+        // Parcourt les options.
         if (isset($options['id']) === true) {
             if (ctype_digit($options['id']) === true) {
                 $conditions[] = 'c.id = ?';
@@ -96,7 +165,7 @@ class Category {
             unset($options['non-empty']);
         }
 
-        // Construis le WHERE.
+        // Construit le WHERE.
         if (isset($conditions[0]) === true) {
             $sql_conditions = ' WHERE '.implode(' AND ', $conditions);
         } else {
@@ -112,7 +181,7 @@ class Category {
             throw new \Exception(__METHOD__.': l\'option \''.$key.'\' n\'a pas été utilisée. Valeur donnée : '.var_export($option, $return = true));
         }
 
-        // Construis la requête.
+        // Construit la requête.
         if (isset($options['fetch_column']) === true) {
             $sql = 'SELECT c.id, c.name'.
                 ' FROM categories c'.
@@ -143,6 +212,11 @@ class Category {
         return $query->fetchAll();
     }
 
+    /**
+     * Enregistre l'objet en base de données.
+     *
+     * @return array
+     */
     public function save() {
         global $DB, $LOGGER;
 
@@ -156,7 +230,7 @@ class Category {
             ':position' => $this->position,
         );
 
-        if ($this->id === 0) {
+        if (empty($this->id) === true) {
             $sql = 'INSERT INTO categories(name, position) VALUES(:name, :position)';
         } else {
             $sql = 'UPDATE categories SET name=:name, position=:position WHERE id=:id';
@@ -165,7 +239,7 @@ class Category {
         $query = $DB->prepare($sql);
 
         if ($query->execute($parameters) === true) {
-            if ($this->id === 0) {
+            if (empty($this->id) === true) {
                 $this->id = $DB->lastInsertId();
             }
 
@@ -180,6 +254,11 @@ class Category {
         return $results;
     }
 
+    /**
+     * Supprime l'objet en base de données.
+     *
+     * @return array
+     */
     public function delete() {
         global $DB, $LOGGER;
 
@@ -224,6 +303,11 @@ class Category {
         return $results;
     }
 
+    /**
+     * Monte la catégorie d'une position.
+     *
+     * @return array
+     */
     public function move_up() {
         global $DB, $LOGGER;
 
@@ -264,7 +348,14 @@ class Category {
         return $results;
     }
 
-    public function move_down($limit = null) {
+    /**
+     * Descend la catégorie d'une position.
+     *
+     * @param integer|null $limit Nombre maximum de catégories. Si NULL, ce nombre est calculé.
+     *
+     * @return array
+     */
+    public function move_down(int $limit = null) {
         global $DB, $LOGGER;
 
         $results = array(

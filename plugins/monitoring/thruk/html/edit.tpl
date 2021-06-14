@@ -1,5 +1,5 @@
 <form action="{$smarty.const.URL}/index.php/services/thruk/edit/{$service->id}" class="form" method="post">
-	{if $service->id === 0}
+	{if empty($service->id) === true}
 		<h2>Ajouter un service Thruk</h2>
 	{else}
 		<h2>Remplacer le service {$service->name}</h2>
@@ -28,7 +28,7 @@
 		</li>
 		{/if}
 
-		{if $service->id === 0}
+		{if empty($service->id) === true}
 		<li>
 			<input class="btn {if $smarty.post === array()}btn-primary{else}btn-default{/if}" name="preview" type="submit" value="aperçu" />
 		</li>

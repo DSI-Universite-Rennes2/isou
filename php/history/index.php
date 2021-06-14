@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 use UniversiteRennes2\Isou\Event;
 use UniversiteRennes2\Isou\Service;
@@ -26,7 +34,7 @@ if (isset($PAGE_NAME[4]) === true) {
     }
 }
 
-// services
+// Services.
 $options_services = Service::get_records(array('fetch_column' => true, 'plugin' => PLUGIN_ISOU, 'has_category' => true));
 $smarty->assign('options_services', $options_services);
 $options_event_types = array(
@@ -36,14 +44,14 @@ $options_event_types = array(
 );
 $smarty->assign('options_event_types', $options_event_types);
 
-// sort
+// Sort.
 $options_sorts = array(
     'Décroissant',
     'Croissant',
 );
 $smarty->assign('options_sorts', $options_sorts);
 
-// max result
+// Max result.
 $options_paging = array('-1' => 'illimité');
 for ($i = 10; $i < 101; $i = $i + 10) {
     $options_paging[$i] = $i;
@@ -55,7 +63,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
 
     $params = array();
 
-    // services
+    // Services.
     $sql_services = array();
     if (is_array($_POST['services']) === true) {
         foreach ($_POST['services'] as $service) {
@@ -74,7 +82,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
         $sql_services = '';
     }
 
-    // event type
+    // Event type.
     if (isset($options_event_types[$_POST['event_type']]) === false) {
         $_POST['event_type'] = '-1';
     }
@@ -86,7 +94,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
         $params[] = $_POST['event_type'];
     }
 
-    // startdate
+    // Startdate.
     try {
         $startdate = new DateTime($_POST['startdate']);
         $_POST['startdate'] = $startdate->format('Y-m-d');
@@ -96,7 +104,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
     $sql_events .= " AND e.startdate >= ?";
     $params[] = $_POST['startdate'];
 
-    // enddate
+    // Enddate.
     if (empty($_POST['enddate']) === false) {
         try {
             $enddate = new DateTime($_POST['enddate']);
@@ -109,14 +117,14 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
         }
     }
 
-    // sort
+    // Sort.
     if ($_POST['sort'] === '0') {
         $sql_sort = " ORDER BY e.startdate DESC";
     } else {
         $sql_sort = " ORDER BY e.startdate ASC";
     }
 
-    // paging
+    // Paging.
     if ($_POST['paging'] !== '-1') {
         if (isset($options_paging[$_POST['paging']]) === false) {
             $_POST['paging'] = '10';
@@ -261,7 +269,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
         $smarty->assign('count_events', $count_events);
     }
 
-    // pagination
+    // Pagination.
     if ($_POST['paging'] === '-1') {
         $count_pages = 1;
     } else {

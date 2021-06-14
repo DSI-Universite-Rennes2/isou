@@ -1,7 +1,18 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou;
 
+/**
+ * Classe décrivant un évènement.
+ */
 class Event {
     const PERIOD_NONE = '0';
     const PERIOD_DAILY = '86400';
@@ -12,16 +23,74 @@ class Event {
     const TYPE_REGULAR = '2';
     const TYPE_CLOSED = '3';
 
+    /**
+     * Identifiant de l'objet.
+     *
+     * @var integer
+     */
     public $id;
+
+    /**
+     * Date de début.
+     *
+     * @var \DateTime
+     */
     public $startdate;
+
+    /**
+     * Date de fin.
+     *
+     * @var \DateTime|null
+     */
     public $enddate;
+
+    /**
+     * Identifiant de l'état.
+     *
+     * @var integer
+     */
     public $state;
+
+    /**
+     * Identifiant du type d'évènement.
+     *
+     * @var integer
+     */
     public $type;
+
+    /**
+     * Identifiant de la période.
+     *
+     * @var integer|null
+     */
     public $period;
+
+    /**
+     * Identifiant de la description.
+     *
+     * @var integer
+     */
     public $ideventdescription;
+
+    /**
+     * Description.
+     *
+     * @var string
+     */
     public $description;
+
+    /**
+     * Identifiant du service.
+     *
+     * @var integer
+     */
     public $idservice;
 
+    /**
+     * Liste des types d'évènements.
+     *
+     * @var string[]
+     */
     public static $TYPES = array(
         self::TYPE_SCHEDULED => 'Évènement prévu',
         self::TYPE_UNSCHEDULED => 'Évènement imprévu',
@@ -29,13 +98,24 @@ class Event {
         self::TYPE_CLOSED => 'Service fermé',
     );
 
+    /**
+     * Liste des périodes.
+     *
+     * @var string[]
+     */
     public static $PERIODS = array(
         self::PERIOD_NONE => 'Aucune',
         self::PERIOD_DAILY => 'Tous les jours',
         self::PERIOD_WEEKLY => 'Toutes les semaines',
     );
 
-    // TODO: à simplifier.
+    /**
+     * Constructeur de la classe.
+     *
+     * TODO: à simplifier.
+     *
+     * @return void
+     */
     public function __construct() {
         if (isset($this->id) === true) {
             // Instance PDO.
@@ -54,18 +134,23 @@ class Event {
             }
         } else {
             // Instance manuelle.
-            $this->id = 0;
+            $this->id = '0';
             $this->startdate = new \DateTime();
             $this->enddate = null;
             $this->state = State::CRITICAL;
             $this->type = self::TYPE_SCHEDULED;
             $this->period = self::PERIOD_NONE;
-            $this->ideventdescription = 1;
+            $this->ideventdescription = '1';
             $this->description = null;
-            $this->idservice = 0;
+            $this->idservice = '0';
         }
     }
 
+    /**
+     * Représentation textuelle de la classe.
+     *
+     * @return string
+     */
     public function __tostring() {
         $str = '';
 
@@ -100,7 +185,7 @@ class Event {
                 // Évènement futur.
                 if ($this->enddate === null) {
                     $str = 'Le service sera '.$type.' le '.$startday.' à partir de '.$starttime.'.';
-                } else if ($this->startdate->format('Ymd') === $this->enddate->format('Ymd')) {
+                } elseif ($this->startdate->format('Ymd') === $this->enddate->format('Ymd')) {
                     // Même journée.
                     $str = 'Le service sera '.$type.' le '.$startday.' de '.$this->startdate->format('G\hi').' à '.$this->enddate->format('G\hi').'.';
                 } else {
@@ -133,7 +218,16 @@ class Event {
         return $str;
     }
 
-    public static function get_record($options = array()) {
+    /**
+     * Récupère un objet en base de données en fonction des options passées en paramètre.
+     *
+     * @param array $options Tableau d'options. @see get_records.
+     *
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
+     *
+     * @return Event|false
+     */
+    public static function get_record(array $options = array()) {
         if (isset($options['id']) === false) {
             throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] est requis.');
         }
@@ -144,7 +238,9 @@ class Event {
     }
 
     /**
-     * @param array $options Array in format:
+     * Récupère un tableau d'objets en base de données en fonction des options passées en paramètre.
+     *
+     * Liste des options disponibles :
      *   after           => DateTime
      *   before          => DateTime
      *   idservice       => int
@@ -158,16 +254,20 @@ class Event {
      *   type            => int : index key from UniversiteRennes2\Isou\Event::$TYPES
      *   sort            => Array of strings
      *
-     * @return array of UniversiteRennes2\Isou\Events
+     * @param array $options Tableau d'options.
+     *
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
+     *
+     * @return Event[]|Event|false
      */
-    public static function get_records($options = array()) {
+    public static function get_records(array $options = array()) {
         global $DB;
 
         $joins = array();
         $conditions = array();
         $parameters = array();
 
-        // Parcours les options.
+        // Parcourt les options.
         if (isset($options['id']) === true) {
             if (ctype_digit($options['id']) === true) {
                 $conditions[] = 'e.id = :id';
@@ -354,14 +454,14 @@ class Event {
             unset($options['type']);
         }
 
-        // Construis le WHERE.
+        // Construit le WHERE.
         if (isset($conditions[0]) === true) {
             $sql_conditions = ' WHERE '.implode(' AND ', $conditions);
         } else {
             $sql_conditions = '';
         }
 
-        // Construis le ORDER BY.
+        // Construit le ORDER BY.
         if (isset($options['sort']) === true) {
             if (is_array($options['sort']) === true) {
                 $sql_orders = ' ORDER BY '.implode(', ', $options['sort']);
@@ -385,7 +485,7 @@ class Event {
             throw new \Exception(__METHOD__.': l\'option \''.$key.'\' n\'a pas été utilisée. Valeur donnée : '.var_export($option, $return = true));
         }
 
-        // Construis la requête.
+        // Construit la requête.
         $sql = 'SELECT e.id, e.startdate, e.enddate, e.state, e.type, e.period, e.ideventdescription, ed.description, e.idservice, s.name AS service_name, s.idplugin'.
             ' FROM events e'.
             ' JOIN events_descriptions ed ON ed.id = e.ideventdescription'.
@@ -405,7 +505,14 @@ class Event {
         return $query->fetchAll();
     }
 
-    public function is_now($datetime = null) {
+    /**
+     * Détermine si l'évènement en en cours.
+     *
+     * @param string $datetime Une chaîne date/heure pour l'objet \DateTime.
+     *
+     * @return boolean
+     */
+    public function is_now(string $datetime = '') {
         global $LOGGER;
 
         try {
@@ -421,7 +528,17 @@ class Event {
         return $bigger_than_startdate && $lower_than_enddate;
     }
 
-    public function set_service($idservice, $options_services = null) {
+    /**
+     * Permet de définir un service.
+     *
+     * @param string $idservice Identifiant du service à associer à l'évènement.
+     * @param array $options_services Tableau indexé des services.
+     *
+     * @throws \Exception Lève une exception lorsque l'identifiant du service n'est pas valide.
+     *
+     * @return void
+     */
+    public function set_service(string $idservice, array $options_services = null) {
         global $DB;
 
         $this->idservice = $idservice;
@@ -458,14 +575,23 @@ class Event {
                     break;
                 case self::TYPE_UNSCHEDULED:
                 default:
-                   $type = 'imprevus';
+                    $type = 'imprevus';
             }
 
             throw new \Exception('Un évènement est déjà en cours pour ce service. Veuillez modifier ou supprimer l\'<a href="'.URL.'/index.php/evenements/'.$type.'/edit/'.$event->id.'"> ancien évènement</a>.');
         }
     }
 
-    public function set_period($period) {
+    /**
+     * Permet de définir une période.
+     *
+     * @param string $period Identifiant de la période à attribuer à l'évènement.
+     *
+     * @throws \Exception Lève une exception lorsque l'identifiant de la période n'est pas valide.
+     *
+     * @return void
+     */
+    public function set_period(string $period) {
         $this->period = $period;
 
         if (empty($this->period) === true) {
@@ -494,7 +620,16 @@ class Event {
         }
     }
 
-    public function set_type($type) {
+    /**
+     * Permet de définir le type de l'évènement.
+     *
+     * @param string $type Identifiant du type de l'évènement.
+     *
+     * @throws \Exception Lève une exception lorsque le type de l'évènement n'est pas valide.
+     *
+     * @return void
+     */
+    public function set_type(string $type) {
         $this->type = $type;
 
         if (isset(self::$TYPES[$this->type]) === false) {
@@ -502,7 +637,17 @@ class Event {
         }
     }
 
-    public function set_startdate($date, $time) {
+    /**
+     * Permet de définir la date de début de l'évènement.
+     *
+     * @param string $date Date au format YYYY-MM-DD.
+     * @param string $time Heure au format HH:MM.
+     *
+     * @throws \Exception Lève une exception lorsque les paramètres ne sont pas valides.
+     *
+     * @return void
+     */
+    public function set_startdate(string $date, string $time) {
         try {
             $preg_match_date = preg_match('#^(?P<year>\d{4}).(?P<month>\d{2}).(?P<day>\d{2})$#', $date);
             $preg_match_time = preg_match('#^(?P<hour>\d{2}).(?P<minute>\d{2})$#', $time);
@@ -520,7 +665,17 @@ class Event {
         }
     }
 
-    public function set_enddate($date, $time) {
+    /**
+     * Permet de définir la date de fin de l'évènement.
+     *
+     * @param string $date Date au format YYYY-MM-DD.
+     * @param string $time Heure au format HH:MM.
+     *
+     * @throws \Exception Lève une exception lorsque les paramètres ne sont pas valides.
+     *
+     * @return void
+     */
+    public function set_enddate(string $date, string $time) {
         if (empty($date) === true || empty($time) === true) {
             $this->enddate = null;
         } else {
@@ -554,7 +709,17 @@ class Event {
         }
     }
 
-    public function set_state($state, $options_states = null) {
+    /**
+     * Permet de définir l'état de l'évènement.
+     *
+     * @param string $state Etat à attribuer à l'évènement.
+     * @param array $options_states Tableau indexé des états.
+     *
+     * @throws \Exception Lève une exception lorsque l'identifiant de l'état n'est pas valide.
+     *
+     * @return void
+     */
+    public function set_state(string $state, array $options_states = null) {
         $this->state = $state;
 
         if ($options_states === null) {
@@ -610,7 +775,7 @@ class Event {
             $this->set_description();
         }
 
-        if (isset($this->description->id) === true && $this->description->id === 0) {
+        if (isset($this->description->id) === true && empty($this->description->id) === true) {
             $this->description->save();
             $this->ideventdescription = $DB->lastInsertId();
         }
@@ -631,7 +796,7 @@ class Event {
             ':idservice' => $this->idservice,
         );
 
-        if ($this->id === 0) {
+        if (empty($this->id) === true) {
             $sql = 'INSERT INTO events(startdate, enddate, state, type, period, ideventdescription, idservice) VALUES(:startdate, :enddate, :state, :type, :period, :ideventdescription, :idservice)';
         } else {
             $sql = 'UPDATE events SET startdate=:startdate, enddate=:enddate, state=:state, type=:type, period=:period, ideventdescription=:ideventdescription, idservice=:idservice WHERE id = :id';
@@ -640,7 +805,7 @@ class Event {
         $query = $DB->prepare($sql);
 
         if ($query->execute($params) === true) {
-            if ($this->id === 0) {
+            if (empty($this->id) === true) {
                 $this->id = $DB->lastInsertId();
             }
         } else {
@@ -651,6 +816,13 @@ class Event {
         }
     }
 
+    /**
+     * Supprime l'objet en base de données.
+     *
+     * @throws \Exception Lève une exception en cas d'erreur lors de la suppression.
+     *
+     * @return void
+     */
     public function delete() {
         global $DB, $LOGGER;
 
@@ -665,6 +837,11 @@ class Event {
         }
     }
 
+    /**
+     * Clôture l'évènement.
+     *
+     * @return boolean Retourne true si l'évènement a pu être clôturer.
+     */
     public function close() {
         global $DB, $LOGGER;
 

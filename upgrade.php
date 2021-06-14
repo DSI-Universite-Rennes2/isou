@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 require __DIR__.'/config.php';
 require PRIVATE_PATH.'/libs/upgrade.php';
@@ -89,7 +97,7 @@ try {
     exit(1);
 }
 
-// Mets à jour la date de dernière mise à jour et le numéro de version d'isou.
+// Met à jour la date de dernière mise à jour et le numéro de version d'isou.
 echo PHP_EOL;
 isou_update_version();
 

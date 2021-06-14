@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 /**
  * Retourne les arguments passés à la requête HTTP.
@@ -7,10 +15,11 @@
  *    -> URL appelée : https://services.univ-rennes2.fr/isou/index.php/configuration/informations
  *    <- valeur retournée : configuration/informations
  *
- * @var string $script_called
+ * @param string $script_called Nom du script PHP appelé.
+ *
  * @return string
  */
-function get_page_name($script_called = 'index.php') {
+function get_page_name(string $script_called = 'index.php') {
     $uri = $_SERVER["REQUEST_URI"];
 
     $pos = strpos($uri, '/'.$script_called);
@@ -30,10 +39,11 @@ function get_page_name($script_called = 'index.php') {
  *    -> URL appelée : https://services.univ-rennes2.fr/isou/index.php/configuration/informations
  *    <- valeur retournée : https://services.univ-rennes2.fr/isou
  *
- * @var boolean $force_https Si True, force l'utilisation du HTTPS.
+ * @param boolean $force_https Si True, force l'utilisation du HTTPS.
+ *
  * @return string
  */
-function get_base_url($force_https = false) {
+function get_base_url(bool $force_https = false) {
     if ($force_https === true || (isset($_SERVER['HTTPS']) === true && empty($_SERVER['HTTPS']) === false)) {
         $scheme = 'https://';
     } else {

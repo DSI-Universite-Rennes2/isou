@@ -1,24 +1,72 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou;
 
+/**
+ * Classe décrivant le contenu d'un groupe de dépendances.
+ */
 class Dependency_Group_Content {
+    /**
+     * Identifiant de l'objet.
+     *
+     * @var integer
+     */
     public $id;
+
+    /**
+     * Identifiant du groupe.
+     *
+     * @var integer
+     */
     public $idgroup;
+
+    /**
+     * Identifiant du service.
+     *
+     * @var integer
+     */
     public $idservice;
+
+    /**
+     * Identifiant de l'état du service.
+     *
+     * @var integer
+     */
     public $servicestate;
 
+    /**
+     * Constructeur de la classe.
+     *
+     * @return void
+     */
     public function __construct() {
         if (isset($this->idgroup) === false) {
             // Instance manuelle.
-            $this->id = 0;
-            $this->idgroup = 0;
-            $this->idservice = 0;
-            $this->servicestate = 1;
+            $this->id = '0';
+            $this->idgroup = '0';
+            $this->idservice = '0';
+            $this->servicestate = State::WARNING;
         }
     }
 
-    public function check_data($groups, $services, $states) {
+    /**
+     * Contrôle les données avant de les enregistrer en base de données.
+     *
+     * @param array $groups Tableau associatif contenant les valeurs autorisés pour la propriété "idgroup".
+     * @param array $services Tableau associatif contenant les valeurs autorisés pour la propriété "idservice".
+     * @param array $states Tableau associatif contenant les valeurs autorisés pour la propriété "servicestate".
+     *
+     * @return string[] Retourne un tableau d'erreurs.
+     */
+    public function check_data(array $groups, array $services, array $states) {
         $errors = array();
 
         if (isset($groups[$this->idgroup]) === false) {
@@ -41,7 +89,16 @@ class Dependency_Group_Content {
         return $errors;
     }
 
-    public static function get_record($options = array()) {
+    /**
+     * Récupère un objet en base de données en fonction des options passées en paramètre.
+     *
+     * @param array $options Tableau d'options. @see get_records.
+     *
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
+     *
+     * @return Group_Content|false
+     */
+    public static function get_record(array $options = array()) {
         if (isset($options['id']) === false) {
             throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] est requis.');
         }
@@ -51,13 +108,24 @@ class Dependency_Group_Content {
         return self::get_records($options);
     }
 
-    public static function get_records($options = array()) {
+    /**
+     * Récupère un tableau d'objets en base de données en fonction des options passées en paramètre.
+     *
+     * Liste des options disponibles : TODO.
+     *
+     * @param array $options Tableau d'options.
+     *
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
+     *
+     * @return Group_Content[]|Group_Content|false
+     */
+    public static function get_records(array $options = array()) {
         global $DB;
 
         $parameters = array();
         $conditions = array();
 
-        // Parcours les options.
+        // Parcourt les options.
         if (isset($options['id']) === true) {
             if (ctype_digit($options['id']) === true) {
                 $conditions[] = 'dgc.id = :id';
@@ -80,7 +148,7 @@ class Dependency_Group_Content {
             unset($options['group']);
         }
 
-        // Construis le WHERE.
+        // Construit le WHERE.
         if (isset($conditions[0]) === true) {
             $sql_conditions = ' WHERE '.implode(' AND ', $conditions);
         } else {
@@ -96,7 +164,7 @@ class Dependency_Group_Content {
             throw new \Exception(__METHOD__.': l\'option \''.$key.'\' n\'a pas été utilisée. Valeur donnée : '.var_export($option, $return = true));
         }
 
-        // Construis la requête.
+        // Construit la requête.
         $sql = 'SELECT dgc.id, dgc.idgroup, dgc.idservice, dgc.servicestate, s.name, s.idplugin'.
             ' FROM dependencies_groups_content dgc'.
             ' JOIN services s ON s.id = dgc.idservice'.
@@ -114,6 +182,11 @@ class Dependency_Group_Content {
         return $query->fetchAll();
     }
 
+    /**
+     * Enregistre l'objet en base de données.
+     *
+     * @return array
+     */
     public function save() {
         global $DB, $LOGGER;
 
@@ -128,7 +201,7 @@ class Dependency_Group_Content {
             ':state' => $this->servicestate,
         );
 
-        if ($this->id === 0) {
+        if (empty($this->id) === true) {
             $sql = 'INSERT INTO dependencies_groups_content(idgroup, idservice, servicestate) VALUES(:idgroup, :idservice, :state)';
         } else {
             $sql = 'UPDATE dependencies_groups_content SET idgroup = :idgroup, idservice = :idservice, servicestate = :state WHERE id = :id';
@@ -137,7 +210,7 @@ class Dependency_Group_Content {
         $query = $DB->prepare($sql);
 
         if ($query->execute($params) === true) {
-            if ($this->id === 0) {
+            if (empty($this->id) === true) {
                 $this->id = $DB->lastInsertId();
             }
 
@@ -152,7 +225,14 @@ class Dependency_Group_Content {
         return $results;
     }
 
-    public function change_state($state) {
+    /**
+     * Change l'état du service.
+     *
+     * @param string $state Identifiant de l'état à attribuer.
+     *
+     * @return array
+     */
+    public function change_state(string $state) {
         global $DB, $LOGGER;
 
         $results = array(
@@ -181,6 +261,11 @@ class Dependency_Group_Content {
         return $results;
     }
 
+    /**
+     * Supprime l'objet en base de données.
+     *
+     * @return array
+     */
     public function delete() {
         global $DB, $LOGGER;
 

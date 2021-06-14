@@ -1,34 +1,106 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou;
 
+/**
+ * Classe décrivant un groupe de dépendances.
+ */
 class Dependency_Group {
+    /**
+     * Identifiant de l'objet.
+     *
+     * @var integer
+     */
     public $id;
+
+    /**
+     * Nom du groupe.
+     *
+     * @var string
+     */
     public $name;
+
+    /**
+     * Témoin indiquant si le groupe est redondé. Valeurs possibles '0' ou '1'.
+     *
+     * @var integer
+     */
     public $redundant;
+
+    /**
+     * État du groupe (voir les constantes de la classe State pour avoir les valeurs possibles).
+     *
+     * @var integer
+     */
     public $groupstate;
+
+    /**
+     * Identifiant du service.
+     *
+     * @var integer
+     */
     public $idservice;
+
+    /**
+     * Nom du service.
+     *
+     * @var string
+     */
     public $service;
+
+    /**
+     * Identifiant du message.
+     *
+     * @var integer
+     */
     public $idmessage;
+
+    /**
+     * Contenu du message.
+     *
+     * @var string
+     */
     public $message;
 
+    /**
+     * Constructeur de la classe.
+     *
+     * @return void
+     */
     public function __construct() {
         if (isset($this->id) === false) {
             // Instance manuelle.
-            $this->id = 0;
+            $this->id = '0';
             $this->name = 'Groupe de dépendances';
-            $this->redundant = 0;
+            $this->redundant = '0';
             $this->groupstate = State::WARNING;
-            $this->idservice = 1;
+            $this->idservice = '1';
             $this->service = '';
-            $this->idmessage = 1;
-            $this->message = null;
+            $this->idmessage = '1';
+            $this->message = '';
         }
 
         $this->contents = null;
     }
 
-    public function check_data($redundants, $states, $services) {
+    /**
+     * Contrôle les données avant de les enregistrer en base de données.
+     *
+     * @param array $redundants Tableau associatif contenant les valeurs autorisés pour la propriété "redundant".
+     * @param array $states Tableau associatif contenant les valeurs autorisés pour la propriété "groupstate".
+     * @param array $services Tableau associatif contenant les valeurs autorisés pour la propriété "idservice".
+     *
+     * @return string[] Retourne un tableau d'erreurs.
+     */
+    public function check_data(array $redundants, array $states, array $services) {
         $errors = array();
 
         $this->name = htmlentities($this->name, ENT_NOQUOTES, 'UTF-8');
@@ -60,6 +132,11 @@ class Dependency_Group {
         return $errors;
     }
 
+    /**
+     * Retourne le contenu de groupe.
+     *
+     * @return Dependency_Group_Content[]
+     */
     public function get_contents() {
         if ($this->contents === null) {
             $this->set_contents();
@@ -68,12 +145,25 @@ class Dependency_Group {
         return $this->contents;
     }
 
+    /**
+     * Définit le contenu de ce groupe.
+     *
+     * @return void
+     */
     public function set_contents() {
         $this->contents = Dependency_Group_Content::get_records(array('group' => $this->id));
     }
 
-    // TODO: split this function
-    public static function get_dependencies_groups_and_groups_contents_by_service_sorted_by_flags($idservice) {
+    /**
+     * Retourne les groupes de dépendances et leur contenu triés par état.
+     *
+     * TODO: scinder cette fonction.
+     *
+     * @param integer $idservice Identifiant du service.
+     *
+     * @return integer|false
+     */
+    public static function get_dependencies_groups_and_groups_contents_by_service_sorted_by_flags(int $idservice) {
         global $DB;
 
         $groups = array();
@@ -109,7 +199,13 @@ class Dependency_Group {
         return $groups;
     }
 
-    // TODO: remplacer par Dependency_Message::get_record
+    /**
+     * Retourne l'identifiant d'un message.
+     *
+     * TODO: remplacer par Dependency_Message::get_record.
+     *
+     * @return integer|false
+     */
     public function get_message() {
         global $DB;
 
@@ -125,7 +221,16 @@ class Dependency_Group {
         }
     }
 
-    public static function get_record($options = array()) {
+    /**
+     * Récupère un objet en base de données en fonction des options passées en paramètre.
+     *
+     * @param array $options Tableau d'options. @see get_records.
+     *
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
+     *
+     * @return Dependency_Group|false
+     */
+    public static function get_record(array $options = array()) {
         if (isset($options['id']) === false) {
             throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] est requis.');
         }
@@ -135,13 +240,24 @@ class Dependency_Group {
         return self::get_records($options);
     }
 
-    public static function get_records($options = array()) {
+    /**
+     * Récupère un tableau d'objets en base de données en fonction des options passées en paramètre.
+     *
+     * Liste des options disponibles : TODO.
+     *
+     * @param array $options Tableau d'options.
+     *
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
+     *
+     * @return Dependency_Group[]Dependency_Group|false
+     */
+    public static function get_records(array $options = array()) {
         global $DB;
 
         $conditions = array();
         $parameters = array();
 
-        // Parcours les options.
+        // Parcourt les options.
         if (isset($options['id']) === true) {
             if (ctype_digit($options['id']) === true) {
                 $conditions[] = 'dg.id = :id';
@@ -164,7 +280,7 @@ class Dependency_Group {
             unset($options['service']);
         }
 
-        // Construis le WHERE.
+        // Construit le WHERE.
         if (isset($conditions[0]) === true) {
             $sql_conditions = ' WHERE '.implode(' AND ', $conditions);
         } else {
@@ -180,7 +296,7 @@ class Dependency_Group {
             throw new \Exception(__METHOD__.': l\'option \''.$key.'\' n\'a pas été utilisée. Valeur donnée : '.var_export($option, $return = true));
         }
 
-        // Construis la requête.
+        // Construit la requête.
         $sql = 'SELECT dg.id, dg.name, dg.redundant, dg.groupstate, dg.idservice, dg.idmessage, dm.message'.
             ' FROM dependencies_groups dg'.
             ' JOIN dependencies_messages dm ON dm.id = dg.idmessage'.
@@ -198,7 +314,15 @@ class Dependency_Group {
         return $query->fetchAll();
     }
 
-    public static function get_service_reverse_dependency_groups($idservice, $state = null) {
+    /**
+     * Retourne les groupes de dépendances inversés.
+     *
+     * @param string $idservice Identifiant du service.
+     * @param string $state Identifiant de l'état.
+     *
+     * @return array
+     */
+    public static function get_service_reverse_dependency_groups(string $idservice, string $state = null) {
         global $DB;
 
         $conditions = array();
@@ -223,6 +347,11 @@ class Dependency_Group {
         return $query->fetchAll(\PDO::FETCH_CLASS, 'UniversiteRennes2\Isou\Dependency_Group');
     }
 
+    /**
+     * Enregistre un message en base de données.
+     *
+     * @return integer|false
+     */
     public function set_message() {
         global $DB, $LOGGER;
 
@@ -238,6 +367,11 @@ class Dependency_Group {
         }
     }
 
+    /**
+     * Enregistre l'objet en base de données.
+     *
+     * @return array
+     */
     public function save() {
         global $DB, $LOGGER;
 
@@ -254,7 +388,7 @@ class Dependency_Group {
             ':idmessage' => $this->idmessage,
         );
 
-        if ($this->id === 0) {
+        if (empty($this->id) === true) {
             $sql = 'INSERT INTO dependencies_groups(name, redundant, groupstate, idservice, idmessage) VALUES(:name, :redundant, :groupstate, :idservice, :idmessage)';
         } else {
             $sql = 'UPDATE dependencies_groups SET name=:name, redundant=:redundant, groupstate=:groupstate, idservice=:idservice, idmessage=:idmessage WHERE id = :id';
@@ -263,7 +397,7 @@ class Dependency_Group {
         $query = $DB->prepare($sql);
 
         if ($query->execute($params) === true) {
-            if ($this->id === 0) {
+            if (empty($this->id) === true) {
                 $this->id = $DB->lastInsertId();
             }
             $results['successes'] = array('Les données ont été correctement enregistrées.');
@@ -277,6 +411,11 @@ class Dependency_Group {
         return $results;
     }
 
+    /**
+     * Duplique un groupe de dépendances.
+     *
+     * @return array
+     */
     public function duplicate() {
         global $DB;
 
@@ -310,6 +449,11 @@ class Dependency_Group {
         return $results;
     }
 
+    /**
+     * Supprime l'objet en base de données.
+     *
+     * @return array
+     */
     public function delete() {
         global $DB, $LOGGER;
 
@@ -345,6 +489,11 @@ class Dependency_Group {
         return $results;
     }
 
+    /**
+     * Détermine si le groupe est en état de fonctionnement.
+     *
+     * @return boolean
+     */
     public function is_up() {
         global $DB;
 

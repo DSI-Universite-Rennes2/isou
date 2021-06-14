@@ -1,25 +1,72 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou;
 
+/**
+ * Classe décrivant une description d'un évènement.
+ */
 class Event_Description {
+    /**
+     * Identifiant de l'objet.
+     *
+     * @var integer
+     */
     public $id;
+
+    /**
+     * Description de l'évènement.
+     *
+     * @var string
+     */
     public $description;
+
+    /**
+     * Témoin indiquant si la description a été générée automatiquement. Valeurs possibles '0' ou '1'.
+     *
+     * @var integer
+     */
     public $autogen;
 
+    /**
+     * Constructeur de la classe.
+     *
+     * @return void
+     */
     public function __construct() {
         if (isset($this->id) === false) {
-            $this->id = 0;
+            $this->id = '0';
             $this->description = '';
             $this->autogen = 0;
         }
     }
 
+    /**
+     * Représentation textuelle de la classe.
+     *
+     * @return string
+     */
     public function __tostring() {
         return $this->description;
     }
 
-    public static function get_record($options = array()) {
+    /**
+     * Récupère un objet en base de données en fonction des options passées en paramètre.
+     *
+     * @param array $options Tableau d'options. @see get_records.
+     *
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
+     *
+     * @return Event_Description|false
+     */
+    public static function get_record(array $options = array()) {
         if (isset($options['id']) === false && isset($options['description']) === false) {
             throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] ou $options[\'description\'] est requis.');
         }
@@ -29,13 +76,24 @@ class Event_Description {
         return self::get_records($options);
     }
 
-    public static function get_records($options = array()) {
+    /**
+     * Récupère un tableau d'objets en base de données en fonction des options passées en paramètre.
+     *
+     * Liste des options disponibles : TODO.
+     *
+     * @param array $options Tableau d'options.
+     *
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
+     *
+     * @return Event_Description[]|Event_Description|false
+     */
+    public static function get_records(array $options = array()) {
         global $DB;
 
         $conditions = array();
         $parameters = array();
 
-        // Parcours les options.
+        // Parcourt les options.
         if (isset($options['id']) === true) {
             if (ctype_digit($options['id']) === true) {
                 $conditions[] = 'ed.id = :id';
@@ -69,7 +127,7 @@ class Event_Description {
             unset($options['autogen']);
         }
 
-        // Construis le WHERE.
+        // Construit le WHERE.
         if (isset($conditions[0]) === true) {
             $sql_conditions = ' WHERE '.implode(' AND ', $conditions);
         } else {
@@ -85,7 +143,7 @@ class Event_Description {
             throw new \Exception(__METHOD__.': l\'option \''.$key.'\' n\'a pas été utilisée. Valeur donnée : '.var_export($option, $return = true));
         }
 
-        // Construis la requête.
+        // Construit la requête.
         $sql = 'SELECT ed.id, ed.description, ed.autogen'.
             ' FROM events_descriptions ed'.
             $sql_conditions;
@@ -100,7 +158,13 @@ class Event_Description {
 
         return $query->fetchAll();
     }
-
+    /**
+     * Enregistre l'objet en base de données.
+     *
+     * @throws \Exception Lève une exception en cas d'erreur lors de l'enregistrement.
+     *
+     * @return void
+     */
     public function save() {
         global $DB, $LOGGER;
 
@@ -109,7 +173,7 @@ class Event_Description {
             ':autogen' => $this->autogen,
         );
 
-        if ($this->id === 0) {
+        if (empty($this->id) === true) {
             $sql = 'INSERT INTO events_descriptions(description, autogen) VALUES(:description, :autogen)';
         } else {
             $sql = 'UPDATE events_descriptions SET description=:description, autogen=:autogen WHERE id = :id';
@@ -119,7 +183,7 @@ class Event_Description {
         $query = $DB->prepare($sql);
 
         if ($query->execute($params) === true) {
-            if ($this->id === 0) {
+            if (empty($this->id) === true) {
                 $this->id = $DB->lastInsertId();
             }
         } else {
@@ -130,6 +194,13 @@ class Event_Description {
         }
     }
 
+    /**
+     * Supprime l'objet en base de données.
+     *
+     * @throws \Exception Lève une exception en cas d'erreur lors de la suppression.
+     *
+     * @return void
+     */
     public function delete() {
         global $DB, $LOGGER;
 

@@ -1,12 +1,12 @@
 <?php
-/*
- * This file is part of Isou project.
+/**
+ * This file is part of isou project.
  *
- * (c) Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
  */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou\tests\unit;
 
@@ -16,9 +16,14 @@ use UniversiteRennes2\Mock\PDO;
 $DB = new PDO();
 
 /**
- * Classe pour tester la classe UniversiteRennes2\Isou\State.
+ * Teste la classe State.
  */
 class State extends atoum {
+    /**
+     * Teste la méthode __construct.
+     *
+     * @return void
+     */
     public function test_construct() {
         $i = 1;
 
@@ -33,6 +38,11 @@ class State extends atoum {
                 ->variable($this->testedInstance->image)->isEqualTo('');
     }
 
+    /**
+     * Teste la méthode __tostring.
+     *
+     * @return void
+     */
     public function test_tostring() {
         $i = 1;
 
@@ -43,6 +53,11 @@ class State extends atoum {
                 ->isEqualTo($this->testedInstance->get_flag_html_renderer());
     }
 
+    /**
+     * Teste la méthode get_flag_html_renderer.
+     *
+     * @return void
+     */
     public function test_get_flag_html_renderer() {
         $i = 1;
 
@@ -53,6 +68,11 @@ class State extends atoum {
                 ->isEqualTo('<img src="/themes//images/" alt="" width="16px" height="16px" />');
     }
 
+    /**
+     * Teste la méthode get_record.
+     *
+     * @return void
+     */
     public function test_get_record() {
         $i = 1;
 
@@ -73,6 +93,11 @@ class State extends atoum {
                 );
     }
 
+    /**
+     * Teste la méthode get_records.
+     *
+     * @return void
+     */
     public function test_get_records() {
         $i = 1;
 

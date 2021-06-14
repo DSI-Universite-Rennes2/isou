@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 use UniversiteRennes2\Isou\Dependency_Group;
 use UniversiteRennes2\Isou\Dependency_Group_Content;
@@ -20,7 +28,7 @@ if ($event === false) {
 
 $events = array($event);
 
-// TODO: récupérer les services de services (Isou)
+// TODO: récupérer les services de services (Isou).
 $groups = Dependency_Group::get_records(array('service' => $event->idservice));
 foreach ($groups as $group) {
     $contents = Dependency_Group_Content::get_records(array('group' => $group->id));

@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 use UniversiteRennes2\Isou\Service;
 
@@ -54,7 +62,7 @@ sort($services);
 
 $previews = array();
 if (isset($_POST['service']) === true && empty($_POST['service']) === false) {
-    if ($service->id === 0) {
+    if (empty($service->id) === true) {
         // On ajoute un ou des services... on active les regexp.
         $found = false;
         $regexp = str_replace('/', '\/', $_POST['service']);

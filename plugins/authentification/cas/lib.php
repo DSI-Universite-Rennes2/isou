@@ -1,5 +1,14 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
 
+declare(strict_types=1);
+
+use UniversiteRennes2\Isou\Plugin;
 use UniversiteRennes2\Isou\User;
 
 /**
@@ -9,7 +18,7 @@ use UniversiteRennes2\Isou\User;
  *
  * @return void
  */
-function authentification_login($plugin) {
+function authentification_login(Plugin $plugin) {
     phpCAS::setVerbose($plugin->settings->cas_verbose);
 
     // Initialize phpCAS client.
@@ -108,7 +117,7 @@ function authentification_login($plugin) {
  *
  * @return void
  */
-function authentification_logout($plugin) {
+function authentification_logout(Plugin $plugin) {
     phpCAS::setVerbose($plugin->settings->cas_verbose);
 
     // Initialize phpCAS client.

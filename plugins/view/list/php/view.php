@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 use UniversiteRennes2\Isou\Category;
 use UniversiteRennes2\Isou\Event;
@@ -55,7 +63,7 @@ foreach ($services as $service) {
                 if (empty($event->enddate) === true || $event->enddate > $now) {
                     $service->scheduled_events = true;
                 }
-            } else if ($event->enddate < $now && $event->type === Event::TYPE_UNSCHEDULED) {
+            } elseif ($event->enddate < $now && $event->type === Event::TYPE_UNSCHEDULED) {
                 $categories[$service->idcategory]->past_events_count++;
                 $service->count_unscheduled_events++;
             }

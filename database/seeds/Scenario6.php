@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Initialise le scénario 6.
  *
@@ -8,6 +7,8 @@
  *    Un évènement prévu est en cours.
  *    Une fois le cron lancé, le service isou doit passer en rouge.
  */
+
+declare(strict_types=1);
 
 use Phinx\Seed\AbstractSeed;
 
@@ -18,6 +19,11 @@ class Scenario6 extends AbstractSeed {
     const ISOU_SEED_PREFIX_ID = '6';
     const ISOU_SEED_NAME = 'Scenario '.self::ISOU_SEED_PREFIX_ID;
 
+    /**
+     * Exécute la mise en place du scénario.
+     *
+     * @return void
+     */
     public function run() {
         // Création des catégories.
         $data = array(

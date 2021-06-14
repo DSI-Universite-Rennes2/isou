@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 use UniversiteRennes2\Isou\Plugin;
 
@@ -13,6 +21,11 @@ function has_new_version() {
     return CURRENT_VERSION !== $CFG['version'];
 }
 
+/**
+ * Retourne la configuration d'isou.
+ *
+ * @return array
+ */
 function get_configurations() {
     global $DB;
 
@@ -50,6 +63,11 @@ function get_configurations() {
     return $configurations;
 }
 
+/**
+ * Retourne la liste des plugins de monitoring.
+ *
+ * @return array
+ */
 function get_plugins() {
     $plugins = Plugin::get_records(array('type' => 'monitoring'));
     foreach ($plugins as $plugin) {
@@ -59,7 +77,16 @@ function get_plugins() {
     return $plugins;
 }
 
-function set_configuration($key, $value, $field = null) {
+/**
+ * Enregistre un paramètre de la configuration générale.
+ *
+ * @param string $key Nom du paramètre.
+ * @param string $value Valeur du paramètre.
+ * @param string $field Libellé du paramètre.
+ *
+ * @return boolean
+ */
+function set_configuration(string $key, string $value, string $field = null) {
     global $DB;
 
     $sql = "UPDATE configuration SET value=? WHERE key=?";

@@ -1,12 +1,12 @@
 <?php
-/*
- * This file is part of Isou project.
+/**
+ * This file is part of isou project.
  *
- * (c) Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
  */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou\tests\unit;
 
@@ -19,9 +19,14 @@ $DB = new PDO();
 $LOGGER = new Logger();
 
 /**
- * Classe pour tester la classe UniversiteRennes2\Isou\Dependency_Group.
+ * Teste la classe Dependency_Group.
  */
 class Dependency_Group extends atoum {
+    /**
+     * Teste la méthode __construct.
+     *
+     * @return void
+     */
     public function test_construct() {
         $i = 1;
 
@@ -32,6 +37,11 @@ class Dependency_Group extends atoum {
                 ->variable($this->testedInstance->id)->isEqualTo(0);
     }
 
+    /**
+     * Teste la méthode check_data.
+     *
+     * @return void
+     */
     public function test_check_data() {
         $i = 1;
 
@@ -60,6 +70,11 @@ class Dependency_Group extends atoum {
                 ->contains('Le service choisi est invalide.');
     }
 
+    /**
+     * Teste la méthode get_dependencies_groups_and_groups_contents_by_service_sorted_by_flags.
+     *
+     * @return void
+     */
     public function test_get_dependencies_groups_and_groups_contents_by_service_sorted_by_flags() {
         // Ce test génère une boucle infinie à cause du `while ($group = $query->fetch())`.
         return;
@@ -73,6 +88,11 @@ class Dependency_Group extends atoum {
                 ->array($this->testedInstance->get_dependencies_groups_and_groups_contents_by_service_sorted_by_flags($idservice = 1));
     }
 
+    /**
+     * Teste la méthode get_record.
+     *
+     * @return void
+     */
     public function test_get_record() {
         $i = 1;
 
@@ -93,6 +113,11 @@ class Dependency_Group extends atoum {
                 );
     }
 
+    /**
+     * Teste la méthode get_records.
+     *
+     * @return void
+     */
     public function test_get_records() {
         global $DB;
 
@@ -150,6 +175,11 @@ class Dependency_Group extends atoum {
         $DB->test_pdostatement->test_execute = false;
     }
 
+    /**
+     * Teste la méthode get_service_reverse_dependency_groups.
+     *
+     * @return void
+     */
     public function test_get_service_reverse_dependency_groups() {
         $i = 1;
 
@@ -157,9 +187,14 @@ class Dependency_Group extends atoum {
         $this->assert(__METHOD__.' : test #'.$i++)
             ->given($this->newTestedInstance)
             ->then
-                ->array($this->testedInstance->get_service_reverse_dependency_groups($idservce = 1, $state = 1));
+                ->array($this->testedInstance->get_service_reverse_dependency_groups($idservice = '1', $state = State::WARNING));
     }
 
+    /**
+     * Teste la méthode set_message.
+     *
+     * @return void
+     */
     public function test_set_message() {
         global $DB;
 
@@ -179,6 +214,11 @@ class Dependency_Group extends atoum {
                 ->boolean($this->testedInstance->set_message())->isEqualTo(false);
     }
 
+    /**
+     * Teste la méthode save.
+     *
+     * @return void
+     */
     public function test_save() {
         global $DB;
 
@@ -231,6 +271,11 @@ class Dependency_Group extends atoum {
                 ->variable($this->testedInstance->id)->isEqualTo(0);
     }
 
+    /**
+     * Teste la méthode duplicate.
+     *
+     * @return void
+     */
     public function test_duplicate() {
         $i = 1;
 
@@ -251,6 +296,11 @@ class Dependency_Group extends atoum {
                 ->array($this->testedInstance->duplicate());
     }
 
+    /**
+     * Teste la méthode delete.
+     *
+     * @return void
+     */
     public function test_delete() {
         global $DB;
 
@@ -284,6 +334,11 @@ class Dependency_Group extends atoum {
                     });
     }
 
+    /**
+     * Teste la méthode is_up.
+     *
+     * @return void
+     */
     public function test_is_up() {
         $i = 1;
 

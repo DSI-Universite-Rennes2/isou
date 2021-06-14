@@ -1,12 +1,12 @@
 <?php
-/*
- * This file is part of Isou project.
+/**
+ * This file is part of isou project.
  *
- * (c) Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
  */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou\tests\unit;
 
@@ -18,13 +18,23 @@ $DB = new PDO();
 $LOGGER = new Logger();
 
 /**
- * Classe pour tester la classe UniversiteRennes2\Isou\Plugin.
+ * Teste la classe Plugin.
  */
 class Plugin extends atoum {
+    /**
+     * Teste la méthode __construct.
+     *
+     * @return void
+     */
     public function test_construct() {
         // Rien à tester...
     }
 
+    /**
+     * Teste la méthode get_record.
+     *
+     * @return void
+     */
     public function test_get_record() {
         $i = 1;
 
@@ -45,6 +55,11 @@ class Plugin extends atoum {
                 );
     }
 
+    /**
+     * Teste la méthode get_records.
+     *
+     * @return void
+     */
     public function test_get_records() {
         global $DB;
 
@@ -118,18 +133,38 @@ class Plugin extends atoum {
         $DB->test_pdostatement->test_execute = false;
     }
 
+    /**
+     * Teste la méthode set_settings.
+     *
+     * @return void
+     */
     public function test_set_settings() {
         // Rien à tester...
     }
 
+    /**
+     * Teste la méthode install.
+     *
+     * @return void
+     */
     public function test_install() {
         // Rien à tester...
     }
 
+    /**
+     * Teste la méthode install_settings.
+     *
+     * @return void
+     */
     public function test_install_settings() {
         // Rien à tester...
     }
 
+    /**
+     * Teste la méthode save.
+     *
+     * @return void
+     */
     public function test_save() {
         global $DB;
 
@@ -150,10 +185,20 @@ class Plugin extends atoum {
                 ->variable($this->testedInstance->id)->isEqualTo(42);
     }
 
+    /**
+     * Teste la méthode update.
+     *
+     * @return void
+     */
     public function test_update() {
         // Rien à tester...
     }
 
+    /**
+     * Teste la méthode update_settings.
+     *
+     * @return void
+     */
     public function test_update_settings() {
         // Rien à tester...
     }

@@ -1,12 +1,12 @@
 <?php
-/*
- * This file is part of Isou project.
+/**
+ * This file is part of isou project.
  *
- * (c) Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
  */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou\tests\unit;
 
@@ -19,9 +19,14 @@ $DB = new PDO();
 $LOGGER = new Logger();
 
 /**
- * Classe pour tester la classe UniversiteRennes2\Isou\Service.
+ * Teste la classe Service.
  */
 class Service extends atoum {
+    /**
+     * Teste la méthode __construct.
+     *
+     * @return void
+     */
     public function test_construct() {
         $i = 1;
 
@@ -32,6 +37,11 @@ class Service extends atoum {
                 ->variable($this->testedInstance->id)->isEqualTo(0);
     }
 
+    /**
+     * Teste la méthode __tostring.
+     *
+     * @return void
+     */
     public function test_tostring() {
         $i = 1;
 
@@ -42,6 +52,11 @@ class Service extends atoum {
                 ->string($this->testedInstance->__tostring());
     }
 
+    /**
+     * Teste la méthode check_data.
+     *
+     * @return void
+     */
     public function test_check_data() {
         global $DB;
 
@@ -117,6 +132,11 @@ class Service extends atoum {
                 ->contains('La valeur choisie pour le verrouillage n\'est pas valide.');
     }
 
+    /**
+     * Teste la méthode get_record.
+     *
+     * @return void
+     */
     public function test_get_record() {
         $i = 1;
 
@@ -137,6 +157,11 @@ class Service extends atoum {
                 );
     }
 
+    /**
+     * Teste la méthode get_records.
+     *
+     * @return void
+     */
     public function test_get_records() {
         global $DB;
 
@@ -306,6 +331,11 @@ class Service extends atoum {
         $DB->test_pdostatement->test_execute = false;
     }
 
+    /**
+     * Teste la méthode save.
+     *
+     * @return void
+     */
     public function test_save() {
         global $DB;
 
@@ -358,6 +388,11 @@ class Service extends atoum {
                 ->variable($this->testedInstance->id)->isEqualTo(0);
     }
 
+    /**
+     * Teste la méthode delete.
+     *
+     * @return void
+     */
     public function test_delete() {
         global $DB;
 
@@ -391,6 +426,11 @@ class Service extends atoum {
                     });
     }
 
+    /**
+     * Teste la méthode change_state.
+     *
+     * @return void
+     */
     public function test_change_state() {
         global $DB;
 
@@ -416,6 +456,11 @@ class Service extends atoum {
                 );
     }
 
+    /**
+     * Teste la méthode enable.
+     *
+     * @return void
+     */
     public function test_enable() {
         global $DB;
 
@@ -435,6 +480,11 @@ class Service extends atoum {
                 ->boolean($this->testedInstance->enable())->isEqualTo(false);
     }
 
+    /**
+     * Teste la méthode disable.
+     *
+     * @return void
+     */
     public function test_disable() {
         global $DB;
 
@@ -454,6 +504,11 @@ class Service extends atoum {
                 ->boolean($this->testedInstance->disable())->isEqualTo(false);
     }
 
+    /**
+     * Teste la méthode visible.
+     *
+     * @return void
+     */
     public function test_visible() {
         global $DB;
 
@@ -473,6 +528,11 @@ class Service extends atoum {
                 ->boolean($this->testedInstance->visible())->isEqualTo(false);
     }
 
+    /**
+     * Teste la méthode hide.
+     *
+     * @return void
+     */
     public function test_hide() {
         global $DB;
 
@@ -492,6 +552,11 @@ class Service extends atoum {
                 ->boolean($this->testedInstance->hide())->isEqualTo(false);
     }
 
+    /**
+     * Teste la méthode lock.
+     *
+     * @return void
+     */
     public function test_lock() {
         global $DB;
 
@@ -511,6 +576,11 @@ class Service extends atoum {
                 ->boolean($this->testedInstance->lock(State::OK))->isEqualTo(false);
     }
 
+    /**
+     * Teste la méthode unlock.
+     *
+     * @return void
+     */
     public function test_unlock() {
         global $DB;
 
@@ -530,6 +600,11 @@ class Service extends atoum {
                 ->boolean($this->testedInstance->unlock())->isEqualTo(false);
     }
 
+    /**
+     * Teste la méthode get_dependencies.
+     *
+     * @return void
+     */
     public function test_get_dependencies() {
         $i = 1;
 
@@ -541,6 +616,11 @@ class Service extends atoum {
                 ->array($this->testedInstance->get_dependencies());
     }
 
+    /**
+     * Teste la méthode get_reverse_dependencies.
+     *
+     * @return void
+     */
     public function test_get_reverse_dependencies() {
         $i = 1;
 
@@ -551,6 +631,11 @@ class Service extends atoum {
                 ->array($this->testedInstance->get_reverse_dependencies());
     }
 
+    /**
+     * Teste la méthode set_reverse_dependencies.
+     *
+     * @return void
+     */
     public function test_set_reverse_dependencies() {
         $i = 1;
 
@@ -561,6 +646,11 @@ class Service extends atoum {
                 ->variable($this->testedInstance->reverse_dependencies)->isEqualTo($this->testedInstance->get_reverse_dependencies());
     }
 
+    /**
+     * Teste la méthode get_all_events.
+     *
+     * @return void
+     */
     public function test_get_all_events() {
         $i = 1;
 
@@ -572,6 +662,11 @@ class Service extends atoum {
                 ->array($this->testedInstance->get_all_events());
     }
 
+    /**
+     * Teste la méthode get_current_event.
+     *
+     * @return void
+     */
     public function test_get_current_event() {
         $i = 1;
 
@@ -583,6 +678,11 @@ class Service extends atoum {
                 ->object($this->testedInstance->get_current_event());
     }
 
+    /**
+     * Teste la méthode get_closed_event.
+     *
+     * @return void
+     */
     public function test_get_closed_event() {
         $i = 1;
 
@@ -594,6 +694,11 @@ class Service extends atoum {
                 ->object($this->testedInstance->get_closed_event());
     }
 
+    /**
+     * Teste la méthode get_regular_events.
+     *
+     * @return void
+     */
     public function test_get_regular_events() {
         $i = 1;
 

@@ -1,5 +1,5 @@
 <form action="{$smarty.const.URL}/index.php/services/nagios/edit/{$service->id}" class="form-horizontal" method="post">
-	{if $service->id === 0}
+	{if empty($service->id) === true}
 		<h2>Ajouter un service Nagios</h2>
 	{else}
 		<h2>Remplacer le service {$service->name}</h2>

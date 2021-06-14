@@ -1,20 +1,27 @@
 <?php
-
 /**
+ * This file is part of isou project.
+ *
  * Fonctions liées aux mises à jour des services du plugin Nagios.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
  */
 
+declare(strict_types=1);
+
+use UniversiteRennes2\Isou\Plugin;
 use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
 /**
- * Mets l'état des services du plugin Nagios.
+ * Met l'état des services du plugin Nagios.
  *
- * @param UniversiteRennes2\Isou\Plugin $plugin Une instance du plugin Nagios.
+ * @param Plugin $plugin Une instance du plugin Nagios.
  *
  * @return boolean True si la mise à jour s'est déroulée correctement ; False si une erreur est survenue.
  */
-function plugin_nagios_update($plugin) {
+function plugin_nagios_update(Plugin $plugin) {
     global $LOGGER;
 
     // Vérifie si le fichier est lisible.
@@ -92,7 +99,7 @@ function plugin_nagios_update($plugin) {
         $LOGGER->addError('Le cache n\'a pas pu être écrit dans le répertoire "'.$cache_path.'".');
     }
 
-    // Mets à jour les états des services Nagios dans la base de données d'Isou.
+    // Met à jour les états des services Nagios dans la base de données d'Isou.
     foreach (Service::get_records(array('plugin' => PLUGIN_NAGIOS)) as $service) {
         $id = md5($service->name);
 

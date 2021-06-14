@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 use UniversiteRennes2\Isou\Plugin;
 
@@ -32,7 +40,7 @@ if (has_new_version() === true) {
 // Charge les plugins.
 $plugins = get_plugins();
 
-// Créé un fichier cron.pid.
+// Crée un fichier cron.pid.
 $pid_file = PRIVATE_PATH.'/cron.pid';
 if (is_file($pid_file) === true) {
     echo 'Le fichier '.$pid_file.' existe déjà. Un processus du cron est en cours ?';
@@ -44,7 +52,7 @@ if (is_file($pid_file) === true) {
 
         // Si le fichier existe depuis plus de 10 minutes, alerter les admins.
         $atime = fileatime($pid_file);
-        if ($atime !== false && $atime + (10 * 60) < TIME) {
+        if ($atime !== false && ($atime + (10 * 60)) < TIME) {
             error_log('Le fichier \''.$pid_file.'\' a été créé depuis plus de 10 minutes.'.PHP_EOL.
                 'Il est probablement nécessaire de tuer le processus '.$pid.'.');
             exit(1);
@@ -66,7 +74,7 @@ file_put_contents($pid_file, getmypid());
 
 require_once PRIVATE_PATH.'/libs/cron.php';
 
-// Mets à jour les backends.
+// Met à jour les backends.
 $plugins = Plugin::get_records(array('active' => true, 'type' => 'monitoring'));
 foreach ($plugins as $plugin) {
     if ($plugin->codename === 'isou') {
@@ -91,7 +99,7 @@ foreach ($plugins as $plugin) {
     }
 }
 
-// Mets à jour les services ISOU.
+// Met à jour les services ISOU.
 update_services_tree();
 
 // On regénère le fichier isou.json.
@@ -100,7 +108,7 @@ cron_regenerate_json();
 // Nettoie les anciens évènements des plugins autres qu'Isou.
 cron_delete_old_plugin_events();
 
-// Mets à jour la base de données.
+// Met à jour la base de données.
 $sql = "UPDATE configuration SET value = :value WHERE key = :key";
 $query = $DB->prepare($sql);
 $query->execute(array(':value' => strftime('%FT%T'), ':key' => 'last_cron_update'));

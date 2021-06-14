@@ -1,21 +1,81 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou;
 
+/**
+ * Classe décrivant un module.
+ */
 class Plugin {
+    /**
+     * Identifiant de l'objet.
+     *
+     * @var integer
+     */
     public $id;
+
+    /**
+     * Nom du module.
+     *
+     * @var string
+     */
     public $name;
+
+    /**
+     * Nom de code unique du module.
+     *
+     * @var string
+     */
     public $codename;
+
+    /**
+     * Témoin indiquant si le module est activé. Valeurs possibles '0' ou '1'.
+     *
+     * @var integer
+     */
     public $active;
+
+    /**
+     * Numéro de version du module.
+     *
+     * @var string
+     */
     public $version;
+
+    /**
+     * Paramètres du module.
+     *
+     * @var stdClass[]
+     */
     public $settings;
 
+    /**
+     * Constructeur de la classe.
+     *
+     * @return void
+     */
     public function __construct() {
         $this->settings = new \stdClass();
         $this->set_settings();
     }
 
-    public static function get_record($options = array()) {
+    /**
+     * Récupère un objet en base de données en fonction des options passées en paramètre.
+     *
+     * @param array $options Tableau d'options. @see get_records.
+     *
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
+     *
+     * @return Plugin|false
+     */
+    public static function get_record(array $options = array()) {
         if (isset($options['id']) === false && isset($options['codename']) === false) {
             throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] est requis.');
         }
@@ -25,13 +85,24 @@ class Plugin {
         return self::get_records($options);
     }
 
-    public static function get_records($options = array()) {
+    /**
+     * Récupère un tableau d'objets en base de données en fonction des options passées en paramètre.
+     *
+     * Liste des options disponibles : TODO.
+     *
+     * @param array $options Tableau d'options.
+     *
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
+     *
+     * @return Plugin[]|Plugin|false
+     */
+    public static function get_records(array $options = array()) {
         global $DB;
 
         $conditions = array();
         $parameters = array();
 
-        // Parcours les options.
+        // Parcourt les options.
         if (isset($options['id']) === true) {
             if (ctype_digit($options['id']) === true) {
                 $conditions[] = 'p.id = :id';
@@ -76,7 +147,7 @@ class Plugin {
             unset($options['active']);
         }
 
-        // Construis le WHERE.
+        // Construit le WHERE.
         if (isset($conditions[0]) === true) {
             $sql_conditions = ' WHERE '.implode(' AND ', $conditions);
         } else {
@@ -92,7 +163,7 @@ class Plugin {
             throw new \Exception(__METHOD__.': l\'option \''.$key.'\' n\'a pas été utilisée. Valeur donnée : '.var_export($option, $return = true));
         }
 
-        // Construis la requête.
+        // Construit la requête.
         if (isset($options['fetch_column']) === true) {
             $sql = 'SELECT p.id, p.name'.
                 ' FROM plugins p'.
@@ -121,6 +192,11 @@ class Plugin {
         return $query->fetchAll();
     }
 
+    /**
+     * Définit les paramètres du module.
+     *
+     * @return void
+     */
     public function set_settings() {
         global $DB, $LOGGER;
 
@@ -135,13 +211,28 @@ class Plugin {
         }
     }
 
+    /**
+     * Installe le module en base de données.
+     *
+     * TODO: retourner un truc.
+     *
+     * @return void
+     */
     public function install() {
         echo 'Installation du plugin '.$this->name.' ('.$this->version.')'.PHP_EOL;
 
-        return $this->save();
+        $this->save();
     }
 
-    public static function decode_settings($value, $type) {
+    /**
+     * Décode une valeur enregistrée en base de données.
+     *
+     * @param mixed $value Valeur à décoder.
+     * @param string $type Type initial de la valeur.
+     *
+     * @return mixed
+     */
+    public static function decode_settings($value, string $type) {
         switch ($type) {
             case 'array':
                 return json_decode($value);
@@ -149,10 +240,11 @@ class Plugin {
                 return boolval($value);
             case 'datetime':
                 try {
-                    return new \DateTime($value);
+                    $datetime = new \DateTime($value);
                 } catch (Exception $exception) {
-                    return new \DateTime('1970-01-01');
+                    $datetime = new \DateTime('1970-01-01');
                 }
+                return $datetime;
             case 'integer':
                 return intval($value);
             case 'string':
@@ -161,6 +253,13 @@ class Plugin {
         }
     }
 
+    /**
+     * Encode une valeur pour l'enregistrer en base de données.
+     *
+     * @param mixed $value Valeur à convertir en type texte.
+     *
+     * @return array
+     */
     public static function encode_settings($value) {
         $settings = array();
         $settings[0] = $value;
@@ -183,8 +282,13 @@ class Plugin {
         return $settings;
     }
 
-
-    // TODO: retourner un truc.
+    /**
+     * Insère les paramètres en base de données.
+     *
+     * TODO: retourner un truc.
+     *
+     * @return void
+     */
     public function install_settings() {
         global $DB;
 
@@ -205,7 +309,13 @@ class Plugin {
         }
     }
 
-    // TODO: retourner un truc.
+    /**
+     * Enregistre l'objet en base de données.
+     *
+     * TODO: retourner un truc.
+     *
+     * @return void
+     */
     public function save() {
         global $DB;
 
@@ -235,15 +345,29 @@ class Plugin {
         }
     }
 
+    /**
+     * Met à jour le module en base de données.
+     *
+     * TODO: retourner un truc.
+     *
+     * @return void
+     */
     public function update() {
-        // throw new \Exception('La méthode '.__METHOD__.' n\'est pas implémentée.');
         echo 'Mise à jour du plugin '.$this->name.' ('.$this->version.')'.PHP_EOL;
 
-        return $this->save();
+        $this->save();
     }
 
-    // TODO: retourner un truc.
-    public function update_settings($overwrite = false) {
+    /**
+     * Met à jour les paramètres du module en base de données.
+     *
+     * TODO: retourner un truc.
+     *
+     * @param boolean $overwrite Témoin indiquant si les paramètres doivent être écrasés. Valeurs possibles '0' ou '1'.
+     *
+     * @return void
+     */
+    public function update_settings(bool $overwrite = false) {
         global $DB;
 
         $settings = (array) $this->settings;

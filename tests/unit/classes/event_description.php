@@ -1,12 +1,12 @@
 <?php
-/*
- * This file is part of Isou project.
+/**
+ * This file is part of isou project.
  *
- * (c) Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
  */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou\tests\unit;
 
@@ -18,9 +18,14 @@ $DB = new PDO();
 $LOGGER = new Logger();
 
 /**
- * Classe pour tester la classe UniversiteRennes2\Isou\Event_Description.
+ * Teste la classe Event_Description.
  */
 class Event_Description extends atoum {
+    /**
+     * Teste la méthode __construct.
+     *
+     * @return void
+     */
     public function test_construct() {
         $i = 1;
 
@@ -31,6 +36,11 @@ class Event_Description extends atoum {
                 ->variable($this->testedInstance->id)->isEqualTo(0);
     }
 
+    /**
+     * Teste la méthode get_record.
+     *
+     * @return void
+     */
     public function test_get_record() {
         $i = 1;
 
@@ -51,6 +61,11 @@ class Event_Description extends atoum {
                 );
     }
 
+    /**
+     * Teste la méthode get_records.
+     *
+     * @return void
+     */
     public function test_get_records() {
         global $DB;
 
@@ -124,6 +139,11 @@ class Event_Description extends atoum {
         $DB->test_pdostatement->test_execute = false;
     }
 
+    /**
+     * Teste la méthode save.
+     *
+     * @return void
+     */
     public function test_save() {
         global $DB;
 
@@ -155,6 +175,11 @@ class Event_Description extends atoum {
                 );
     }
 
+    /**
+     * Teste la méthode delete.
+     *
+     * @return void
+     */
     public function test_delete() {
         global $DB;
 

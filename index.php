@@ -1,4 +1,14 @@
-<!DOCTYPE html>
+<?php
+/**
+ * This file is part of isou project.
+ *
+ * Désactive la vérification phpcs sur ce fichier.
+ * phpcs:disable
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+?><!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="utf-8" />

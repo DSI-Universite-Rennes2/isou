@@ -1,12 +1,12 @@
 <?php
-/*
- * This file is part of Isou project.
+/**
+ * This file is part of isou project.
  *
- * (c) Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
  */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou\tests\unit;
 
@@ -18,9 +18,14 @@ $DB = new PDO();
 $LOGGER = new Logger();
 
 /**
- * Classe pour tester la classe UniversiteRennes2\Isou\Dependency_Message.
+ * Teste la classe Dependency_Message.
  */
 class Dependency_Message extends atoum {
+    /**
+     * Teste la méthode __construct.
+     *
+     * @return void
+     */
     public function test_construct() {
         $i = 1;
 
@@ -32,6 +37,11 @@ class Dependency_Message extends atoum {
                 ->variable($this->testedInstance->message)->isEqualTo('');
     }
 
+    /**
+     * Teste la méthode get_record.
+     *
+     * @return void
+     */
     public function test_get_record() {
         $i = 1;
 
@@ -52,6 +62,11 @@ class Dependency_Message extends atoum {
                 );
     }
 
+    /**
+     * Teste la méthode get_records.
+     *
+     * @return void
+     */
     public function test_get_records() {
         global $DB;
 

@@ -1,8 +1,9 @@
 <?php
-
 /**
  * Initialise le schéma de données d'Isou.
  */
+
+declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
@@ -13,7 +14,7 @@ class Initialisation extends AbstractMigration {
     /**
      * Modifie la structure du schéma de la base de données.
      *
-     * @throws Exception if any errors occur.
+     * @throws Exception Lève une exception en cas d'erreur.
      *
      * @return void
      */
@@ -64,6 +65,11 @@ class Initialisation extends AbstractMigration {
         $this->setup_dependencies_messages();
     }
 
+    /**
+     * Génère la table announcement.
+     *
+     * @return void
+     */
     public function setup_announcement() {
         echo PHP_EOL.' **  Table des annonces...'.PHP_EOL;
 
@@ -90,6 +96,11 @@ class Initialisation extends AbstractMigration {
         $table->saveData();
     }
 
+    /**
+     * Génère la table categories.
+     *
+     * @return void
+     */
     public function setup_categories() {
         echo PHP_EOL.' **  Table des catégories des services...'.PHP_EOL;
 
@@ -108,6 +119,11 @@ class Initialisation extends AbstractMigration {
             ->create();
     }
 
+    /**
+     * Génère la table configuration.
+     *
+     * @return void
+     */
     public function setup_configuration() {
         echo PHP_EOL.' **  Table de configuration...'.PHP_EOL;
 
@@ -209,6 +225,11 @@ class Initialisation extends AbstractMigration {
         $table->saveData();
     }
 
+    /**
+     * Génère la table contact.
+     *
+     * @return void
+     */
     public function setup_contact() {
         echo PHP_EOL.' **  Table de contact...'.PHP_EOL;
 
@@ -224,6 +245,11 @@ class Initialisation extends AbstractMigration {
         $table->saveData();
     }
 
+    /**
+     * Génère la table dependencies_groups.
+     *
+     * @return void
+     */
     public function setup_dependencies_groups() {
         echo PHP_EOL.' **  Tables des groupes de dépendances...'.PHP_EOL;
 
@@ -241,6 +267,11 @@ class Initialisation extends AbstractMigration {
             ->create();
     }
 
+    /**
+     * Génère la table dependencies_groups_content.
+     *
+     * @return void
+     */
     public function setup_dependencies_groups_content() {
         echo PHP_EOL.' **  Tables des contenus des groupes de dépendances...'.PHP_EOL;
 
@@ -254,6 +285,11 @@ class Initialisation extends AbstractMigration {
             ->create();
     }
 
+    /**
+     * Génère la table dependencies_messages.
+     *
+     * @return void
+     */
     public function setup_dependencies_messages() {
         echo PHP_EOL.' **  Tables des messages de dépendances...'.PHP_EOL;
 
@@ -269,6 +305,11 @@ class Initialisation extends AbstractMigration {
         $table->saveData();
     }
 
+    /**
+     * Génère la table events.
+     *
+     * @return void
+     */
     public function setup_events() {
         echo PHP_EOL.' **  Table des évènements...'.PHP_EOL;
 
@@ -303,6 +344,11 @@ class Initialisation extends AbstractMigration {
             ->create();
     }
 
+    /**
+     * Génère la table events_descriptions.
+     *
+     * @return void
+     */
     public function setup_events_descriptions() {
         echo PHP_EOL.' **  Table des descriptions des évènements...'.PHP_EOL;
 
@@ -321,6 +367,11 @@ class Initialisation extends AbstractMigration {
             ->create();
     }
 
+    /**
+     * Génère la table plugins.
+     *
+     * @return void
+     */
     public function setup_plugins() {
         echo PHP_EOL.' **  Tables des plugins...'.PHP_EOL;
 
@@ -422,6 +473,11 @@ class Initialisation extends AbstractMigration {
         $table->saveData();
     }
 
+    /**
+     * Génère la table services.
+     *
+     * @return void
+     */
     public function setup_services() {
         echo PHP_EOL.' **  Table des services...'.PHP_EOL;
 
@@ -454,6 +510,11 @@ class Initialisation extends AbstractMigration {
             ->create();
     }
 
+    /**
+     * Génère la table states.
+     *
+     * @return void
+     */
     public function setup_states() {
         echo PHP_EOL.' **  Tables des états des services...'.PHP_EOL;
 
@@ -515,6 +576,11 @@ class Initialisation extends AbstractMigration {
         $table->saveData();
     }
 
+    /**
+     * Génère la table subscriptions.
+     *
+     * @return void
+     */
     public function setup_subscriptions() {
         echo PHP_EOL.' **  Tables des inscriptions aux notifications web...'.PHP_EOL;
 
@@ -530,6 +596,11 @@ class Initialisation extends AbstractMigration {
             ->create();
     }
 
+    /**
+     * Génère la table users.
+     *
+     * @return void
+     */
     public function setup_users() {
         echo PHP_EOL.' **  Tables des utilisateurs...'.PHP_EOL;
 

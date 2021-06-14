@@ -1,8 +1,14 @@
 <?php
-
 /**
+ * This file is part of isou project.
+ *
  * Fonctions liées aux procédures du crontab.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
  */
+
+declare(strict_types=1);
 
 use UniversiteRennes2\Isou\Dependency_Group;
 use UniversiteRennes2\Isou\Dependency_Message;
@@ -13,7 +19,7 @@ use UniversiteRennes2\Isou\State;
 use UniversiteRennes2\Isou\Subscription;
 
 /**
- * Mets à jour Isou en fonction des changements d'état des services backend, des évènements prévues, fermés, etc...
+ * Met à jour Isou en fonction des changements d'état des services backend, des évènements prévues, fermés, etc...
  *
  * @return void
  */
@@ -25,18 +31,18 @@ function update_services_tree() {
 
     $LOGGER->addInfo('Mise à jour de l\'arbre des dépendances');
 
-    // Parcours tous les services.
+    // Parcourt tous les services.
     // Pour chaque service, nous mettons à jour les services qui dépendent de ce service.
     while (current($services) !== false) {
         $parent_service = array_shift($services);
 
-        // Définis tous les enfants de ce service et de son état courant.
+        // Définit tous les enfants de ce service et de son état courant.
         $parent_service->set_reverse_dependencies($parent_service->state);
 
         // $LOGGER->addDebug('Recherche des dépendances pour le service '.$parent_service->name.' (id #'.$parent_service->id.')');
         // $LOGGER->addDebug('   '.count($parent_service->reverse_dependencies).' groupes dépendent du service "'.$parent_service->name.'" (avec l\'état: '.$parent_service->state.')');
 
-        // Parcours chaque enfant.
+        // Parcourt chaque enfant.
         foreach ($parent_service->reverse_dependencies as $dependencies_group) {
             $child_service = Service::get_record(array('id' => $dependencies_group->idservice, 'enable' => true));
 
@@ -110,7 +116,7 @@ function update_services_tree() {
 
                 if (empty($description) === true) {
                     $description = $message->message;
-                } else if (stripos($description, $message->message) === false) {
+                } elseif (stripos($description, $message->message) === false) {
                     $description .= "\n".$message->message;
                 } else {
                     $description = null;
@@ -260,7 +266,7 @@ function cron_regenerate_json() {
     $json_data = json_encode($json_data, JSON_PRETTY_PRINT);
 
     $json_file = PUBLIC_PATH.'/isou.json';
-    // Mets à jour le fichier uniquement si le contenu est différent.
+    // Met à jour le fichier uniquement si le contenu est différent.
     if (is_file($json_file) === false || trim(file_get_contents($json_file)) !== trim($json_data)) {
         file_put_contents($json_file, $json_data);
     }
@@ -370,7 +376,7 @@ function cron_report() {
         // TODO: Liste des services supprimés.
         // TODO: Envoyer la notification.
 
-        // Mets à jour le témoin de dernière notification dans la base de données.
+        // Met à jour le témoin de dernière notification dans la base de données.
         $sql = "UPDATE configuration SET value=? WHERE key=?";
         $query = $DB->prepare($sql);
         $query->execute(array(strftime('%FT%T'), 'last_daily_report'));

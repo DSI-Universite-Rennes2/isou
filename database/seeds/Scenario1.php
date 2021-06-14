@@ -1,10 +1,11 @@
 <?php
-
 /**
  * Initialise le scénario 1.
  *      Contexte du service isou :
  *          - 1 serveur web (service thruk)
  */
+
+declare(strict_types=1);
 
 use Phinx\Seed\AbstractSeed;
 
@@ -15,6 +16,11 @@ class Scenario1 extends AbstractSeed {
     const ISOU_SEED_PREFIX_ID = '1';
     const ISOU_SEED_NAME = 'Scenario 1';
 
+    /**
+     * Exécute la mise en place du scénario.
+     *
+     * @return void
+     */
     public function run() {
         // Active le service thruk.
         $connection = $this->getAdapter()->getConnection();

@@ -1,22 +1,72 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou;
 
+/**
+ * Classe décrivant une annonce.
+ */
 class Announcement {
+    /**
+     * Message de l'annonce.
+     *
+     * @var string
+     */
     public $message;
+
+    /**
+     * Témoin indiquant si l'annonce est affichée ou non. Valeurs possibles '0' ou '1'.
+     *
+     * @var integer
+     */
     public $visible;
+
+    /**
+     * Nom utilisateur de l'auteur de l'annonce.
+     *
+     * @var string
+     */
     public $author;
+
+    /**
+     * Date de la dernière modification de l'annonce.
+     *
+     * @var \DateTime
+     */
     public $last_modification;
 
+    /**
+     * Constructeur de la classe.
+     *
+     * @return void
+     */
     public function __construct() {
         try {
-            $this->last_modification = new \DateTime($this->last_modification);
+            $last_modification = '';
+            if (isset($this->last_modification) === true) {
+                $last_modification = $this->last_modification;
+            }
+            $this->last_modification = new \DateTime($last_modification);
         } catch (Exception $exception) {
             $this->last_modification = new \DateTime();
         }
     }
 
-    public function check_data($options_visible) {
+    /**
+     * Contrôle les données avant de les enregistrer en base de données.
+     *
+     * @param string[] $options_visible Tableau associatif contenant les valeurs autorisés pour la propriété "visible".
+     *
+     * @return string[] Retourne un tableau d'erreurs.
+     */
+    public function check_data(array $options_visible) {
         $errors = array();
 
         $HTMLPurifier = new \HTMLPurifier();
@@ -31,13 +81,22 @@ class Announcement {
         return $errors;
     }
 
-    public static function get_record($options = array()) {
+    /**
+     * Récupère un objet en base de données en fonction des options passées en paramètre.
+     *
+     * @param array $options Tableau d'options.
+     *
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
+     *
+     * @return Announcement|false
+     */
+    public static function get_record(array $options = array()) {
         global $DB;
 
         $conditions = array();
         $parameters = array();
 
-        // Parcours les options.
+        // Parcourt les options.
         if (isset($options['empty']) === true) {
             if (is_bool($options['empty']) === true) {
                 if ($options['empty'] === true) {
@@ -63,7 +122,7 @@ class Announcement {
             unset($options['visible']);
         }
 
-        // Construis le WHERE.
+        // Construit le WHERE.
         if (isset($conditions[0]) === true) {
             $sql_conditions = ' WHERE '.implode(' AND ', $conditions);
         } else {
@@ -79,7 +138,7 @@ class Announcement {
             throw new \Exception(__METHOD__.': l\'option \''.$key.'\' n\'a pas été utilisée. Valeur donnée : '.var_export($option, $return = true));
         }
 
-        // Construis la requête.
+        // Construit la requête.
         $sql = 'SELECT a.id, a.message, a.visible, a.author, a.last_modification'.
             ' FROM announcement a'.
             $sql_conditions;
@@ -91,6 +150,11 @@ class Announcement {
         return $query->fetch();
     }
 
+    /**
+     * Enregistre l'objet en base de données.
+     *
+     * @return array
+     */
     public function save() {
         global $DB, $LOGGER;
 
@@ -117,7 +181,7 @@ class Announcement {
 
             $LOGGER->addInfo('Modification de l\'annonce', array('author' => $_SESSION['phpCAS']['user']));
         } else {
-            // log db errors
+            // Enregistre le message d'erreur dans les logs.
             $LOGGER->addError(implode(', ', $query->errorInfo()));
 
             $results['errors'][] = 'La modification n\'a pas été enregistrée !';

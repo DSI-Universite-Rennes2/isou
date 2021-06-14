@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 $TITLE .= ' - Configuration de l\'authentification';
 
@@ -63,7 +71,7 @@ foreach ($old_databases as $database) {
 // Vérification du cron.
 if (isset($CFG['last_cron_update']) === false || $CFG['last_cron_update'] === new DateTime('1970-01-01')) {
     $errors['Crons'][] = 'Le fichier cron.php ne semble pas être appelé régulièrement.';
-} elseif ((TIME - 10 * 60) > $CFG['last_cron_update']->getTimestamp()) {
+} elseif ($CFG['last_cron_update']->getTimestamp() < (TIME - 10 * 60)) {
     $errors['Crons'][] = 'Le fichier cron.php ne semble pas être appelé régulièrement.'.
         ' La dernière exécution du cron date du '.strftime('%c', $CFG['last_cron_update']->getTimestamp()).'.';
 }

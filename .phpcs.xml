@@ -6,10 +6,8 @@
     <file>.</file>
 
     <!-- Fichiers/répertoires à ignorer. -->
-    <exclude-pattern>^cache</exclude-pattern>
-    <exclude-pattern>^config.php$</exclude-pattern>
-    <exclude-pattern>^index.php$</exclude-pattern>
-    <exclude-pattern>^vendor</exclude-pattern>
+    <exclude-pattern>/cache/</exclude-pattern>
+    <exclude-pattern>/vendor/</exclude-pattern>
 
     <!-- Retourne un exit code à 0 même si des warnings sont détectés. -->
     <config name="ignore_warnings_on_exit" value="1" />
@@ -48,7 +46,6 @@
     <rule ref="Generic">
         <exclude name="Generic.Arrays.DisallowLongArraySyntax.Found" />
         <exclude name="Generic.CodeAnalysis.AssignmentInCondition.Found" />
-        <exclude name="Generic.Commenting.DocComment.TagValueIndent" />
         <exclude name="Generic.Files.EndFileNoNewline.Found" />
         <exclude name="Generic.Formatting.MultipleStatementAlignment.NotSameWarning" />
         <exclude name="Generic.Formatting.NoSpaceAfterCast.SpaceFound" />
@@ -156,7 +153,13 @@
     <rule ref="Squiz.Commenting.DocCommentAlignment" />
 
     <!-- Vérifie la qualité de la documentation du fichier. -->
-    <!-- <rule ref="Squiz.Commenting.FileComment" /> -->
+    <rule ref="Squiz.Commenting.FileComment">
+        <exclude name="Squiz.Commenting.FileComment.PackageTagOrder" />
+        <exclude name="Squiz.Commenting.FileComment.MissingPackageTag" />
+        <exclude name="Squiz.Commenting.FileComment.SubpackageTagOrder" />
+        <exclude name="Squiz.Commenting.FileComment.MissingSubpackageTag" />
+        <exclude name="Squiz.Commenting.FileComment.IncorrectAuthor" />
+    </rule>
 
     <!-- Vérifie la qualité de la documentation d'une classe. -->
     <rule ref="Squiz.Commenting.ClassComment" />

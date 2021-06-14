@@ -1,12 +1,12 @@
 <?php
-/*
- * This file is part of Isou project.
+/**
+ * This file is part of isou project.
  *
- * (c) Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
  */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou\tests\unit;
 
@@ -20,9 +20,14 @@ $DB = new PDO();
 $LOGGER = new Logger();
 
 /**
- * Classe pour tester la classe UniversiteRennes2\Isou\Event.
+ * Teste la classe Event.
  */
 class Event extends atoum {
+    /**
+     * Teste la méthode __construct.
+     *
+     * @return void
+     */
     public function test_construct() {
         $i = 1;
 
@@ -40,6 +45,11 @@ class Event extends atoum {
                 ->variable($this->testedInstance->id)->isEqualTo(1);
     }
 
+    /**
+     * Teste la méthode __tostring.
+     *
+     * @return void
+     */
     public function test_tostring() {
         $i = 1;
 
@@ -50,6 +60,11 @@ class Event extends atoum {
                 ->string($this->testedInstance->__tostring());
     }
 
+    /**
+     * Teste la méthode get_record.
+     *
+     * @return void
+     */
     public function test_get_record() {
         $i = 1;
 
@@ -70,6 +85,11 @@ class Event extends atoum {
                 );
     }
 
+    /**
+     * Teste la méthode get_records.
+     *
+     * @return void
+     */
     public function test_get_records() {
         global $DB;
 
@@ -361,6 +381,11 @@ class Event extends atoum {
         $DB->test_pdostatement->test_execute = false;
     }
 
+    /**
+     * Teste la méthode is_now.
+     *
+     * @return void
+     */
     public function test_is_now() {
         $i = 1;
 
@@ -425,13 +450,18 @@ class Event extends atoum {
                 ->boolean($this->testedInstance->is_now($now))->isFalse();
     }
 
+    /**
+     * Teste la méthode set_service.
+     *
+     * @return void
+     */
     public function test_set_service() {
         $i = 1;
 
         // Teste si la méthode s'exécute correctement.
         $this->assert(__METHOD__.' : test #'.$i++)
             ->given($this->newTestedInstance)
-            ->then($this->testedInstance->set_service(1, array('1' => 'foo')));
+            ->then($this->testedInstance->set_service('1', array('1' => 'foo')));
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -439,11 +469,16 @@ class Event extends atoum {
             ->then
                 ->exception(
                     function() {
-                        $this->testedInstance->set_service(1);
+                        $this->testedInstance->set_service('1');
                     }
                 );
     }
 
+    /**
+     * Teste la méthode set_period.
+     *
+     * @return void
+     */
     public function test_set_period() {
         $i = 1;
 
@@ -521,6 +556,11 @@ class Event extends atoum {
                 );
     }
 
+    /**
+     * Teste la méthode set_type.
+     *
+     * @return void
+     */
     public function test_set_type() {
         $i = 1;
 
@@ -541,6 +581,11 @@ class Event extends atoum {
                 );
     }
 
+    /**
+     * Teste la méthode set_startdate.
+     *
+     * @return void
+     */
     public function test_set_startdate() {
         $i = 1;
 
@@ -561,6 +606,11 @@ class Event extends atoum {
                 );
     }
 
+    /**
+     * Teste la méthode set_enddate.
+     *
+     * @return void
+     */
     public function test_set_enddate() {
         $i = 1;
 
@@ -610,6 +660,11 @@ class Event extends atoum {
                 );
     }
 
+    /**
+     * Teste la méthode set_state.
+     *
+     * @return void
+     */
     public function test_set_state() {
         $i = 1;
 
@@ -643,7 +698,7 @@ class Event extends atoum {
     }
 
     /**
-     * Teste la méthode set_description().
+     * Teste la méthode set_description.
      *
      * @return void
      */
@@ -659,6 +714,11 @@ class Event extends atoum {
                 ->variable($this->testedInstance->description->description)->isEqualTo('foo');
     }
 
+    /**
+     * Teste la méthode save.
+     *
+     * @return void
+     */
     public function test_save() {
         global $DB;
 
@@ -691,6 +751,11 @@ class Event extends atoum {
                 );
     }
 
+    /**
+     * Teste la méthode delete.
+     *
+     * @return void
+     */
     public function test_delete() {
         global $DB;
 
@@ -713,6 +778,11 @@ class Event extends atoum {
                 );
     }
 
+    /**
+     * Teste la méthode close.
+     *
+     * @return void
+     */
     public function test_close() {
         global $DB;
 

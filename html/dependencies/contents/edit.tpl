@@ -1,5 +1,5 @@
 <form action="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/group/{$dependency_group->id}/content/edit/{$dependency_group_content->id}" class="form-horizontal" method="post">
-	{if $dependency_group_content->id === 0}
+	{if empty($dependency_group_content->id) === true}
 	<h2>Ajouter des dépendances</h2>
 	{else}
 	<h2>Mettre à jour la dépendance</h2>
@@ -37,7 +37,7 @@
 				<label class="control-label" for="services">Nom du service lié</label>
 			</dt>
 			<dd class="col-sm-10" id="isou-dependencies-contents-backends-dd">
-				{if $dependency_group_content->id === 0}
+				{if empty($dependency_group_content->id) === true}
 				<ul class="nav nav-tabs" role="tablist">
 					{foreach $options_services as $plugin => $services}
 						<li role="presentation"><a href="#tab-{$plugin|lower|escape:'url'}" aria-controls="tab-{$plugin|lower|escape:'url'}" role="tab" data-toggle="tab">{$plugin}</a></li>

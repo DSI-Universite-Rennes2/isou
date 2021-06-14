@@ -1,8 +1,14 @@
 <?php
-
 /**
- * Script executant les tests d'intégration.
+ * This file is part of isou project.
+ *
+ * Script exécutant les tests d'intégration.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
  */
+
+declare(strict_types=1);
 
 use Phinx\Console\PhinxApplication;
 use Symfony\Component\Console\Input\StringInput;
@@ -107,7 +113,7 @@ sort($scenarios);
 $errors_count = 0;
 $successes_count = 0;
 
-// unset($scenarios[0], $scenarios[2]);
+// Comment: unset($scenarios[0], $scenarios[2]);.
 $LOGGER->pushHandler(new \Monolog\Handler\NullHandler());
 
 foreach ($scenarios as $scenario_file) {
@@ -120,7 +126,7 @@ foreach ($scenarios as $scenario_file) {
     }
 
     echo '* '.$scenario->name.PHP_EOL;
-    // echo '    '.$scenario->description.PHP_EOL;
+    // Comment: echo '    '.$scenario->description.PHP_EOL;.
     foreach ($scenario->cases as $case) {
         echo str_repeat(' ', 3).'- '.$case->name.' : '.$case->description.PHP_EOL;
 

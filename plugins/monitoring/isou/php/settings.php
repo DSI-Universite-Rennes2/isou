@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 $smarty->addTemplateDir(PRIVATE_PATH.'/plugins/monitoring/isou/html');
 
@@ -11,7 +19,7 @@ if (isset($_POST['plugin_isou_tolerance']) === true) {
     if ((string) ($plugin->settings->tolerance / 60) !== $_POST['plugin_isou_tolerance'] && ctype_digit($_POST['plugin_isou_tolerance']) === true) {
         if ($_POST['plugin_isou_tolerance'] > 10) {
             $_POST['plugin_isou_tolerance'] = 10;
-        } else if ($_POST['plugin_isou_tolerance'] < 1) {
+        } elseif ($_POST['plugin_isou_tolerance'] < 1) {
             $_POST['plugin_isou_tolerance'] = 1;
         }
 

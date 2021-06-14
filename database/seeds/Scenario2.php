@@ -1,11 +1,12 @@
 <?php
-
 /**
  * Initialise le scénario 2.
  *      Contexte du service isou :
  *          - 1 serveur de base de données (service thruk)
  *          - 1 serveur web (service thruk)
  */
+
+declare(strict_types=1);
 
 use Phinx\Seed\AbstractSeed;
 
@@ -16,6 +17,11 @@ class Scenario2 extends AbstractSeed {
     const ISOU_SEED_PREFIX_ID = '2';
     const ISOU_SEED_NAME = 'Scenario 2';
 
+    /**
+     * Exécute la mise en place du scénario.
+     *
+     * @return void
+     */
     public function run() {
         // Création des catégories.
         $data = array(

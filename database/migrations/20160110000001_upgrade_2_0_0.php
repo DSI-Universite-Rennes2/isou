@@ -1,8 +1,9 @@
 <?php
-
 /**
  * Migre le schéma de données d'Isou en version 2.0.0.
  */
+
+declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
@@ -13,7 +14,7 @@ class Upgrade200 extends AbstractMigration {
     /**
      * Modifie la structure du schéma de la base de données.
      *
-     * @throws Exception if any errors occur.
+     * @throws Exception Lève une exception en cas d'erreur.
      *
      * @return void
      */
@@ -43,6 +44,11 @@ class Upgrade200 extends AbstractMigration {
         $this->setup_statistics();
     }
 
+    /**
+     * Migre les anciennes données de la table announcement.
+     *
+     * @return void
+     */
     public function setup_announcement() {
         if ($this->hasTable('annonce') === true) {
             echo PHP_EOL.' **  Table des annonces...'.PHP_EOL;
@@ -69,6 +75,11 @@ class Upgrade200 extends AbstractMigration {
         }
     }
 
+    /**
+     * Migre les anciennes données de la table categories.
+     *
+     * @return void
+     */
     public function setup_categories() {
         if ($this->hasTable('categories_old') === true) {
             echo PHP_EOL.' **  Table des catégories des services...'.PHP_EOL;
@@ -91,6 +102,11 @@ class Upgrade200 extends AbstractMigration {
         }
     }
 
+    /**
+     * Migre les anciennes données de la table configuration.
+     *
+     * @return void
+     */
     public function setup_configuration() {
         if ($this->hasTable('configuration_old') === true) {
             echo PHP_EOL.' **  Table de configuration...'.PHP_EOL;
@@ -154,6 +170,11 @@ class Upgrade200 extends AbstractMigration {
         }
     }
 
+    /**
+     * Migre les anciennes données de la table dependencies.
+     *
+     * @return void
+     */
     public function setup_dependencies() {
         if ($this->hasTable('dependencies') === true) {
             echo PHP_EOL.' **  Tables des dépendances...'.PHP_EOL;
@@ -216,6 +237,11 @@ class Upgrade200 extends AbstractMigration {
         }
     }
 
+    /**
+     * Migre les anciennes données de la table events.
+     *
+     * @return void
+     */
     public function setup_events() {
         if ($this->hasTable('events_old') === true) {
             echo PHP_EOL.' **  Table des évènements...'.PHP_EOL;
@@ -312,6 +338,11 @@ class Upgrade200 extends AbstractMigration {
         }
     }
 
+    /**
+     * Migre les anciennes données de la table services.
+     *
+     * @return void
+     */
     public function setup_services() {
         if ($this->hasTable('services_old') === true) {
             echo PHP_EOL.' **  Table des services...'.PHP_EOL;
@@ -360,6 +391,11 @@ class Upgrade200 extends AbstractMigration {
         }
     }
 
+    /**
+     * Migre les anciennes données de la table statistics.
+     *
+     * @return void
+     */
     public function setup_statistics() {
         if ($this->hasTable('statistics') === true) {
             echo PHP_EOL.' **  Tables des statistiques...'.PHP_EOL;

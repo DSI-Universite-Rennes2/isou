@@ -1,8 +1,14 @@
 <?php
-
 /**
+ * This file is part of isou project.
+ *
  * Fonctions liées aux procédures de mise à jour.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
  */
+
+declare(strict_types=1);
 
 use Phinx\Console\PhinxApplication;
 use Symfony\Component\Console\Input\StringInput;
@@ -10,7 +16,7 @@ use Symfony\Component\Console\Output\NullOutput;
 use UniversiteRennes2\Isou\Plugin;
 
 /**
- * Mets à jour la date de dernière mise à jour et le numéro de version d'isou.
+ * Met à jour la date de dernière mise à jour et le numéro de version d'isou.
  *
  * @return void
  */
@@ -238,11 +244,11 @@ function upgrade_090_to_095() {
 /**
  * Détermine si un plugin doit être mis à jour ou applique les mises à jour.
  *
- * @var boolean $check_only Indique si les mises à jour doivent être signalées ou appliquées.
+ * @param boolean $check_only Indique si les mises à jour doivent être signalées ou appliquées.
  *
  * @return boolean Retourne true si une mise à jour est disponible ou si les mises à jour ont été faites correctement.
  */
-function upgrade_plugins($check_only = false) {
+function upgrade_plugins(bool $check_only = false) {
     global $DB, $LOGGER;
 
     $plugins_paths = array();

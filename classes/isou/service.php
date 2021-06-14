@@ -1,26 +1,119 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou;
 
+/**
+ * Classe décrivant un service.
+ */
 class Service {
+    /**
+     * Identifiant de l'objet.
+     *
+     * @var integer
+     */
     public $id;
+
+    /**
+     * Nom du service.
+     *
+     * @var string
+     */
     public $name;
+
+    /**
+     * URL du service.
+     *
+     * @var string
+     */
     public $url;
+
+    /**
+     * État en cours du service.
+     *
+     * @var integer
+     */
     public $state;
+
+    /**
+     * Commentaire sur le service.
+     *
+     * @var string
+     */
     public $comment;
+
+    /**
+     * Témoin indiquant si le service est activé. Valeurs possibles '0' ou '1'.
+     *
+     * @var integer
+     */
     public $enable;
+
+    /**
+     * Témoin indiquant si le service est visible. Valeurs possibles '0' ou '1'.
+     *
+     * @var integer
+     */
     public $visible;
+
+    /**
+     * Témoin indiquant si le service est verrouillé. Valeurs possibles '0' ou '1'.
+     *
+     * @var integer
+     */
     public $locked;
+
+    /**
+     * Identifiant utilisé pour la construction du flux RSS.
+     *
+     * @var string
+     */
     public $rsskey;
+
+    /**
+     * Date de dernière modification du service.
+     *
+     * @var \DateTime
+     */
     public $timemodified;
+
+    /**
+     * Identifiant du module.
+     *
+     * @var integer
+     */
     public $idplugin;
+
+    /**
+     * Identifiant de catégorie.
+     *
+     * @var integer
+     */
     public $idcategory;
+
+    /**
+     * Nom de la catégorie.
+     *
+     * @var string
+     */
     public $category;
 
+    /**
+     * Constructeur de la classe.
+     *
+     * @return void
+     */
     public function __construct() {
         if (isset($this->id) === false) {
             // Instance manuelle.
-            $this->id = 0;
+            $this->id = '0';
             $this->name = '';
             $this->url = null;
             $this->state = State::OK;
@@ -42,10 +135,20 @@ class Service {
         $this->reverse_dependencies = null;
     }
 
+    /**
+     * Représentation textuelle de la classe.
+     *
+     * @return string
+     */
     public function __tostring() {
         return $this->name.' (id: '.$this->id.')';
     }
 
+    /**
+     * Contrôle les données avant de les enregistrer en base de données.
+     *
+     * @return string[] Retourne un tableau d'erreurs.
+     */
     public function check_data() {
         $errors = array();
 
@@ -104,14 +207,15 @@ class Service {
     }
 
     /**
-     * @param array $options Array in format:
+     * Récupère un objet en base de données en fonction des options passées en paramètre.
      *
-     * @see function get_records()
-     * Note : fetch_one param is always set at true
+     * @param array $options Tableau d'options. @see get_records.
      *
-     * @return UniversiteRennes2\Isou\Service|false
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
+     *
+     * @return Service|false
      */
-    public static function get_record($options = array()) {
+    public static function get_record(array $options = array()) {
         if (isset($options['id']) === false && isset($options['name'], $options['plugin']) === false) {
             throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] ou les paramètres $options[\'name\'] et $options[\'plugin\'] sont requis.');
         }
@@ -122,25 +226,31 @@ class Service {
     }
 
     /**
-     * @param array $options Array in format:
-     *   category => int : category id
-     *   enable => bool
-     *   id => int : service id
-     *   locked => bool
-     *   fetch_one => bool
-     *   visible => bool
-     *   type => int : index key from UniversiteRennes2\Isou\Service::$TYPES
+     * Récupère un tableau d'objets en base de données en fonction des options passées en paramètre.
      *
-     * @return UniversiteRennes2\Isou\Service[]|UniversiteRennes2\Isou\Service|false
+     * Liste des options disponibles :
+     *   category   => int
+     *   enable     => bool
+     *   id         => int
+     *   locked     => bool
+     *   fetch_one  => bool
+     *   visible    => bool
+     *   type       => int
+     *
+     * @param array $options Tableau d'options.
+     *
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
+     *
+     * @return Service[]|Service|false
      */
-    public static function get_records($options = array()) {
+    public static function get_records(array $options = array()) {
         global $DB;
 
         $joins = array();
         $conditions = array();
         $parameters = array();
 
-        // Parcours les options.
+        // Parcourt les options.
         if (isset($options['id']) === true) {
             if (ctype_digit($options['id']) === true) {
                 $conditions[] = 's.id = :id';
@@ -255,7 +365,7 @@ class Service {
             unset($options['dependencies_group']);
         }
 
-        // Construis le WHERE.
+        // Construit le WHERE.
         if (isset($conditions[0]) === true) {
             $sql_conditions = ' WHERE '.implode(' AND ', $conditions);
         } else {
@@ -271,7 +381,7 @@ class Service {
             throw new \Exception(__METHOD__.': l\'option \''.$key.'\' n\'a pas été utilisée. Valeur donnée : '.var_export($option, $return = true));
         }
 
-        // Construis la requête.
+        // Construit la requête.
         if (isset($options['fetch_column']) === true) {
             $sql = 'SELECT s.id, s.name'.
                 ' FROM services s'.
@@ -302,6 +412,11 @@ class Service {
         return $query->fetchAll();
     }
 
+    /**
+     * Enregistre l'objet en base de données.
+     *
+     * @return array
+     */
     public function save() {
         global $DB, $LOGGER;
 
@@ -326,7 +441,7 @@ class Service {
             ':idcategory' => $this->idcategory,
         );
 
-        if ($this->id === 0) {
+        if (empty($this->id) === true) {
             $sql = 'INSERT INTO services(name, url, state, comment, enable, visible, locked, rsskey, timemodified, idplugin, idcategory)'.
                 ' VALUES(:name, :url, :state, :comment, :enable, :visible, :locked, :rsskey, :timemodified, :idplugin, :idcategory)';
         } else {
@@ -337,7 +452,7 @@ class Service {
         $query = $DB->prepare($sql);
 
         if ($query->execute($params) === true) {
-            if ($this->id === 0) {
+            if (empty($this->id) === true) {
                 $this->id = $DB->lastInsertId();
             }
             $results['successes'] = array('Les données ont été correctement enregistrées.');
@@ -351,6 +466,11 @@ class Service {
         return $results;
     }
 
+    /**
+     * Supprime l'objet en base de données.
+     *
+     * @return array
+     */
     public function delete() {
         global $DB, $LOGGER;
 
@@ -400,7 +520,16 @@ class Service {
         return $results;
     }
 
-    public function change_state($state) {
+    /**
+     * Change l'état du service.
+     *
+     * @param string $state Identifiant de l'état à attribuer.
+     *
+     * @throws \Exception Lève une exception en cas d'erreur lors du changement d'état.
+     *
+     * @return Event|false Retourne l'évènement créé ou false si l'évènement a été fermé.
+     */
+    public function change_state(string $state) {
         global $DB, $LOGGER;
 
         $sql = 'UPDATE services SET state=:state, timemodified=:timemodified WHERE id = :id';
@@ -429,7 +558,14 @@ class Service {
         return $event;
     }
 
-    public function enable($enable = '1') {
+    /**
+     * Active ou désactive le service.
+     *
+     * @param string $enable Témoin indiquant si le service doit être activé ou non. Valeurs possibles '0' ou '1'.
+     *
+     * @return boolean
+     */
+    public function enable(string $enable = '1') {
         global $DB, $LOGGER;
 
         $sql = 'UPDATE services SET state=:state, enable=:enable, timemodified=:timemodified WHERE id = :id';
@@ -443,11 +579,23 @@ class Service {
         }
     }
 
+    /**
+     * Désactive le service.
+     *
+     * @return boolean
+     */
     public function disable() {
         return $this->enable('0');
     }
 
-    public function visible($visible = '1') {
+    /**
+     * Affiche ou masque le service.
+     *
+     * @param string $visible Témoin indiquant si le service doit être affiché ou non. Valeurs possibles '0' ou '1'.
+     *
+     * @return boolean
+     */
+    public function visible(string $visible = '1') {
         global $DB, $LOGGER;
 
         $sql = 'UPDATE services SET visible=:visible WHERE id = :id';
@@ -460,12 +608,23 @@ class Service {
             return false;
         }
     }
-
+    /**
+     * Masque le service.
+     *
+     * @return boolean
+     */
     public function hide() {
         return $this->visible('0');
     }
 
-    public function lock($state) {
+    /**
+     * Verrouille le service et change l'état du service.
+     *
+     * @param string $state Identifiant de l'état à attribuer.
+     *
+     * @return boolean
+     */
+    public function lock(string $state) {
         global $DB, $LOGGER;
 
         $sql = 'UPDATE services SET state=:state, locked=1 WHERE id = :id';
@@ -480,6 +639,11 @@ class Service {
         }
     }
 
+    /**
+     * Déverrouille le service.
+     *
+     * @return boolean
+     */
     public function unlock() {
         global $DB, $LOGGER;
 
@@ -494,6 +658,11 @@ class Service {
         }
     }
 
+    /**
+     * Retourne toutes les dépendances.
+     *
+     * @return Dependency[]
+     */
     public function get_dependencies() {
         if ($this->dependencies === null) {
             $this->set_dependencies();
@@ -502,11 +671,23 @@ class Service {
         return $this->dependencies;
     }
 
+    /**
+     * Définit les dépendances de ce service.
+     *
+     * @return void
+     */
     public function set_dependencies() {
         $this->dependencies = Dependency_Group::get_records(array('service' => $this->id));
     }
 
-    public function get_reverse_dependencies($state = null) {
+    /**
+     * Retourne toutes les dépendances inversées.
+     *
+     * @param string $state Identifiant de l'état.
+     *
+     * @return Dependency[]
+     */
+    public function get_reverse_dependencies(string $state = null) {
         if ($this->reverse_dependencies === null) {
             $this->reverse_dependencies = Dependency_Group::get_service_reverse_dependency_groups($this->id, $state);
         }
@@ -514,17 +695,38 @@ class Service {
         return $this->reverse_dependencies;
     }
 
-    public function set_reverse_dependencies($state = null) {
+    /**
+     * Définit les dépendances inversées.
+     *
+     * @param string $state Identifiant de l'état.
+     *
+     * @return void
+     */
+    public function set_reverse_dependencies(string $state = null) {
         $this->reverse_dependencies = $this->get_reverse_dependencies($state);
     }
 
-    public function get_all_events($options = array()) {
+    /**
+     * Retourne tous les évènements de ce service.
+     *
+     * @param array $options Tableau d'options. @see get_records.
+     *
+     * @return Event[]
+     */
+    public function get_all_events(array $options = array()) {
         $options['idservice'] = $this->id;
 
         return Event::get_records($options);
     }
 
-    public function get_current_event($options = array()) {
+    /**
+     * Retourne l'évènement en cours de ce service.
+     *
+     * @param array $options Tableau d'options. @see get_records.
+     *
+     * @return Event|false
+     */
+    public function get_current_event(array $options = array()) {
         $options['idservice'] = $this->id;
         $options['finished'] = false;
         $options['fetch_one'] = true;
@@ -532,14 +734,30 @@ class Service {
         return Event::get_records($options);
     }
 
-    public function get_closed_event($options = array()) {
+    /**
+     * Retourne le (dernier ?) évènement clôturé de ce service.
+     *
+     * TODO: n'utilise pas l'option 'type' => Event::TYPE_CLOSED. À corriger.
+     *
+     * @param array $options Tableau d'options. @see get_records.
+     *
+     * @return Event[]
+     */
+    public function get_closed_event(array $options = array()) {
         $options['idservice'] = $this->id;
         $options['fetch_one'] = true;
 
         return Event::get_records($options);
     }
 
-    public function get_regular_events($options = array()) {
+    /**
+     * Retourne tous les évènements réguliers de ce service.
+     *
+     * @param array $options Tableau d'options. @see get_records.
+     *
+     * @return Event[]
+     */
+    public function get_regular_events(array $options = array()) {
         $options['idservice'] = $this->id;
         $options['regular'] = true;
 

@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of isou project.
+ *
+ * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @license The Unlicense <http://unlicense.org>
+ */
+
+declare(strict_types=1);
 
 use League\CommonMark\CommonMarkConverter;
 
@@ -11,7 +19,7 @@ $handle = opendir($changelog_path);
 if ($handle !== false) {
     $converter = new CommonMarkConverter();
 
-    while (false !== ($file = readdir($handle))) {
+    while (($file = readdir($handle)) !== false) {
         if (in_array($file, array('.', '..', 'index.php', 'index.html', 'template.md'), $strict = true) === true) {
             continue;
         }
