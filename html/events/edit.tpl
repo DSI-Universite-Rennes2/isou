@@ -1,3 +1,6 @@
+{if count($options_services) === 0}
+	<p class="alert alert-danger">Vous n'avez pas encore défini de service isou. Avant d'ajouter un évènement, vous devez <a class="text-danger" href="{$smarty.const.URL}/index.php/services/isou/edit/0"><strong>créer un service isou</strong></a>.</p>
+{else}
 <form action="{$smarty.const.URL}/index.php/evenements/{$eventtype}/edit/{$event->id}" class="form-horizontal" method="post">
 
 	{if $event->id == 0}
@@ -108,3 +111,4 @@ Exemple :<br />Pour le {$smarty.now|date_format:'%A %d %B %Y à %H heures et %M 
 		</li>
 	</ul>
 </form>
+{/if}
