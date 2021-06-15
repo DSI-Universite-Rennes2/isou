@@ -21,6 +21,8 @@ if ($isou->settings->grouping === false) {
 
 $services = Service::get_records(array('plugin' => PLUGIN_ISOU, 'has_category' => false));
 foreach ($services as $service) {
+    $service->dependencies_content = array();
+
     foreach ($service->get_dependencies() as $dependency) {
         // On récupère la liste des services présents dans le groupe de dépendances.
         $service->dependencies_content = $dependency->get_contents();
