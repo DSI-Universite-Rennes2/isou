@@ -168,6 +168,7 @@ class Dependency_Group_Content {
         $sql = 'SELECT dgc.id, dgc.idgroup, dgc.idservice, dgc.servicestate, s.name, s.idplugin'.
             ' FROM dependencies_groups_content dgc'.
             ' JOIN services s ON s.id = dgc.idservice'.
+            ' JOIN plugins p ON p.id = s.idplugin AND p.active = 1'.
             $sql_conditions.
             ' ORDER BY s.name';
         $query = $DB->prepare($sql);

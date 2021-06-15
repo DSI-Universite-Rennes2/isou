@@ -490,6 +490,7 @@ class Event {
             ' FROM events e'.
             ' JOIN events_descriptions ed ON ed.id = e.ideventdescription'.
             ' JOIN services s ON s.id = e.idservice'.
+            ' JOIN plugins p ON p.id = s.idplugin AND p.active = 1'.
             ' '.implode(' ', $joins).
             $sql_conditions.
             $sql_orders;
