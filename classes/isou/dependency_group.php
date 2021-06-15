@@ -159,11 +159,11 @@ class Dependency_Group {
      *
      * TODO: scinder cette fonction.
      *
-     * @param integer $idservice Identifiant du service.
+     * @param string $idservice Identifiant du service.
      *
      * @return integer|false
      */
-    public static function get_dependencies_groups_and_groups_contents_by_service_sorted_by_flags(int $idservice) {
+    public static function get_dependencies_groups_and_groups_contents_by_service_sorted_by_flags(string $idservice) {
         global $DB;
 
         $groups = array();
