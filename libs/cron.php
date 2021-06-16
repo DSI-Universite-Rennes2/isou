@@ -299,10 +299,12 @@ function cron_notify() {
     $messages = array();
     foreach ($services as $service) {
         if (in_array($service->state, array(State::OK, State::CLOSED), $strict = true) === true) {
+            // On ignore les retours à la normale et les services fermés.
             continue;
         }
 
         if ($service->visible === '0') {
+            // On ignore les services non visibles.
             continue;
         }
 
@@ -311,7 +313,13 @@ function cron_notify() {
             continue;
         }
 
-        if ($event->startdate->getTimestamp() < TIME) {
+        if (in_array($event->type, array(Event::TYPE_REGULAR, Event::TYPE_CLOSED), $strict = true) === true) {
+            // On ignore les évènements réguliers et de fermeture.
+            continue;
+        }
+
+        if (strftime('%FT%H:%M', $event->startdate->getTimestamp()) !== strftime('%FT%H:%M', TIME)) {
+            // On ignore les anciens évènements.
             continue;
         }
 
@@ -323,8 +331,7 @@ function cron_notify() {
         return;
     }
 
-    $message = 'Services perturbés :'.PHP_EOL.
-        implode(PHP_EOL, $messages);
+    $message = sprintf('Services perturbés :%s%s%s%s', PHP_EOL, implode(PHP_EOL, $messages), PHP_EOL, strftime('%c'));
 
     $subscriptions = Subscription::get_records();
     if (isset($subscriptions[0]) === false) {
