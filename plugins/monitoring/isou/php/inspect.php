@@ -24,6 +24,7 @@ if ($service === false) {
 
 $sql = "SELECT DISTINCT s.id, s.name, s.state".
     " FROM services s".
+    " JOIN plugins p ON p.id = s.idplugin AND p.active = 1".
     " JOIN dependencies_groups_content dgc ON s.id = dgc.idservice".
     " JOIN dependencies_groups dg ON dg.id = dgc.idgroup".
     " WHERE dg.idservice = ?";

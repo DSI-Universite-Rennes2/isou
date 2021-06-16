@@ -385,6 +385,7 @@ class Service {
         if (isset($options['fetch_column']) === true) {
             $sql = 'SELECT s.id, s.name'.
                 ' FROM services s'.
+                ' JOIN plugins p ON p.id = s.idplugin AND p.active = 1'.
                 ' '.implode(' ', $joins).
                 $sql_conditions.
                 ' ORDER BY UPPER(s.name)';
@@ -397,6 +398,7 @@ class Service {
 
         $sql = 'SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idplugin, s.idcategory'.
                 ' FROM services s'.
+                ' JOIN plugins p ON p.id = s.idplugin AND p.active = 1'.
                 ' '.implode(' ', $joins).
                 $sql_conditions.
                 ' ORDER BY UPPER(s.name)';
