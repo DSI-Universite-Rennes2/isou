@@ -23,13 +23,25 @@ function get_page_name(string $script_called = 'index.php') {
     $uri = $_SERVER["REQUEST_URI"];
 
     $pos = strpos($uri, '/'.$script_called);
-
-    $var = strpos($uri, '?');
-    if ($var !== false) {
-        $uri = substr($uri, 0, $var);
+    if ($pos === false) {
+        // Le script appelé n'est pas présent dans l'URL appelée.
+        return '';
     }
 
-    return substr($uri, (strlen(' /'.$script_called) + $pos));
+    $get_vars = strpos($uri, '?');
+    if ($get_vars !== false) {
+        // On nettoie l'URL de ses paramètre GET.
+        $uri = substr($uri, 0, $get_vars);
+    }
+
+    $script_length = strlen($script_called);
+    if (substr($uri, -$script_length) === $script_called) {
+        // Le script est appelé directement, sans paramètre.
+        return '';
+    }
+
+    $cut = $pos + strlen('/'.$script_called.'/');
+    return substr($uri, $cut);
 }
 
 /**
