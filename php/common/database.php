@@ -21,7 +21,7 @@ try {
 
     $smarty->display('common/error_database.tpl');
 
-    $LOGGER->addError($exception->getMessage());
+    $LOGGER->error($exception->getMessage());
 
     // Close PDO connection.
     $DB = null;

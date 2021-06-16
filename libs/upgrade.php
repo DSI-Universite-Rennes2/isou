@@ -271,7 +271,7 @@ function upgrade_plugins(bool $check_only = false) {
                 }
 
                 if (is_file($plugins_path.'/'.$entry.'/version.php') === false) {
-                    $LOGGER->addInfo('Le fichier '.$entry.'/version.php n\'existe pas.');
+                    $LOGGER->info('Le fichier '.$entry.'/version.php n\'existe pas.');
                     continue;
                 }
 
@@ -285,7 +285,7 @@ function upgrade_plugins(bool $check_only = false) {
             $module = include($plugins_path.'/'.$entry.'/version.php');
 
             if (is_object($module) === false) {
-                $LOGGER->addInfo('Le fichier '.$entry.'/version.php ne retourne pas un objet.');
+                $LOGGER->info('Le fichier '.$entry.'/version.php ne retourne pas un objet.');
                 continue;
             }
 

@@ -32,7 +32,7 @@ class Logger extends \Monolog\Logger {
      *
      * @return void
      */
-    public function addError($message, array $context = array()) { // phpcs:ignore
+    public function error($message, array $context = array()) : void { // phpcs:ignore
     }
 
     /**
@@ -43,7 +43,7 @@ class Logger extends \Monolog\Logger {
      *
      * @return void
      */
-    public function addInfo($message, array $context = array()) { // phpcs:ignore
+    public function info($message, array $context = array()) : void { // phpcs:ignore
     }
 
     /**
@@ -54,6 +54,6 @@ class Logger extends \Monolog\Logger {
      *
      * @return void
      */
-    public function addWarning($message, array $context = array()) { // phpcs:ignore
+    public function warning($message, array $context = array()) : void { // phpcs:ignore
     }
 }

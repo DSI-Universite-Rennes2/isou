@@ -520,7 +520,7 @@ class Event {
             $datetime = new \DateTime($datetime);
         } catch (\Exception $exception) {
             $datetime = new \DateTime();
-            $LOGGER->addInfo($exception->getMessage());
+            $LOGGER->info($exception->getMessage());
         }
 
         $bigger_than_startdate = ($datetime >= $this->startdate);
@@ -769,7 +769,7 @@ class Event {
         global $DB, $LOGGER;
 
         if ($DB->inTransaction() === false) {
-            $LOGGER->addWarning('Il est recommandé de démarrer une transaction lorsqu\'on enregistre un évènement.');
+            $LOGGER->warning('Il est recommandé de démarrer une transaction lorsqu\'on enregistre un évènement.');
         }
 
         if ($this->description === null) {
@@ -811,7 +811,7 @@ class Event {
             }
         } else {
             // Enregistre le message d'erreur.
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
 
             throw new \Exception('Une erreur est survenue lors de l\'enregistrement de l\'évènement.');
         }
@@ -832,7 +832,7 @@ class Event {
 
         if ($query->execute(array(':id' => $this->id)) === false) {
             // Enregistre le message d'erreur.
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
 
             throw new \Exception('Une erreur est survenue lors de la suppression de l\'évènement.');
         }
@@ -852,7 +852,7 @@ class Event {
             $this->enddate = new \DateTime(STR_TIME);
             return true;
         } else {
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
             return false;
         }
     }

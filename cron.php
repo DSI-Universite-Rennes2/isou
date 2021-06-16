@@ -18,7 +18,7 @@ if (defined('STDIN') === false) {
 require __DIR__.'/config.php';
 
 $starttime = microtime(true);
-$LOGGER->addInfo('Début du cron '.strftime('%c'));
+$LOGGER->info('Début du cron '.strftime('%c'));
 
 // Force la définition du niveau d'erreurs.
 error_reporting(-1);
@@ -33,7 +33,7 @@ $CFG = get_configurations();
 
 // Vérifie si un nouvelle version n'est pas en cours d'installation.
 if (has_new_version() === true) {
-    $LOGGER->addInfo('Une nouvelle version est en cours d\'installation.');
+    $LOGGER->info('Une nouvelle version est en cours d\'installation.');
     exit(0);
 }
 
@@ -83,19 +83,19 @@ foreach ($plugins as $plugin) {
 
     $plugin_library_file = PRIVATE_PATH.'/plugins/monitoring/'.$plugin->codename.'/lib.php';
     if (is_readable($plugin_library_file) === false) {
-        $LOGGER->addWarning('Le fichier "'.$plugin_library_file.'" n\'existe pas.');
+        $LOGGER->warning('Le fichier "'.$plugin_library_file.'" n\'existe pas.');
         continue;
     }
 
     require $plugin_library_file;
     $function_name = 'plugin_'.$plugin->codename.'_update';
     if (function_exists($function_name) === false) {
-        $LOGGER->addWarning('La fonction "'.$function_name.'" n\'existe pas.');
+        $LOGGER->warning('La fonction "'.$function_name.'" n\'existe pas.');
         continue;
     }
 
     if ($function_name($plugin) === false) {
-        $LOGGER->addWarning('La mise à jour du backend "'.$plugin->codename.'" ne s\'est pas passé correctement.');
+        $LOGGER->warning('La mise à jour du backend "'.$plugin->codename.'" ne s\'est pas passé correctement.');
     }
 }
 
@@ -125,5 +125,5 @@ if ($CFG['report_enabled'] === '1') {
 
 unlink($pid_file);
 
-$LOGGER->addInfo('Temps d\'exécution : '.(microtime(true) - $starttime).' secondes.');
-$LOGGER->addInfo('Fin du cron '.strftime('%c'));
+$LOGGER->info('Temps d\'exécution : '.(microtime(true) - $starttime).' secondes.');
+$LOGGER->info('Fin du cron '.strftime('%c'));

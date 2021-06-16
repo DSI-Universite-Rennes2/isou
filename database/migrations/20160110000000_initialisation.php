@@ -332,10 +332,10 @@ class Initialisation extends AbstractMigration {
         echo ' ==   - Crée la table "events".'.PHP_EOL;
         $table = $this->table('events');
         $table->addColumn('startdate', 'string')
-            ->addColumn('enddate', 'string')
+            ->addColumn('enddate', 'string', array('null' => true))
             ->addColumn('state', 'integer')
             ->addColumn('type', 'integer')
-            ->addColumn('period', 'integer')
+            ->addColumn('period', 'integer', array('null' => true))
             ->addColumn('ideventdescription', 'integer')
             ->addColumn('idservice', 'integer')
             ->addIndex(array('ideventdescription', 'idservice'))
@@ -492,16 +492,16 @@ class Initialisation extends AbstractMigration {
         echo ' ==   - Crée la table "services".'.PHP_EOL;
         $table = $this->table('services');
         $table->addColumn('name', 'string')
-            ->addColumn('url', 'string')
+            ->addColumn('url', 'string', array('null' => true))
             ->addColumn('state', 'integer')
-            ->addColumn('comment', 'string')
+            ->addColumn('comment', 'string', array('null' => true))
             ->addColumn('enable', 'integer')
             ->addColumn('visible', 'integer')
             ->addColumn('locked', 'integer')
             ->addColumn('rsskey', 'integer')
             ->addColumn('timemodified', 'string')
             ->addColumn('idplugin', 'integer')
-            ->addColumn('idcategory', 'integer')
+            ->addColumn('idcategory', 'integer', array('null' => true))
             ->addIndex(array('rsskey', 'idplugin', 'idcategory'))
             ->addIndex(array('idcategory'))
             ->addIndex(array('idplugin'))
@@ -591,8 +591,8 @@ class Initialisation extends AbstractMigration {
             ->addColumn('public_key', 'string')
             ->addColumn('authentification_token', 'string')
             ->addColumn('content_encoding', 'string')
-            ->addColumn('lastnotification', 'string')
-            ->addColumn('iduser', 'integer')
+            ->addColumn('lastnotification', 'string', array('null' => true))
+            ->addColumn('iduser', 'integer', array('null' => true))
             ->create();
     }
 
@@ -614,7 +614,7 @@ class Initialisation extends AbstractMigration {
             ->addColumn('lastname', 'string')
             ->addColumn('email', 'string')
             ->addColumn('admin', 'integer')
-            ->addColumn('lastaccess', 'string')
+            ->addColumn('lastaccess', 'string', array('null' => true))
             ->addColumn('timecreated', 'string')
             ->addIndex(array('authentification', 'username'), array('unique' => true))
             ->create();

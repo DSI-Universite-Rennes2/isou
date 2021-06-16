@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou;
 
-use Minishlink\WebPush\Notification;
+use Minishlink\WebPush\Subscription as SubscriptionInterface;
 use Minishlink\WebPush\WebPush;
 
 /**
@@ -106,7 +106,7 @@ class Subscription {
 
         if ($query->execute(array(':id' => $this->id)) === false) {
             // Enregistre le message d'erreur.
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
 
             throw new \Exception('Une erreur est survenue lors de la suppression de la souscription.');
         }
@@ -241,7 +241,14 @@ class Subscription {
      * @return true|array Retourne true en cas de succès, ou un tableau contenant les erreurs rencontrées à l'envoi du message.
      */
     public function notify(WebPush $webpush, Notification $notification) {
-        return $webpush->sendNotification($this->endpoint, $notification->payload, $this->public_key, $this->authentification_token, $notification->flush, $notification->options);
+        $parameters = array();
+        $parameters['endpoint'] = $this->endpoint;
+        $parameters['publicKey'] = $this->public_key;
+        $parameters['authToken'] = $this->authentification_token;
+        $parameters['contentEncoding'] = $this->content_encoding;
+        $subscription = SubscriptionInterface::create($parameters);
+
+        return $webpush->sendOneNotification($subscription, $notification->payload, $notification->options);
     }
 
     /**
@@ -280,7 +287,7 @@ class Subscription {
         $query = $DB->prepare($sql);
         if ($query->execute($params) === false) {
             // Enregistre le message d'erreur.
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
 
             throw new \Exception('Une erreur est survenue lors de l\'enregistrement de la souscription.');
         }

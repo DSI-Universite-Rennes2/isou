@@ -460,7 +460,7 @@ class Service {
             $results['successes'] = array('Les données ont été correctement enregistrées.');
         } else {
             // Enregistre le message d'erreur.
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
 
             $results['errors'] = array('Une erreur est survenue lors de l\'enregistrement des données.');
         }
@@ -511,7 +511,7 @@ class Service {
             $results['successes'] = array('Les données ont été correctement supprimées.');
         } else {
             // Enregistre le message d'erreur.
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
 
             if ($previous_transaction === false) {
                 $DB->rollBack();
@@ -576,7 +576,7 @@ class Service {
             $this->enable = $enable;
             return true;
         } else {
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
             return false;
         }
     }
@@ -606,7 +606,7 @@ class Service {
             $this->visible = '1';
             return true;
         } else {
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
             return false;
         }
     }
@@ -636,7 +636,7 @@ class Service {
             $this->locked = '1';
             return true;
         } else {
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
             return false;
         }
     }
@@ -655,7 +655,7 @@ class Service {
             $this->locked = '0';
             return true;
         } else {
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
             return false;
         }
     }

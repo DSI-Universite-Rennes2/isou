@@ -188,7 +188,7 @@ class Event_Description {
             }
         } else {
             // Enregistre le message d'erreur.
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
 
             throw new \Exception('Une erreur est survenue lors de l\'enregistrement de la description de l\'évènement.');
         }
@@ -209,7 +209,7 @@ class Event_Description {
 
         if ($query->execute(array(':id' => $this->id)) === false) {
             // Enregistre le message d'erreur.
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
 
             throw new \Exception('Une erreur est survenue lors de la suppression de la description d\'évènement.');
         }

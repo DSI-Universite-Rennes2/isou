@@ -26,7 +26,7 @@ function plugin_nagios_update(Plugin $plugin) {
 
     // Vérifie si le fichier est lisible.
     if (is_readable($plugin->settings->statusdat_path) === false) {
-        $LOGGER->addError('Le fichier '.$plugin->settings->statusdat_path.' ne peut pas être lu.');
+        $LOGGER->error('Le fichier '.$plugin->settings->statusdat_path.' ne peut pas être lu.');
 
         return false;
     }
@@ -34,7 +34,7 @@ function plugin_nagios_update(Plugin $plugin) {
     // Vérifie si le fichier peut être ouvert.
     $handle = @fopen($plugin->settings->statusdat_path, 'r');
     if ($handle === false) {
-        $LOGGER->addError('Le fichier '.$plugin->settings->statusdat_path.' n\'a pu être ouvert.');
+        $LOGGER->error('Le fichier '.$plugin->settings->statusdat_path.' n\'a pu être ouvert.');
 
         return false;
     }
@@ -80,7 +80,7 @@ function plugin_nagios_update(Plugin $plugin) {
             if (isset($services[$id]) === false) {
                 $services[$id] = $service;
             } else {
-                $LOGGER->addInfo('Un service Nagios porte déjà le nom "'.$service->name.'" (id: '.$id.').');
+                $LOGGER->info('Un service Nagios porte déjà le nom "'.$service->name.'" (id: '.$id.').');
             }
         }
     }
@@ -91,12 +91,12 @@ function plugin_nagios_update(Plugin $plugin) {
 
     if (is_dir($cache_path) === false) {
         if (mkdir($cache_path, 0755, $recursive = true) === false) {
-            $LOGGER->addError('Impossible de créer le dossier "'.$cache_path.'"');
+            $LOGGER->error('Impossible de créer le dossier "'.$cache_path.'"');
         }
     }
 
     if (file_put_contents($cache_path.'/services.json', json_encode($services, JSON_PRETTY_PRINT)) === false) {
-        $LOGGER->addError('Le cache n\'a pas pu être écrit dans le répertoire "'.$cache_path.'".');
+        $LOGGER->error('Le cache n\'a pas pu être écrit dans le répertoire "'.$cache_path.'".');
     }
 
     // Met à jour les états des services Nagios dans la base de données d'Isou.
@@ -108,7 +108,7 @@ function plugin_nagios_update(Plugin $plugin) {
         }
 
         if ($service->state !== $services[$id]->state) {
-            $LOGGER->addInfo('   Le service "'.$service->name.'" (id #'.$service->id.') passe de l\'état '.$service->state.' à '.$services[$id]->state.'.');
+            $LOGGER->info('   Le service "'.$service->name.'" (id #'.$service->id.') passe de l\'état '.$service->state.' à '.$services[$id]->state.'.');
             $service->change_state($services[$id]->state);
         }
     }

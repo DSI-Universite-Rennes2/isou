@@ -246,7 +246,7 @@ class Category {
             $results['successes'] = array('Les données ont été correctement enregistrées.');
         } else {
             // Enregistre le message d'erreur.
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
 
             $results['errors'] = array('Une erreur est survenue lors de l\'enregistrement des données.');
         }
@@ -294,7 +294,7 @@ class Category {
             $results['successes'] = array('Les données ont été correctement supprimées.');
         } else {
             // Enregistre le message d'erreur.
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
 
             $DB->rollBack();
             $results['errors'] = array('Une erreur est survenue lors de la suppression des données.');
@@ -338,7 +338,7 @@ class Category {
                 $results['successes'] = array('Les données ont été correctement enregistrées.');
             } else {
                 // Enregistre le message d'erreur.
-                $LOGGER->addError(implode(', ', $query->errorInfo()));
+                $LOGGER->error(implode(', ', $query->errorInfo()));
 
                 $DB->rollBack();
                 $results['errors'] = array('Une erreur est survenue lors de l\'enregistrement des données.');
@@ -389,7 +389,7 @@ class Category {
                 $results['successes'] = array('Les données ont été correctement enregistrées.');
             } else {
                 // Enregistre le message d'erreur.
-                $LOGGER->addError(implode(', ', $query->errorInfo()));
+                $LOGGER->error(implode(', ', $query->errorInfo()));
 
                 $DB->rollBack();
                 $results['errors'] = array('Une erreur est survenue lors de l\'enregistrement des données.');

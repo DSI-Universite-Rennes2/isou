@@ -218,7 +218,7 @@ class Dependency_Group_Content {
             $results['successes'] = array('Les données ont été correctement enregistrées.');
         } else {
             // Enregistre le message d'erreur.
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
 
             $results['errors'] = array('Une erreur est survenue lors de l\'enregistrement des données.');
         }
@@ -254,7 +254,7 @@ class Dependency_Group_Content {
             $results['successes'] = array('Les données ont été correctement enregistrées.');
         } else {
             // Enregistre le message d'erreur.
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
 
             $results['errors'] = array('Une erreur est survenue lors de l\'enregistrement des données.');
         }
@@ -281,7 +281,7 @@ class Dependency_Group_Content {
             $results['successes'] = array('Les données ont été correctement supprimées.');
         } else {
             // Enregistre le message d'erreur.
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
 
             $results['errors'] = array('Une erreur est survenue lors de la suppression des données.');
         }

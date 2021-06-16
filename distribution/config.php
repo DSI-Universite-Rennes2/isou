@@ -52,6 +52,8 @@ $LOGGER = new Logger('isou');
 if (defined('STDIN') === false) {
     $LOGGER->pushHandler(new StreamHandler(LOGS_PATH.'/isou.log'));
     $LOGGER->pushHandler(new StreamHandler(LOGS_PATH.'/error.log', Logger::ERROR));
+} else {
+    $LOGGER->pushHandler(new StreamHandler('php://stdout'));
 }
 
 // Calcule le timestamp de l'heure courante.

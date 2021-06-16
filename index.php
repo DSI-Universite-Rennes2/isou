@@ -8,6 +8,9 @@
  * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
  * @license The Unlicense <http://unlicense.org>
  */
+
+declare(strict_types=1);
+
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>

@@ -29,7 +29,7 @@ function update_services_tree() {
     // TODO: utilisé la propriété timemodified.
     $services = Service::get_records();
 
-    $LOGGER->addInfo('Mise à jour de l\'arbre des dépendances');
+    $LOGGER->info('Mise à jour de l\'arbre des dépendances');
 
     // Parcourt tous les services.
     // Pour chaque service, nous mettons à jour les services qui dépendent de ce service.
@@ -39,8 +39,8 @@ function update_services_tree() {
         // Définit tous les enfants de ce service et de son état courant.
         $parent_service->set_reverse_dependencies($parent_service->state);
 
-        // $LOGGER->addDebug('Recherche des dépendances pour le service '.$parent_service->name.' (id #'.$parent_service->id.')');
-        // $LOGGER->addDebug('   '.count($parent_service->reverse_dependencies).' groupes dépendent du service "'.$parent_service->name.'" (avec l\'état: '.$parent_service->state.')');
+        // $LOGGER->debug('Recherche des dépendances pour le service '.$parent_service->name.' (id #'.$parent_service->id.')');
+        // $LOGGER->debug('   '.count($parent_service->reverse_dependencies).' groupes dépendent du service "'.$parent_service->name.'" (avec l\'état: '.$parent_service->state.')');
 
         // Parcourt chaque enfant.
         foreach ($parent_service->reverse_dependencies as $dependencies_group) {
@@ -48,7 +48,7 @@ function update_services_tree() {
 
             // Si l'enfant n'existe plus ou n'est plus actif, on ne fait rien.
             if ($child_service === false) {
-                $LOGGER->addError('   Le service avec l\'id #'.$dependencies_group->idservice.' n\'existe pas ou plus.'.
+                $LOGGER->error('   Le service avec l\'id #'.$dependencies_group->idservice.' n\'existe pas ou plus.'.
                     ' Il est pourtant lié avec le service "'.$parent_service->name.'" (id #'.$parent_service->id.') dans le groupe "'.$dependencies_group->name.'" (id #'.$dependencies_group->id.')');
                 continue;
             }
@@ -56,7 +56,7 @@ function update_services_tree() {
             // Si le service enfant est verrouillé, on ne fait rien.
             if ($child_service->locked === '1') {
                 // TODO: vérifier si un évènement existe... sinon, le créer.
-                $LOGGER->addInfo('   Le service "'.$child_service->name.'" (id #'.$child_service->id.') est actuellement en mode forcé. Il ne peut pas être mis à jour.');
+                $LOGGER->info('   Le service "'.$child_service->name.'" (id #'.$child_service->id.') est actuellement en mode forcé. Il ne peut pas être mis à jour.');
                 continue;
             }
 
@@ -65,11 +65,11 @@ function update_services_tree() {
 
             // Si il y a un évènement en cours de type régulier ou de fermeture, on ne fait rien.
             if ($event !== false && in_array($event->type, array(Event::TYPE_REGULAR, Event::TYPE_CLOSED), $strict = true) === true) {
-                $LOGGER->addInfo('   Le service "'.$child_service->name.'" (id #'.$child_service->id.') a actuellement une interruption régulière en cours ou est fermé. Il ne peut pas être mis à jour.');
+                $LOGGER->info('   Le service "'.$child_service->name.'" (id #'.$child_service->id.') a actuellement une interruption régulière en cours ou est fermé. Il ne peut pas être mis à jour.');
                 continue;
             }
 
-            $LOGGER->addInfo('   Analyse du groupe "'.$dependencies_group->name.'" (id #'.$dependencies_group->id.') attaché au service "'.$child_service->name.'" (id #'.$child_service->id.')');
+            $LOGGER->info('   Analyse du groupe "'.$dependencies_group->name.'" (id #'.$dependencies_group->id.') attaché au service "'.$child_service->name.'" (id #'.$child_service->id.')');
 
             if ($dependencies_group->redundant === '1') {
                 // Si le goupe est redondé... on cherche une dépendance qui fonctionne bien.
@@ -96,7 +96,7 @@ function update_services_tree() {
             if ($child_service->state < $state) {
                 // Le niveau d'état du groupe est plus important que l'état actuel du service.
                 // On change l'état du service et ajoute un évènement au besoin.
-                $LOGGER->addInfo('   Le service "'.$child_service->name.'" (id #'.$child_service->id.') passe de l\'état '.$child_service->state.' à '.$dependencies_group->groupstate.'.');
+                $LOGGER->info('   Le service "'.$child_service->name.'" (id #'.$child_service->id.') passe de l\'état '.$child_service->state.' à '.$dependencies_group->groupstate.'.');
                 $event = $child_service->change_state($state);
             } else {
                 // Ce groupe de dépendance n'a pas de problèmes. On continue à parcourir les autres groupes de dépendances.
@@ -133,7 +133,7 @@ function update_services_tree() {
                     $DB->commit();
                 } catch (Exception $exception) {
                     $DB->rollBack();
-                    $LOGGER->addError('Erreur lors de l\'enregistrement de l\'évènement: '.$exception->getMessage());
+                    $LOGGER->error('Erreur lors de l\'enregistrement de l\'évènement: '.$exception->getMessage());
                 }
             }
 
@@ -150,7 +150,7 @@ function update_services_tree() {
         $event = $service->get_current_event();
         if ($event === false) {
             if ($service->state !== State::OK) {
-                $LOGGER->addInfo('   Le service "'.$service->name.'" (id #'.$service->id.') revient à l\'état OK.');
+                $LOGGER->info('   Le service "'.$service->name.'" (id #'.$service->id.') revient à l\'état OK.');
 
                 // Change l'état du service, et clos l'évènement en cours.
                 $service->change_state(State::OK);
@@ -159,7 +159,7 @@ function update_services_tree() {
         }
 
         if ($event->state !== $service->state) {
-            $LOGGER->addInfo('   Le service "'.$service->name.'" (id #'.$service->id.') passe de l\'état '.$service->state.' à '.$event->state.'.');
+            $LOGGER->info('   Le service "'.$service->name.'" (id #'.$service->id.') passe de l\'état '.$service->state.' à '.$event->state.'.');
 
             $service->change_state($event->state);
             continue;
@@ -189,7 +189,7 @@ function update_services_tree() {
             continue;
         }
 
-        $LOGGER->addInfo('   L\'évènement du service "'.$service->name.'" (id #'.$event->id.') a été fermé.');
+        $LOGGER->info('   L\'évènement du service "'.$service->name.'" (id #'.$event->id.') a été fermé.');
 
         // Change l'état du service, et clos l'évènement en cours.
         $service->change_state(State::OK);
@@ -218,7 +218,7 @@ function update_services_tree() {
         $event->save();
     }
 
-    $LOGGER->addInfo('Fin de la mise à jour de l\'arbre des dépendances');
+    $LOGGER->info('Fin de la mise à jour de l\'arbre des dépendances');
 }
 
 /**
@@ -281,15 +281,18 @@ function cron_notify() {
     global $CFG, $DB, $LOGGER;
 
     if ($CFG['notifications_enabled'] === '0') {
+        $LOGGER->notice('Les notifications web ne sont pas activées.');
         return;
     }
 
     if (empty($CFG['site_url']) === true) {
+        $LOGGER->notice('Le paramètre "site_url" n\'est pas défini.');
         return;
     }
 
     $services = Service::get_records(array('plugin' => PLUGIN_ISOU));
     if (isset($services[0]) === false) {
+        $LOGGER->notice('Aucun service isou créé.');
         return;
     }
 
@@ -316,6 +319,7 @@ function cron_notify() {
     }
 
     if (isset($messages[0]) === false) {
+        $LOGGER->notice('Aucun nouveau service isou en anomalie.');
         return;
     }
 
@@ -324,7 +328,7 @@ function cron_notify() {
 
     $subscriptions = Subscription::get_records();
     if (isset($subscriptions[0]) === false) {
-        $LOGGER->addInfo('Aucun utilisateur n\'a souscrit aux notifications web');
+        $LOGGER->info('Aucun utilisateur n\'a souscrit aux notifications web');
         return;
     }
 
@@ -335,15 +339,15 @@ function cron_notify() {
     $notification = new Notification($title, $message, $url, $icon);
     $webpush = $notification->get_webpush();
 
-    $LOGGER->addInfo('Envoi de '.count($subscriptions).' notification(s) web');
+    $LOGGER->info('Envoi de '.count($subscriptions).' notification(s) web');
     foreach ($subscriptions as $subscription) {
-        $result = $subscription->notify($webpush, $notification);
+        $response = $subscription->notify($webpush, $notification);
 
-        if (isset($result['expired']) === true && $result['expired'] === true) {
-            $LOGGER->addInfo('Souscription #'.$subscription->id.' expirée pour l\'utilisateur #'.$subscription->iduser);
+        if ($response->isSubscriptionExpired() === true) {
+            $LOGGER->info('Souscription #'.$subscription->id.' expirée pour l\'utilisateur #'.$subscription->iduser);
             $subscription->delete();
-        } elseif (isset($result['success']) === true && $result['success'] === false) {
-            $LOGGER->addInfo('Envoi de la souscription #'.$subscription->id.' pour l\'utilisateur #'.$subscription->iduser.' a échoué ('.$result['message'].')');
+        } elseif ($response->isSuccess() === false) {
+            $LOGGER->info('Envoi de la souscription #'.$subscription->id.' pour l\'utilisateur #'.$subscription->iduser.' a échoué ('.$response->getReason().')');
         }
     }
 }
@@ -410,7 +414,7 @@ function cron_delete_old_plugin_events() {
                 continue;
             }
 
-            $LOGGER->addInfo('Supprime l\'évènement #'.$event->id.' du '.$event->startdate->format('Y-m-d\TH:i:s').' au '.$event->enddate->format('Y-m-d\TH:i:s'));
+            $LOGGER->info('Supprime l\'évènement #'.$event->id.' du '.$event->startdate->format('Y-m-d\TH:i:s').' au '.$event->enddate->format('Y-m-d\TH:i:s'));
             $event->delete();
         }
     }

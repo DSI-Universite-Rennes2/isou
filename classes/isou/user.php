@@ -279,7 +279,7 @@ class User {
             }
         } else {
             // Enregistre le message d'erreur.
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
 
             throw new \Exception('Une erreur est survenue lors de l\'enregistrement de l\'utilisateur.');
         }

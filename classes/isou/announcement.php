@@ -179,10 +179,10 @@ class Announcement {
                 $results['successes'][] = 'L\'annonce a bien été retirée.';
             }
 
-            $LOGGER->addInfo('Modification de l\'annonce', array('author' => $_SESSION['phpCAS']['user']));
+            $LOGGER->info('Modification de l\'annonce', array('author' => $_SESSION['phpCAS']['user']));
         } else {
             // Enregistre le message d'erreur dans les logs.
-            $LOGGER->addError(implode(', ', $query->errorInfo()));
+            $LOGGER->error(implode(', ', $query->errorInfo()));
 
             $results['errors'][] = 'La modification n\'a pas été enregistrée !';
         }

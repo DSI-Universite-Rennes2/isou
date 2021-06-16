@@ -26,7 +26,7 @@ function plugin_thruk_update(Plugin $plugin) {
 
     $url = $plugin->settings->thruk_path;
     if (empty($url) === true) {
-        $LOGGER->addError('Le paramètre "URL de Thruk" semble être vide.');
+        $LOGGER->error('Le paramètre "URL de Thruk" semble être vide.');
 
         return false;
     }
@@ -47,7 +47,7 @@ function plugin_thruk_update(Plugin $plugin) {
     // Vérifie si le fichier peut être ouvert.
     $handle = @fopen($url, $mode = 'rb', $use_include_path = false, stream_context_create($params));
     if ($handle === false) {
-        $LOGGER->addError('L\'url "'.$url.'" n\'est pas accessible.');
+        $LOGGER->error('L\'url "'.$url.'" n\'est pas accessible.');
 
         return false;
     }
@@ -56,14 +56,14 @@ function plugin_thruk_update(Plugin $plugin) {
     fclose($handle);
 
     if ($response === false) {
-        $LOGGER->addError('Les données de l\'API Thruk n\'ont pas pu être lues.');
+        $LOGGER->error('Les données de l\'API Thruk n\'ont pas pu être lues.');
 
         return false;
     }
 
     $elements = json_decode($response);
     if ($elements === null) {
-        $LOGGER->addError('Le JSON reçu par l\'API Thruk n\'a pas pu être décodé.');
+        $LOGGER->error('Le JSON reçu par l\'API Thruk n\'a pas pu être décodé.');
 
         return false;
     }
@@ -87,7 +87,7 @@ function plugin_thruk_update(Plugin $plugin) {
             if (isset($services[$id]) === false) {
                 $services[$id] = $service;
             } else {
-                $LOGGER->addInfo('Un service Thruk porte déjà le nom "'.$service->name.'" (id: '.$id.').');
+                $LOGGER->info('Un service Thruk porte déjà le nom "'.$service->name.'" (id: '.$id.').');
             }
         }
     }
@@ -97,12 +97,12 @@ function plugin_thruk_update(Plugin $plugin) {
 
     if (is_dir($cache_path) === false) {
         if (mkdir($cache_path, 0755, $recursive = true) === false) {
-            $LOGGER->addError('Impossible de créer le dossier "'.$cache_path.'"');
+            $LOGGER->error('Impossible de créer le dossier "'.$cache_path.'"');
         }
     }
 
     if (file_put_contents($cache_path.'/services.json', json_encode($services, JSON_PRETTY_PRINT)) === false) {
-        $LOGGER->addError('Le cache n\'a pas pu être écrit dans le répertoire "'.$cache_path.'".');
+        $LOGGER->error('Le cache n\'a pas pu être écrit dans le répertoire "'.$cache_path.'".');
     }
 
     // Met à jour les états des services Thruk dans la base de données d'Isou.
@@ -114,7 +114,7 @@ function plugin_thruk_update(Plugin $plugin) {
         }
 
         if ($service->state !== $services[$id]->state) {
-            $LOGGER->addInfo('   Le service "'.$service->name.'" (id #'.$service->id.') passe de l\'état '.$service->state.' à '.$services[$id]->state.'.');
+            $LOGGER->info('   Le service "'.$service->name.'" (id #'.$service->id.') passe de l\'état '.$service->state.' à '.$services[$id]->state.'.');
             $service->change_state($services[$id]->state);
         }
     }

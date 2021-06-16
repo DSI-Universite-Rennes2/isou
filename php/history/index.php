@@ -199,7 +199,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
 
             $event->total = implode(', ', $event->total);
         } catch (Exception $exception) {
-            $LOGGER->addError($exception->getMessage());
+            $LOGGER->error($exception->getMessage());
             continue;
         }
 

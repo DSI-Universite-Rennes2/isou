@@ -24,7 +24,7 @@ if (isset($_DELETE['endpoint'], $_DELETE['publicKey'], $_DELETE['authToken'], $_
             $response->status = 200;
             $response->message = 'Déinscription enregistrée.';
         } catch (Exception $exception) {
-            $LOGGER->addError($exception->getMessage());
+            $LOGGER->error($exception->getMessage());
 
             $response->status = 500;
             $response->message = 'Une erreur est survenue lors de la désinscription.';

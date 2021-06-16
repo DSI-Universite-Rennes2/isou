@@ -74,7 +74,7 @@ function plugin_isou_update_grouping() {
             $dependency_group->message = '';
             $result = $dependency_group->save();
             if (isset($result['errors'][0]) === true) {
-                $LOGGER->addError('Impossible de créer un groupe de dépendances avec l\'état '.$state.' pour le service #'.$service->id);
+                $LOGGER->error('Impossible de créer un groupe de dépendances avec l\'état '.$state.' pour le service #'.$service->id);
 
                 // On passe au groupement suivant.
                 break 2;
@@ -91,7 +91,7 @@ function plugin_isou_update_grouping() {
                     $index = array_search($content->idservice, $grouping_dependencies_list, $strict = true);
                     if ($index === false) {
                         // Supprime d'anciens services.
-                        $LOGGER->addInfo('Supprime du groupe #'.$groupid.' le service #'.$content->idservice);
+                        $LOGGER->info('Supprime du groupe #'.$groupid.' le service #'.$content->idservice);
 
                         $content->delete();
                         continue;
@@ -109,9 +109,9 @@ function plugin_isou_update_grouping() {
 
                     $result = $dependency_group_content->save();
                     if (isset($result['errors'][0]) === true) {
-                        $LOGGER->addError('Impossible d\'ajouter au groupe #'.$groupid.' le service #'.$idservice);
+                        $LOGGER->error('Impossible d\'ajouter au groupe #'.$groupid.' le service #'.$idservice);
                     } else {
-                        $LOGGER->addInfo('Ajoute au groupe #'.$groupid.' le service #'.$idservice);
+                        $LOGGER->info('Ajoute au groupe #'.$groupid.' le service #'.$idservice);
                     }
                 }
             }

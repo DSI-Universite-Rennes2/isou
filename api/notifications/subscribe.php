@@ -28,7 +28,7 @@ if (isset($_POST['endpoint'], $_POST['publicKey'], $_POST['authToken'], $_POST['
             $response->status = 200;
             $response->message = 'Inscription enregistrée.';
         } catch (Exception $exception) {
-            $LOGGER->addError($exception->getMessage());
+            $LOGGER->error($exception->getMessage());
 
             $response->status = 500;
             $response->message = 'Une erreur est survenue lors de l\'inscription.';
