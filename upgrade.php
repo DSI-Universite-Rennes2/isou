@@ -86,6 +86,12 @@ try {
         case '2013-00-00.1':
             upgrade_100_to_200();
             // Pas de break. On enchaine sur l'upgrade de la version 1.0.0 à 2.0.0.
+        case '2.0.0':
+        case '2.1.0':
+        case '2.1.1':
+        case '2.1.2':
+            upgrade_200_to_300();
+            // Pas de break. On enchaine les mises à jour.
         default:
             // Finally, upgrade plugins.
             echo PHP_EOL;

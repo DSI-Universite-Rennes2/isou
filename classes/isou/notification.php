@@ -107,6 +107,8 @@ class Notification {
      * @return WebPush
      */
     public function get_webpush() {
+        global $CFG;
+
         // Paramètres d'authentification du message.
         $authentification = array(
             'VAPID' => array(
@@ -116,6 +118,22 @@ class Notification {
             ),
         );
 
-        return new WebPush($authentification);
+        $default_options = array();
+        $timeout = 30;
+        $curl_options = array('proxy' => array());
+
+        if (empty($CFG['http_proxy']) === false) {
+            $curl_options['proxy']['http'] = $CFG['http_proxy'];
+        }
+
+        if (empty($CFG['https_proxy']) === false) {
+            $curl_options['proxy']['https'] = $CFG['https_proxy'];
+        }
+
+        if (empty($CFG['no_proxy']) === false) {
+            $curl_options['proxy']['no'] = $CFG['no_proxy'];
+        }
+
+        return new WebPush($authentification, $default_options, $timeout, $curl_options);
     }
 }
