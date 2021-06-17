@@ -35,7 +35,12 @@ if (isset($_POST['notifications_enabled'], $_POST['http_proxy'], $_POST['https_p
             }
 
             if (isset($_POST['errors'][0]) === false) {
-                $keys = VAPID::createVapidKeys();
+                $keys = array();
+                if (is_file(VAPID_PRIVATE_KEY) === false || is_file(VAPID_PUBLIC_KEY) === false) {
+                    // On génère une paire de clés uniquement si la paire n'est pas complète.
+                    $keys = VAPID::createVapidKeys();
+                }
+
                 if (empty($keys) === false) {
                     if (file_put_contents(VAPID_PRIVATE_KEY, $keys['privateKey']) === false) {
                         $_POST['errors'][] = 'La clé privée VAPID n\'a pas pu être enregistrée. Désactivez, puis réactivez les notifications pour regénérer la clé.';
