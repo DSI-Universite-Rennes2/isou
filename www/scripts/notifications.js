@@ -1,20 +1,27 @@
 const isou_url = window.location.href.split('/index.php')[0].replace(/\/+$/, '');
 
 function setIsouActiveNotificationImage(active = true) {
+    var button = document.getElementById('isou-top-aside-notifications-button');
     var image = document.getElementById('isou-top-aside-notifications-image');
     var submit = document.getElementById('modal-notifications-submit');
 
-    if (image === false || submit === false) {
+    if (button === false || image === false || submit === false) {
         return;
     }
 
     if (active === true) {
+        button.classList.add('alert-success');
+        button.classList.remove('alert-danger');
+
         image.setAttribute('alt', 'notification activée');
         image.setAttribute('src', isou_url+'/themes/bootstrap3/images/notifications-on.svg');
 
         submit.className = 'btn btn-danger';
         submit.textContent = 'Désactiver les notifications';
     } else {
+        button.classList.add('alert-danger');
+        button.classList.remove('alert-success');
+
         image.setAttribute('alt', 'notification désactivée');
         image.setAttribute('src', isou_url+'/themes/bootstrap3/images/notifications-off.svg');
 
