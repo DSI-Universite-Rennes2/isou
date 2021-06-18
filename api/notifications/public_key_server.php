@@ -6,6 +6,8 @@
  * @license The Unlicense <http://unlicense.org>
  */
 
+declare(strict_types=1);
+
 if (defined('VAPID_PUBLIC_KEY') === true && is_readable(VAPID_PUBLIC_KEY) === true) {
     $key = file_get_contents(VAPID_PUBLIC_KEY);
 }

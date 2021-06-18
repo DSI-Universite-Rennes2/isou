@@ -6,6 +6,8 @@
  * @license The Unlicense <http://unlicense.org>
  */
 
+declare(strict_types=1);
+
 use UniversiteRennes2\Isou\Subscription;
 
 // Initialise la variable DELETE avec les paramètres de la requête HTTP.

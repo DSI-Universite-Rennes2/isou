@@ -6,6 +6,8 @@
  * @license The Unlicense <http://unlicense.org>
  */
 
+declare(strict_types=1);
+
 if ($CFG['notifications_enabled'] === '0') {
     exit(0);
 }

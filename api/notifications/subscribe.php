@@ -6,6 +6,8 @@
  * @license The Unlicense <http://unlicense.org>
  */
 
+declare(strict_types=1);
+
 use UniversiteRennes2\Isou\Subscription;
 
 if (isset($_POST['endpoint'], $_POST['publicKey'], $_POST['authToken'], $_POST['contentEncoding']) === true) {
