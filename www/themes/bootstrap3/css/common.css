@@ -109,6 +109,10 @@ input[type="date"].form-control {
     background: none;
 }
 
+.isou-list-hideable-table-div td {
+    font-weight: normal;
+}
+
 /* Vue tableau. */
 #isou-board th.today {
     background-color: #c9edf9;

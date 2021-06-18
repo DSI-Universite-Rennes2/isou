@@ -11,7 +11,7 @@ declare(strict_types=1);
 use Isou\Helpers\Script;
 use Isou\Helpers\Style;
 
-$theme_version = '1';
+$theme_version = '1.1';
 
 $STYLES[] = new Style('//unpkg.com/bootstrap@3.3/dist/css/bootstrap.min.css');
 $STYLES[] = new Style(URL.'/themes/bootstrap3/css/common.css?v='.$theme_version);
