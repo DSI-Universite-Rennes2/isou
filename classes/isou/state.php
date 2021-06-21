@@ -78,6 +78,19 @@ class State {
     );
 
     /**
+     * Liste des caractères unicode représentant les états de services.
+     *
+     * @var string[]
+     */
+    public static $UNICODE = array(
+        self::OK => "\u{1F7E2}",
+        self::WARNING => "\u{1F7E0}",
+        self::CRITICAL => "\u{1F534}",
+        self::UNKNOWN => "\u{1F535}",
+        self::CLOSED => "\u{26AA}",
+    );
+
+    /**
      * Constructeur de la classe.
      *
      * @return void
