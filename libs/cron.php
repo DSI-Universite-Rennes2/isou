@@ -318,20 +318,26 @@ function cron_notify() {
             continue;
         }
 
-        if (strftime('%FT%H:%M', $event->startdate->getTimestamp()) !== strftime('%FT%H:%M', TIME)) {
+        $format = '%FT%H:%M';
+        if (strftime($format, $event->startdate->getTimestamp()) !== strftime($format, TIME)) {
             // On ignore les anciens évènements.
             continue;
         }
 
-        $messages[] = '- '.$service->name;
+        $messages[] = sprintf('%s %s', State::$UNICODE[$event->state], $service->name);
     }
 
-    if (isset($messages[0]) === false) {
+    $count_services = count($messages);
+    if ($count_services === 0) {
         $LOGGER->notice('Aucun nouveau service isou en anomalie.');
         return;
     }
 
-    $message = sprintf('Services perturbés :%s%s%s%s', PHP_EOL, implode(PHP_EOL, $messages), PHP_EOL, strftime('%c'));
+    if ($count_services === 1) {
+        $message = sprintf('%d service perturbé - %s :%s%s', $count_services, strftime('%Hh%M'), PHP_EOL, implode(PHP_EOL, $messages));
+    } else {
+        $message = sprintf('%d services perturbés - %s :%s%s', $count_services, strftime('%Hh%M'), PHP_EOL, implode(PHP_EOL, $messages));
+    }
 
     $subscriptions = Subscription::get_records();
     if (isset($subscriptions[0]) === false) {
