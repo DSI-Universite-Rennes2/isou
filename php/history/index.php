@@ -289,7 +289,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
     for ($i = 1; $i <= $count_pages; $i++) {
         $selected = ($page == $i);
         $url = URL.'/index.php/statistiques/page/'.$i.'/filter/'.$options_filter.'#resultat';
-        $pagination[] = new SimpleMenu($i, 'Page '.$i, $url, $selected);
+        $pagination[] = new SimpleMenu((string) $i, 'Page '.$i, $url, $selected);
     }
 
     $smarty->assign('pagination', $pagination);
