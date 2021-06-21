@@ -361,6 +361,8 @@ function cron_notify() {
             $subscription->delete();
         } elseif ($response->isSuccess() === false) {
             $LOGGER->info('Envoi de la souscription #'.$subscription->id.' pour l\'utilisateur #'.$subscription->iduser.' a échoué ('.$response->getReason().')');
+        } else {
+            $LOGGER->debug('Souscription #'.$subscription->id.' envoyée à l\'utilisateur #'.$subscription->iduser);
         }
     }
 }
