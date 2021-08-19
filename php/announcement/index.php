@@ -22,7 +22,7 @@ $options_visible = array(
 if (isset($_POST['message'], $_POST['visible']) === true) {
     $announcement->message = $_POST['message'];
     $announcement->visible = $_POST['visible'];
-    $announcement->author = $_SESSION['phpCAS']['user'];
+    $announcement->author = sprintf('%s %s', $USER->firstname, $USER->lastname);
     $announcement->last_modification = new DateTime();
 
     $_POST['errors'] = $announcement->check_data($options_visible);

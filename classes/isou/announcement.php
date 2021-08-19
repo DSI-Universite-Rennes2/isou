@@ -156,7 +156,7 @@ class Announcement {
      * @return array
      */
     public function save() {
-        global $DB, $LOGGER;
+        global $DB, $LOGGER, $USER;
 
         $results = array(
             'successes' => array(),
@@ -179,7 +179,7 @@ class Announcement {
                 $results['successes'][] = 'L\'annonce a bien été retirée.';
             }
 
-            $LOGGER->info('Modification de l\'annonce', array('author' => $_SESSION['phpCAS']['user']));
+            $LOGGER->info('Modification de l\'annonce', array('userid' => $USER->id, 'username' => $USER->username));
         } else {
             // Enregistre le message d'erreur dans les logs.
             $LOGGER->error(implode(', ', $query->errorInfo()));
