@@ -19,3 +19,8 @@ $STYLES[] = new Style(URL.'/themes/bootstrap3/css/common.css?v='.$theme_version)
 if (preg_match('#^dependances/service/[0-9]+/group/[0-9]+/content/edit/0$#', implode('/', $PAGE_NAME)) === 1) {
     $SCRIPTS[] = new Script(URL.'/scripts/dependencies.js');
 }
+
+if ($PAGE_NAME[0] === 'annonce') {
+    $SCRIPTS[] = new Script(URL.'/scripts/tinymce/tinymce.min.js');
+    $SCRIPTS[] = new Script(URL.'/scripts/announcement.js');
+}

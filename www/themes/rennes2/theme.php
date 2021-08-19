@@ -22,6 +22,11 @@ if (preg_match('#^dependances/service/[0-9]+/group/[0-9]+/content/edit/0$#', imp
     $SCRIPTS[] = new Script(URL.'/scripts/dependencies.js');
 }
 
+if ($PAGE_NAME[0] === 'annonce') {
+    $SCRIPTS[] = new Script(URL.'/scripts/tinymce/tinymce.min.js');
+    $SCRIPTS[] = new Script(URL.'/scripts/announcement.js');
+}
+
 $SCRIPTS[] = new Script('//static.univ-rennes2.fr/barre-ent/script.min.js');
 
 $ADDITIONAL_CONTENT = <<<EOF

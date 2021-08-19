@@ -114,7 +114,7 @@
 			{/if}
 
 			{if isset($ANNOUNCEMENT) === true}
-			<aside id="announcement" class="alert alert-warning text-center">
+			<aside id="announcement" class="alert alert-warning">
 					<h1 class="sr-only">Annonce</h1>
 					{$ANNOUNCEMENT->message}
 			</aside>

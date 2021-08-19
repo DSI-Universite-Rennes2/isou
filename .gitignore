@@ -26,5 +26,6 @@ CVS
 /log/*
 /status.dat
 /www/isou.json
+/www/scripts/tinymce/
 /vendor/
 /units/units.sqlite3

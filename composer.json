@@ -30,10 +30,21 @@
         "monolog/monolog": "2.2.*",
         "robmorgan/phinx": "0.12.*",
         "smarty/smarty": "3.1.*",
-        "symfony/yaml": "5.3.*"
+        "symfony/yaml": "5.3.*",
+        "tinymce/tinymce": "5.8.*"
     },
     "require-dev": {
         "atoum/atoum": "3.*",
         "squizlabs/php_codesniffer": "3.*"
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "php -r \"mkdir('www/scripts/tinymce', 0755, true);\"",
+            "php -r \"symlink('../../../vendor/tinymce/tinymce/tinymce.min.js', 'www/scripts/tinymce/tinymce.min.js');\"",
+            "php -r \"symlink('../../../vendor/tinymce/tinymce/icons', 'www/scripts/tinymce/icons');\"",
+            "php -r \"symlink('../../../vendor/tinymce/tinymce/plugins', 'www/scripts/tinymce/plugins');\"",
+            "php -r \"symlink('../../../vendor/tinymce/tinymce/skins', 'www/scripts/tinymce/skins');\"",
+            "php -r \"symlink('../../../vendor/tinymce/tinymce/themes', 'www/scripts/tinymce/themes');\""
+        ]
     }
 }
