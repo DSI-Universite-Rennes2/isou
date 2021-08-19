@@ -49,6 +49,7 @@ class Scenario1 extends AbstractSeed {
                 'visible' => 1,
                 'locked' => 0,
                 'rsskey' => self::ISOU_SEED_PREFIX_ID.'1',
+                'timemodified' => strftime('%FT%T'),
                 'idplugin' => 1, // Type isou.
                 'idcategory' => self::ISOU_SEED_PREFIX_ID.'1',
             ),
@@ -60,6 +61,7 @@ class Scenario1 extends AbstractSeed {
                 'visible' => 0,
                 'locked' => 0,
                 'rsskey' => null,
+                'timemodified' => strftime('%FT%T'),
                 'idplugin' => 3, // Type thruk.
                 'idcategory' => null,
             ),
