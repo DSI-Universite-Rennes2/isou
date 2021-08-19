@@ -138,11 +138,11 @@ class Upgrade200 extends AbstractMigration {
                     case 'last_check_update':
                     case 'last_cron_update':
                     case 'last_update':
-                        $data[':value'] = strftime('%FT%T', $row['value']);
+                        $data[':value'] = strftime('%FT%T', intval($row['value']));
                         break;
                     case 'last_daily_cron_update':
                         $data[':key'] = 'last_daily_report';
-                        $data[':value'] = strftime('%FT%T', $row['value']);
+                        $data[':value'] = strftime('%FT%T', intval($row['value']));
                         break;
                     case 'local_mail':
                         $data[':key'] = 'report_sender';
@@ -187,6 +187,10 @@ class Upgrade200 extends AbstractMigration {
 
             $rows = $this->query('SELECT * FROM dependencies');
             foreach ($rows as $row) {
+                if (empty($row['message']) === true) {
+                    $row['message'] = '';
+                }
+
                 $idmessage = array_search($row['message'], $dependencies_messages);
                 if ($idmessage === false) {
                     $idmessage = count($dependencies_messages);

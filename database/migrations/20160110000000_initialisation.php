@@ -108,7 +108,8 @@ class Initialisation extends AbstractMigration {
         if ($this->hasTable('categories') === true) {
             echo ' ==   - Sauvegarde l\'ancienne table "categories".'.PHP_EOL;
             $table = $this->table('categories');
-            $table->rename('categories_old');
+            $table->rename('categories_old')
+                ->update();
         }
 
         // Create "categories" table.
@@ -131,7 +132,8 @@ class Initialisation extends AbstractMigration {
         if ($this->hasTable('configuration') === true) {
             echo ' ==   - Sauvegarde l\'ancienne table "configuration".'.PHP_EOL;
             $table = $this->table('configuration');
-            $table->rename('configuration_old');
+            $table->rename('configuration_old')
+                ->update();
         }
 
         // Create "configuration" table.
@@ -317,15 +319,18 @@ class Initialisation extends AbstractMigration {
         if ($this->hasTable('events') === true) {
             echo ' ==   - Sauvegarde l\'ancienne table "events".'.PHP_EOL;
             $table = $this->table('events');
-            $table->rename('events_old');
+            $table->rename('events_old')
+                ->update();
 
             echo ' ==   - Sauvegarde l\'ancienne table "events_isou".'.PHP_EOL;
             $table = $this->table('events_isou');
-            $table->rename('events_isou_old');
+            $table->rename('events_isou_old')
+                ->update();
 
             echo ' ==   - Sauvegarde l\'ancienne table "events_nagios".'.PHP_EOL;
             $table = $this->table('events_nagios');
-            $table->rename('events_nagios_old');
+            $table->rename('events_nagios_old')
+                ->update();
         }
 
         // Create "events" table.
@@ -356,7 +361,8 @@ class Initialisation extends AbstractMigration {
         if ($this->hasTable('events_description') === true) {
             echo ' ==   - Sauvegarde l\'ancienne table "events_description".'.PHP_EOL;
             $table = $this->table('events_description');
-            $table->rename('events_description_old');
+            $table->rename('events_description_old')
+                ->update();
         }
 
         // Create "events_descriptions" table.
@@ -485,7 +491,8 @@ class Initialisation extends AbstractMigration {
         if ($this->hasTable('services') === true) {
             echo ' ==   - Sauvegarde l\'ancienne table "services".'.PHP_EOL;
             $table = $this->table('services');
-            $table->rename('services_old');
+            $table->rename('services_old')
+                ->update();
         }
 
         // Create "services" table.
@@ -498,7 +505,7 @@ class Initialisation extends AbstractMigration {
             ->addColumn('enable', 'integer')
             ->addColumn('visible', 'integer')
             ->addColumn('locked', 'integer')
-            ->addColumn('rsskey', 'integer')
+            ->addColumn('rsskey', 'integer', array('null' => true))
             ->addColumn('timemodified', 'string')
             ->addColumn('idplugin', 'integer')
             ->addColumn('idcategory', 'integer', array('null' => true))
