@@ -15,6 +15,7 @@ require_once __DIR__.'/vendor/autoload.php';
 require_once __DIR__.'/tests/unit/mocks/logger.php';
 require_once __DIR__.'/tests/unit/mocks/pdo.php';
 require_once __DIR__.'/tests/unit/mocks/pdostatement.php';
+require_once __DIR__.'/tests/unit/mocks/user.php';
 
 /*
 $testGenerator = new atoum\test\generator();
@@ -29,6 +30,5 @@ define('PLUGIN_ISOU', '1');
 define('URL', '');
 
 // TODO: refactoriser pour supprimer ces variables.
-$_SESSION['phpCAS']['user'] = '';
 define('TIME', time());
 define('STR_TIME', strftime('%Y-%m-%dT%H:%M', TIME));

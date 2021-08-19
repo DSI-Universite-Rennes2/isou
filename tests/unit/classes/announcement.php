@@ -13,9 +13,11 @@ namespace UniversiteRennes2\Isou\tests\unit;
 use atoum;
 use UniversiteRennes2\Mock\Logger;
 use UniversiteRennes2\Mock\PDO;
+use UniversiteRennes2\Mock\User;
 
 $DB = new PDO();
 $LOGGER = new Logger();
+$USER = new User();
 
 /**
  * Teste la classe Announcement.
