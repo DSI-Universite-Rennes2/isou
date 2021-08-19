@@ -38,3 +38,9 @@ jobs:
       - name: Run Atoum.
         run: |
           php vendor/bin/atoum -d tests/unit/classes/ -af .atoum.php
+
+      # Run regression tests.
+      - name: Run regression tests.
+        run: |
+          cp distribution/config.php .
+          php tests/regression/run.php
