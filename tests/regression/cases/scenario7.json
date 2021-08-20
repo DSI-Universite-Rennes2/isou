@@ -1,0 +1,104 @@
+{
+    "name": "Scenario 7",
+    "description": "Contexte du service :\n- 2 serveurs web redondés",
+    "goal": "Valider qu'un service change d'état sur des dysfonctionnements consécutifs.",
+    "cases": [
+        {
+            "name": "Case 1",
+            "description": "Les services \"serveur web 1 (Scenario7)\" et \"serveur web 2 (Scenario7)\" fonctionnent. Le service final doit fonctionner.",
+            "inputs": [
+                {
+                    "id": "71",
+                    "state": "0"
+                },
+                {
+                    "id": "72",
+                    "state": "0"
+                },
+                {
+                    "id": "73",
+                    "state": "0"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "71",
+                    "state": "0"
+                }
+            ]
+        },
+        {
+            "name": "Case 2",
+            "description": "Les services \"serveur web 1 (Scenario7)\" fonctionne. Le service \"serveur web 2 (Scenario7)\" est instable. Le service final doit fonctionner.",
+            "inputs": [
+                {
+                    "id": "71",
+                    "state": "0"
+                },
+                {
+                    "id": "72",
+                    "state": "0"
+                },
+                {
+                    "id": "73",
+                    "state": "1"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "71",
+                    "state": "0"
+                }
+            ]
+        },
+        {
+            "name": "Case 3",
+            "description": "Les services \"serveur web 1 (Scenario7)\" et \"serveur web 2 (Scenario7)\" sont indisponibles. Le service final doit devenir indisponible.",
+            "inputs": [
+                {
+                    "id": "71",
+                    "state": "0"
+                },
+                {
+                    "id": "72",
+                    "state": "2"
+                },
+                {
+                    "id": "73",
+                    "state": "2"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "71",
+                    "state": "2"
+                }
+            ]
+        },
+        {
+            "name": "Case 4",
+            "description": "Les services \"serveur web 1 (Scenario7)\" et \"serveur web 2 (Scenario7)\" sont instables. Le service final démarre à l'état indisponible. Le service final doit revenir à l'état instable.",
+            "inputs": [
+                {
+                    "id": "71",
+                    "state": "2"
+                },
+                {
+                    "id": "72",
+                    "state": "1"
+                },
+                {
+                    "id": "73",
+                    "state": "1"
+                }
+            ],
+            "outputs": [
+                {
+                    "id": "71",
+                    "state": "1"
+                }
+            ]
+        }
+    ],
+    "reset" : []
+}

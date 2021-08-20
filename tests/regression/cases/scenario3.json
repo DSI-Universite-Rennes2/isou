@@ -1,6 +1,6 @@
 {
     "name": "Scenario 3",
-    "description": "Contexte du service :\n- 1 serveur web\n- 1 serveur db",
+    "description": "Contexte du service :\n- 2 serveurs web redondés\n- 1 serveur db",
     "cases": [
         {
             "name": "Case 1",

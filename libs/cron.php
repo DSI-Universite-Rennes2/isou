@@ -84,6 +84,8 @@ function update_services_tree() {
                     }
                 }
 
+                $LOGGER->info('      État du groupe : '.State::$STATES[$state]);
+
                 if (in_array($state, array(State::OK, State::CLOSED), $strict = true) === true) {
                     // Un service semble fonctionné dans le groupe redondé. Il n'y a donc pas de problèmes.
                     continue;
@@ -91,6 +93,8 @@ function update_services_tree() {
             } else {
                 // Si le goupe n'est pas redondé... on prend l'état du groupe de dépendances.
                 $state = $dependencies_group->groupstate;
+
+                $LOGGER->info('      État du groupe : '.State::$STATES[$state]);
             }
 
             if ($child_service->state < $state) {
@@ -144,7 +148,7 @@ function update_services_tree() {
     }
 
     // À ce stade, tous les évènements automatiques ont été enregistrés.
-    // Il reste à traiter les évènements non automatiques (prévus, fermés, réguliers) et remettre en route les services isou.
+    // Il reste à traiter les évènements non prévus et au besoin, remettre en route les services isou.
     $services = Service::get_records(array('enable' => true, 'locked' => false, 'plugin' => PLUGIN_ISOU));
     foreach ($services as $service) {
         $event = $service->get_current_event();
@@ -165,21 +169,32 @@ function update_services_tree() {
             continue;
         }
 
+        // On ne traite que les évènements non prévus.
         if ($event->type !== Event::TYPE_UNSCHEDULED) {
             continue;
         }
 
-        $error = false;
-
+        // Calcule si un groupe de dépendances dysfonctionne.
+        $worst_state = State::OK;
         $groups = Dependency_Group::get_records(array('service' => $event->idservice));
         foreach ($groups as $group) {
-            if ($group->is_up() === false) {
-                $error = true;
-                break;
+            if ($group->is_up() === true) {
+                continue;
+            }
+
+            $LOGGER->info('      Le groupe "'.$group->name.'" (id #'.$group->id.') dysfonctionne ('.State::$STATES[$group->groupstate].').');
+
+            if ($group->groupstate > $worst_state) {
+                $worst_state = $group->groupstate;
             }
         }
 
-        if ($error === true) {
+        if ($worst_state !== State::OK) {
+            // Actualise l'état du service, au besoin.
+            if ($service->state !== $worst_state) {
+                $service->change_state($worst_state);
+            }
+
             // Si l'évènement est justifié, on continue.
             continue;
         }
@@ -195,7 +210,7 @@ function update_services_tree() {
         $service->change_state(State::OK);
     }
 
-    // On mets à jour les dates des évènements de type régulier.
+    // On met à jour les dates des évènements de type régulier.
     $now = new DateTime();
 
     $options = array();
