@@ -37,6 +37,25 @@ function isou_update_version() {
 }
 
 /**
+ * Procède à la migration de la version 3.0.0 à la version 3.0.1.
+ *
+ * @throws Exception Lève une exception lorsqu'une erreur survient.
+ *
+ * @return void
+ */
+function upgrade_300_to_301() {
+    echo 'Mise à jour de la version 3.0.0 vers la version 3.0.1.'.PHP_EOL;
+
+    $phinx = new PhinxApplication();
+    $phinx->setAutoExit(false);
+
+    $arguments = new StringInput('--verbose --environment=production --target=20210819000000 migrate');
+    if ($phinx->run($arguments, new NullOutput()) !== 0) {
+        throw new Exception('Une erreur est survenue lors de la mise à jour vers la version 3.0.1.');
+    }
+}
+
+/**
  * Procède à la migration de la version 2.0.0 à la version 3.0.0.
  *
  * @throws Exception Lève une exception lorsqu'une erreur survient.

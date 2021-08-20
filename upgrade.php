@@ -92,6 +92,9 @@ try {
         case '2.1.2':
             upgrade_200_to_300();
             // Pas de break. On enchaine les mises à jour.
+        case '3.0.0':
+            upgrade_300_to_301();
+            // Pas de break. On enchaine les mises à jour.
         default:
             // Finally, upgrade plugins.
             echo PHP_EOL;
