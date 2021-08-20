@@ -8,31 +8,26 @@
 
 declare(strict_types=1);
 
-use UniversiteRennes2\Isou\Announcement;
+use Isou\Helpers\SimpleMenu;
 
 $TITLE .= ' - Annonce';
 
-$announcement = Announcement::get_record();
+$submenu = array();
+$submenu['annonce'] = new SimpleMenu('bandeau HTML', '', URL.'/index.php/annonce');
 
-$options_visible = array(
-    1 => 'Oui',
-    0 => 'Non',
-);
-
-if (isset($_POST['message'], $_POST['visible']) === true) {
-    $announcement->message = $_POST['message'];
-    $announcement->visible = $_POST['visible'];
-    $announcement->author = sprintf('%s %s', $USER->firstname, $USER->lastname);
-    $announcement->last_modification = new DateTime();
-
-    $_POST['errors'] = $announcement->check_data($options_visible);
-    if (isset($_POST['errors'][0]) === false) {
-        $_POST = array_merge($_POST, $announcement->save());
-    }
+if ($CFG['notifications_enabled'] === '1') {
+    $submenu['notification'] = new SimpleMenu('notification web', '', URL.'/index.php/annonce/notification');
 }
 
-$smarty->assign('options_visible', $options_visible);
+if (isset($submenu['notification'], $PAGE_NAME[1]) === true && $PAGE_NAME[1] === 'notification') {
+    $submenu['notification']->selected = true;
+    require_once PRIVATE_PATH.'/php/announcement/webpush.php';
+} else {
+    $submenu['annonce']->selected = true;
+    require_once PRIVATE_PATH.'/php/announcement/html.php';
+}
 
-$smarty->assign('announcement', $announcement);
+$smarty->assign('submenu', $submenu);
+$smarty->assign('subtemplate', $subtemplate);
 
 $TEMPLATE = 'announcement/index.tpl';
