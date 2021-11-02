@@ -31,7 +31,7 @@
         "robmorgan/phinx": "0.12.*",
         "smarty/smarty": "3.1.*",
         "symfony/yaml": "5.3.*",
-        "tinymce/tinymce": "5.9.*"
+        "tinymce/tinymce": "5.10.*"
     },
     "require-dev": {
         "atoum/atoum": "3.*",
