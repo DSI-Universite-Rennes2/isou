@@ -12,6 +12,22 @@ use UniversiteRennes2\Isou\Plugin;
 use UniversiteRennes2\Isou\User;
 
 /**
+ * Retourne l'URL du service : protocole, nom d'hôte et port (facultatif).
+ *
+ * @return string
+ */
+function authentification_get_service_base_url() {
+    $service_base_url = URL;
+
+    if (preg_match('#^(https?://.*)/.*$#', $service_base_url, $matches) === 1) {
+        // Traite le cas où ISOU n'est pas installé à la racine du serveur.
+        $service_base_url = $matches[1];
+    }
+
+    return $service_base_url;
+}
+
+/**
  * Authentifie l'utilisateur ou redirige vers le formulaire d'authentification CAS.
  *
  * @param Plugin $plugin Instance du plugin CAS.
@@ -22,7 +38,7 @@ function authentification_login(Plugin $plugin) {
     phpCAS::setVerbose($plugin->settings->cas_verbose);
 
     // Initialize phpCAS client.
-    phpCAS::client($plugin->settings->cas_protocol, $plugin->settings->cas_host, $plugin->settings->cas_port, $plugin->settings->cas_path);
+    phpCAS::client($plugin->settings->cas_protocol, $plugin->settings->cas_host, $plugin->settings->cas_port, $plugin->settings->cas_path, authentification_get_service_base_url());
 
     if (isset($_SESSION['username']) === false) {
         if (empty($plugin->settings->cas_certificate_path) === false) {
@@ -121,7 +137,7 @@ function authentification_logout(Plugin $plugin) {
     phpCAS::setVerbose($plugin->settings->cas_verbose);
 
     // Initialize phpCAS client.
-    phpCAS::client($plugin->settings->cas_protocol, $plugin->settings->cas_host, $plugin->settings->cas_port, $plugin->settings->cas_path);
+    phpCAS::client($plugin->settings->cas_protocol, $plugin->settings->cas_host, $plugin->settings->cas_port, $plugin->settings->cas_path, authentification_get_service_base_url());
 
     if (empty($plugin->settings->cas_certificate_path) === false) {
         phpCAS::setCasServerCACert($plugin->settings->cas_certificate_path);
