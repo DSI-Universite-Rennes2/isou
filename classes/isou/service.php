@@ -171,7 +171,10 @@ class Service {
         }
 
         if ($this->idplugin === PLUGIN_ISOU) {
-            $this->url = trim($this->url);
+            if ($this->url !== null) {
+                $this->url = trim($this->url);
+            }
+
             if ($this->url === '') {
                 $this->url = null;
             }
