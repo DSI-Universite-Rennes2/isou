@@ -37,6 +37,32 @@ function isou_update_version() {
 }
 
 /**
+ * Procède à la migration de la version 3.0.1 à la version 3.0.2.
+ *
+ * @throws Exception Lève une exception lorsqu'une erreur survient.
+ *
+ * @return void
+ */
+function upgrade_301_to_302() {
+    global $DB;
+
+    echo 'Mise à jour de la version 3.0.1 vers la version 3.0.2.'.PHP_EOL;
+
+    $queries = array();
+    $queries[] = "UPDATE categories SET name = TRIM(name)";
+    $queries[] = "UPDATE dependencies_groups SET name = TRIM(name)";
+    $queries[] = "UPDATE services SET name = TRIM(name)";
+    $queries[] = "UPDATE services SET url = TRIM(url) WHERE url IS NOT NULL";
+
+    foreach ($queries as $sql) {
+        $query = $DB->prepare($sql);
+        if ($query->execute() === false) {
+            throw new Exception('Une erreur est survenue lors de la mise à jour vers la version 3.0.2.');
+        }
+    }
+}
+
+/**
  * Procède à la migration de la version 3.0.0 à la version 3.0.1.
  *
  * @throws Exception Lève une exception lorsqu'une erreur survient.

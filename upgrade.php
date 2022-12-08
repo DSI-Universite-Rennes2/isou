@@ -95,6 +95,9 @@ try {
         case '3.0.0':
             upgrade_300_to_301();
             // Pas de break. On enchaine les mises à jour.
+        case '3.0.1':
+            upgrade_301_to_302();
+            // Pas de break. On enchaine les mises à jour.
         default:
             // Finally, upgrade plugins.
             echo PHP_EOL;
