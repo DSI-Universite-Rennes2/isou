@@ -82,7 +82,7 @@ class Category {
         if (empty($this->name) === true) {
             $errors[] = 'Le nom de la catégorie ne peut pas être vide.';
         } else {
-            $this->name = htmlentities($this->name, ENT_QUOTES, 'UTF-8');
+            $this->name = htmlentities(trim($this->name), ENT_QUOTES, 'UTF-8');
         }
 
         if ($this->position === null) {
