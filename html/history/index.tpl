@@ -1,4 +1,4 @@
-<h1 class="sr-only">Historique</h1>
+<h1 class="visually-hidden">Historique</h1>
 
 <form action="{$smarty.const.URL}/index.php/statistiques#resultat" class="form-horizontal" method="post">
 
@@ -54,10 +54,10 @@
 	</dl>
 
 	<ul class="list-inline form-submit-buttons-ul">
-		<li>
+		<li class="list-inline-item">
 			<input class="btn btn-primary" type="submit" value="afficher" />
 		</li>
-		<li>
+		<li class="list-inline-item">
 			<input class="btn btn-warning" type="submit" name="export" value="exporter au format csv" />
 		</li>
 	</ul>

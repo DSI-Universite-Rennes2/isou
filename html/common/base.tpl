@@ -17,16 +17,16 @@
 	</head>
 	<body role="document">
 
-		<aside id="top" class="sr-only">
+		<aside id="top" class="visually-hidden">
 			<h1>Liens d'accès rapide</h1>
 			<ul class="list-inline">
-				<li><a href="#navigation">Aller au menu</a></li>
-				<li><a href="#main">Aller au contenu</a></li>
+				<li class="list-inline-item"><a href="#navigation">Aller au menu</a></li>
+				<li class="list-inline-item"><a href="#main">Aller au contenu</a></li>
 			</ul>
 		</aside>
 
-		<aside class="isou-top-aside text-right">
-			<h1 class="sr-only">Authentification</h1>
+		<aside class="isou-top-aside text-end">
+			<h1 class="visually-hidden">Authentification</h1>
 			<p class="isou-top-aside-p">
 				{if $USER === false}
 					<span id="isou-top-aside-nickname-span">Non connecté</span>
@@ -34,14 +34,14 @@
 				{else}
 					<span id="isou-top-aside-nickname-span">{$USER}</span>
 					{if $CFG.notifications_enabled === '1'}
-					<button class="btn btn-xs btn-default" id="isou-top-aside-notifications-button"></button>
+					<button class="btn btn-sm btn-secondary" id="isou-top-aside-notifications-button"></button>
 					{/if}
 					<span id="isou-top-aside-authentification-span">(<a href="{$smarty.const.URL}/index.php/deconnexion">déconnexion</a>)</span>
 				{/if}
 			</p>
 
 			{if $CFG.notifications_enabled === '1'}
-			<div class="modal fade in text-left hidden" id="modal-notifications" tabindex="-1" role="dialog" aria-labelledby="modal-notifications-label">
+			<div class="modal fade in text-start hidden" id="modal-notifications" tabindex="-1" role="dialog" aria-labelledby="modal-notifications-label">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
 						<div class="modal-header" id="modal-notifications-label">
@@ -62,16 +62,16 @@
 			{/if}
 		</aside>
 
-		<aside class="isou-top-aside text-right">
-			<h1 class="sr-only">Informations complémentaires sur le service</h1>
+		<aside class="isou-top-aside text-end">
+			<h1 class="visually-hidden">Informations complémentaires sur le service</h1>
 			<p class="isou-top-aside-p small">État des services actualisé toutes les minutes.</p>
 		</aside>
 
 		<div class="container">
-			<header class="page-header" role="banner">
-				<div class="jumbotron">
-					<h1 id="isou-header">{$CFG.site_name}</h1>
-					<p>{$CFG.site_header}</p>
+			<header class="bg-body-secondary mb-4 p-5 page-header rounded-3" role="banner">
+				<div class="container-fluid">
+					<h1 class="display-5 fw-bold" id="isou-header">{$CFG.site_name}</h1>
+					<p class="fs-4">{$CFG.site_header}</p>
 				</div>
 			</header>
 
@@ -81,28 +81,28 @@
 
 			{if count($MENUS->public) > 1 || empty($MENUS->administration) === false}
 			<nav id="navigation" role="navigation">
-				<h1 class="sr-only">Navigation</h1>
+				<h1 class="visually-hidden">Navigation</h1>
 
-				<div id="menu" class="container-fluid navbar navbar-default menu-div">
-					<ul class="nav navbar-nav menu-ul">
+				<div id="menu" class="bg-body-secondary border container-fluid menu-div navbar navbar-expand-lg rounded">
+					<ul class="menu-ul navbar-nav ps-4">
 						{foreach $MENUS->public as $menu}
-						<li class="menu-ul-items{if $menu->selected === true} active{/if}">
-							<a class="menu-entries" href="{$smarty.const.URL}/index.php/{$menu->url}">{$menu->label}</a>
+						<li class="menu-ul-items mx-2 nav-item">
+							<a class="{if $menu->selected === true}active {/if}menu-entries nav-link" href="{$smarty.const.URL}/index.php/{$menu->url}">{$menu->label}</a>
 						</li>
 						{/foreach}
 					</ul>
 				</div>
 
 				{if empty($MENUS->administration) === false}
-				<div id="administration-menu" class="container-fluid navbar navbar-inverse menu-div">
-					<div class="navbar-right">
-						<div class="navbar-header menu-title">
+				<div id="administration-menu" class="bg-dark container-fluid menu-div my-2 p-2 navbar navbar-dark navbar-expand-lg rounded">
+					<div class="collapseuu navbar-collapse">
+						<div class="d-inline navbar-header menu-title ms-auto">
 							<span class="navbar-brand">Administration :</span>
 						</div>
-						<ul class="nav navbar-nav menu-ul">
+						<ul class="menu-ul navbar-nav px-4">
 						{foreach $MENUS->administration as $menu}
-							<li class="menu-ul-items{if $menu->selected === true} active{/if}">
-								<a class="menu-entries" href="{$smarty.const.URL}/index.php/{$menu->url}" title="{$menu->title}">{$menu->label}</a>
+							<li class="menu-ul-items nav-item">
+								<a class="{if $menu->selected === true}active {/if}menu-entries nav-link" href="{$smarty.const.URL}/index.php/{$menu->url}" title="{$menu->title}">{$menu->label}</a>
 							</li>
 						{/foreach}
 						</ul>
@@ -115,7 +115,7 @@
 
 			{if isset($ANNOUNCEMENT) === true}
 			<aside id="announcement" class="alert alert-warning">
-					<h1 class="sr-only">Annonce</h1>
+					<h1 class="visually-hidden">Annonce</h1>
 					{$ANNOUNCEMENT->message}
 			</aside>
 			{/if}

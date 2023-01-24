@@ -98,16 +98,16 @@
 		</div>
 	</dl>
 
-	<p class="well">Le format de date demandé est de type "DD/MM/YYYY hh:mm".<br />
+	<p class="bg-light border mb-4 px-4 py-2 rounded">Le format de date demandé est de type "DD/MM/YYYY hh:mm".<br />
 Exemple :<br />Pour le {$smarty.now|date_format:'%A %d %B %Y à %H heures et %M minutes'}, la valeur attendue est {$smarty.now|date_format:'%d/%m/%Y %H:00'}.
 	</p>
 
 	<ul class="list-inline">
-		<li>
+		<li class="list-inline-item">
 			<input class="btn btn-primary" type="submit" value="enregistrer" />
 		</li>
-		<li>
-			<a class="btn btn-default" href="{$smarty.const.URL}/index.php/evenements/{$eventtype}">annuler</a>
+		<li class="list-inline-item">
+			<a class="btn btn-secondary" href="{$smarty.const.URL}/index.php/evenements/{$eventtype}">annuler</a>
 		</li>
 	</ul>
 </form>

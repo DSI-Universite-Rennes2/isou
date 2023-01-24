@@ -1,19 +1,19 @@
-<h1 class="sr-only">Calendrier</h1>
+<h1 class="visually-hidden">Calendrier</h1>
 
 <p class="alert alert-info text-center">Liste des opérations de maintenance prévues.</p>
 
 <table id="calendar" class="table table-bordered" summary="Calendrier répertoriant toutes les intervertions prévues">
 	{* Titre du calendrier. *}
 	<caption class="text-center">
-		<div class="sr-only">Calendrier des interventions</div>
+		<div class="visually-hidden">Calendrier des interventions</div>
 		<ul class="list-unstyled row">
 			{if $smarty.get.page > 1}
-			<li class="col-md-6 text-left">
+			<li class="col-md-6 text-start">
 				<a class="btn" href="{$smarty.const.URL}/index.php/calendrier/{$smarty.get.page - 1}"><img alt="Page précédente" src="{$smarty.const.URL}/themes/{$CFG.theme}/images/arrow-left.gif" /></a>
 			</li>
 			{/if}
 			{if $smarty.get.page < 5}
-			<li class="col-md-6-offset text-right">
+			<li class="col-md-6-offset text-end">
 				<a class="btn" href="{$smarty.const.URL}/index.php/calendrier/{$smarty.get.page + 1}"><img alt="Page suivante" src="{$smarty.const.URL}/themes/{$CFG.theme}/images/arrow-right.gif" /></a>
 			</li>
 			{/if}

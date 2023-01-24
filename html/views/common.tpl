@@ -19,7 +19,7 @@
 		</dt>
 		<dd>
 			<input class="form-control" id="plugin-view-route" name="plugin_view_route" type="text" value="{$plugin->settings->route}" />
-			<p class="help-block small">Exemple: {$smarty.const.URL}/index.php/<strong>{$plugin->settings->route}</strong>.</p>
+			<p class="d-block small">Exemple: {$smarty.const.URL}/index.php/<strong>{$plugin->settings->route}</strong>.</p>
 		</dd>
 	</div>
 </dl>

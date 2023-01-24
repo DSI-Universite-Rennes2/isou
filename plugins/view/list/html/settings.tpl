@@ -8,7 +8,7 @@
 		{include file="views/common.tpl"}
 
 		<ul class="list-inline">
-			<li>
+			<li class="list-inline-items">
 				<input class="btn btn-primary" type="submit" value="enregistrer" />
 			</li>
 		</ul>

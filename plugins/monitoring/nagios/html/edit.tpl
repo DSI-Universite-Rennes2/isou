@@ -22,11 +22,11 @@
 	</dl>
 
 	<ul class="list-inline">
-		<li>
+		<li class="list-inline-items">
 			<input class="btn btn-primary" type="submit" value="enregistrer" />
 		</li>
-		<li>
-			<a class="btn btn-default" href="{$smarty.const.URL}/index.php/services/nagios">annuler</a>
+		<li class="list-inline-items">
+			<a class="btn btn-secondary" href="{$smarty.const.URL}/index.php/services/nagios">annuler</a>
 		</li>
 	</ul>
 </form>

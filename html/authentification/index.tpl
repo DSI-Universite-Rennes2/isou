@@ -14,7 +14,7 @@
 				<div class="row">
 					<ul class="list-inline col-md-6 col-md-offset-3">
 					{foreach $plugins as $plugin}
-						<li class="col-md-6 text-center"><a class="btn btn-primary btn-lg" href="{$smarty.const.URL}/index.php/connexion/{$plugin->codename}">{$plugin->name}</a></li>
+						<li class="col-md-6 list-inline-item text-center"><a class="btn btn-primary btn-lg" href="{$smarty.const.URL}/index.php/connexion/{$plugin->codename}">{$plugin->name}</a></li>
 					{/foreach}
 					</ul>
 				</div>

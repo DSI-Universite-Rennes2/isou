@@ -1,4 +1,4 @@
-<h1 class="sr-only">Actualité</h1>
+<h1 class="visually-hidden">Actualité</h1>
 
 <p class="alert alert-info text-center">Liste des interruptions en cours.</p>
 
@@ -49,6 +49,6 @@
 		{/foreach}
 		</ul>
 
-		<p class="sr-only escape"><a class="quickaccess-page-up-a" href="#top">retourner en haut de la page</a></p>
+		<p class="visually-hidden escape"><a class="quickaccess-page-up-a" href="#top">retourner en haut de la page</a></p>
 	{/foreach}
 {/if}
