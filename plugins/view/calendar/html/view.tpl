@@ -38,11 +38,12 @@
 	{foreach $calendar as $week}
 		<tr>
 		{foreach $week as $day}
-			<td class="panel {if $day->datetime < $now}panel-default{else if $day->datetime === $now}panel-info{/if}">
-					<div class="panel-heading">
+			<td class="col">
+			<div class="card h-100">
+					<div class="{if $day->datetime < $now}bg-body-secondary {else if $day->datetime === $now}bg-info-subtle {/if}card-header">
 						<span class="small" id="date-{$day->datetime|date_format:'%d-%B-%Y'}">{$day->datetime|date_format:$day->strftime}</span>
 					</div>
-					<div class="panel-body">
+					<div class="card-body">
 						{if isset($day->services[0]) === true}
 						<ul>
 							{foreach $day->services as $service}
@@ -63,6 +64,7 @@
 								<p>Aucune intervention prévue</p>
 							{/if}
 						{/if}
+					</div>
 					</div>
 			</td>
 		{/foreach}
