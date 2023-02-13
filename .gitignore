@@ -25,6 +25,7 @@ CVS
 /database/vapid_public.key
 /log/*
 /status.dat
+/www/isou.ics
 /www/isou.json
 /www/scripts/tinymce/
 /vendor/

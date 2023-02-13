@@ -10,6 +10,11 @@ declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou;
 
+use DateInterval;
+use DateTime;
+use Smarty;
+use stdClass;
+
 /**
  * Classe décrivant un évènement.
  */
@@ -530,6 +535,63 @@ class Event {
     }
 
     /**
+     * Régénère le fichier ics listant les événements prévus.
+     *
+     * @return void
+     */
+    public static function regenerate_ics() {
+        $since = new DateTime();
+        $since->setTime(0, 0, 0);
+        $since->sub(new DateInterval('P3M'));
+
+        $options = array();
+        $options['has_category'] = true;
+        $options['plugin'] = PLUGIN_ISOU;
+        $options['since'] = $since;
+        $options['sort'] = array(
+            'e.enddate IS NULL DESC',
+            'e.enddate DESC',
+            'e.startdate DESC',
+        );
+        $options['type'] = self::TYPE_SCHEDULED;
+
+        $events = array();
+        foreach (self::get_records($options) as $record) {
+            $service = Service::get_record(array('id' => $record->idservice));
+
+            $event = new stdClass();
+            $event->uid = md5($record->id);
+            $event->summary = html_entity_decode($service->name);
+            $event->dtstart = $record->startdate->format('Ymd\\THis');
+            $event->dtend = null;
+            if (empty($record->enddate) === false) {
+                $event->dtend = $record->enddate->format('Ymd\\THis');
+            }
+            $description = str_replace("\r\n", "\\n", $record->description);
+            $event->description = strip_tags($description);
+            $event->status = 'CONFIRMED';
+
+            $events[] = $event;
+        }
+
+        $smarty = new Smarty();
+        $smarty->setTemplateDir(PRIVATE_PATH.'/html/');
+        $smarty->setCompileDir(PRIVATE_PATH.'/cache/smarty/');
+
+        $smarty->assign('events', $events);
+        $smarty->assign('timezone', date_default_timezone_get());
+
+        $data = $smarty->fetch('common/ics.tpl');
+
+        $output_file = PUBLIC_PATH.'/isou.ics';
+
+        // Met à jour le fichier uniquement si le contenu est différent.
+        if (is_file($output_file) === false || trim(file_get_contents($output_file)) !== trim($data)) {
+            file_put_contents($output_file, $data);
+        }
+    }
+
+    /**
      * Permet de définir un service.
      *
      * @param string $idservice Identifiant du service à associer à l'évènement.
@@ -808,6 +870,11 @@ class Event {
         if ($query->execute($params) === true) {
             if (empty($this->id) === true) {
                 $this->id = $DB->lastInsertId();
+            }
+
+            if ($this->type === self::TYPE_SCHEDULED) {
+                // On regénère le fichier isou.ics.
+                self::regenerate_ics();
             }
         } else {
             // Enregistre le message d'erreur.
