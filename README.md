@@ -70,3 +70,10 @@ Isou utilise les ressources graphiques suivantes :
 - [twotiny](https://code.google.com/archive/p/twotiny/) (Licence [Artistic License/GPL](http://dev.perl.org/licenses/))
 
 Isou utilise le CDN [Unpkg.com](https://unpkg.com/) pour le thème [bootstrap](https://getbootstrap.com/).
+
+## Reporting security issues
+We take security seriously. If you discover a security issue, please bring it to their attention right away!
+
+Please **DO NOT** file a public issue, instead send your report privately to [foss-security@univ-rennes2.fr](mailto:foss-security@univ-rennes2.fr).
+
+Security reports are greatly appreciated and we will publicly thank you for it.
