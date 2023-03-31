@@ -212,10 +212,20 @@ class Event {
                 }
             } else {
                 // Évènement en cours.
-                if (strftime('%A%d%B', $this->startdate->getTimestamp()) === strftime('%A%d%B')) {
-                    $str = 'Le service est '.$type.' depuis '.$starttime.'.';
+                if ($this->enddate === null) {
+                    if (strftime('%A%d%B', $this->startdate->getTimestamp()) === strftime('%A%d%B')) {
+                        $str = 'Le service est '.$type.' depuis '.$starttime.'.';
+                    } else {
+                        $str = 'Le service est '.$type.' depuis le '.$startday.' '.$starttime.'.';
+                    }
                 } else {
-                    $str = 'Le service est '.$type.' depuis le '.$startday.' '.$starttime.'.';
+                    $endtime = $this->enddate->format('H\hi');
+                    $endday = strftime('%A %d %B', $this->enddate->getTimestamp());
+                    if (strftime('%A %d %B', $this->startdate->getTimestamp()) === $endday) {
+                        $str = 'Le service est '.$type.' de '.$starttime.' à '.$endtime.'.';
+                    } else {
+                        $str = 'Le service est '.$type.' jusqu\'au '.$endday.' '.$endtime.'.';
+                    }
                 }
             }
         }
