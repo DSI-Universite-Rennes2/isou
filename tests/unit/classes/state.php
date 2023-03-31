@@ -13,6 +13,7 @@ namespace UniversiteRennes2\Isou\tests\unit;
 use atoum;
 use UniversiteRennes2\Mock\PDO;
 
+$CFG = array('theme' => '');
 $DB = new PDO();
 
 /**
