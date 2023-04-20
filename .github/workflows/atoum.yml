@@ -9,13 +9,13 @@ jobs:
   # when a job name is not provided.
   test:
     # Virtual environment to use.
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     # Determines build matrix.
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.3']
+        php: ['7.4']
 
     steps:
       # Check out this repository code in ./plugin directory
