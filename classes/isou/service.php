@@ -624,6 +624,15 @@ class Service {
     }
 
     /**
+     * Indique si le service est verrouillé.
+     *
+     * @return boolean
+     */
+    public function is_locked() {
+        return (empty($this->locked) === false);
+    }
+
+    /**
      * Verrouille le service et change l'état du service.
      *
      * @param string $state Identifiant de l'état à attribuer.

@@ -113,10 +113,25 @@ if (isset($_POST['type'], $_POST['service'], $_POST['startdate'], $_POST['startt
             // Enregistre l'évènement en base de données et sa description.
             $event->save();
 
+            $service = Service::get_record(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
+
             if ($_POST['type'] === Event::TYPE_CLOSED && $event->is_now() === true) {
-                $service = Service::get_record(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
                 $service->state = State::CLOSED;
                 $service->save();
+            }
+
+            if ($_POST['type'] === Event::TYPE_UNSCHEDULED) {
+                if (empty($event->enddate) === true) {
+                    // L'évènement n'a pas de date de fin. On verrouille le service pour que le CRON ne ferme pas automatiquement l'évènement.
+                    if ($service->is_locked() === false) {
+                        $service->lock($event->state);
+                    }
+                } else {
+                    // L'évènement a une date de fin. On déverrouille le service au besoin.
+                    if ($service->is_locked() === true) {
+                        $service->unlock();
+                    }
+                }
             }
 
             $DB->commit();

@@ -9,6 +9,7 @@
 declare(strict_types=1);
 
 use UniversiteRennes2\Isou\Event;
+use UniversiteRennes2\Isou\Service;
 
 $event = false;
 if (isset($PAGE_NAME[3]) === true && ctype_digit($PAGE_NAME[3]) === true) {
@@ -26,6 +27,11 @@ if ($event === false) {
 
     try {
         $event->delete();
+
+        $service = Service::get_record(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
+        if ($event->type === Event::TYPE_UNSCHEDULED && empty($event->enddate) === true && $service->is_locked() === true) {
+            $service->unlock();
+        }
     } catch (Exception $exception) {
         $_POST['errors'][] = $exception->getMessage();
     }
