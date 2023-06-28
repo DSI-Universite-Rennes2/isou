@@ -9,6 +9,7 @@
 
 {include file="common/messages_session.tpl"}
 
+<div class="row">
 {if count($groups) === 0}
 	<p class="alert alert-info text-center">Aucun groupe de dépendances défini.</p>
 {else}
@@ -70,3 +71,4 @@
 	</div>
 	{/foreach}
 {/if}
+</div>
