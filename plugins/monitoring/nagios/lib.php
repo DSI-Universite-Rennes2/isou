@@ -42,7 +42,11 @@ function plugin_nagios_update(Plugin $plugin) {
     // Parse le fichier status.dat de Nagios.
     $services = array();
     while (feof($handle) === false) {
-        $line = trim(fgets($handle, 4096));
+        $line = fgets($handle, 4096);
+        if ($line === false) {
+            break;
+        }
+        $line = trim($line);
         if (preg_match('/^servicestatus \{/', $line) === 1) {
             $service = new stdClass();
             $service->name = '@';
