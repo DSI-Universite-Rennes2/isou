@@ -60,55 +60,71 @@ foreach ($cache as $data) {
 }
 sort($services);
 
-$previews = array();
-if (isset($_POST['service']) === true && empty($_POST['service']) === false) {
-    if (empty($service->id) === true) {
-        // On ajoute un ou des services... on active les regexp.
-        $found = false;
-        $regexp = str_replace('/', '\/', $_POST['service']);
-        foreach ($cache as $data) {
-            if (preg_match('/'.$regexp.'/i', $data['name']) === 1) {
-                if (isset($thruk[$data['name']]) === true) {
-                    continue;
-                }
+if (isset($_POST['pattern']) === false) {
+    $_POST['pattern'] = '';
+}
+$_POST['pattern'] = trim($_POST['pattern']);
 
-                $found = true;
-                if (isset($_POST['preview']) === true) {
-                    $previews[] = $data['name'];
-                    continue;
-                }
-
-                $service->name = $data['name'];
-
-                $_POST = array_merge($_POST, $service->save());
-
-                if (isset($_POST['errors'][0]) === true) {
-                    break;
-                }
-
-                $service->id = 0;
-            }
+$results = array();
+if (empty($_POST['pattern']) === false) {
+    $regexp = str_replace('/', '\/', $_POST['pattern']);
+    foreach ($cache as $data) {
+        if (preg_match('/'.$regexp.'/i', $data['name']) !== 1) {
+            continue;
         }
 
-        $service->name = $_POST['service'];
-
-        if ($found === false) {
-            $_POST['errors'][] = 'Aucun service ne correspond à "'.$_POST['service'].'".';
-        }
-    } else {
-        // On modifie un service. On veut un nom strict.
-        if (in_array($_POST['service'], $services, true) === false) {
-            $_POST['errors'][] = 'Le service "'.$_POST['service'].'" n\'existe pas.';
+        if (isset($thruk[$data['name']]) === true) {
+            continue;
         }
 
-        if (isset($_POST['errors'][0]) === false) {
-            $service->name = $_POST['service'];
-
-            $_POST = array_merge($_POST, $service->save());
-        }
+        $results[] = $data['name'];
     }
 
-    if (isset($_POST['errors'][0]) === false && isset($_POST['preview']) === false) {
+    if (isset($results[0]) === false) {
+        $_POST['errors'][] = 'Aucun service ne correspond à la recherche "'.htmlentities($_POST['pattern']).'".';
+    }
+}
+
+if (isset($_POST['submit']) === true) {
+    if (is_array($_POST['services']) === true) {
+        // On ajoute un ou plusieurs services...
+        foreach ($_POST['services'] as $service_name) {
+            $key = array_search($service_name, $results);
+
+            if ($key === false) {
+                $_SESSION['messages']['warnings'][] = 'Le service "'.htmlentities($service_name).'" n\'a pas été ajouté.';
+                continue;
+            }
+
+            $service = new Service();
+            $service->name = $service_name;
+            $service->idplugin = PLUGIN_THRUK;
+
+            $_POST['errors'] = $service->check_data();
+            if (isset($_POST['errors'][0]) === true) {
+                break;
+            }
+
+            $_POST = array_merge($_POST, $service->save());
+
+            if (isset($_POST['errors'][0]) === true) {
+                break;
+            }
+
+            unset($results[$key]);
+        }
+    } elseif (empty($service->id) === false) {
+        $service->name = $_POST['services'];
+
+        $_POST['errors'] = $service->check_data();
+        if (isset($_POST['errors'][0]) === false) {
+            $_POST = array_merge($_POST, $service->save());
+        }
+    } else {
+        $_POST['errors'][0] = 'Une erreur est survenue lors de l\'enregistrement des données.';
+    }
+
+    if (isset($_POST['errors'][0]) === false) {
         $_SESSION['messages']['successes'] = $_POST['successes'];
 
         // On force la mise à jour des groupements de service Isou.
@@ -120,9 +136,8 @@ if (isset($_POST['service']) === true && empty($_POST['service']) === false) {
     }
 }
 
-if (isset($_POST['preview']) === true) {
-    $smarty->assign('previews', $previews);
-}
+sort($results);
+$smarty->assign('results', $results);
 
 $smarty->assign('service', $service);
 $smarty->assign('services', $services);

@@ -9,11 +9,11 @@
 
 	<dl>
 		<dt>
-			<label for="service">Service Thruk</label>
+			<label for="pattern">Service Thruk</label>
 		</dt>
 		<dd class="form-group">
-			<input class="form-control" list="services" id="service" name="service" value="{$service->name}" />
-			<datalist id="services">
+			<input class="form-control" id="pattern" list="suggestions" name="pattern" placeholder="Rechercher un service Thruk. Les expressions régulières sont acceptées. Exemple : https.*myhostname" value="{$smarty.post.pattern|default:""}" type="search" />
+			<datalist id="suggestions">
 			{foreach $services as $service}
 				<option value="{$service}">
 			{/foreach}
@@ -22,30 +22,32 @@
 	</dl>
 
 	<ul class="list-inline">
-		{if $service->id !== 0 || $smarty.post !== array()}
 		<li>
-			<input class="btn btn-primary" name="submit" type="submit" value="enregistrer" />
+			<input class="btn btn-primary" name="search" type="submit" value="rechercher" />
 		</li>
-		{/if}
-
-		{if empty($service->id) === true}
-		<li>
-			<input class="btn {if $smarty.post === array()}btn-primary{else}btn-default{/if}" name="preview" type="submit" value="aperçu" />
-		</li>
-		{/if}
 
 		<li>
 			<a class="btn btn-default" href="{$smarty.const.URL}/index.php/services/thruk">annuler</a>
 		</li>
 	</ul>
 
-	{if isset($previews[0]) === true}
+	{if isset($results[0]) === true}
 	<div class="well">
-		<p>{count($previews)} services seront ajoutés :</p>
-		<ul>
-		{foreach $previews as $preview}
-			<li>{$preview}</li>
-		{/foreach}
+		<p>{count($results)} services trouvés :</p>
+		{if empty($service->id) === true}
+    {html_checkboxes id="services" name="services" output=$results separator='<br />' style="margin-right:.5em;" values=$results}
+		{else}
+    {html_radios id="services" name="services" output=$results separator='<br />' style="margin-right:.5em;" values=$results}
+		{/if}
+
+		<ul class="list-inline">
+			<li>
+				<input class="btn btn-primary" name="submit" type="submit" value="{if empty($service->id) === true}ajouter{else}modifier{/if}" />
+			</li>
+
+			<li>
+				<a class="btn btn-default" href="{$smarty.const.URL}/index.php/services/thruk">annuler</a>
+			</li>
 		</ul>
 	</div>
 	{/if}
