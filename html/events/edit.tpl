@@ -103,10 +103,6 @@
 		</div>
 	</dl>
 
-	<p class="well">Le format de date demandé est de type "DD/MM/YYYY hh:mm".<br />
-Exemple :<br />Pour le {$smarty.now|date_format:'%A %d %B %Y à %H heures et %M minutes'}, la valeur attendue est {$smarty.now|date_format:'%d/%m/%Y %H:00'}.
-	</p>
-
 	<ul class="list-inline">
 		<li>
 			<input class="btn btn-primary" type="submit" value="enregistrer" />
