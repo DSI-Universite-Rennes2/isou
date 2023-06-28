@@ -25,7 +25,12 @@
 				<label class="control-label" for="service">Nom du service</label>
 			</dt>
 			<dd class="col-sm-10">
-				{html_options class="form-control" id="service" name="service" options=$options_services selected=$event->idservice}
+				<input class="form-control" id="service" list="services" name="service" required="1" type="text" value="{$options_services[$event->idservice]|default:''}" />
+				<datalist id="services">
+				{foreach $options_services as $service}
+					<option value="{$service}">
+				{/foreach}
+				</datalist>
 			</dd>
 		</div>
 		<div class="form-group">
