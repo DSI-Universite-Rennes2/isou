@@ -1,41 +1,55 @@
-Résumé
--------
-Nombre de serivces Isou forcés : {count($forcedservices)}
-Nombre de services Nagios supprimés : {count($nagiosServices)}
+Résumé quotidien
+==================
 
-{if count($nagiosServices) > 0}
-Liste des services Nagios supprimés
-------------------------------------
-{foreach $nagiosServices as $service}
-   - {$service}
-{/foreach}
-{/if}
+État des services depuis le {$last_daily_report|date_format:"%a %d %B %Y %H:%M"}.
 
-{if count($forcedservices) > 0}
+Nombre de services uniques perturbés : {$count_warning_events}
+Nombre de services uniques indisponibles : {$count_critical_events}
+
+Nombre d'évènements prévus : {$count_scheduled_events}
+Nombre d'évènements non prévus : {$count_unscheduled_events}
+{* Liste des services actuellement forcés *}
+{if count($locked_services) > 0}
+
+
 Liste des services actuellement forcés
----------------------------------------
-{foreach $forcedservices as $forcedservice}
-- {$forcedservice->nameForUsers} : {$STATES.{$forcedservice->state}->alt}
+=======================================
+{foreach $locked_services as $locked_service}
+- {$locked_service->name|unescape:"htmlall"} : {$STATES[{$locked_service->state}]->alternate_text}
 {/foreach}
 {/if}
+{* Liste des services actuellement fermés *}
+{if count($closed_services) > 0}
 
-{if count($categories) > 0}
+
+Liste des services actuellement fermés
+=======================================
+{foreach $closed_services as $closed_service}
+- {$closed_service->name|unescape:"htmlall"} : {$STATES[{$closed_service->state}]->alternate_text}
+{/foreach}
+{/if}
+{* Liste des interruptions régulières *}
+{if count($regular_events) > 0}
+
+
+Liste des interruptions régulières
+==================================
+{foreach $regular_events as $record}
+- {$record->service_name|unescape:"htmlall"} ; {$record}
+{/foreach}
+{/if}
+{* Liste des services indisponibles de la journée *}
+{if count($events) > 0}
+
+
 Liste des services indisponibles de la journée
------------------------------------------------
-{section name=i loop=$categories}
- **{$categories[i]->name} :**
-{section name=j loop=$categories[i]->services}
-   - {$categories[i]->services[j]->getNameForUsers()} : {$categories[i]->services[j]->total}
-{foreach $categories[i]->services[j]->getEvents() as $event}
-     . {$categories[i]->services[j]->getNameForUsers()}, {if $event->getEndDate() === NULL}depuis {$event->getStartDate()|date_format:'%c'}{else}de {$event->getStartDate()|date_format:'%c'} à {$event->getEndDate()|date_format:'%c'}{/if}
-{if $event->getDescription() != ""}
+===============================================
+{foreach $events as $plugin => $records}
 
-       x {$event->getDescription()}
-{/if}
-
+{$plugin}
+---------
+{foreach $records as $record}
+- {$record->service_name|unescape:"htmlall"} ; {$record}
 {/foreach}
-{/section}
-
-{/section}
+{/foreach}
 {/if}
-

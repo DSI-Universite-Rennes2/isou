@@ -14,6 +14,7 @@ use UniversiteRennes2\Isou\Dependency_Group;
 use UniversiteRennes2\Isou\Dependency_Message;
 use UniversiteRennes2\Isou\Event;
 use UniversiteRennes2\Isou\Notification;
+use UniversiteRennes2\Isou\Plugin;
 use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 use UniversiteRennes2\Isou\Subscription;
@@ -397,23 +398,108 @@ function cron_report() {
     $now = new DateTime();
 
     $daily_cron_time = explode(':', $CFG['report_hour']);
-    $daily_cron_time = mktime($daily_cron_time[0], $daily_cron_time[1]);
+    $daily_cron_time = mktime(intval($daily_cron_time[0]), intval($daily_cron_time[1]));
 
     // Si on n'est pas le même jour que $CFG['last_daily_report'].
     if ($now->format('d') !== $CFG['last_daily_report']->format('d') && $now->getTimestamp() >= $daily_cron_time) {
+        // Charge les listes des plugins de monitoring.
+        $plugins = array();
+        foreach (Plugin::get_records(array('active' => true, 'type' => 'monitoring')) as $plugin) {
+            $plugins[$plugin->id] = $plugin->name;
+        }
+
         // Liste des services forcés.
-        $services = Service::get_records(array('locked' => true));
+        $closed_services = Service::get_records(array('state' => State::CLOSED));
+        $locked_services = Service::get_records(array('locked' => true));
+
+        $visible_isou_services = Service::get_records(array('plugin' => PLUGIN_ISOU, 'has_category' => true, 'visible' => true));
 
         // Liste des événements.
-        $events = Event::get_records(array('since' => $now));
+        $critical_events = array();
+        $regular_events = Event::get_records(array('type' => Event::TYPE_REGULAR, 'sort' => array('service_name', 'startdate')));
+        $scheduled_events = array();
+        $unscheduled_events = array();
+        $warning_events = array();
+
+        $events = array();
+        foreach (Event::get_records(array('since' => $CFG['last_daily_report'], 'sort' => array('startdate'))) as $event) {
+            if (isset($plugins[$event->idplugin]) === false) {
+                continue;
+            }
+
+            if (in_array($event->type, array(Event::TYPE_REGULAR, Event::TYPE_CLOSED), $strict = true) === true) {
+                continue;
+            }
+
+            if ($event->idplugin === PLUGIN_ISOU) {
+                if (isset($visible_isou_services[$event->idservice]) === false) {
+                    continue;
+                }
+
+                switch ($event->state) {
+                    case State::WARNING:
+                        $warning_events[$event->idservice] = $event->idservice;
+                        break;
+                    case State::CRITICAL:
+                        $critical_events[$event->idservice] = $event->idservice;
+                        break;
+                }
+
+                switch ($event->type) {
+                    case Event:: TYPE_SCHEDULED:
+                        $scheduled_events[$event->idservice] = $event->idservice;
+                        break;
+                    case Event::TYPE_UNSCHEDULED:
+                        $unscheduled_events[$event->idservice] = $event->idservice;
+                        break;
+                }
+            }
+
+            $plugin = $plugins[$event->idplugin];
+            if (isset($events[$plugin]) === false) {
+                $events[$plugin] = array();
+            }
+
+            $events[$plugin][] = $event;
+        }
+        ksort($events);
 
         // TODO: Liste des services supprimés.
-        // TODO: Envoyer la notification.
+
+        // Envoye la notification.
+        if (count($events) !== 0) {
+            $smarty = new Smarty();
+            $smarty->setTemplateDir(PRIVATE_PATH.'/html/');
+            $smarty->setCompileDir(PRIVATE_PATH.'/cache/smarty/');
+
+            $smarty->assign('count_critical_events', count($critical_events));
+            $smarty->assign('count_scheduled_events', count($scheduled_events));
+            $smarty->assign('count_unscheduled_events', count($unscheduled_events));
+            $smarty->assign('count_warning_events', count($warning_events));
+            $smarty->assign('events', $events);
+            $smarty->assign('last_daily_report', $CFG['last_daily_report']);
+            $smarty->assign('closed_services', $closed_services);
+            $smarty->assign('locked_services', $locked_services);
+            $smarty->assign('regular_events', $regular_events);
+            $smarty->assign('STATES', State::get_records());
+
+            $subject = '[isou] Rapport quotidien';
+            $message = $smarty->fetch('mail/daily_cron.tpl');
+
+            $additional_headers = '';
+            $additional_params = '';
+            if (filter_var($CFG['report_sender'], FILTER_VALIDATE_EMAIL) !== false) {
+                $additional_headers = 'From: '.$CFG['report_sender'];
+                $additional_params = '-f '.$CFG['report_sender'];
+            }
+
+            mail($CFG['report_receiver'], $subject, $message, $additional_headers, $additional_params);
+        }
 
         // Met à jour le témoin de dernière notification dans la base de données.
-        $sql = "UPDATE configuration SET value=? WHERE key=?";
+        $sql = "UPDATE configuration SET value=:value WHERE key=:key";
         $query = $DB->prepare($sql);
-        $query->execute(array(strftime('%FT%T'), 'last_daily_report'));
+        $query->execute(array('value' => strftime('%FT%T'), 'key' => 'last_daily_report'));
     }
 }
 

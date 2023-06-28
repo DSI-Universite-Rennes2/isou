@@ -20,6 +20,10 @@ foreach (array('report_enabled', 'report_hour') as $key) {
         $value = htmlentities($_POST[$key], ENT_QUOTES, 'UTF-8');
         if (set_configuration($key, $value) === true) {
             $CFG[$key] = $value;
+
+            if ($key === 'report_enabled' && empty($value) === false) {
+                set_configuration('last_daily_report', strftime('%FT%T', time() - 24 * 60 * 60));
+            }
         }
     }
 }
