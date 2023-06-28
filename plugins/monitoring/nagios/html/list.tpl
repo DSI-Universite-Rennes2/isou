@@ -32,9 +32,9 @@
 			<td headers="head-note">
 				{* <!-- ex: service NAGIOS non utilisé dans ISOU, service retiré de NAGIOS --> *}
 				{if isset($service->notes[0])}
-				<ul class="alert alert-warning list-unstyled">
+				<ul class="list-unstyled">
 				{foreach $service->notes as $note}
-					<li>{$note}</li>
+					<li class="alert alert-{$note['style']}">{$note['label']}</li>
 				{/foreach}
 				</ul>
 				{/if}
