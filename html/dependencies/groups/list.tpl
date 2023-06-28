@@ -3,8 +3,9 @@
 	<li class="active">{$service->name}</li>
 </ul>
 
-<ul class="list-inline text-right">
-	<li><a class="btn btn-success" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/group/edit/0">Créer un groupe de dépendances</a></li>
+<ul class="list-unstyled row">
+	<li class="col-md-6 text-left"><a class="btn btn-info" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/simulate">Simuler une panne</a></li>
+	<li class="col-md-6 text-right"><a class="btn btn-success" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/group/edit/0">Créer un groupe de dépendances</a></li>
 </ul>
 
 {include file="common/messages_session.tpl"}

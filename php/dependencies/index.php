@@ -54,6 +54,8 @@ if ($PAGE_NAME[1] === 'service' && isset($PAGE_NAME[2]) === true && ctype_digit(
                     require PRIVATE_PATH.'/php/dependencies/groups/edit.php';
             }
         }
+    } elseif (isset($PAGE_NAME[3]) === true && $PAGE_NAME[3] === 'simulate') {
+        require PRIVATE_PATH.'/php/dependencies/simulate.php';
     }
 
     if (isset($TEMPLATE) === false) {

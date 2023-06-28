@@ -206,4 +206,21 @@ class State {
 
         return $query->fetchAll();
     }
+
+    /**
+     * Retourne le caractère unicode représentant un état de service.
+     *
+     * @param string $state État de service.
+     *
+     * @throws \Exception Lève une exception lorsque le paramètre $state n'est pas valide.
+     *
+     * @return string
+     */
+    public static function get_unicode_character(string $state) {
+        if (isset(self::$UNICODE[$state]) === false) {
+            throw new \Exception('La valeur "'.$state.'" n\'est pas valide.');
+        }
+
+        return self::$UNICODE[$state];
+    }
 }
