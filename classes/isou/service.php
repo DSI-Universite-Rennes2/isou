@@ -201,8 +201,8 @@ class Service {
             }
         } else {
             $this->url = null;
-            $this->enable = 0;
-            $this->visible = 0;
+            $this->enable = '0';
+            $this->visible = '0';
             $this->rsskey = null;
             $this->idcategory = null;
         }
