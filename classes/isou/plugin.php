@@ -77,7 +77,7 @@ class Plugin {
      */
     public static function get_record(array $options = array()) {
         if (isset($options['id']) === false && isset($options['codename']) === false) {
-            throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] est requis.');
+            throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] ou $options[\'codename\'] est requis.');
         }
 
         $options['fetch_one'] = true;
