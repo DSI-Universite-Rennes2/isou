@@ -23,17 +23,17 @@ $services = Service::get_records(array('plugin' => PLUGIN_ISOU, 'has_category' =
 foreach ($services as $service) {
     $service->notes = array();
 
-    if ($service->visible === '0') {
-        $service->notes[] = 'Service masqué sur les pages publiques';
+    $service->get_dependencies();
+    if (isset($service->dependencies[0]) === false) {
+        $service->notes[] = array('label' => 'Service sans dépendance', 'style' => 'danger');
     }
 
     if ($service->locked === '1') {
-        $service->notes[] = 'Service dont l\'état est verrouillé';
+        $service->notes[] = array('label' => 'Service dont l\'état est verrouillé', 'style' => 'warning');
     }
 
-    $service->get_dependencies();
-    if (isset($service->dependencies[0]) === false) {
-        $service->notes[] = 'Service sans dépendance';
+    if ($service->visible === '0') {
+        $service->notes[] = array('label' => 'Service masqué sur les pages publiques', 'style' => 'info');
     }
 
     $categories[$service->idcategory]->services[] = $service;
