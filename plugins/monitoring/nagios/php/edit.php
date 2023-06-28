@@ -45,34 +45,99 @@ if (count($cache) === 0) {
     exit(0);
 }
 
+$nagios = array();
+foreach (Service::get_records(array('plugin' => PLUGIN_NAGIOS)) as $record) {
+    $nagios[$record->name] = $record;
+}
+
 $services = array();
 foreach ($cache as $data) {
+    if (isset($nagios[$data['name']]) === true) {
+        continue;
+    }
+
     $services[] = $data['name'];
 }
 sort($services);
 
-if (isset($_POST['service']) === true) {
-    // Vérifie que le service existe.
-    if (in_array($_POST['service'], $services, true) === false) {
-        $_POST['errors'][] = 'Le service "'.$_POST['service'].'" n\'existe pas.';
+if (isset($_POST['pattern']) === false) {
+    $_POST['pattern'] = '';
+}
+$_POST['pattern'] = trim($_POST['pattern']);
+
+$results = array();
+if (empty($_POST['pattern']) === false) {
+    $regexp = str_replace('/', '\/', $_POST['pattern']);
+    foreach ($cache as $data) {
+        if (preg_match('/'.$regexp.'/i', $data['name']) !== 1) {
+            continue;
+        }
+
+        if (isset($nagios[$data['name']]) === true) {
+            continue;
+        }
+
+        $results[] = $data['name'];
+    }
+
+    if (isset($results[0]) === false) {
+        $_POST['errors'][] = 'Aucun service ne correspond à la recherche "'.htmlentities($_POST['pattern']).'".';
+    }
+}
+
+if (isset($_POST['submit']) === true) {
+    if (is_array($_POST['services']) === true) {
+        // On ajoute un ou plusieurs services...
+        foreach ($_POST['services'] as $service_name) {
+            $key = array_search($service_name, $results);
+
+            if ($key === false) {
+                $_SESSION['messages']['warnings'][] = 'Le service "'.htmlentities($service_name).'" n\'a pas été ajouté.';
+                continue;
+            }
+
+            $service = new Service();
+            $service->name = $service_name;
+            $service->idplugin = PLUGIN_NAGIOS;
+
+            $_POST['errors'] = $service->check_data();
+            if (isset($_POST['errors'][0]) === true) {
+                break;
+            }
+
+            $_POST = array_merge($_POST, $service->save());
+
+            if (isset($_POST['errors'][0]) === true) {
+                break;
+            }
+
+            unset($results[$key]);
+        }
+    } elseif (empty($service->id) === false) {
+        $service->name = $_POST['services'];
+
+        $_POST['errors'] = $service->check_data();
+        if (isset($_POST['errors'][0]) === false) {
+            $_POST = array_merge($_POST, $service->save());
+        }
+    } else {
+        $_POST['errors'][0] = 'Une erreur est survenue lors de l\'enregistrement des données.';
     }
 
     if (isset($_POST['errors'][0]) === false) {
-        $service->name = $_POST['service'];
+        $_SESSION['messages']['successes'] = $_POST['successes'];
 
-        $_POST = array_merge($_POST, $service->save());
-        if (isset($_POST['errors'][0]) === false) {
-            $_SESSION['messages']['successes'] = $_POST['successes'];
+        // On force la mise à jour des groupements de service Isou.
+        require PRIVATE_PATH.'/plugins/monitoring/isou/lib.php';
+        plugin_isou_update_grouping();
 
-            // On force la mise à jour des groupements de service Isou.
-            require PRIVATE_PATH.'/plugins/monitoring/isou/lib.php';
-            plugin_isou_update_grouping();
-
-            header('Location: '.URL.'/index.php/services/nagios');
-            exit(0);
-        }
+        header('Location: '.URL.'/index.php/services/nagios');
+        exit(0);
     }
 }
+
+sort($results);
+$smarty->assign('results', $results);
 
 $smarty->assign('service', $service);
 $smarty->assign('services', $services);
