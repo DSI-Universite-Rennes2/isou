@@ -614,10 +614,15 @@ class Event {
     public function set_service(string $idservice, array $options_services = null) {
         global $DB;
 
-        $this->idservice = $idservice;
-
         if ($options_services === null) {
             $options_services = Service::get_records(array('fetch_column' => true, 'plugin' => PLUGIN_ISOU));
+        }
+
+        if (is_numeric($idservice) === true) {
+            $this->idservice = $idservice;
+        } else {
+            $service_name = htmlentities(trim($idservice), ENT_NOQUOTES, 'UTF-8');
+            $this->idservice = (string) array_search($service_name, $options_services);
         }
 
         if (isset($options_services[$this->idservice]) === false) {
