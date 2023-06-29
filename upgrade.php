@@ -52,9 +52,14 @@ if (has_new_version() === false && upgrade_plugins($check_only = true) === false
 }
 
 // Avertissement avant la mise à jour.
-echo 'Vous vous apprêtez à faire une mise à jour d\'Isou.'.PHP_EOL.PHP_EOL;
-echo '   - Avant de lancer la procédure, il est fortement recommandé de faire une sauvegarde du fichier "'.$db_file_path.'"'.PHP_EOL.PHP_EOL;
-echo 'Souhaitez-vous lancer la mise à jour ? (o/n)'.PHP_EOL;
+echo PHP_EOL;
+if (empty($CFG['version']) === true) {
+    echo 'Vous vous apprêtez à mettre à jour votre instance Isou en version '.CURRENT_VERSION.'.'.PHP_EOL.PHP_EOL;
+} else {
+    echo 'Vous vous apprêtez à mettre à jour votre instance Isou de la version '.$CFG['version'].' à la version '.CURRENT_VERSION.'.'.PHP_EOL.PHP_EOL;
+}
+echo '   - ATTENTION ! Avant de lancer la procédure, il est fortement recommandé de faire une sauvegarde du fichier "'.$db_file_path.'"'.PHP_EOL.PHP_EOL;
+echo 'Souhaitez-vous lancer la procédure de mise à jour en version '.CURRENT_VERSION.' ? (o/n)'.PHP_EOL;
 $response = trim(fgets(STDIN));
 if (in_array($response, array('o', 'y', 'O', 'Y'), true) === false) {
     exit(0);

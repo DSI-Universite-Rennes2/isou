@@ -23,7 +23,7 @@ use UniversiteRennes2\Isou\Plugin;
 function isou_update_version() {
     global $DB;
 
-    echo 'Votre version d\'isou est '.CURRENT_VERSION.'.'.PHP_EOL;
+    echo 'Votre instance Isou est maintenant en version '.CURRENT_VERSION.'.'.PHP_EOL;
 
     $update = array();
     $update['last_update'] = strftime('%FT%T');
