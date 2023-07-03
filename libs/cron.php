@@ -416,7 +416,7 @@ function cron_report() {
 
         // Liste des événements.
         $critical_events = array();
-        $regular_events = Event::get_records(array('type' => Event::TYPE_REGULAR, 'sort' => array('service_name', 'startdate')));
+        $regular_events = Event::get_records(array('type' => Event::TYPE_REGULAR, 'sort' => array('UPPER(service_name)', 'startdate')));
         $scheduled_events = array();
         $unscheduled_events = array();
         $warning_events = array();
