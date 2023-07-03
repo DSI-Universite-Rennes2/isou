@@ -8,4 +8,4 @@
 
 declare(strict_types=1);
 
-define('CURRENT_VERSION', '3.2.0');
+define('CURRENT_VERSION', '3.2.1');
