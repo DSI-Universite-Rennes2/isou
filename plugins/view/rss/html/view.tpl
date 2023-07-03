@@ -11,7 +11,10 @@
 			<form method="post" action="{$smarty.const.URL}/index.php/rss/config#rss-url">
 				<ul class="list-unstyled">
 				{foreach $categories as $category}
-				   <li>
+					{if count($category->services) === 0}
+						{continue}
+					{/if}
+					<li>
 					<details>
 						<summary>{$category->name}</summary>
 						<ul class="list-unstyled">
