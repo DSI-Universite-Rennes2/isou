@@ -44,7 +44,7 @@ function plugin_nagios_update(Plugin $plugin) {
     while (feof($handle) === false) {
         $line = fgets($handle, 4096);
         if ($line === false) {
-            break;
+            continue;
         }
         $line = trim($line);
         if (preg_match('/^servicestatus \{/', $line) === 1) {
