@@ -16,6 +16,18 @@ header('content-type: application/xml');
 define('MAXFEED', 100);
 
 require __DIR__.'/../config.php';
+require PRIVATE_PATH.'/php/common/database.php';
+
+// Charge la configuration.
+require PRIVATE_PATH.'/libs/configuration.php';
+$CFG = get_configurations();
+
+// Charge les plugins.
+$plugins = get_plugins();
+
+$smarty = new Smarty();
+$smarty->setTemplateDir(PRIVATE_PATH.'/html/');
+$smarty->setCompileDir(PRIVATE_PATH.'/cache/smarty/');
 
 // Décode le filtre par service dans l'url du flux RSS.
 $keys = array();
@@ -31,41 +43,12 @@ if (isset($_GET['services']) === true) {
     }
 }
 
-$now = mktime(0, 0, 0);
-$record = array();
 $items = array();
 
-try {
-    if (is_file(substr(DB_PATH, 7)) === false) {
-        throw new PDOException(DB_PATH.' n\'existe pas.');
-    }
-    $DB = new PDO(DB_PATH, '', '');
-} catch (PDOException $exception) {
-    header("HTTP/1.0 503 Service Unavailable");
-
-    // Ferme la connexion PDO.
-    $DB = null;
-
-    exit(0);
-}
-
-$smarty = new Smarty();
-$smarty->setTemplateDir(PRIVATE_PATH.'/html/');
-$smarty->setCompileDir(PRIVATE_PATH.'/cache/smarty/');
-
-// Charge la configuration.
-require PRIVATE_PATH.'/libs/configuration.php';
-$CFG = get_configurations();
-
-// Charge les plugins.
-$plugins = get_plugins();
-
-$items = array();
 $options = array();
 $options['since'] = new DateTime(strftime('%Y-%m-%d', TIME - (30 * 24 * 60 * 60)));
 $options['has_category'] = true;
 $options['plugin'] = PLUGIN_ISOU;
-
 foreach (Event::get_records($options) as $event) {
     if (isset($services[$event->idservice]) === false) {
         $services[$event->idservice] = Service::get_record(array('id' => $event->idservice, 'plugin' => PLUGIN_ISOU));
