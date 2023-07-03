@@ -17,22 +17,18 @@ define('MAXFEED', 100);
 
 require __DIR__.'/../config.php';
 
-// Find filter on rss url.
-if (isset($_GET['key']) === true && ctype_xdigit($_GET['key']) === true) {
-    $maxKey = pow(2, 100);
-    $key = hexdec($_GET['key']);
-    $keys = array();
-    $i = 100;
-    while ($key > 0) {
-        if ($key >= $maxKey) {
-            $keys[$i] = $i;
-            $key = $key - $maxKey;
+// Décode le filtre par service dans l'url du flux RSS.
+$keys = array();
+if (isset($_GET['services']) === true) {
+    $value = base64_decode(rawurldecode($_GET['services']));
+    if ($value !== false) {
+        foreach (explode(',', $value) as $serviceid) {
+            if (ctype_digit($serviceid) === false) {
+                continue;
+            }
+            $keys[] = $serviceid;
         }
-        $maxKey /= 2;
-        $i--;
     }
-} else {
-    $keys = null;
 }
 
 $now = mktime(0, 0, 0);
@@ -79,8 +75,11 @@ foreach (Event::get_records($options) as $event) {
         continue;
     }
 
-    $rsskey = intval($services[$event->idservice]->rsskey);
-    if ($keys !== null && in_array($rsskey, $keys, $strict = true) === false) {
+    if ($services[$event->idservice]->enable === '0' || $services[$event->idservice]->visible === '0') {
+        continue;
+    }
+
+    if (empty($keys) === false && in_array($event->idservice, $keys, $strict = true) === false) {
         continue;
     }
 

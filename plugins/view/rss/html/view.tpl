@@ -34,7 +34,7 @@
 			</form>
 
 			{if $rss_url !== null}
-				<p id="rss-url">Vous pouvez consulter les actualités des services sélectionnés précédemment en utilisant ce lien RSS : <a href="{$rss_url}" title="lien vers le flux RSS">{$rss_url}</a>.</p>
+				<p id="rss-url">Vous pouvez consulter les actualités des services sélectionnés précédemment en utilisant ce lien RSS : <a href="{$rss_url}" title="lien vers le flux RSS">{$rss_url|rawurldecode}</a>.</p>
 			{/if}
 		</div>
 

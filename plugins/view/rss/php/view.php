@@ -15,7 +15,7 @@ if (count($MENUS->public) > 1) {
     $TITLE .= ' - Configuration Flux RSS';
 }
 
-$key = 0;
+$keys = array();
 
 $categories = array();
 foreach (Category::get_records(array('non-empty' => true)) as $category) {
@@ -43,15 +43,15 @@ foreach ($services as $service) {
     $categories[$service->idcategory]->services[] = $service;
 
     if (isset($_POST['keys'][$service->id]) === true) {
-        $key += pow(2, $service->rsskey);
+        $keys[] = $service->id;
     }
 }
 
 if (isset($_POST['generer']) === true) {
-    if ($key === 0) {
+    if (empty($keys) === true) {
         $rss_url = URL.'/rss.php';
     } else {
-        $rss_url = URL.'/rss.php?key='.strtoupper(dechex($key));
+        $rss_url = URL.'/rss.php?services='.rawurlencode(base64_encode(implode(',', $keys)));
     }
 } else {
     $rss_url = null;
