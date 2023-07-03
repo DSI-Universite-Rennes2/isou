@@ -5,6 +5,7 @@
 </ul>
 
 <form action="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/simulate" class="well" method="post">
+	<h2>État des dépendances :</h2>
 	{foreach $dependencies as $iddependency => $dependency}
 	<div class="form-group">
 		<label>{html_options name="state[$iddependency]" options=$options_states selected=$smarty.post.state[$iddependency]|default:""}{$dependency}</label>
@@ -23,6 +24,7 @@
 
 {if isset($results) === true}
 <div class="row">
+	<h2>Résultat de la simulation :</h2>
 	<div class="col-md-12">
 	{if $service->state === \UniversiteRennes2\Isou\State::OK}
 	<p class="alert alert-success">{\UniversiteRennes2\Isou\State::get_unicode_character($service->state)} {$service->name}</p>
