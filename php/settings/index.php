@@ -32,6 +32,9 @@ switch ($PAGE_NAME[1]) {
     case 'notifications':
         require PRIVATE_PATH.'/php/settings/notifications.php';
         break;
+    case 'proxy':
+        require PRIVATE_PATH.'/php/settings/proxy.php';
+        break;
     case 'rapport':
         require PRIVATE_PATH.'/php/settings/report.php';
         break;
@@ -48,6 +51,7 @@ switch ($PAGE_NAME[1]) {
 
 $services_menu = array();
 $services_menu['general'] = new SimpleMenu('Général', 'Configuration générale', URL.'/index.php/configuration/general');
+$services_menu['proxy'] = new SimpleMenu('Proxy HTTP', 'Configuration d\'un proxy web', URL.'/index.php/configuration/proxy');
 $services_menu['apparence'] = new SimpleMenu('Apparence', 'Configuration des vues', URL.'/index.php/configuration/apparence');
 $services_menu['authentification'] = new SimpleMenu('Authentification', 'Gestion de l\'authentification', URL.'/index.php/configuration/authentification');
 $services_menu['utilisateurs'] = new SimpleMenu('Utilisateurs', 'Afficher les utilisateurs', URL.'/index.php/configuration/utilisateurs');

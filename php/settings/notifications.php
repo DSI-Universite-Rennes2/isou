@@ -17,7 +17,7 @@ $options_yes_no = array(
     0 => 'Non',
 );
 
-if (isset($_POST['notifications_enabled'], $_POST['http_proxy'], $_POST['https_proxy'], $_POST['no_proxy']) === true) {
+if (isset($_POST['notifications_enabled']) === true) {
     // Enregistre l'activation des notifications.
     if ($CFG['notifications_enabled'] !== $_POST['notifications_enabled'] && set_configuration('notifications_enabled', $_POST['notifications_enabled']) === true) {
         $CFG['notifications_enabled'] = $_POST['notifications_enabled'];
@@ -53,45 +53,8 @@ if (isset($_POST['notifications_enabled'], $_POST['http_proxy'], $_POST['https_p
             }
         }
     }
-
-    // Enregistre les paramètres du proxy.
-    if ($CFG['http_proxy'] !== $_POST['http_proxy'] && set_configuration('http_proxy', $_POST['http_proxy']) === true) {
-        $CFG['http_proxy'] = $_POST['http_proxy'];
-    }
-
-    if ($CFG['https_proxy'] !== $_POST['https_proxy'] && set_configuration('https_proxy', $_POST['https_proxy']) === true) {
-        $CFG['https_proxy'] = $_POST['https_proxy'];
-    }
-
-    $no_proxy = array();
-    foreach (explode(',', $_POST['no_proxy']) as $value) {
-        $value = trim($value);
-
-        if (empty($value) === true) {
-            continue;
-        }
-
-        $no_proxy[] = $value;
-    }
-
-    if ($no_proxy === array()) {
-        if (empty($no_proxy) !== empty($CFG['no_proxy']) && set_configuration('no_proxy', '') === true) {
-            $CFG['no_proxy'] = null;
-        }
-    } else {
-        if ($no_proxy !== $CFG['no_proxy'] && set_configuration('no_proxy', json_encode($no_proxy)) === true) {
-            $CFG['no_proxy'] = $no_proxy;
-        }
-    }
-}
-
-if (empty($CFG['no_proxy']) === true) {
-    $no_proxy = '';
-} else {
-    $no_proxy = implode(', ', $CFG['no_proxy']);
 }
 
 $smarty->assign('options_yes_no', $options_yes_no);
-$smarty->assign('no_proxy', $no_proxy);
 
 $SUBTEMPLATE = 'settings/notifications.tpl';
