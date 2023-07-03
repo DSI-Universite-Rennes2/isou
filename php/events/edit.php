@@ -52,6 +52,9 @@ $options_periods = Event::$PERIODS;
 $options_services = Service::get_records(array('fetch_column' => true, 'plugin' => PLUGIN_ISOU, 'has_category' => true));
 
 $options_types = Event::$TYPES;
+if (in_array($event->type, array(Event::TYPE_SCHEDULED, Event::TYPE_UNSCHEDULED), $strict = true) === true) {
+    unset($options_types[Event::TYPE_CLOSED], $options_types[Event::TYPE_REGULAR]);
+}
 
 if ($_POST['type'] === Event::TYPE_CLOSED) {
     $_POST['state'] = State::CLOSED;

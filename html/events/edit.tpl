@@ -17,7 +17,11 @@
 				<label class="control-label" for="type">Type d'évènement</label>
 			</dt>
 			<dd class="col-sm-10">
+				{if $event->type === UniversiteRennes2\Isou\Event::TYPE_SCHEDULED || $event->type === UniversiteRennes2\Isou\Event::TYPE_UNSCHEDULED}
+				{html_options class="form-control" id="type" name="type" options=$options_types selected=$event->type}
+				{else}
 				{html_options class="form-control" id="type" name="type" options=$options_types selected=$event->type disabled="1"}
+				{/if}
 			</dd>
 		</div>
 		<div class="form-group">
