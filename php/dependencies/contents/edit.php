@@ -109,8 +109,12 @@ if (isset($_POST['services'], $_POST['servicestate']) === true) {
 
         $contents = Dependency_Group_Content::get_records(array('group' => $dependency_group->id));
         foreach ($children as $child) {
+            $dependency_group_content->id = 0;
+
+            // Vérifie si le service est déjà dans ce groupe.
             foreach ($contents as $content) {
                 if ($content->idservice === $child) {
+                    // Le service est déjà dans ce groupe. On met à jour le contenu.
                     $dependency_group_content->id = $content->id;
                     break;
                 }
