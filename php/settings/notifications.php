@@ -19,7 +19,7 @@ $options_yes_no = array(
 
 if (isset($_POST['notifications_enabled'], $_POST['http_proxy'], $_POST['https_proxy'], $_POST['no_proxy']) === true) {
     // Enregistre l'activation des notifications.
-    if (set_configuration('notifications_enabled', $_POST['notifications_enabled']) === true) {
+    if ($CFG['notifications_enabled'] !== $_POST['notifications_enabled'] && set_configuration('notifications_enabled', $_POST['notifications_enabled']) === true) {
         $CFG['notifications_enabled'] = $_POST['notifications_enabled'];
 
         if (empty($CFG['notifications_enabled']) === false) {
