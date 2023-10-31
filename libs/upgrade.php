@@ -38,6 +38,11 @@ function isou_update_version() {
         $query = $DB->prepare($sql);
         $query->execute(array(':value' => $value, ':key' => $key));
     }
+
+    // Optimise la base de données.
+    $sql = "VACUUM";
+    $query = $DB->prepare($sql);
+    $query->execute();
 }
 
 /**
