@@ -138,6 +138,8 @@ function upgrade_to_3_3_0() {
     $configurations['check_updates_enabled'] = array('0', 'boolean');
     $configurations['last_update_check'] = array($now, 'datetime');
     $configurations['available_update'] = array('0', 'string');
+    $configurations['gather_statistics_enabled'] = array('0', 'boolean');
+    $configurations['last_statistics_gathering'] = array($now, 'datetime');
     foreach ($configurations as $key => $values) {
         list($value, $type) = $values;
         $sql = "INSERT INTO configuration(key, value, type) VALUES(:key, :value, :type)";

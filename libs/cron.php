@@ -310,6 +310,81 @@ function cron_check_updates() {
 }
 
 /**
+ * Collecte et envoie des données statistiques.
+ *
+ * @return void
+ */
+function cron_gather_statistics() {
+    global $CFG, $DB, $LOGGER;
+
+    if ($CFG['gather_statistics_enabled'] === '0') {
+        $LOGGER->debug('La collecte de statistiques n\'est pas activée.');
+        return;
+    }
+
+    if (DEBUG === true || DEV === true) {
+        $LOGGER->debug('La collecte de statistiques est désactivée lorsque la constante DEBUG ou DEV est configurée à True.');
+        return;
+    }
+
+    $last_month = new DateTime('-1 month');
+    if ($CFG['last_statistics_gathering'] > $last_month) {
+        $interval = $last_month->diff($CFG['last_statistics_gathering']);
+        $LOGGER->debug('Prochaine collecte de statistiques dans '.$interval->format('%a').' jours.');
+        return;
+    }
+
+    // Récupère la liste des plugins activés.
+    $plugins = array();
+    foreach (Plugin::get_records(array('active' => true)) as $plugin) {
+        $plugins[] = sprintf('%s:%s:%s', $plugin->codename, $plugin->type, $plugin->version);
+    }
+
+    // Prépare la requête HTTP.
+    $curl_options = array();
+    $curl_options[CURLOPT_URL] = 'https://services.univ-rennes2.fr/isou/gather_statistics.php';
+    $curl_options[CURLOPT_HEADER] = false;
+    $curl_options[CURLOPT_POST] = true;
+    $curl_options[CURLOPT_NOBODY] = false;
+    $curl_options[CURLOPT_RETURNTRANSFER] = true;
+    $curl_options[CURLOPT_POSTFIELDS] = array('url' => $CFG['site_url'], 'plugins' => json_encode($plugins), 'version' => CURRENT_VERSION);
+
+    if (empty($CFG['http_proxy']) === false) {
+        $curl_options[CURLOPT_PROXY] = $CFG['http_proxy'];
+    }
+
+    if (empty($CFG['https_proxy']) === false) {
+        $curl_options[CURLPROXY_HTTPS] = $CFG['https_proxy'];
+    }
+
+    if (empty($CFG['no_proxy']) === false) {
+        $curl_options[CURLOPT_NOPROXY] = implode(',', $CFG['no_proxy']);
+    }
+
+    $curl = curl_init();
+    curl_setopt_array($curl, $curl_options);
+
+    if (curl_exec($curl) === false) {
+        $LOGGER->notice('Erreur lors de l\'envoi de la collecte de statistiques ('.curl_error($curl).')');
+        curl_close($curl);
+        return;
+    }
+
+    $response_code = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+    curl_close($curl);
+
+    if ($response_code !== 200) {
+        $LOGGER->notice('Erreur sur le code de réponse HTTP ('.$response_code.')');
+        return;
+    }
+
+    $sql = "UPDATE configuration SET value = :value WHERE key = 'last_statistics_gathering'";
+    $query = $DB->prepare($sql);
+    $query->execute(array(':value' => strftime('%FT%T')));
+    $LOGGER->info('Les statistiques ont été transmises à '.$curl_options[CURLOPT_URL]);
+}
+
+/**
  * Régénère le fichier public isou.json listant les interruptions en cours.
  *
  * @return void

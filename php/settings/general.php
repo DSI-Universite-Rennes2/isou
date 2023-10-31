@@ -30,11 +30,11 @@ if ($handle !== false) {
 ksort($themes);
 
 $options_yes_no = array(
-    1 => 'Oui',
-    0 => 'Non',
+    '1' => 'Oui',
+    '0' => 'Non',
 );
 
-foreach (array('site_name', 'site_header', 'site_url', 'theme', 'check_updates_enabled') as $key) {
+foreach (array('site_name', 'site_header', 'site_url', 'theme', 'check_updates_enabled', 'gather_statistics_enabled') as $key) {
     if (isset($_POST[$key]) === true) {
         $value = htmlentities($_POST[$key], ENT_QUOTES, 'UTF-8');
         if ($value !== $CFG[$key]) {

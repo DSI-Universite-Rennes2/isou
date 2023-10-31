@@ -128,6 +128,11 @@ if ($CFG['check_updates_enabled'] === '1') {
     cron_check_updates();
 }
 
+// Collecte de statistiques.
+if ($CFG['gather_statistics_enabled'] === '1') {
+    cron_gather_statistics();
+}
+
 unlink($pid_file);
 
 $LOGGER->info('Temps d\'exécution : '.(microtime(true) - $starttime).' secondes.');
