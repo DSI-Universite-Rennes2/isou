@@ -828,7 +828,7 @@ class Event {
         if ($event_description === false) {
             $event_description = new Event_Description();
             $event_description->description = $description;
-            $event_description->autogen = $autogen;
+            $event_description->autogen = intval($autogen);
         }
 
         $this->ideventdescription = $event_description->id;

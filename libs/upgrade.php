@@ -13,6 +13,7 @@ declare(strict_types=1);
 use Phinx\Console\PhinxApplication;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
+use UniversiteRennes2\Isou\Event_Description;
 use UniversiteRennes2\Isou\Plugin;
 
 /**
@@ -34,6 +35,129 @@ function isou_update_version() {
         $query = $DB->prepare($sql);
         $query->execute(array(':value' => $value, ':key' => $key));
     }
+}
+
+/**
+ * Procède à la migration vers la version 3.3.0.
+ *
+ * @throws Exception Lève une exception lorsqu'une erreur survient.
+ *
+ * @return void
+ */
+function upgrade_to_3_3_0() {
+    global $DB;
+
+    echo '- Procédure de mise à jour du schéma de base de données vers la version 3.3.0.'.PHP_EOL;
+
+    // Attribue une valeur au champ "autogen" lorsqu'il n'y en a pas.
+    $sql = "UPDATE events_descriptions SET autogen=0 WHERE autogen NOT IN (0, 1)";
+    $query = $DB->prepare($sql);
+    $query->execute();
+
+    // Supprime les descriptions d'évènement non utilisées.
+    try {
+        $count_unused_descriptions = delete_unused_event_descriptions();
+    } catch (Exception $exception) {
+        echo $exception->getMessage().PHP_EOL;
+        return;
+    }
+
+    // Calcule les descriptions d'évènement en double.
+    $count_descriptions = 0;
+    $count_duplicated_descriptions = 0;
+    foreach (Event_Description::get_records() as $record) {
+        if (isset($descriptions[$record->autogen]) === false) {
+            $descriptions[$record->autogen] = array();
+        }
+
+        $description = strtolower(trim($record->description));
+        if (isset($descriptions[$record->autogen][$description]) === true) {
+            $descriptions[$record->autogen][$description]->duplicates[] = $record->id;
+            continue;
+        }
+
+        $descriptions[$record->autogen][$description] = new stdClass();
+        $descriptions[$record->autogen][$description]->id = $record->id;
+        $descriptions[$record->autogen][$description]->duplicates = array();
+        $count_descriptions++;
+    }
+
+    // Supprime les descriptions d'évènement en double.
+    $count_processed_descriptions = 0;
+    foreach ($descriptions as $type => $records) {
+        foreach ($records as $description) {
+            $count_processed_descriptions++;
+            if ($count_processed_descriptions % 10 === 0) {
+                echo '.';
+            }
+
+            if (count($description->duplicates) === 0) {
+                continue;
+            }
+
+            $params = array();
+            foreach ($description->duplicates as $id => $duplicate) {
+                $params['oldid'.$id] = $duplicate;
+                $count_duplicated_descriptions++;
+            }
+
+            $sql = "UPDATE events SET ideventdescription = :newid WHERE ideventdescription IN (:".implode(',:', array_keys($params)).")";
+            $params['newid'] = $description->id;
+
+            $query = $DB->prepare($sql);
+            if ($query->execute($params) === false) {
+                echo PHP_EOL;
+                echo 'Une erreur est survenue lors de la mise à jour des descriptions des évènements.'.PHP_EOL;
+            }
+        }
+    }
+
+    // Supprime les descriptions d'évènement non utilisées.
+    try {
+        $count_unused_descriptions += delete_unused_event_descriptions();
+    } catch (Exception $exception) {
+        echo $exception->getMessage().PHP_EOL;
+        return;
+    }
+
+    echo PHP_EOL;
+    echo PHP_EOL;
+    echo $count_descriptions.' descriptions traitées.'.PHP_EOL;
+    echo '  - '.$count_duplicated_descriptions.' descriptions en double traitées'.PHP_EOL;
+    if ($count_unused_descriptions > 0) {
+        echo '  - '.$count_unused_descriptions.' descriptions d\'évènement non utilisées supprimées'.PHP_EOL;
+    }
+}
+
+/**
+ * Procède à la suppression de descriptions d'évènement non utilisées et retourne le nombre de descriptions supprimées.
+ *
+ * @throws Exception Lève une exception lorsqu'une erreur survient.
+ *
+ * @return integer
+ */
+function delete_unused_event_descriptions() {
+    global $DB;
+
+    $sql = "SELECT COUNT(*) as count
+              FROM events_descriptions
+             WHERE id NOT IN (SELECT ideventdescription FROM events)";
+    $query = $DB->prepare($sql);
+    if ($query->execute() === false) {
+        throw new Exception('Une erreur est survenue lors de la suppression des descriptions d\'évènement non utilisées.');
+    }
+
+    $description = $query->fetch(\PDO::FETCH_OBJ);
+    $count_unused_descriptions = $description->count;
+    if ($count_unused_descriptions > 0) {
+        $sql = "DELETE FROM events_descriptions WHERE id NOT IN (SELECT ideventdescription FROM events)";
+        $query = $DB->prepare($sql);
+        if ($query->execute() === false) {
+            throw new Exception('Une erreur est survenue lors de la suppression des descriptions d\'évènement non utilisées.');
+        }
+    }
+
+    return $count_unused_descriptions;
 }
 
 /**

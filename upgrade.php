@@ -103,6 +103,17 @@ try {
         case '3.0.1':
             upgrade_301_to_302();
             // Pas de break. On enchaine les mises à jour.
+        case '3.0.2':
+        case '3.0.3':
+        case '3.0.4':
+        case '3.1.0':
+        case '3.1.1':
+        case '3.1.2':
+        case '3.2.0':
+        case '3.2.1':
+        case '3.2.2':
+            upgrade_to_3_3_0();
+            // Pas de break. On enchaine les mises à jour.
         default:
             // Finally, upgrade plugins.
             echo PHP_EOL;
