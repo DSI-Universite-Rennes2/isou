@@ -509,7 +509,7 @@ function cron_report() {
  * @return void
  */
 function cron_delete_old_plugin_events() {
-    global $LOGGER;
+    global $DB, $LOGGER;
 
     // On garde les évènements sur 90 jours.
     $expire = strftime('%FT%T', time() - (90 * 24 * 60 * 60));
@@ -532,6 +532,27 @@ function cron_delete_old_plugin_events() {
 
             $LOGGER->info('Supprime l\'évènement #'.$event->id.' du '.$event->startdate->format('Y-m-d\TH:i:s').' au '.$event->enddate->format('Y-m-d\TH:i:s'));
             $event->delete();
+        }
+    }
+
+    // Supprime les descriptions d'évènement non utilisées.
+    $sql = "SELECT COUNT(*) as count
+              FROM events_descriptions
+             WHERE id NOT IN (SELECT ideventdescription FROM events)";
+    $query = $DB->prepare($sql);
+    if ($query->execute() === false) {
+        $LOGGER->error('La requête SQL suivante n\'a pas pu être exécutée: '.$sql);
+        return;
+    }
+
+    $description = $query->fetch(\PDO::FETCH_OBJ);
+    if ($description->count > 0) {
+        $sql = "DELETE FROM events_descriptions WHERE id NOT IN (SELECT ideventdescription FROM events)";
+        $query = $DB->prepare($sql);
+        if ($query->execute() === true) {
+            $LOGGER->info($description->count.' descriptions d\'évènements supprimés.');
+        } else {
+            $LOGGER->error('La requête SQL suivante n\'a pas pu être exécutée: '.$sql);
         }
     }
 }
