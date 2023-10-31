@@ -79,6 +79,10 @@
 				<p class="alert alert-danger">Il est fortement recommandé de <strong>ne pas utiliser</strong> la <a href="{$smarty.const.URL}/index.php/configuration/authentification">méthode d'authentification locale</a> en production.</p>
 			{/if}
 
+			{if empty($MENUS->administration) === false && empty($CFG.available_update) === false}
+				<p class="alert alert-info">Nouvelle mise à jour : la version {$CFG.available_update} d'Isou est disponible.</p>
+			{/if}
+
 			{if count($MENUS->public) > 1 || empty($MENUS->administration) === false}
 			<nav id="navigation" role="navigation">
 				<h1 class="sr-only">Navigation</h1>

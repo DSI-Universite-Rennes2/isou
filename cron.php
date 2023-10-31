@@ -123,6 +123,11 @@ if ($CFG['report_enabled'] === '1') {
     cron_report();
 }
 
+// Recherche une mise à jour.
+if ($CFG['check_updates_enabled'] === '1') {
+    cron_check_updates();
+}
+
 unlink($pid_file);
 
 $LOGGER->info('Temps d\'exécution : '.(microtime(true) - $starttime).' secondes.');

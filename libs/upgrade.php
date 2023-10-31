@@ -22,13 +22,16 @@ use UniversiteRennes2\Isou\Plugin;
  * @return void
  */
 function isou_update_version() {
-    global $DB;
+    global $CFG, $DB;
 
     echo 'Votre instance Isou est maintenant en version '.CURRENT_VERSION.'.'.PHP_EOL;
 
     $update = array();
     $update['last_update'] = strftime('%FT%T');
     $update['version'] = CURRENT_VERSION;
+    if (isset($CFG['available_update']) === true && $CFG['available_update'] <= CURRENT_VERSION) {
+        $update['available_update'] = '0';
+    }
 
     foreach ($update as $key => $value) {
         $sql = "UPDATE configuration SET value = :value WHERE key = :key";
@@ -127,6 +130,24 @@ function upgrade_to_3_3_0() {
     if ($count_unused_descriptions > 0) {
         echo '  - '.$count_unused_descriptions.' descriptions d\'évènement non utilisées supprimées'.PHP_EOL;
     }
+
+    // Création de nouveaux paramètres pour l'administration.
+    $now = date('Y-m-d\TH:i:s');
+
+    $configurations = array();
+    $configurations['check_updates_enabled'] = array('0', 'boolean');
+    $configurations['last_update_check'] = array($now, 'datetime');
+    $configurations['available_update'] = array('0', 'string');
+    foreach ($configurations as $key => $values) {
+        list($value, $type) = $values;
+        $sql = "INSERT INTO configuration(key, value, type) VALUES(:key, :value, :type)";
+        $query = $DB->prepare($sql);
+        $query->execute(array(':key' => $key, ':value' => $value, 'type' => $type));
+    }
+
+    $sql = "DELETE FROM configuration WHERE key = 'last_check_update'";
+    $query = $DB->prepare($sql);
+    $query->execute();
 }
 
 /**

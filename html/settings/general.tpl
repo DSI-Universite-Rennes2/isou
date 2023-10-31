@@ -39,6 +39,12 @@
 		{html_radios class="isou-radios" name="theme" options=$themes selected=$CFG.theme}
 	</fieldset>
 
+	<fieldset>
+		<legend>Recherche automatique de mises à jour</legend>
+		{html_radios class="isou-radios" name="check_updates_enabled" options=$options_yes_no selected=$CFG.check_updates_enabled}
+		<p class="help-block small">Une fois par jour, une requête HTTPS est envoyée au site Github.com pour vérifier si une nouvelle mise à jour d'Isou est disponible.</p>
+	</fieldset>
+
 	<ul class="list-inline">
 		<li>
 			<input class="btn btn-primary" type="submit" value="enregistrer" />

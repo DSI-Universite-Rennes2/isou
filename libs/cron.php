@@ -238,6 +238,78 @@ function update_services_tree() {
 }
 
 /**
+ * Vérifie la disponibilité d'une mise à jour d'Isou.
+ *
+ * @return void
+ */
+function cron_check_updates() {
+    global $CFG, $DB, $LOGGER;
+
+    if ($CFG['check_updates_enabled'] === '0') {
+        $LOGGER->debug('Les vérifications de disponibilité de mises à jour d\'Isou ne sont pas activées.');
+        return;
+    }
+
+    if ($CFG['available_update'] === '1') {
+        $LOGGER->debug('Une nouvelle mise à jour Isou est disponible.');
+        return;
+    }
+
+    $yesterday = new DateTime('-24 hours');
+    if ($CFG['last_update_check'] > $yesterday) {
+        $interval = $CFG['last_update_check']->diff($yesterday);
+        $LOGGER->debug('Prochaine vérification de nouvelle version d\'Isou dans '.$interval->format('%Hh%I'));
+        return;
+    }
+
+    $curl_options = array();
+    $curl_options[CURLOPT_URL] = 'https://raw.githubusercontent.com/DSI-Universite-Rennes2/isou/master/version.php';
+    $curl_options[CURLOPT_HEADER] = false;
+    $curl_options[CURLOPT_HTTPGET] = true;
+    $curl_options[CURLOPT_NOBODY] = false;
+    $curl_options[CURLOPT_RETURNTRANSFER] = true;
+
+    if (empty($CFG['http_proxy']) === false) {
+        $curl_options[CURLOPT_PROXY] = $CFG['http_proxy'];
+    }
+
+    if (empty($CFG['https_proxy']) === false) {
+        $curl_options[CURLPROXY_HTTPS] = $CFG['https_proxy'];
+    }
+
+    if (empty($CFG['no_proxy']) === false) {
+        $curl_options[CURLOPT_NOPROXY] = implode(',', $CFG['no_proxy']);
+    }
+
+    $curl = curl_init();
+    curl_setopt_array($curl, $curl_options);
+    $githubcontent = curl_exec($curl);
+    curl_close($curl);
+
+    if ($githubcontent === false) {
+        $LOGGER->notice('Erreur lors de la vérification de nouvelle version d\'Isou ('.curl_error($curl).')');
+        return;
+    }
+
+    if (preg_match('/CURRENT_VERSION\', \'([0-9\.]+)\'\);/', $githubcontent, $matches) === 0) {
+        $LOGGER->notice('La page Github téléchargée ne contient pas le pattern /CURRENT_VERSION\', \'([0-9\.]+)\'\);/');
+        return;
+    }
+
+    $sql = "UPDATE configuration SET value = :value WHERE key = 'last_update_check'";
+    $query = $DB->prepare($sql);
+    $query->execute(array(':value' => strftime('%FT%T')));
+
+    if ($matches[1] === CURRENT_VERSION) {
+        return;
+    }
+
+    $sql = "UPDATE configuration SET value = :value WHERE key = 'available_update'";
+    $query = $DB->prepare($sql);
+    $query->execute(array(':value' => $matches[1]));
+}
+
+/**
  * Régénère le fichier public isou.json listant les interruptions en cours.
  *
  * @return void

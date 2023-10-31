@@ -27,13 +27,10 @@
 		<dd>{$CFG.last_update|date_format:'%c'}</dd>
 	</div>
 
-	{*
-	TODO: à implémenter.
 	<div>
-		<dt style="text-align: left;">Dernière vérification de mise à jour d'Isou.</dt>
-		<dd>{$CFG.last_check_update|date_format:'%c'}</dd>
+		<dt class="text-left">Dernière vérification de mise à jour d'Isou.</dt>
+		<dd>{if empty($CFG.check_updates_enabled)}désactivée{else}{$CFG.last_update_check|date_format:'%c'}{/if}</dd>
 	</div>
-	*}
 </dl>
 
 {foreach $errors as $type => $details}
