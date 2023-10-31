@@ -193,7 +193,7 @@ function delete_unused_event_descriptions() {
 function upgrade_301_to_302() {
     global $DB;
 
-    echo 'Mise à jour de la version 3.0.1 vers la version 3.0.2.'.PHP_EOL;
+    echo '- Procédure de mise à jour du schéma de base de données de la version 3.0.1 vers la version 3.0.2.'.PHP_EOL;
 
     $queries = array();
     $queries[] = "UPDATE categories SET name = TRIM(name)";
@@ -217,7 +217,7 @@ function upgrade_301_to_302() {
  * @return void
  */
 function upgrade_300_to_301() {
-    echo 'Mise à jour de la version 3.0.0 vers la version 3.0.1.'.PHP_EOL;
+    echo '- Procédure de mise à jour du schéma de base de données de la version 3.0.0 vers la version 3.0.1.'.PHP_EOL;
 
     $phinx = new PhinxApplication();
     $phinx->setAutoExit(false);
@@ -236,7 +236,7 @@ function upgrade_300_to_301() {
  * @return void
  */
 function upgrade_200_to_300() {
-    echo 'Mise à jour de la version 2.0.0 vers la version 3.0.0.'.PHP_EOL;
+    echo '- Procédure de mise à jour du schéma de base de données de la version 2.0.0 vers la version 3.0.0.'.PHP_EOL;
 
     $phinx = new PhinxApplication();
     $phinx->setAutoExit(false);
@@ -255,7 +255,7 @@ function upgrade_200_to_300() {
  * @return void
  */
 function upgrade_100_to_200() {
-    echo 'Mise à jour de la version 1.0.0 (2013-00-00.1). vers la version 2.0.0.'.PHP_EOL;
+    echo '- Procédure de mise à jour du schéma de base de données de la version 1.0.0 (2013-00-00.1). vers la version 2.0.0.'.PHP_EOL;
 
     $phinx = new PhinxApplication();
     $phinx->setAutoExit(false);
@@ -395,7 +395,7 @@ function upgrade_100_to_200() {
  * @return void
  */
 function upgrade_0110_to_100() {
-    echo 'Mise à jour de la version 0.11.0 (2012-03-16.1) vers la version 1.0.0 (2013-00-00.1).'.PHP_EOL;
+    echo '- Procédure de mise à jour du schéma de base de données de la version 0.11.0 (2012-03-16.1) vers la version 1.0.0 (2013-00-00.1).'.PHP_EOL;
 
     throw new Exception('Not implemented. TODO...');
 }
@@ -408,7 +408,7 @@ function upgrade_0110_to_100() {
  * @return void
  */
 function upgrade_0100_to_0110() {
-    echo 'Mise à jour de la version 0.10.0 (2012-02-16.1) vers la version 0.11.0 (2012-03-16.1).'.PHP_EOL;
+    echo '- Procédure de mise à jour du schéma de base de données de la version 0.10.0 (2012-02-16.1) vers la version 0.11.0 (2012-03-16.1).'.PHP_EOL;
 
     throw new Exception('Not implemented. TODO...');
 }
@@ -421,7 +421,7 @@ function upgrade_0100_to_0110() {
  * @return void
  */
 function upgrade_096_to_0100() {
-    echo 'Mise à jour de la version 0.9.6 vers la version 0.10.0 (2012-02-16.1).'.PHP_EOL;
+    echo '- Procédure de mise à jour du schéma de base de données de la version 0.9.6 vers la version 0.10.0 (2012-02-16.1).'.PHP_EOL;
 
     throw new Exception('Not implemented. TODO...');
 }
@@ -434,7 +434,7 @@ function upgrade_096_to_0100() {
  * @return void
  */
 function upgrade_095_to_096() {
-    echo 'Mise à jour de la version 0.9.5 vers la version 0.9.6.'.PHP_EOL;
+    echo '- Procédure de mise à jour du schéma de base de données de la version 0.9.5 vers la version 0.9.6.'.PHP_EOL;
 
     throw new Exception('Not implemented. TODO...');
 }
@@ -447,7 +447,7 @@ function upgrade_095_to_096() {
  * @return void
  */
 function upgrade_090_to_095() {
-    echo 'Mise à jour de la version 0.9.0 vers la version 0.9.5.'.PHP_EOL;
+    echo '- Procédure de mise à jour du schéma de base de données de la version 0.9.0 vers la version 0.9.5.'.PHP_EOL;
 
     throw new Exception('Not implemented. TODO...');
 }
