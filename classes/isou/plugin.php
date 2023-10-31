@@ -36,6 +36,13 @@ class Plugin {
     public $codename;
 
     /**
+     * Type du module (authentification, monitoring ou view).
+     *
+     * @var string
+     */
+    public $type;
+
+    /**
      * Témoin indiquant si le module est activé. Valeurs possibles '0' ou '1'.
      *
      * @var integer
