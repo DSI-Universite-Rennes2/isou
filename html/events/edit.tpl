@@ -31,8 +31,8 @@
 			<dd class="col-sm-10">
 				<input class="form-control" id="service" list="services" name="service" required="1" type="text" value="{$options_services[$event->idservice]|default:''}" />
 				<datalist id="services">
-				{foreach $options_services as $service}
-					<option value="{$service}">
+				{foreach $options_services as $idservice => $service}
+					<option data-idservice="{$idservice}" value="{$service}">
 				{/foreach}
 				</datalist>
 			</dd>
@@ -97,6 +97,14 @@
 			</dd>
 		</div>
 		{/if}
+		<div aria-hidden="true" class="form-group hidden" id="reuse-description-container">
+			<dt class="col-sm-2">
+				<label class="control-label" for="reuse-description">Descriptions précédemment utilisées</label>
+			</dt>
+			<dd class="col-sm-10">
+				<select class="form-control alert-info" id="reuse-description"></select>
+			</dd>
+		</div>
 		<div class="form-group">
 			<dt class="col-sm-2">
 				<label class="control-label" for="description">Raison de l'interruption (html autorisé)</label>

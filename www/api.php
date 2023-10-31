@@ -33,6 +33,9 @@ if (isset($_SESSION['username'], $_SESSION['authentification']) === true) {
 $PAGE_NAME = explode('/', get_page_name(basename(__FILE__)));
 
 switch ($PAGE_NAME[0]) {
+    case 'evenements':
+        require PRIVATE_PATH.'/api/events/index.php';
+        break;
     case 'notifications':
         require PRIVATE_PATH.'/api/notifications/index.php';
         break;
