@@ -13,6 +13,7 @@ namespace UniversiteRennes2\Mock;
 /**
  * Simule un utilisateur authentifié.
  */
+#[\AllowDynamicProperties]
 class User {
     /**
      * Constructeur de la classe.
@@ -29,6 +30,6 @@ class User {
         $this->email = '';
         $this->admin = 1;
         $this->lastaccess = null;
-        $this->timecreated = strftime('%FT%T');
+        $this->timecreated = date('Y-m-d\TH:i:s');
     }
 }

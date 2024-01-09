@@ -111,7 +111,7 @@ class Plugin {
 
         // Parcourt les options.
         if (isset($options['id']) === true) {
-            if (ctype_digit($options['id']) === true) {
+            if (is_string($options['id']) === true && ctype_digit($options['id']) === true) {
                 $conditions[] = 'p.id = :id';
                 $parameters[':id'] = $options['id'];
             } else {
@@ -239,7 +239,7 @@ class Plugin {
      *
      * @return mixed
      */
-    public static function decode_settings($value, string $type) {
+    public static function decode_settings(mixed $value, string $type) {
         switch ($type) {
             case 'array':
                 return json_decode($value);
@@ -267,7 +267,7 @@ class Plugin {
      *
      * @return array
      */
-    public static function encode_settings($value) {
+    public static function encode_settings(mixed $value) {
         $settings = array();
         $settings[0] = $value;
 

@@ -298,7 +298,7 @@ function cron_check_updates() {
 
     $sql = "UPDATE configuration SET value = :value WHERE key = 'last_update_check'";
     $query = $DB->prepare($sql);
-    $query->execute(array(':value' => strftime('%FT%T')));
+    $query->execute(array(':value' => date('Y-m-d\TH:i:s')));
 
     if ($matches[1] === CURRENT_VERSION) {
         return;
@@ -380,7 +380,7 @@ function cron_gather_statistics() {
 
     $sql = "UPDATE configuration SET value = :value WHERE key = 'last_statistics_gathering'";
     $query = $DB->prepare($sql);
-    $query->execute(array(':value' => strftime('%FT%T')));
+    $query->execute(array(':value' => date('Y-m-d\TH:i:s')));
     $LOGGER->info('Les statistiques ont été transmises à '.$curl_options[CURLOPT_URL]);
 }
 
@@ -481,8 +481,8 @@ function cron_notify() {
             continue;
         }
 
-        $format = '%FT%H:%M';
-        if (strftime($format, $event->startdate->getTimestamp()) !== strftime($format, TIME)) {
+        $format = 'Y-m-d\TH:i';
+        if (date($format, $event->startdate->getTimestamp()) !== date($format, TIME)) {
             // On ignore les anciens évènements.
             continue;
         }
@@ -497,9 +497,9 @@ function cron_notify() {
     }
 
     if ($count_services === 1) {
-        $message = sprintf('%d service perturbé - %s :%s%s', $count_services, strftime('%Hh%M'), PHP_EOL, implode(PHP_EOL, $messages));
+        $message = sprintf('%d service perturbé - %s :%s%s', $count_services, date('H\hi'), PHP_EOL, implode(PHP_EOL, $messages));
     } else {
-        $message = sprintf('%d services perturbés - %s :%s%s', $count_services, strftime('%Hh%M'), PHP_EOL, implode(PHP_EOL, $messages));
+        $message = sprintf('%d services perturbés - %s :%s%s', $count_services, date('H\hi'), PHP_EOL, implode(PHP_EOL, $messages));
     }
 
     $subscriptions = Subscription::get_records();
@@ -646,7 +646,7 @@ function cron_report() {
         // Met à jour le témoin de dernière notification dans la base de données.
         $sql = "UPDATE configuration SET value=:value WHERE key=:key";
         $query = $DB->prepare($sql);
-        $query->execute(array('value' => strftime('%FT%T'), 'key' => 'last_daily_report'));
+        $query->execute(array('value' => date('Y-m-d\TH:i:s'), 'key' => 'last_daily_report'));
     }
 }
 
@@ -659,7 +659,7 @@ function cron_delete_old_plugin_events() {
     global $DB, $LOGGER;
 
     // On garde les évènements sur 90 jours.
-    $expire = strftime('%FT%T', time() - (90 * 24 * 60 * 60));
+    $expire = date('Y-m-d\TH:i:s', time() - (90 * 24 * 60 * 60));
     $expired_date = new DateTime($expire);
 
     $services = Service::get_records();

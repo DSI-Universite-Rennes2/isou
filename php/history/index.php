@@ -99,7 +99,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
         $startdate = new DateTime($_POST['startdate']);
         $_POST['startdate'] = $startdate->format('Y-m-d');
     } catch (Exception $exception) {
-        $_POST['startdate'] = strftime('%Y-%m-01');
+        $_POST['startdate'] = date('Y-m-01');
     }
     $sql_events .= " AND e.startdate >= ?";
     $params[] = $_POST['startdate'];
@@ -243,8 +243,8 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
             $data = array();
             $data[] = $event->name;
             $data[] = $event->state_alt;
-            $data[] = strftime('%A %e %B %Y %H:%M', $event->startdate->getTimestamp());
-            $data[] = strftime('%A %e %B %Y %H:%M', $event->enddate->getTimestamp());
+            $data[] = IntlDateFormatter::formatObject($event->startdate, 'eeee dd MMMM y HH:mm');
+            $data[] = IntlDateFormatter::formatObject($event->enddate, 'eeee dd MMMM y HH:mm');
             $data[] = $event->total;
             $data[] = $event->total_minutes;
 
@@ -296,7 +296,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
 }
 
 if (isset($_POST['startdate']) === false) {
-    $_POST['startdate'] = strftime('%Y-01-01');
+    $_POST['startdate'] = date('Y-01-01');
 }
 
 if (isset($_POST['enddate']) === false) {

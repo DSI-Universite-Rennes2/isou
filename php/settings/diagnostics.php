@@ -73,7 +73,7 @@ if (isset($CFG['last_cron_update']) === false || $CFG['last_cron_update'] === ne
     $errors['Crons'][] = 'Le fichier cron.php ne semble pas être appelé régulièrement.';
 } elseif ($CFG['last_cron_update']->getTimestamp() < (TIME - 10 * 60)) {
     $errors['Crons'][] = 'Le fichier cron.php ne semble pas être appelé régulièrement.'.
-        ' La dernière exécution du cron date du '.strftime('%c', $CFG['last_cron_update']->getTimestamp()).'.';
+        ' La dernière exécution du cron date du '.date('r', $CFG['last_cron_update']->getTimestamp()).'.';
 }
 
 $HTMLPurifier = new HTMLPurifier();

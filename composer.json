@@ -21,20 +21,21 @@
         "sort-packages": true
     },
     "require": {
-        "php": ">=7.3",
+        "php": ">=8.2",
+        "ext-intl": "*",
         "ext-pdo_sqlite": "*",
         "apereo/phpcas": "1.6.*",
         "ezyang/htmlpurifier": "4.*",
-        "league/commonmark": "1.6.*",
-        "minishlink/web-push": "6.0.*",
-        "monolog/monolog": "2.2.*",
-        "robmorgan/phinx": "0.12.*",
-        "smarty/smarty": "3.1.*",
-        "symfony/yaml": "5.3.*",
-        "tinymce/tinymce": "5.10.*"
+        "league/commonmark": "2.*",
+        "minishlink/web-push": "8.*",
+        "monolog/monolog": "3.*",
+        "robmorgan/phinx": "0.15.*",
+        "smarty/smarty": "4.3.*",
+        "symfony/yaml": "7.*",
+        "tinymce/tinymce": "6.*"
     },
     "require-dev": {
-        "atoum/atoum": "3.*",
+        "atoum/atoum": "4.*",
         "squizlabs/php_codesniffer": "3.*"
     },
     "scripts": {

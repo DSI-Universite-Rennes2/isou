@@ -13,6 +13,7 @@ namespace UniversiteRennes2\Isou;
 /**
  * Classe décrivant une catégorie.
  */
+#[\AllowDynamicProperties]
 class Category {
     /**
      * Identifiant de l'objet.
@@ -87,7 +88,7 @@ class Category {
 
         if ($this->position === null) {
             $this->position = (string) (count(self::get_records()) + 1);
-        } elseif (ctype_digit($this->position) === false) {
+        } elseif (is_string($this->position) === false || ctype_digit($this->position) === false) {
             $errors[] = 'La position de la catégorie doit être un entier.';
         }
 
@@ -133,7 +134,7 @@ class Category {
 
         // Parcourt les options.
         if (isset($options['id']) === true) {
-            if (ctype_digit($options['id']) === true) {
+            if (is_string($options['id']) === true && ctype_digit($options['id']) === true) {
                 $conditions[] = 'c.id = ?';
                 $parameters[] = $options['id'];
             } else {

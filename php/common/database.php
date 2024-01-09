@@ -12,10 +12,10 @@ try {
     if (is_file(substr(DB_PATH, 7)) === false) {
         throw new PDOException(DB_PATH.' n\'existe pas.');
     }
-    $DB = new PDO(DB_PATH, '', '');
+    $DB = new PDO(DB_PATH, '', '', array(PDO::ATTR_STRINGIFY_FETCHES => 1));
 } catch (PDOException $exception) {
     if (defined('STDIN') === true) {
-        echo strftime('%c').': '.$exception->getMessage().PHP_EOL;
+        echo date('r').': '.$exception->getMessage().PHP_EOL;
         exit(1);
     }
 

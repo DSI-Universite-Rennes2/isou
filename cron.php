@@ -18,7 +18,7 @@ if (defined('STDIN') === false) {
 require __DIR__.'/config.php';
 
 $starttime = microtime(true);
-$LOGGER->info('Début du cron '.strftime('%c'));
+$LOGGER->info('Début du cron '.date('r'));
 
 // Force la définition du niveau d'erreurs.
 error_reporting(-1);
@@ -111,7 +111,7 @@ cron_delete_old_plugin_events();
 // Met à jour la base de données.
 $sql = "UPDATE configuration SET value = :value WHERE key = :key";
 $query = $DB->prepare($sql);
-$query->execute(array(':value' => strftime('%FT%T'), ':key' => 'last_cron_update'));
+$query->execute(array(':value' => date('Y-m-d\TH:i:s'), ':key' => 'last_cron_update'));
 
 // Notifications.
 if ($CFG['notifications_enabled'] === '1') {
@@ -136,4 +136,4 @@ if ($CFG['gather_statistics_enabled'] === '1') {
 unlink($pid_file);
 
 $LOGGER->info('Temps d\'exécution : '.(microtime(true) - $starttime).' secondes.');
-$LOGGER->info('Fin du cron '.strftime('%c'));
+$LOGGER->info('Fin du cron '.date('r'));

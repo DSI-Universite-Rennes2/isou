@@ -64,7 +64,7 @@ class Upgrade200 extends AbstractMigration {
                     'message' => $row['message'],
                     'visible' => $row['afficher'],
                     'author' => 'isou',
-                    'last_modification' => strftime('%FT%T'),
+                    'last_modification' => date('Y-m-d\TH:i:s'),
                 );
                 $table->insert($data);
             }
@@ -138,11 +138,11 @@ class Upgrade200 extends AbstractMigration {
                     case 'last_check_update':
                     case 'last_cron_update':
                     case 'last_update':
-                        $data[':value'] = strftime('%FT%T', intval($row['value']));
+                        $data[':value'] = date('Y-m-d\TH:i:s', intval($row['value']));
                         break;
                     case 'last_daily_cron_update':
                         $data[':key'] = 'last_daily_report';
-                        $data[':value'] = strftime('%FT%T', intval($row['value']));
+                        $data[':value'] = date('Y-m-d\TH:i:s', intval($row['value']));
                         break;
                     case 'local_mail':
                         $data[':key'] = 'report_sender';
@@ -381,7 +381,7 @@ class Upgrade200 extends AbstractMigration {
                     'visible' => $row['visible'],
                     'locked' => $row['readonly'],
                     'rsskey' => $row['rssKey'],
-                    'timemodified' => strftime('%FT%T'),
+                    'timemodified' => date('Y-m-d\TH:i:s'),
                     'idplugin' => $idplugin,
                     'idcategory' => $row['idCategory'],
                 );

@@ -83,7 +83,7 @@ if ($handle !== false) {
 // Run cases.
 echo PHP_EOL;
 
-$DB = new PDO('sqlite:'.$db_file_path, '', '');
+$DB = new PDO('sqlite:'.$db_file_path, '', '', array(PDO::ATTR_STRINGIFY_FETCHES => 1));
 
 // Charge la configuration.
 require PRIVATE_PATH.'/libs/configuration.php';

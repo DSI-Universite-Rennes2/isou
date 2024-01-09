@@ -27,7 +27,7 @@ function isou_update_version() {
     echo 'Votre instance Isou est maintenant en version '.CURRENT_VERSION.'.'.PHP_EOL;
 
     $update = array();
-    $update['last_update'] = strftime('%FT%T');
+    $update['last_update'] = date('Y-m-d\TH:i:s');
     $update['version'] = CURRENT_VERSION;
     if (isset($CFG['available_update']) === true && $CFG['available_update'] <= CURRENT_VERSION) {
         $update['available_update'] = '0';

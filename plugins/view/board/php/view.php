@@ -28,7 +28,7 @@ $services_events = array();
 
 $days = array();
 for ($i = 6; $i >= 0; $i--) {
-    $days[$i] = new DateTime(strftime('%Y-%m-%d', TIME - ($i * 24 * 60 * 60)));
+    $days[$i] = new DateTime(date('Y-m-d', TIME - ($i * 24 * 60 * 60)));
 
     $since = clone $days[$i];
     $before = clone $days[$i];

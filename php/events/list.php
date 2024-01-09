@@ -33,7 +33,7 @@ switch ($PAGE_NAME[1]) {
         $smarty->assign('plugins', $plugins_);
         break;
     case 'fermes':
-        $options['since'] = new DateTime(strftime('%FT%T', mktime(0, 0, 0) - 35 * 24 * 60 * 60));
+        $options['since'] = new DateTime(date('Y-m-d\TH:i:s', mktime(0, 0, 0) - 35 * 24 * 60 * 60));
         $options['type'] = Event::TYPE_CLOSED;
         $subtemplate = 'events/list_closed_events.tpl';
         break;
@@ -43,13 +43,13 @@ switch ($PAGE_NAME[1]) {
         $subtemplate = 'events/list_regular_events.tpl';
         break;
     case 'prevus':
-        $options['since'] = new DateTime(strftime('%FT%T', mktime(0, 0, 0) - 35 * 24 * 60 * 60));
+        $options['since'] = new DateTime(date('Y-m-d\TH:i:s', mktime(0, 0, 0) - 35 * 24 * 60 * 60));
         $options['type'] = Event::TYPE_SCHEDULED;
         $subtemplate = 'events/list_default_events.tpl';
         break;
     case 'imprevus':
     default:
-        $options['since'] = new DateTime(strftime('%FT%T', mktime(0, 0, 0) - 35 * 24 * 60 * 60));
+        $options['since'] = new DateTime(date('Y-m-d\TH:i:s', mktime(0, 0, 0) - 35 * 24 * 60 * 60));
         $options['type'] = Event::TYPE_UNSCHEDULED;
         $subtemplate = 'events/list_default_events.tpl';
 }

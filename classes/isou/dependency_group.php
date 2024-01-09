@@ -13,6 +13,7 @@ namespace UniversiteRennes2\Isou;
 /**
  * Classe décrivant un groupe de dépendances.
  */
+#[\AllowDynamicProperties]
 class Dependency_Group {
     /**
      * Identifiant de l'objet.
@@ -259,7 +260,7 @@ class Dependency_Group {
 
         // Parcourt les options.
         if (isset($options['id']) === true) {
-            if (ctype_digit($options['id']) === true) {
+            if (is_string($options['id']) === true && ctype_digit($options['id']) === true) {
                 $conditions[] = 'dg.id = :id';
                 $parameters[':id'] = $options['id'];
             } else {
@@ -270,7 +271,7 @@ class Dependency_Group {
         }
 
         if (isset($options['service']) === true) {
-            if (ctype_digit($options['service']) === true) {
+            if (is_string($options['service']) === true && ctype_digit($options['service']) === true) {
                 $conditions[] = 'dg.idservice = :service';
                 $parameters[':service'] = $options['service'];
             } else {
@@ -350,7 +351,7 @@ class Dependency_Group {
     /**
      * Enregistre un message en base de données.
      *
-     * @return integer|false
+     * @return string|false
      */
     public function set_message() {
         global $DB, $LOGGER;

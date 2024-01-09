@@ -13,6 +13,7 @@ namespace UniversiteRennes2\Isou;
 /**
  * Classe décrivant un service.
  */
+#[\AllowDynamicProperties]
 class Service {
     /**
      * Identifiant de l'objet.
@@ -122,7 +123,7 @@ class Service {
             $this->visible = '1';
             $this->locked = '0';
             $this->rsskey = null;
-            $this->timemodified = strftime('%FT%T');
+            $this->timemodified = date('Y-m-d\TH:i:s');
             $this->idplugin = PLUGIN_ISOU;
             $this->idcategory = null;
             $this->category = '';
@@ -256,7 +257,7 @@ class Service {
 
         // Parcourt les options.
         if (isset($options['id']) === true) {
-            if (ctype_digit($options['id']) === true) {
+            if (is_string($options['id']) === true && ctype_digit($options['id']) === true) {
                 $conditions[] = 's.id = :id';
                 $parameters[':id'] = $options['id'];
             } else {
@@ -300,7 +301,7 @@ class Service {
         }
 
         if (isset($options['state']) === true) {
-            if (ctype_digit($options['state']) === true) {
+            if (is_string($options['state']) === true && ctype_digit($options['state']) === true) {
                 $conditions[] = 's.state = :state';
                 $parameters[':state'] = $options['state'];
             } else {
@@ -322,7 +323,7 @@ class Service {
         }
 
         if (isset($options['category']) === true) {
-            if (ctype_digit($options['category']) === true) {
+            if (is_string($options['category']) === true && ctype_digit($options['category']) === true) {
                 $conditions[] = 's.idcategory = :idcategory';
                 $parameters[':idcategory'] = $options['category'];
             } else {
@@ -347,7 +348,7 @@ class Service {
         }
 
         if (isset($options['plugin']) === true) {
-            if (ctype_digit($options['plugin']) === true) {
+            if (is_string($options['plugin']) === true && ctype_digit($options['plugin']) === true) {
                 $conditions[] = 's.idplugin = :plugin';
                 $parameters[':plugin'] = $options['plugin'];
             } else {
@@ -358,7 +359,7 @@ class Service {
         }
 
         if (isset($options['dependencies_group']) === true) {
-            if (ctype_digit($options['dependencies_group']) === true) {
+            if (is_string($options['dependencies_group']) === true && ctype_digit($options['dependencies_group']) === true) {
                 $joins[] = 'JOIN dependencies_groups_content dgc ON s.id = dgc.idservice';
                 $conditions[] = 'dgc.idgroup = :dependencies_group';
                 $parameters[':dependencies_group'] = $options['dependencies_group'];
@@ -426,7 +427,7 @@ class Service {
     public function save() {
         global $DB, $LOGGER;
 
-        $this->timemodified = strftime('%FT%T');
+        $this->timemodified = date('Y-m-d\TH:i:s');
 
         $results = array(
             'successes' => array(),
@@ -540,7 +541,7 @@ class Service {
 
         $sql = 'UPDATE services SET state=:state, timemodified=:timemodified WHERE id = :id';
         $query = $DB->prepare($sql);
-        if ($query->execute(array(':state' => $state, ':timemodified' => strftime('%FT%T'), ':id' => $this->id)) === false) {
+        if ($query->execute(array(':state' => $state, ':timemodified' => date('Y-m-d\TH:i:s'), ':id' => $this->id)) === false) {
             throw new \Exception(implode(', ', $query->errorInfo()));
         }
 
@@ -576,7 +577,7 @@ class Service {
 
         $sql = 'UPDATE services SET state=:state, enable=:enable, timemodified=:timemodified WHERE id = :id';
         $query = $DB->prepare($sql);
-        if ($query->execute(array(':state' => State::OK, ':enable' => $enable, ':timemodified' => strftime('%FT%T'), ':id' => $this->id)) === true) {
+        if ($query->execute(array(':state' => State::OK, ':enable' => $enable, ':timemodified' => date('Y-m-d\TH:i:s'), ':id' => $this->id)) === true) {
             $this->enable = $enable;
             return true;
         } else {

@@ -149,7 +149,7 @@ class Initialisation extends AbstractMigration {
         $rows = array(
             array(
                 'key' => 'last_check_update',
-                'value' => strftime('%FT%T'),
+                'value' => date('Y-m-d\TH:i:s'),
                 'type' => 'datetime',
             ),
             array(
@@ -164,7 +164,7 @@ class Initialisation extends AbstractMigration {
             ),
             array(
                 'key' => 'last_update',
-                'value' => strftime('%FT%T'),
+                'value' => date('Y-m-d\TH:i:s'),
                 'type' => 'datetime',
             ),
             array(
@@ -639,7 +639,7 @@ class Initialisation extends AbstractMigration {
                 'email' => '',
                 'admin' => 1,
                 'lastaccess' => null,
-                'timecreated' => strftime('%FT%T'),
+                'timecreated' => date('Y-m-d\TH:i:s'),
             ),
         );
         $table->insert($rows);

@@ -146,7 +146,7 @@ class Subscription {
 
         // Parcourt les options.
         if (isset($options['id']) === true) {
-            if (ctype_digit($options['id']) === true) {
+            if (is_string($options['id']) === true && ctype_digit($options['id']) === true) {
                 $conditions[] = 's.id = :id';
                 $parameters[':id'] = $options['id'];
             } else {
@@ -190,7 +190,7 @@ class Subscription {
         }
 
         if (isset($options['userid']) === true) {
-            if (ctype_digit($options['userid']) === true) {
+            if (is_string($options['userid']) === true && ctype_digit($options['userid']) === true) {
                 $conditions[] = 's.userid = :userid';
                 $parameters[':userid'] = $options['userid'];
             } else {

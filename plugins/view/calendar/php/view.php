@@ -36,11 +36,11 @@ if ($CALENDAR_STEP === 'WEEKLY') {
     $time = mktime(0, 0, 0) - ((6 + $date['wday'] - (($_GET['page'] - 1) * 7))) * 24 * 60 * 60;
 } else {
     $first_months_day = mktime(0, 0, 0, $date['mon'] + $_GET['page'] - 1, 1);
-    $time = $first_months_day - ((intval(strftime('%u', $first_months_day)) - 1) * 24 * 60 * 60);
+    $time = $first_months_day - ((intval(date('N', $first_months_day)) - 1) * 24 * 60 * 60);
 }
 
-$begincalendar = strftime('%Y-%m-%dT%H:%M', $time);
-$endcalendar = strftime('%Y-%m-%dT%H:%M', $time + 35 * 24 * 60 * 60);
+$begincalendar = date('Y-m-d\TH:i', $time);
+$endcalendar = date('Y-m-d\TH:i', $time + 35 * 24 * 60 * 60);
 
 $one_day = new DateInterval('P1D');
 $calendar = array();
@@ -50,8 +50,8 @@ $calendar_day->services = array();
 for ($i = 0; $i < 5; $i++) {
     for ($j = 0; $j < 7; $j++) {
         if ($i === 0) {
-            if (strftime('%d', $calendar_day->datetime) === '01') {
-                if (strftime('%m', $calendar_day->datetime) === '01') {
+            if (date('d', $calendar_day->datetime) === '01') {
+                if (date('m', $calendar_day->datetime) === '01') {
                     $calendar_day->strftime = '1er %B %Y';
                 } else {
                     $calendar_day->strftime = '1er %B';

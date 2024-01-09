@@ -28,4 +28,4 @@ define('URL', '');
 
 // TODO: refactoriser pour supprimer ces variables.
 define('TIME', time());
-define('STR_TIME', strftime('%Y-%m-%dT%H:%M', TIME));
+define('STR_TIME', date('Y-m-d\TH:i', TIME));

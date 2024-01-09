@@ -22,7 +22,7 @@ foreach (array('report_enabled', 'report_hour') as $key) {
             $CFG[$key] = $value;
 
             if ($key === 'report_enabled' && empty($value) === false) {
-                set_configuration('last_daily_report', strftime('%FT%T', time() - 24 * 60 * 60));
+                set_configuration('last_daily_report', date('Y-m-d\TH:i:s', time() - 24 * 60 * 60));
             }
         }
     }

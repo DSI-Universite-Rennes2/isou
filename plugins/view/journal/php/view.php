@@ -30,7 +30,7 @@ $options['plugin'] = PLUGIN_ISOU;
 $days = array();
 for ($i = 0; $i < 7; $i++) {
     $days[$i] = new stdClass();
-    $days[$i]->date = new DateTime(strftime('%Y-%m-%d 00:00:00', TIME - ($i * 24 * 60 * 60)));
+    $days[$i]->date = new DateTime(date('Y-m-d 00:00:00', TIME - ($i * 24 * 60 * 60)));
 
     $options['since'] = $days[$i]->date;
     $options['before'] = clone $days[$i]->date;

@@ -79,7 +79,7 @@ class Dependency_Message {
 
         // Parcourt les options.
         if (isset($options['id']) === true) {
-            if (ctype_digit($options['id']) === true) {
+            if (is_string($options['id']) === true && ctype_digit($options['id']) === true) {
                 $conditions[] = 'dm.id = :id';
                 $parameters[':id'] = $options['id'];
             } else {

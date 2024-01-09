@@ -21,6 +21,8 @@ define('DEBUG', false);
 define('DEV', false);
 
 // Définit la locale utilisée par l'application.
+Locale::setDefault('fr-FR');
+
 setlocale(LC_TIME, 'fr_FR.UTF8');
 date_default_timezone_set('Europe/Paris');
 
@@ -58,7 +60,7 @@ if (defined('STDIN') === false) {
 
 // Calcule le timestamp de l'heure courante.
 define('TIME', time());
-define('STR_TIME', strftime('%Y-%m-%dT%H:%M', TIME));
+define('STR_TIME', date('Y-m-d\TH:i', TIME));
 
 // Calcule l'URL du service.
 define('URL', get_base_url($force_https = HTTPS));

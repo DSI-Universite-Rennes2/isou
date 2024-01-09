@@ -15,6 +15,7 @@ use UniversiteRennes2\Isou\Plugin;
 /**
  * Classe décrivant les éléments des menus de navigation d'isou.
  */
+#[\AllowDynamicProperties]
 class SimpleMenu {
     /**
      * Libellé du menu.

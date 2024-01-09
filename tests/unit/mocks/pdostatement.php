@@ -13,6 +13,7 @@ namespace UniversiteRennes2\Mock;
 /**
  * Simule la classe PHP PDOStatement.
  */
+#[\AllowDynamicProperties]
 class PDOStatement extends \PDOStatement {
     /**
      * Constructeur de la classe.
@@ -31,7 +32,7 @@ class PDOStatement extends \PDOStatement {
      *
      * @return array
      */
-    public function errorInfo() {
+    public function errorInfo(): array {
         return array();
     }
 
@@ -42,7 +43,7 @@ class PDOStatement extends \PDOStatement {
      *
      * @return boolean
      */
-    public function execute($options = null) { // phpcs:ignore
+    public function execute($options = null): bool { // phpcs:ignore
         if ($this->test_execute === false) {
             return false;
         }
@@ -57,9 +58,9 @@ class PDOStatement extends \PDOStatement {
      * @param integer $cursor_orientation Orientation.
      * @param integer $cursor_offset Décalage.
      *
-     * @return array|false
+     * @return mixed
      */
-    public function fetch($fetch_style = null, $cursor_orientation = \PDO::FETCH_ORI_NEXT, $cursor_offset = 0) { // phpcs:ignore
+    public function fetch($fetch_style = null, $cursor_orientation = \PDO::FETCH_ORI_NEXT, $cursor_offset = 0): mixed { // phpcs:ignore
         if ($this->test_fetch === false) {
             return false;
         }
@@ -71,12 +72,11 @@ class PDOStatement extends \PDOStatement {
      * Retourne des enregistrements.
      *
      * @param integer $fetch_style Mode.
-     * @param string $classname Nom de la classe.
-     * @param array $constructorArgs Paramètres du constructeur.
+     * @param mixed ...$args Divers arguments attendus en fonction du mode utilisé.
      *
      * @return array
      */
-    public function fetchAll($fetch_style = null, $classname = null, $constructorArgs = array()) { // phpcs:ignore
+    public function fetchAll(int $fetch_style = null, mixed ...$args): array { // phpcs:ignore
         return $this->test_fetch_all;
     }
 
@@ -84,13 +84,19 @@ class PDOStatement extends \PDOStatement {
      * Définit le mode pour récupérer les enregistrements.
      *
      * @param integer $mode Mode.
-     * @param string $classname Nom de la classe.
-     * @param array $constructorArgs Paramètres du constructeur.
+     * @param mixed ...$args Divers arguments attendus en fonction du mode utilisé.
+     *
+     * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
      *
      * @return void
      */
-    public function setFetchMode($mode = \PDO::FETCH_CLASS, $classname = '', $constructorArgs = array()) { // phpcs:ignore
+    public function setFetchMode(int $mode = \PDO::FETCH_CLASS, mixed ...$args) { // phpcs:ignore
         if ($mode === \PDO::FETCH_CLASS) {
+            if (isset($args[0]) === false) {
+                throw new \Exception(__CLASS__.'::'.__METHOD__.' expects at least 1 argument, 0 given');
+            }
+
+            $classname = $args[0];
             $this->test_fetch_class = new $classname;
         }
     }

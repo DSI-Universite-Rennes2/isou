@@ -13,6 +13,7 @@ namespace UniversiteRennes2\Isou;
 /**
  * Classe décrivant le contenu d'un groupe de dépendances.
  */
+#[\AllowDynamicProperties]
 class Dependency_Group_Content {
     /**
      * Identifiant de l'objet.
@@ -127,7 +128,7 @@ class Dependency_Group_Content {
 
         // Parcourt les options.
         if (isset($options['id']) === true) {
-            if (ctype_digit($options['id']) === true) {
+            if (is_string($options['id']) === true && ctype_digit($options['id']) === true) {
                 $conditions[] = 'dgc.id = :id';
                 $parameters[':id'] = $options['id'];
             } else {
@@ -138,7 +139,7 @@ class Dependency_Group_Content {
         }
 
         if (isset($options['group']) === true) {
-            if (ctype_digit($options['group']) === true) {
+            if (is_string($options['group']) === true && ctype_digit($options['group']) === true) {
                 $conditions[] = 'dgc.idgroup = :idgroup';
                 $parameters[':idgroup'] = $options['group'];
             } else {

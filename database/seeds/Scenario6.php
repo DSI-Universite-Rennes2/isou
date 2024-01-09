@@ -24,7 +24,7 @@ class Scenario6 extends AbstractSeed {
      *
      * @return void
      */
-    public function run() {
+    public function run(): void {
         // Création des catégories.
         $data = array(
             array(
@@ -47,7 +47,7 @@ class Scenario6 extends AbstractSeed {
                 'visible' => 1,
                 'locked' => 0,
                 'rsskey' => self::ISOU_SEED_PREFIX_ID.'1',
-                'timemodified' => strftime('%FT%T'),
+                'timemodified' => date('Y-m-d\TH:i:s'),
                 'idplugin' => 1, // Plugin isou.
                 'idcategory' => self::ISOU_SEED_PREFIX_ID.'1',
             ),
@@ -59,8 +59,8 @@ class Scenario6 extends AbstractSeed {
         $data = array(
             array(
                 'id' => self::ISOU_SEED_PREFIX_ID.'1',
-                'startdate' => strftime('%FT%T', time() - 2 * 60),
-                'enddate' => strftime('%FT%T', time() + 2 * 60),
+                'startdate' => date('Y-m-d\TH:i:s', time() - 2 * 60),
+                'enddate' => date('Y-m-d\TH:i:s', time() + 2 * 60),
                 'state' => '2',
                 'type' => '1', // TYPE_SCHEDULED.
                 'period' => '0', // PERIOD_NONE.

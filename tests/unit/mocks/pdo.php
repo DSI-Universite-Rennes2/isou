@@ -13,6 +13,7 @@ namespace UniversiteRennes2\Mock;
 /**
  * Simule la classe PHP PDO.
  */
+#[\AllowDynamicProperties]
 class PDO extends \PDO {
     /**
      * Constructeur de la classe.
@@ -28,19 +29,23 @@ class PDO extends \PDO {
     /**
      * Démarre une transaction.
      *
-     * @return void
+     * @return true
      */
-    public function beginTransaction() {
+    public function beginTransaction(): bool {
         $this->test_transaction = true;
+
+        return true;
     }
 
     /**
      * Valide une transaction.
      *
-     * @return void
+     * @return true
      */
-    public function commit() {
+    public function commit(): bool {
         $this->test_transaction = false;
+
+        return true;
     }
 
     /**
@@ -49,9 +54,9 @@ class PDO extends \PDO {
      * @param string $sql Requête SQL.
      * @param array $driver_options Options.
      *
-     * @return boolean
+     * @return \PDOStatement|false
      */
-    public function prepare($sql, $driver_options = null) { // phpcs:ignore
+    public function prepare($sql, $driver_options = null): \PDOStatement|false { // phpcs:ignore
         if ($this->test_prepare === false) {
             return false;
         }
@@ -66,7 +71,7 @@ class PDO extends \PDO {
      *
      * @return boolean
      */
-    public function inTransaction() {
+    public function inTransaction(): bool {
         return $this->test_transaction;
     }
 
@@ -75,18 +80,19 @@ class PDO extends \PDO {
      *
      * @param string $name Nom.
      *
-     * @return integer
+     * @return string|false
      */
-    public function lastInsertId($name = null) { // phpcs:ignore Squiz.Commenting.FunctionComment.ScalarTypeHintMissing
-        return 1;
+    public function lastInsertId($name = null): string|false { // phpcs:ignore
+        return '1';
     }
 
     /**
      * Annule une transaction.
      *
-     * @return void
+     * @return true
      */
-    public function rollBack() {
+    public function rollBack(): bool {
         $this->test_transaction = false;
+        return true;
     }
 }

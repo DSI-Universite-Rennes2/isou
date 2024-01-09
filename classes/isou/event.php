@@ -12,12 +12,14 @@ namespace UniversiteRennes2\Isou;
 
 use DateInterval;
 use DateTime;
+use IntlDateFormatter;
 use Smarty;
 use stdClass;
 
 /**
  * Classe décrivant un évènement.
  */
+#[\AllowDynamicProperties]
 class Event {
     const PERIOD_NONE = '0';
     const PERIOD_DAILY = '86400';
@@ -160,9 +162,9 @@ class Event {
         $str = '';
 
         if ($this->state === State::CLOSED) {
-            $str = 'Service fermé depuis le '.strftime('%A %d %B %Y', $this->startdate->getTimestamp()).'.';
+            $str = 'Service fermé depuis le '.IntlDateFormatter::formatObject($this->startdate, 'eeee dd MMMM y').'.';
             if ($this->enddate !== null) {
-                $str .= ' Réouverture le '.strftime('%A %d %B %Y', $this->enddate->getTimestamp()).'.';
+                $str .= ' Réouverture le '.IntlDateFormatter::formatObject($this->enddate, 'eeee dd MMMM y').'.';
             }
         } elseif (empty($this->period) === false) {
             $starttime = $this->startdate->format('H\hi');
@@ -170,7 +172,7 @@ class Event {
 
             switch ($this->period) {
                 case self::PERIOD_WEEKLY:
-                    $str = 'Tous les '.strftime('%A', $this->startdate->getTimestamp()).' de '.$starttime.' à '.$endtime.'.';
+                    $str = 'Tous les '.IntlDateFormatter::formatObject($this->startdate, 'eeee').' de '.$starttime.' à '.$endtime.'.';
                     break;
                 case self::PERIOD_DAILY:
                 default:
@@ -178,7 +180,7 @@ class Event {
             }
         } else {
             $starttime = $this->startdate->format('H\hi');
-            $startday = strftime('%A %d %B', $this->startdate->getTimestamp());
+            $startday = IntlDateFormatter::formatObject($this->startdate, 'eeee dd MMMM');
 
             if ($this->type === self::TYPE_SCHEDULED) {
                 $type = 'en maintenance';
@@ -195,33 +197,33 @@ class Event {
                     $str = 'Le service sera '.$type.' le '.$startday.' de '.$this->startdate->format('G\hi').' à '.$this->enddate->format('G\hi').'.';
                 } else {
                     $endtime = $this->enddate->format('H\hi');
-                    $endday = strftime('%A %d %B', $this->enddate->getTimestamp());
+                    $endday = IntlDateFormatter::formatObject($this->enddate, 'eeee dd MMMM');
                     $str = 'Le service sera '.$type.' du '.$startday.' '.$starttime.' au '.$endday.' '.$endtime.'.';
                 }
             } elseif ($this->enddate !== null && $this->enddate->getTimestamp() < TIME) {
                 $endtime = $this->enddate->format('H\hi');
 
                 // Évènement passé.
-                if (strftime('%A%d%B', $this->startdate->getTimestamp()) === strftime('%A%d%B', $this->enddate->getTimestamp())) {
+                if ($this->startdate->format('Ymd') === $this->enddate->format('Ymd')) {
                     // Évènement qui s'est déroulé sur une journée.
                     $str = 'Le service a été '.$type.' le '.$startday.' de '.$starttime.' à '.$endtime.'.';
                 } else {
                     // Évènement qui s'est déroulé sur plusieurs journées.
-                    $endday = strftime('%A %d %B', $this->enddate->getTimestamp());
+                    $endday = IntlDateFormatter::formatObject($this->enddate, 'eeee dd MMMM');
                     $str = 'Le service a été '.$type.' du '.$startday.' '.$starttime.' au '.$endday.' '.$endtime.'.';
                 }
             } else {
                 // Évènement en cours.
                 if ($this->enddate === null) {
-                    if (strftime('%A%d%B', $this->startdate->getTimestamp()) === strftime('%A%d%B')) {
+                    if ($this->startdate->format('Ymd') === date('Ymd')) {
                         $str = 'Le service est '.$type.' depuis '.$starttime.'.';
                     } else {
                         $str = 'Le service est '.$type.' depuis le '.$startday.' '.$starttime.'.';
                     }
                 } else {
                     $endtime = $this->enddate->format('H\hi');
-                    $endday = strftime('%A %d %B', $this->enddate->getTimestamp());
-                    if (strftime('%A %d %B', $this->startdate->getTimestamp()) === $endday) {
+                    $endday = IntlDateFormatter::formatObject($this->enddate, 'eeee dd MMMM');
+                    if (IntlDateFormatter::formatObject($this->startdate, 'eeee dd MMMM') === $endday) {
                         $str = 'Le service est '.$type.' de '.$starttime.' à '.$endtime.'.';
                     } else {
                         $str = 'Le service est '.$type.' jusqu\'au '.$endday.' '.$endtime.'.';
@@ -284,7 +286,7 @@ class Event {
 
         // Parcourt les options.
         if (isset($options['id']) === true) {
-            if (ctype_digit($options['id']) === true) {
+            if (is_string($options['id']) === true && ctype_digit($options['id']) === true) {
                 $conditions[] = 'e.id = :id';
                 $parameters[':id'] = $options['id'];
             } else {
@@ -337,7 +339,7 @@ class Event {
         }
 
         if (isset($options['idservice']) === true) {
-            if (ctype_digit($options['idservice']) === true) {
+            if (is_string($options['idservice']) === true && ctype_digit($options['idservice']) === true) {
                 $conditions[] = 's.id = :idservice';
                 $parameters[':idservice'] = $options['idservice'];
             } else {
@@ -363,7 +365,7 @@ class Event {
         }
 
         if (isset($options['plugin']) === true) {
-            if (ctype_digit($options['plugin']) === true) {
+            if (is_string($options['plugin']) === true && ctype_digit($options['plugin']) === true) {
                 $conditions[] = 's.idplugin = :idplugin';
                 $parameters[':idplugin'] = $options['plugin'];
             } else {
@@ -374,7 +376,7 @@ class Event {
         }
 
         if (isset($options['notplugin']) === true) {
-            if (ctype_digit($options['notplugin']) === true) {
+            if (is_string($options['notplugin']) === true && ctype_digit($options['notplugin']) === true) {
                 $conditions[] = 's.idplugin != :idplugin';
                 $parameters[':idplugin'] = $options['notplugin'];
             } else {
@@ -411,7 +413,7 @@ class Event {
 
         if (isset($options['finished']) === true) {
             if (is_bool($options['finished']) === true) {
-                $parameters[':now'] = strftime('%FT%T');
+                $parameters[':now'] = date('Y-m-d\TH:i:s');
                 if ($options['finished'] === true) {
                     $conditions[] = '(e.enddate IS NOT NULL AND e.enddate <= :now)';
                 } else {

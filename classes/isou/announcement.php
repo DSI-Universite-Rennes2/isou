@@ -15,6 +15,13 @@ namespace UniversiteRennes2\Isou;
  */
 class Announcement {
     /**
+     * Identifiant de l'annonce.
+     *
+     * @var integer
+     */
+    public $id;
+
+    /**
      * Message de l'annonce.
      *
      * @var string

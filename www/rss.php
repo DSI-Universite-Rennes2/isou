@@ -46,7 +46,7 @@ if (isset($_GET['services']) === true) {
 $items = array();
 
 $options = array();
-$options['since'] = new DateTime(strftime('%Y-%m-%d', TIME - (30 * 24 * 60 * 60)));
+$options['since'] = new DateTime(date('Y-m-d', TIME - (30 * 24 * 60 * 60)));
 $options['has_category'] = true;
 $options['plugin'] = PLUGIN_ISOU;
 foreach (Event::get_records($options) as $event) {
@@ -67,12 +67,15 @@ foreach (Event::get_records($options) as $event) {
     }
 
     $opening_event_id = $event->startdate->format('Y-m-d\TH:i:s').'_'.$event->id;
-    $items[$opening_event_id] = clone $event;
+
+    $items[$opening_event_id] = new stdClass();
+
     if ($event->type === UniversiteRennes2\Isou\Event::TYPE_SCHEDULED) {
         $items[$opening_event_id]->title = 'Interruption : '.$services[$event->idservice]->name;
     } else {
         $items[$opening_event_id]->title = 'Interruption non prévue : '.$services[$event->idservice]->name;
     }
+
     $items[$opening_event_id]->link = URL.'#'.$opening_event_id;
     $items[$opening_event_id]->guid = $opening_event_id;
     $items[$opening_event_id]->pubdate = gmdate('D, d M Y H:i:s', $event->startdate->getTimestamp());

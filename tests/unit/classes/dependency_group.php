@@ -204,7 +204,7 @@ class Dependency_Group extends atoum {
         $this->assert(__METHOD__.' : test #'.$i++)
             ->given($this->newTestedInstance)
             ->then
-                ->integer($this->testedInstance->set_message());
+                ->string($this->testedInstance->set_message());
 
         // Teste lorsque la requête SQL échoue.
         $DB->test_pdostatement->test_execute = false;
