@@ -3,13 +3,13 @@
 ## Vues
 ### Liste
 - [ ] simplifier l'affichage des dates (ex: si un évènement a lieu le même jour, afficher une seule fois la date)
-- [ ] mettre un indice visuel pour afficher les évènements passés et à venir
+- [x] mettre un indice visuel pour afficher les évènements passés et à venir
 
 ## Administration
 ### Évènements
-- [ ] ajouter le javascript pour pouvoir changer de type d'évènements à la volée
-- [ ] supprimer les descriptions en double
-- [ ] permettre de réutiliser les descriptions d'évènements
+- [x] ajouter le javascript pour pouvoir changer de type d'évènements à la volée
+- [x] supprimer les descriptions en double
+- [x] permettre de réutiliser les descriptions d'évènements
 
 ### Annonce
 - [ ] remplacer le module annonce par un type d'évènements
@@ -28,8 +28,8 @@
 - [ ] permettre de modifier les droits
 
 ### Cron
-- [ ] mettre en place un système d'enregistrement de site
-- [ ] détecter la disponibilité des mises à jour sur sourcesup
+- [x] mettre en place un système d'enregistrement de site
+- [x] détecter la disponibilité des mises à jour sur sourcesup
 - [ ] ajouter une variable pour le debug/trace
 
 ### Code

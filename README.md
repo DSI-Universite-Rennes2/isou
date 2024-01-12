@@ -50,7 +50,7 @@ Les services Isou peuvent être associés à des services issus d'outils de moni
 Par défaut, l'application génère un utilisateur local nommé `isou` dont le mot de passe est `isou`. Une fois l'authentification CAS configurée, il est fortement recommandé de ne pas utiliser la méthode d'authentification locale.
 
 ## Développements à venir
-[ROADMAP](ROADMAP.md)
+[ROADMAP](https://github.com/DSI-Universite-Rennes2/isou/milestones)
 
 ## Problèmes courants
 ### Isou et Nagios
