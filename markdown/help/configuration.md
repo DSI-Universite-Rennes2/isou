@@ -7,8 +7,6 @@ Le sous-onglet [apparence](../configuration/apparence) permet de :
 - choisir les vues présentées sur la page d'accueil
 - sélectionner le thème graphique de l'application
 
-Note: le thème `classic` n'est plus maintenu. Il est déconseillé de l'utiliser.
-
 ## <span id="authentification"></span>Authentification
 Le sous-onglet [authentification](../configuration/authentification) gère les différents modules d'authentification.
 Il existe 2 modules :
