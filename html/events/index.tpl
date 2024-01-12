@@ -1,12 +1,8 @@
-<h1 class="sr-only">Évènements</h1>
+<h1 class="visually-hidden">Évènements</h1>
 
-<ul class="nav nav-tabs">
+<ul class="flex-column flex-lg-row nav nav-tabs">
 {foreach $submenu as $menu}
-	{if $menu->selected === true}
-	<li class="active"><a href="{$menu->url}">{$menu->label}</a></li>
-	{else}
-	<li><a href="{$menu->url}">{$menu->label}</a></li>
-	{/if}
+	<li class="nav-item"><a class="{if $menu->selected === true}active {/if}nav-link" href="{$menu->url}">{$menu->label}</a></li>
 {/foreach}
 </ul>
 
@@ -16,7 +12,7 @@
 {else}
 	{* Liste des évènements. *}
 	{if $show_add_button === true}
-		<p class="text-right">
+		<p class="text-end">
 			<a class="btn btn-primary" href="{$smarty.const.URL}/index.php/evenements/{$eventtype}/edit/0">Ajouter un évènement</a>
 		</p>
 	{/if}

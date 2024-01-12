@@ -22,12 +22,11 @@
 	</dl>
 
 	<ul class="list-inline">
-		<li>
+		<li class="list-inline-item">
 			<input class="btn btn-primary" name="search" type="submit" value="rechercher" />
 		</li>
-
-		<li>
-			<a class="btn btn-default" href="{$smarty.const.URL}/index.php/services/nagios">annuler</a>
+		<li class="list-inline-item">
+			<a class="btn btn-secondary" href="{$smarty.const.URL}/index.php/services/nagios">annuler</a>
 		</li>
 	</ul>
 

@@ -1,5 +1,7 @@
-body {
-    margin: .5em 1em;
+#isou-main-content {
+    min-height: 90vh;
+    margin: 0;
+    padding: .5em 1em;
 }
 
 details {
@@ -7,8 +9,6 @@ details {
 }
 
 summary {
-    background: #FFFFFF;
-    background: #F5F5F5;
     cursor: pointer;
     display: list-item;
     font-weight: bold;
@@ -19,8 +19,8 @@ summary {
     text-decoration: underline;
 }
 
-.isou-top-aside-p {
-    margin: 0;
+#isou-top-aside-authentification-dropdown .dropdown-toggle::after {
+    margin-left: .5em;
 }
 
 .form-horizontal .control-label {
@@ -75,12 +75,14 @@ input[type="date"].form-control {
     background-image: url('../images/calendar.gif');
     background-repeat: no-repeat;
     padding-left: 20px;
+    text-indent: .5em;
 }
 
 .isou-list-event-unscheduled {
     background-image: url('../images/caution.gif');
     background-repeat: no-repeat;
     padding-left: 20px;
+    text-indent: .5em;
 }
 
 .isou-list-event-regular {
@@ -114,6 +116,7 @@ input[type="date"].form-control {
 }
 
 /* Vue tableau. */
+/*
 #isou-board th.today {
     background-color: #c9edf9;
 }
@@ -129,12 +132,13 @@ input[type="date"].form-control {
 #isou-board td.today.danger {
     background-color: #ffa9a9;
 }
-
+*/
 /* Vue calendrier. */
+    /*
 .events-li:target {
     background-color: #FFC0CB;
 }
-
+*/
 #calendar td,
 #calendar .panel-heading {
     padding: 0;

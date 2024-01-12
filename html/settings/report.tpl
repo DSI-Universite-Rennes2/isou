@@ -6,7 +6,7 @@
 		<div class="form-group">
 			<dt id="report-enabled">Activer le rapport quotidien</dt>
 			<dd>
-				<span class="help-block small">Envoie un rapport quotidien des différents évènements de la veille.</span>
+				<span class="d-block small">Envoie un rapport quotidien des différents évènements de la veille.</span>
 			</dd>
 			<dd>
 				{html_radios class="isou-radios" aria-labelledby="report-enabled" name="report_enabled" options=$options_yes_no selected=$CFG.report_enabled}
@@ -42,7 +42,7 @@
 	</dl>
 
 	<ul class="list-inline">
-		<li>
+		<li class="list-inline-item">
 			<input class="btn btn-primary" type="submit" value="enregistrer" />
 		</li>
 	</ul>

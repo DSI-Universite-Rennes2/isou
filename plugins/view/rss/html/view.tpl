@@ -1,4 +1,4 @@
-<h1 class="sr-only">Flux RSS</h1>
+<h1 class="visually-hidden">Flux RSS</h1>
 
 {if count($categories) === 0}
 	<p class="alert alert-info">Aucun service disponible pour le moment.</p>

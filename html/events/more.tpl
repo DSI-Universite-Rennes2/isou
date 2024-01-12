@@ -1,4 +1,4 @@
-<table class="table table-bordered table-condensed">
+<table class="caption-top table table-bordered table-condensed">
 	<thead>
 		<tr>
 			<th id="lth1">État</th>
@@ -17,7 +17,7 @@
 			<td headers="lth3">{$event->service_name}</td>
 			<td headers="lth4">{$event->startdate|date_format:"%a %d %B %Y %H:%M"}</td>
 			{if $event->enddate === null}
-			<td class="danger" headers="lth5">en cours</td>
+			<td class="table-danger text-danger" headers="lth5">en cours</td>
 			{else}
 			<td headers="lth5">{$event->enddate|date_format:"%a %d %B %Y %H:%M"}</td>
 			{/if}
@@ -27,5 +27,5 @@
 </table>
 
 <ul class="list-inline">
-	<li><a class="btn btn-default" href="{$smarty.const.URL}/index.php/evenements/{$eventtype}">retour</a></li>
+	<li class="list-inline-item"><a class="btn btn-secondary" href="{$smarty.const.URL}/index.php/evenements/{$eventtype}">retour</a></li>
 </ul>

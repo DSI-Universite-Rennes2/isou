@@ -1,4 +1,4 @@
-<h1 class="sr-only">Historique</h1>
+<h1 class="visually-hidden">Historique</h1>
 
 <form action="{$smarty.const.URL}/index.php/statistiques#resultat" class="form-horizontal" method="post">
 
@@ -54,10 +54,10 @@
 	</dl>
 
 	<ul class="list-inline form-submit-buttons-ul">
-		<li>
+		<li class="list-inline-item">
 			<input class="btn btn-primary" type="submit" value="afficher" />
 		</li>
-		<li>
+		<li class="list-inline-item">
 			<input class="btn btn-warning" type="submit" name="export" value="exporter au format csv" />
 		</li>
 	</ul>
@@ -69,7 +69,7 @@
 	<p id="resultat" class="alert alert-info">Aucun résultat</p>
 	{else}
 
-	<table class="table table-bordered table-condensed" id="resultat" summary="Historique des interruptions">
+	<table class="caption-top table table-bordered table-condensed" id="resultat" summary="Historique des interruptions">
 	<caption class="text-center">Historique des interruptions : {$count_events} {if $count_events > 1}évènements trouvés{else}évènement trouvé{/if}.</caption>
 	<thead>
 		<tr>

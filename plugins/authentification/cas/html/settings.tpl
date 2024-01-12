@@ -34,7 +34,7 @@
 				</dt>
 				<dd>
 					<input class="form-control" id="plugin-cas-path" name="plugin_cas_path" type="text" value="{$plugin->settings->cas_path}" />
-					<p class="help-block small">Généralement vide. Mettre 'mon-cas' par exemple, si votre serveur CAS est accessible à l'adresse auth.example.com/mon-cas.</p>
+					<p class="d-block small">Généralement vide. Mettre 'mon-cas' par exemple, si votre serveur CAS est accessible à l'adresse auth.example.com/mon-cas.</p>
 				</dd>
 			</div>
 			<div class="form-group">
@@ -49,7 +49,7 @@
 				</dt>
 				<dd>
 					<input class="form-control" id="plugin-cas-certificate-path" name="plugin_cas_certificate_path" type="string" value="{$plugin->settings->cas_certificate_path}" />
-					<p class="help-block small">Chemin pour valider le certificat du serveur CAS. Si vide, le certificat du serveur CAS ne sera pas vérifié.</p>
+					<p class="d-block small">Chemin pour valider le certificat du serveur CAS. Si vide, le certificat du serveur CAS ne sera pas vérifié.</p>
 				</dd>
 			</div>
 			<div class="form-group">
@@ -58,7 +58,7 @@
 				</dt>
 				<dd>
 					<input class="form-control" id="plugin-cas-logout-redirection" name="plugin_cas_logout_redirection" type="url" value="{$plugin->settings->cas_logout_redirection}" />
-					<p class="help-block small">Adresse vers laquelle l'utilisateur sera redirigé après déconnexion. Si vide, l'utilisateur restera sur la page de déconnexion du serveur CAS.</p>
+					<p class="d-block small">Adresse vers laquelle l'utilisateur sera redirigé après déconnexion. Si vide, l'utilisateur restera sur la page de déconnexion du serveur CAS.</p>
 				</dd>
 			</div>
 			<div class="form-group">
@@ -80,7 +80,7 @@
 				</dt>
 				<dd>
 					<input class="form-control" id="plugin-cas-ldap-uri" name="plugin_cas_ldap_uri" type="text" value="{$plugin->settings->cas_ldap_uri}" />
-					<div class="help-block small">
+					<div class="d-block small">
 						<p>Exemple d'URI LDAP : <code>ldap://ldap.example.com:port</code> ou <code>ldaps://ldap.example.com:port</code>.</p>
 						<p>Vous pouvez également fournir plusieurs URI LDAP séparés par un espace comme une chaîne.</p>
 					</div>
@@ -92,7 +92,7 @@
 				</dt>
 				<dd>
 					<input class="form-control" id="plugin-cas-ldap-username" name="plugin_cas_ldap_username" type="text" value="{$plugin->settings->cas_ldap_username}" />
-					<p class="help-block small">Laisser vide pour une authentification anonyme.</p>
+					<p class="d-block small">Laisser vide pour une authentification anonyme.</p>
 				</dd>
 			</div>
 			<div class="form-group">
@@ -109,7 +109,7 @@
 				</dt>
 				<dd>
 					<input class="form-control" id="plugin-cas-ldap-dn" name="plugin_cas_ldap_dn" type="text" value="{$plugin->settings->cas_ldap_dn}" />
-					<div class="help-block small">
+					<div class="d-block small">
 						<p>Exemple de DN LDAP : <code>ou=users,dc=ldap,dc=example,dc=com</code></p>
 					</div>
 				</dd>
@@ -120,7 +120,7 @@
 				</dt>
 				<dd>
 					<input class="form-control" id="plugin-cas-ldap-filter" name="plugin_cas_ldap_filter" type="text" value="{$plugin->settings->cas_ldap_filter}" />
-					<div class="help-block small">
+					<div class="d-block small">
 						<p>Exemple de filtre LDAP : <code>(&amp;(uid=:phpcas_username)(memberof=cn=isou,ou=groups,dc=ldap,dc=example,dc=com))</code>.</p>
 						<p>Si un enregistrement est retourné par le filtre, l'utilisateur aura des droits administrateur sur ISOU.</p>
 				</dd>
@@ -154,7 +154,7 @@
 	</fieldset>
 
 	<ul class="list-inline">
-		<li>
+		<li class="list-inline-item">
 			<input class="btn btn-primary" type="submit" value="enregistrer" />
 		</li>
 	</ul>

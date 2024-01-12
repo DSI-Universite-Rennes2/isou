@@ -11,17 +11,17 @@
 
 	<dl>
 		<div class="form-group">
-			<dt class="col-sm-2">
+			<dt>
 				<label class="control-label" for="webpush">Contenu du message</label>
 			</dt>
-			<dd class="col-sm-10">
+			<dd>
 				<textarea class="form-control" id="webpush" maxlength="120" name="message" cols="75" required="1" rows="10"></textarea>
 			</dd>
 		</div>
 	</dl>
 
 	<ul class="list-inline">
-		<li>
+		<li class="list-inline-item">
 			<input class="btn btn-primary" type="submit" value="envoyer" />
 		</li>
 	</ul>

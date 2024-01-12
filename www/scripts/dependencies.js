@@ -11,16 +11,16 @@
  *
  */
 function toggleBackends(link) {
-    var oldlink = document.querySelector('#isou-dependencies-contents-backends-dd > ul > li.active > a');
+    var oldlink = document.querySelector('#isou-dependencies-contents-backends-dd > ul > li > a.active');
     if (oldlink) {
-        oldlink.parentNode.classList.remove('active');
+        oldlink.classList.remove('active');
         var oldpane = document.getElementById(oldlink.getAttribute('aria-controls'));
         if (oldpane) {
             oldpane.classList.remove('active');
         }
     }
 
-    link.parentNode.classList.add('active');
+    link.classList.add('active');
     var newpane = document.getElementById(link.getAttribute('aria-controls'));
     if (newpane) {
         newpane.classList.add('active');

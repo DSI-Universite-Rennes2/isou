@@ -11,11 +11,11 @@ declare(strict_types=1);
 use Isou\Helpers\Script;
 use Isou\Helpers\Style;
 
-$theme_version = '1.1';
+$theme_version = '4.0';
 
-$STYLES[] = new Style('//static.univ-rennes2.fr/bootstrap/3.3/css/bootstrap.min.css');
-$STYLES[] = new Style('//static.univ-rennes2.fr/bootstrap/3.3/rennes2/bootstrap.css');
-$STYLES[] = new Style(URL.'/themes/bootstrap3/css/common.css?v='.$theme_version);
+$STYLES[] = new Style('//static.univ-rennes2.fr/bootstrap/5.3/css/bootstrap.min.css');
+$STYLES[] = new Style('//static.univ-rennes2.fr/bootstrap-icons/1.11/font/bootstrap-icons.min.css');
+$STYLES[] = new Style(URL.'/themes/bootstrap/css/common.css?v='.$theme_version);
 $STYLES[] = new Style(URL.'/themes/rennes2/css/common.css?v='.$theme_version);
 
 if (preg_match('#^dependances/service/[0-9]+/group/[0-9]+/content/edit/0$#', implode('/', $PAGE_NAME)) === 1) {
@@ -27,6 +27,7 @@ if (preg_match('#^dependances/service/[0-9]+/group/[0-9]+/content/edit/0$#', imp
     $SCRIPTS[] = new Script(URL.'/scripts/announcement.js');
 }
 
+$SCRIPTS[] = new Script('//static.univ-rennes2.fr/bootstrap/5.3/js/bootstrap.bundle.min.js');
 $SCRIPTS[] = new Script('//static.univ-rennes2.fr/barre-ent/script.min.js');
 
 $ADDITIONAL_CONTENT = <<<EOF

@@ -1,12 +1,12 @@
-<ul class="nav nav-tabs">
-	<li><a href="{$smarty.const.URL}/index.php/services/isou">Liste des services</a></li>
-	<li class="active"><a class="btn btn-default" href="{$smarty.const.URL}/index.php/services/isou/grouping">Liste des groupements de services</a></li>
+<ul class="flex-column flex-lg-row nav nav-tabs">
+	<li class="nav-item"><a class="nav-link" href="{$smarty.const.URL}/index.php/services/isou">Liste des services</a></li>
+	<li class="nav-item"><a class="active nav-link" href="{$smarty.const.URL}/index.php/services/isou/grouping">Liste des groupements de services</a></li>
 </ul>
 
 {if isset($services[0]) === false}
 <p class="alert alert-info">Aucun groupement généré.</p>
 {else}
-<table class="table table-bordered">
+<table class="caption-top table table-bordered">
 	<thead>
 		<tr>
 			<th>Domaine</th>
@@ -19,7 +19,7 @@
 		<tr>
 			<td>{$service->name}</td>
 			{if count($service->dependencies_content) === 0}
-			<td class="danger">Aucun service.</td>
+			<td class="table-danger text-danger">Aucun service.</td>
 			{else}
 			<td>
 					<ul>
@@ -29,7 +29,7 @@
 					</ul>
 			</td>
 			{/if}
-			<td><a class="btn btn-danger" href="{$smarty.const.URL}/index.php/services/isou/delete/{$service->id}">Supprimer</a></td>
+			<td><a class="btn btn-sm btn-danger" href="{$smarty.const.URL}/index.php/services/isou/delete/{$service->id}">Supprimer</a></td>
 		</tr>
 		{/foreach}
 	</tbody>

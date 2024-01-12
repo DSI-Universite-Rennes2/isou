@@ -1,4 +1,4 @@
-<table class="table table-striped">
+<table class="caption-top table table-striped">
 	<thead>
 		<tr>
 			<th>Type d'authentification</th>

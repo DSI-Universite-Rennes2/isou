@@ -5,25 +5,25 @@
 
 	<dl>
 		<div class="form-group">
-			<dt class="col-sm-2">
+			<dt>
 				<label class="control-label" for="message">Contenu de l'annonce (html autorisé)</label>
 			</dt>
-			<dd class="col-sm-10">
+			<dd>
 				<textarea class="form-control" id="message" name="message" cols="75" rows="10">{$announcement->message}</textarea>
 			</dd>
 		</div>
 		<div class="form-group">
-			<dt class="col-sm-2" id="visible">Afficher l'annonce</dt>
-			<dd class="col-sm-10">
+			<dt id="visible">Afficher l'annonce</dt>
+			<dd>
 				{html_radios class="isou-radios" aria-labelledby="visible" name="visible" options=$options_visible selected=$announcement->visible}
 			</dd>
 		</div>
 	</dl>
 
-		<p class="well">Modifiée par {$announcement->author}, le {$announcement->last_modification|date_format:'%A %d %b %Y %H:%M'}.</p>
+	<p class="border mb-4 px-4 py-2 rounded">Modifiée par {$announcement->author}, le {$announcement->last_modification|date_format:'%A %d %b %Y %H:%M'}.</p>
 
 	<ul class="list-inline">
-		<li>
+		<li class="list-inline-item">
 			<input class="btn btn-primary" type="submit" value="enregistrer" />
 		</li>
 	</ul>

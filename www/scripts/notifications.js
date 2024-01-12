@@ -1,29 +1,20 @@
 const isou_url = window.location.href.split('/index.php')[0].replace(/\/+$/, '');
 
 function setIsouActiveNotificationImage(active = true) {
-    var button = document.getElementById('isou-top-aside-notifications-button');
-    var image = document.getElementById('isou-top-aside-notifications-image');
+    var link = document.getElementById('toggle-webnotification');
     var submit = document.getElementById('modal-notifications-submit');
 
-    if (button === false || image === false || submit === false) {
+    if (link === false || submit === false) {
         return;
     }
 
     if (active === true) {
-        button.classList.add('alert-success');
-        button.classList.remove('alert-danger');
-
-        image.setAttribute('alt', 'notification activée');
-        image.setAttribute('src', isou_url+'/themes/bootstrap3/images/notifications-on.svg');
+        link.innerHTML = '<i aria-hidden="true" class="bi-bell-slash"> </i>Désactiver les notifications web';
 
         submit.className = 'btn btn-danger';
         submit.textContent = 'Désactiver les notifications';
     } else {
-        button.classList.add('alert-danger');
-        button.classList.remove('alert-success');
-
-        image.setAttribute('alt', 'notification désactivée');
-        image.setAttribute('src', isou_url+'/themes/bootstrap3/images/notifications-off.svg');
+        link.innerHTML = '<i aria-hidden="true" class="bi-bell-fill"> </i>Activer les notifications web';
 
         submit.className = 'btn btn-success';
         submit.textContent = 'Activer les notifications';
@@ -119,16 +110,16 @@ function unsubscribeIsouNotifications() {
 
 // Lorsque la page est chargée...
 document.addEventListener('DOMContentLoaded', function() {
-    var notificationsButton = document.getElementById('isou-top-aside-notifications-button');
+    var notificationsListItem = document.getElementById('toggle-webnotification-li');
 
-    if (notificationsButton === false) {
+    if (notificationsListItem === false) {
         // Les notifications ne sont pas activées sur Isou.
         return;
     }
 
     if (!('serviceWorker' in navigator)) {
         // Supprime la cloche lorsque les serviceworker ne sont pas activés sur le navigateur.
-        notificationsButton.remove();
+        notificationsListItem.remove();
 
         console.log('Les ServiceWorker ne sont pas gérés ou activés par votre navigateur.');
         return;
@@ -136,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (!('PushManager' in window)) {
         // Supprime la cloche lorsque les push ne sont pas activés sur le navigateur.
-        notificationsButton.remove();
+        notificationsListItem.remove();
 
         console.log('Les Push ne sont pas gérés ou activés par votre navigateur.');
         return;
@@ -156,38 +147,12 @@ document.addEventListener('DOMContentLoaded', function() {
         navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
             serviceWorkerRegistration.pushManager.getSubscription()
                 .then(function(subscription) {
-                    // Initialise l'image de notification.
-                    var image = document.createElement('img');
-                    image.setAttribute('id', 'isou-top-aside-notifications-image');
-                    image.setAttribute('height', '16px');
-                    image.setAttribute('width', '16px');
-
-                    notificationsButton.append(image);
-
+                    // Initialise le lien de notification.
                     if (subscription) {
                         setIsouActiveNotificationImage(true);
                     } else {
                         setIsouActiveNotificationImage(false);
                     }
-
-                    // Gère les inscriptions/désinscriptions aux notifications.
-                    notificationsButton.addEventListener('click', function() {
-                        var modal = document.getElementById('modal-notifications');
-                        modal.style.display = 'unset';
-                        modal.classList.remove('hidden');
-
-                        document.getElementById('modal-backdrop').classList.remove('hidden');
-                    });
-
-                    // Gère le bouton de fermeture de la modal de notification.
-                    var close = document.getElementById('modal-notifications-close');
-                    close.addEventListener('click', function() {
-                        var modal = document.getElementById('modal-notifications');
-                        modal.style.display = 'none';
-                        modal.classList.add('hidden');
-
-                        document.getElementById('modal-backdrop').classList.add('hidden');
-                    });
 
                     // Gère le bouton d'activation/désactivation de la modal de notification.
                     var submit = document.getElementById('modal-notifications-submit');

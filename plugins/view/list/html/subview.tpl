@@ -1,4 +1,4 @@
-<table class="table table-bordered table-condensed">
+<table class="caption-top table table-bordered table-condensed">
 	<thead>
 		<tr>
 			<th class="col-md-5" id="column-1">Service</th>
@@ -12,9 +12,9 @@
 		<tr>
 			{* Services column. *}
 			{if $service->url === null}
-				<td headers="column-1" class="text-left">{$service->name}</td>
+				<td headers="column-1" class="text-start">{$service->name}</td>
 			{else}
-				<td headers="column-1" class="text-left"><a href="{$service->url}" title="Accéder à la page du service {$service->name|escape:'html':'UTF-8'}">{$service->name}</a></td>
+				<td headers="column-1" class="text-start"><a href="{$service->url}" title="Accéder à la page du service {$service->name|escape:'html':'UTF-8'}">{$service->name}</a></td>
 			{/if}
 
 			{* States column. *}
@@ -38,7 +38,7 @@
 					{if isset($service->more) === true}
 						{* Liste des interruptions en plus *}
 						<details class="isou-list-events-details isou-list-events-more-details">
-							<summary class="isou-list-hideable-summary text-right small">{count($service->more)} interruption{if count($service->more) !== 1}s{/if} en plus</summary>
+							<summary class="isou-list-hideable-summary text-end small">{count($service->more)} interruption{if count($service->more) !== 1}s{/if} en plus</summary>
 							<ul class="list-unstyled">
 							{foreach $service->more as $event}
 								{if $event->type === UniversiteRennes2\Isou\Event::TYPE_SCHEDULED}

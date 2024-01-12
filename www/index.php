@@ -124,7 +124,7 @@ if (has_new_version() === true) {
 }
 
 if (isset($CFG['theme']) === false || is_file(PUBLIC_PATH.'/themes/'.$CFG['theme'].'/theme.php') === false) {
-    $CFG['theme'] = 'bootstrap3';
+    $CFG['theme'] = 'bootstrap';
 }
 
 require PUBLIC_PATH.'/themes/'.$CFG['theme'].'/theme.php';

@@ -38,9 +38,9 @@
 			</dt>
 			<dd class="col-sm-10" id="isou-dependencies-contents-backends-dd">
 				{if empty($dependency_group_content->id) === true}
-				<ul class="nav nav-tabs" role="tablist">
+				<ul class="flex-column flex-lg-row nav nav-tabs" role="tablist">
 					{foreach $options_services as $plugin => $services}
-						<li role="presentation"><a href="#tab-{$plugin|lower|escape:'url'}" aria-controls="tab-{$plugin|lower|escape:'url'}" role="tab" data-toggle="tab">{$plugin}</a></li>
+						<li class="nav-item" role="presentation"><a class="nav-link" href="#tab-{$plugin|lower|escape:'url'}" aria-controls="tab-{$plugin|lower|escape:'url'}" role="tab" data-toggle="tab">{$plugin}</a></li>
 					{/foreach}
 				</ul>
 				<div class="tab-content">
@@ -67,11 +67,11 @@
 	</dl>
 
 	<ul class="list-inline">
-		<li>
+		<li class="list-inline-item">
 			<input class="btn btn-primary" type="submit" value="enregistrer" />
 		</li>
-		<li>
-			<a class="btn btn-default" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}">annuler</a>
+		<li class="list-inline-item">
+			<a class="btn btn-secondary" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}">annuler</a>
 		</li>
 	</ul>
 </form>

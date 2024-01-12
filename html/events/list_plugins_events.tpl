@@ -1,4 +1,4 @@
-<table class="table table-bordered table-condensed">
+<table class="caption-top table table-bordered table-condensed">
 	<caption class="text-center">Liste des interruptions des services non isou</caption>
 	<thead>
 		<tr>
@@ -17,7 +17,7 @@
 			<td headers="lth3">{$event->service_name}</td>
 			<td headers="lth4">{$event->startdate|date_format:"%a %d %B %Y %H:%M"}</td>
 			{if $event->enddate === null}
-			<td headers="lth5" class="danger">en cours</td>
+			<td headers="lth5" class="table-danger text-danger">en cours</td>
 			{else}
 			<td headers="lth5">{$event->enddate|date_format:"%a %d %B %Y %H:%M"}</td>
 			{/if}

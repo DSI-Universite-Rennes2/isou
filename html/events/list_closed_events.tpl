@@ -1,4 +1,4 @@
-<table class="table table-bordered table-condensed">
+<table class="caption-top table table-bordered table-condensed">
 	<thead>
 		<tr>
 			<th id="lth1">État</th>
@@ -16,15 +16,15 @@
 			<td headers="lth2">{$event->service_name}</td>
 			<td headers="lth3">{$event->startdate|date_format:"%a %d %B %Y %H:%M"}</td>
 			{if $event->enddate === null}
-			<td headers="lth4" class="info">indéterminé</td>
+			<td headers="lth4" class="table-info text-info">indéterminé</td>
 			{else}
 			<td headers="lth4">{$event->enddate|date_format:"%a %d %B %Y %H:%M"}</td>
 			{/if}
 			<td headers="lth5">{if empty($event->description) === false}{$event->description|nl2br}{/if}</td>
 			<td headers="lth6">
 				<ul class="list-inline">
-					<li><a class="btn btn-xs btn-primary" href="{$smarty.const.URL}/index.php/evenements/{$eventtype}/edit/{$event->id}">modifier</a></li>
-					<li><a class="btn btn-xs btn-danger" href="{$smarty.const.URL}/index.php/evenements/{$eventtype}/delete/{$event->id}">supprimer</a></li>
+					<li class="list-inline-item"><a class="btn btn-sm btn-primary" href="{$smarty.const.URL}/index.php/evenements/{$eventtype}/edit/{$event->id}">modifier</a></li>
+					<li class="list-inline-item"><a class="btn btn-sm btn-danger" href="{$smarty.const.URL}/index.php/evenements/{$eventtype}/delete/{$event->id}">supprimer</a></li>
 				</ul>
 			</td>
 		{/foreach}

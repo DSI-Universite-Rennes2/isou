@@ -1,8 +1,8 @@
 <div class="row">
 	<div class="col-md-2">
-		<ul class="nav nav-pills nav-stacked">
+		<ul class="flex-column nav nav-pills">
 		{foreach $changelogs as $build => $changelog}
-			<li><a href="#version-{$build}">{$build}</a></li>
+			<li class="nav-item"><a class="nav-link" href="#version-{$build}">{$build}</a></li>
 		{/foreach}
 		</ul>
 	</div>

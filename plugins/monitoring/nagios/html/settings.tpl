@@ -19,14 +19,14 @@
 				</dt>
 				<dd>
 					<input class="form-control" type="text" name="plugin_nagios_path" id="plugin-nagios-path" value="{$plugin->settings->statusdat_path}" />
-					<span class="help-block small" id="localauthentificationpath-aria-describedby">exemple : /var/share/nagios/status.dat</span>
+					<span class="d-block small" id="localauthentificationpath-aria-describedby">exemple : /var/share/nagios/status.dat</span>
 				</dd>
 			</div>
 		</dl>
 	</fieldset>
 
 	<ul class="list-inline">
-		<li>
+		<li class="list-inline-item">
 			<input class="btn btn-primary" type="submit" value="enregistrer" />
 		</li>
 	</ul>

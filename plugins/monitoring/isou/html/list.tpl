@@ -1,11 +1,11 @@
 {if $isou->settings->grouping === true}
-<ul class="nav nav-tabs">
-	<li class="active"><a href="{$smarty.const.URL}/index.php/services/isou">Liste des services</a></li>
-	<li><a class="btn btn-default" href="{$smarty.const.URL}/index.php/services/isou/grouping">Liste des groupements de services</a></li>
+<ul class="flex-column flex-lg-row nav nav-tabs">
+	<li class="nav-item"><a class="active nav-link" href="{$smarty.const.URL}/index.php/services/isou">Liste des services</a></li>
+	<li class="nav-item"><a class="nav-link" href="{$smarty.const.URL}/index.php/services/isou/grouping">Liste des groupements de services</a></li>
 </ul>
 {/if}
 
-<p class="text-right"><a class="btn btn-primary" href="{$smarty.const.URL}/index.php/services/isou/edit/0">Ajouter un service ISOU</a></p>
+<p class="text-end"><a class="btn btn-primary" href="{$smarty.const.URL}/index.php/services/isou/edit/0">Ajouter un service ISOU</a></p>
 
 {include file="common/messages_session.tpl"}
 
@@ -16,7 +16,7 @@
 
 	<details open>
 		<summary>{$category->name}</summary>
-		<table class="table table-condensed table-striped" summary="liste des services ISOU de la catégorie {$category->name}">
+		<table class="caption-top table table-condensed table-striped" summary="liste des services ISOU de la catégorie {$category->name}">
 		{* <!-- <caption class="services-caption"></caption> --> *}
 		<thead>
 			<tr>
@@ -36,9 +36,9 @@
 				</td>
 				<td headers="head-action-{$i}">
 				<ul class="list-inline">
-					<!-- <li><a class="btn btn-xs btn-default" href="{$smarty.const.URL}/index.php/services/isou/inspect/{$service->id}">inspecter</a></li> -->
-					<li><a class="btn btn-xs btn-primary" href="{$smarty.const.URL}/index.php/services/isou/edit/{$service->id}">modifier</a></li>
-					<li><a class="btn btn-xs btn-danger" href="{$smarty.const.URL}/index.php/services/isou/delete/{$service->id}">supprimer</a></li>
+					<!-- <li class="list-inline-item"><a class="btn btn-sm btn-secondary" href="{$smarty.const.URL}/index.php/services/isou/inspect/{$service->id}">inspecter</a></li> -->
+					<li class="list-inline-item"><a class="btn btn-sm btn-primary" href="{$smarty.const.URL}/index.php/services/isou/edit/{$service->id}">modifier</a></li>
+					<li class="list-inline-item"><a class="btn btn-sm btn-danger" href="{$smarty.const.URL}/index.php/services/isou/delete/{$service->id}">supprimer</a></li>
 				</ul>
 				</td>
 				<td headers="head-note-{$i}">

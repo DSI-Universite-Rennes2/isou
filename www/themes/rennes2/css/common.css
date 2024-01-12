@@ -2,13 +2,52 @@ body {
     margin: 0;
 }
 
+#isou-main-content {
+    min-height: 84vh;
+}
+
 .isou-top-aside {
-    margin: .2em 1em 0 0;
+    margin: 0 1em 0 0;
+}
+
+.isou-top-aside-p {
+    margin: .2em 0 0 0;
+}
+
+#isou-top-aside-authentification-dropdown .dropdown-toggle {
+    margin-top: .5em;
+}
+
+.isou-top-aside-p {
+    margin: 0;
+}
+
+.isou-top-aside-p.small {
+    margin: 0;
+}
+
+.small {
+    font-size: .75em;
 }
 
 .page-header {
     border: none;
     margin: .5em 0 0 0;
+}
+
+.page-header .container-fluid {
+    background-image: url("//static.univ-rennes2.fr/bootstrap/3.3/rennes2/logo-rennes2-128x128-noir.png");
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding-left: 128px;
+}
+
+html[data-bs-theme="auto"] .page-header .container-fluid {
+    background-image: url("//static.univ-rennes2.fr/bootstrap/3.3/rennes2/logo-rennes2-128x128-noir.png");
+}
+
+html[data-bs-theme="dark"] .page-header .container-fluid {
+    background-image: url("//static.univ-rennes2.fr/bootstrap/3.3/rennes2/logo-rennes2-128x128-blanc.png");
 }
 
 .alert .btn {
@@ -21,11 +60,6 @@ body {
 
 .isou-list-event-unscheduled {
     background-image: url('../images/caution.gif');
-}
-
-#administration-menu li:nth-child(-n+3) a {
-    background-color: darkgreen;
-    color: white;
 }
 
 #administration-menu li.active a,
@@ -45,10 +79,7 @@ body > .container {
 
 #isou-footer-p {
     line-height: 3em;
-}
-
-#isou-footer-span {
-    border: none;
+    margin: 0;
 }
 
 #isou-plugin-isou-services-edit-form label[for='url'],

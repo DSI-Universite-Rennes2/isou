@@ -1,13 +1,9 @@
-<h1 class="sr-only">Annonce</h1>
+<h1 class="visually-hidden">Annonce</h1>
 
 {if isset($submenu['notification']) === true}
-<ul class="nav nav-tabs">
+<ul class="flex-column flex-lg-row nav nav-tabs">
 {foreach $submenu as $menu}
-	{if $menu->selected === true}
-	<li class="active"><a href="{$menu->url}">{$menu->label}</a></li>
-	{else}
-	<li><a href="{$menu->url}">{$menu->label}</a></li>
-	{/if}
+	<li class="nav-item"><a class="{if $menu->selected === true}active {/if}nav-link" href="{$menu->url}">{$menu->label}</a></li>
 {/foreach}
 </ul>
 {/if}

@@ -1,19 +1,19 @@
-<h1 class="sr-only">Calendrier</h1>
+<h1 class="visually-hidden">Calendrier</h1>
 
 <p class="alert alert-info text-center">Liste des opérations de maintenance prévues.</p>
 
-<table id="calendar" class="table table-bordered" summary="Calendrier répertoriant toutes les intervertions prévues">
+<table id="calendar" class="caption-top table table-bordered" summary="Calendrier répertoriant toutes les intervertions prévues">
 	{* Titre du calendrier. *}
 	<caption class="text-center">
-		<div class="sr-only">Calendrier des interventions</div>
+		<div class="visually-hidden">Calendrier des interventions</div>
 		<ul class="list-unstyled row">
 			{if $smarty.get.page > 1}
-			<li class="col-md-6 text-left">
+			<li class="col-md-6 text-start">
 				<a class="btn" href="{$smarty.const.URL}/index.php/calendrier/{$smarty.get.page - 1}"><img alt="Page précédente" src="{$smarty.const.URL}/themes/{$CFG.theme}/images/arrow-left.gif" /></a>
 			</li>
 			{/if}
 			{if $smarty.get.page < 5}
-			<li class="col-md-6-offset text-right">
+			<li class="col-md-6-offset text-end">
 				<a class="btn" href="{$smarty.const.URL}/index.php/calendrier/{$smarty.get.page + 1}"><img alt="Page suivante" src="{$smarty.const.URL}/themes/{$CFG.theme}/images/arrow-right.gif" /></a>
 			</li>
 			{/if}
@@ -38,11 +38,12 @@
 	{foreach $calendar as $week}
 		<tr>
 		{foreach $week as $day}
-			<td class="panel {if $day->datetime < $now}panel-default{else if $day->datetime === $now}panel-info{/if}">
-					<div class="panel-heading">
+			<td class="col">
+			<div class="card h-100">
+					<div class="{if $day->datetime < $now}bg-body-secondary {else if $day->datetime === $now}bg-info-subtle {/if}card-header">
 						<span class="small" id="date-{$day->datetime|date_format:'%d-%B-%Y'}">{$day->datetime|date_format:$day->strftime}</span>
 					</div>
-					<div class="panel-body">
+					<div class="card-body">
 						{if isset($day->services[0]) === true}
 						<ul>
 							{foreach $day->services as $service}
@@ -63,6 +64,7 @@
 								<p>Aucune intervention prévue</p>
 							{/if}
 						{/if}
+					</div>
 					</div>
 			</td>
 		{/foreach}

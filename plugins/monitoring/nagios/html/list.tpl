@@ -3,14 +3,14 @@
 {else}
 	{include file="common/messages_session.tpl"}
 
-	<p class="text-right">
+	<p class="text-end">
 		<a class="btn btn-primary" href="{$smarty.const.URL}/index.php/services/{$plugin->codename}/edit/0">Ajouter un service {$plugin->name}</a>
 	</p>
 
 	{if count($services) === 0}
 		<p class="alert alert-info">Aucun service {$plugin->name} utilisé.</p>
 	{else}
-	<table class="table table-condensed" summary="liste des services {$plugin->name}">
+	<table class="caption-top table table-condensed" summary="liste des services {$plugin->name}">
 		<caption>{count($services)} services {$plugin->name} gérés dans Isou</caption>
 		<thead>
 		<tr>
@@ -25,8 +25,8 @@
 			<td headers="head-name">{$service->name}</td>
 			<td headers="head-action">
 				<ul class="list-inline">
-					<li><a class="btn btn-xs btn-primary" href="{$smarty.const.URL}/index.php/services/{$plugin->codename}/edit/{$service->id}">modifier</a></li>
-					<li><a class="btn btn-xs btn-danger" href="{$smarty.const.URL}/index.php/services/{$plugin->codename}/delete/{$service->id}">supprimer</a></li>
+					<li class="list-inline-item"><a class="btn btn-sm btn-primary" href="{$smarty.const.URL}/index.php/services/{$plugin->codename}/edit/{$service->id}">modifier</a></li>
+					<li class="list-inline-item"><a class="btn btn-sm btn-danger" href="{$smarty.const.URL}/index.php/services/{$plugin->codename}/delete/{$service->id}">supprimer</a></li>
 				</ul>
 			</td>
 			<td headers="head-note">

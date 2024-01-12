@@ -1,4 +1,4 @@
-<table id="list" class="table table-condensed" summary="Journal des perturbations et interruptions de services">
+<table id="list" class="caption-top table table-condensed" summary="Journal des perturbations et interruptions de services">
 	<caption class="text-center">Journal des services monitorés</caption>
 	<thead>
 		<tr class="header">
@@ -15,7 +15,7 @@
 			<th colspan="5" class="thdate active">{$day->date|date_format:"%A %e %B"}</th>
 		</tr>
 		{if isset($day->events[0]) === false}
-		<tr><td colspan="5" class="info">Aucun évènement</td></tr>
+		<tr><td colspan="5" class="table-info text-info">Aucun évènement</td></tr>
 		{else}
 		{foreach $day->events as $event}
 			<tr>
@@ -23,7 +23,7 @@
 				<td>{$event->service}</td>
 				<td>{$event->startdate|date_format:"%a %e %b %Hh%M"}</td>
 				{if $event->enddate === null}
-				<td class="danger">en cours</td>
+				<td class="table-danger text-danger">en cours</td>
 				{else}
 				<td>{$event->enddate|date_format:"%a %e %b %Hh%M"}</td>
 				{/if}

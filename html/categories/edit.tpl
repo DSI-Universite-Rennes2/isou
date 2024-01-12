@@ -19,11 +19,11 @@
 	</dl>
 
 	<ul class="list-inline">
-		<li>
+		<li class="list-inline-item">
 			<input class="btn btn-primary" type="submit" value="enregistrer" />
 		</li>
-		<li>
-			<a class="btn btn-default" href="{$smarty.const.URL}/index.php/categories">annuler</a>
+		<li class="list-inline-item">
+			<a class="btn btn-secondary" href="{$smarty.const.URL}/index.php/categories">annuler</a>
 		</li>
 	</ul>
 </form>

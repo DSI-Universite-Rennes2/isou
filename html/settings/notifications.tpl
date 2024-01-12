@@ -9,13 +9,13 @@
 				{html_radios class="isou-radios" aria-labelledby="notification-enabled" name="notifications_enabled" options=$options_yes_no selected=$CFG.notifications_enabled}
 			</dd>
 			<dd>
-				<span class="help-block small">Autorise les utilisateurs connectés à recevoir une notification web dès qu'un service est perturbé.</span>
+				<span class="d-block small">Autorise les utilisateurs connectés à recevoir une notification web dès qu'un service est perturbé.</span>
 			</dd>
 		</div>
 	</dl>
 
 	<ul class="list-inline">
-		<li>
+		<li class="list-inline-item">
 			<input class="btn btn-primary" type="submit" value="enregistrer" />
 		</li>
 	</ul>

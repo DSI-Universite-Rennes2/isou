@@ -11,10 +11,11 @@ declare(strict_types=1);
 use Isou\Helpers\Script;
 use Isou\Helpers\Style;
 
-$theme_version = '1.1';
+$theme_version = '4.0';
 
-$STYLES[] = new Style('//unpkg.com/bootstrap@3.3/dist/css/bootstrap.min.css');
-$STYLES[] = new Style(URL.'/themes/bootstrap3/css/common.css?v='.$theme_version);
+$STYLES[] = new Style('//unpkg.com/bootstrap@5.3/dist/css/bootstrap.min.css');
+$STYLES[] = new Style('//unpkg.com/bootstrap-icons@1.11/font/bootstrap-icons.min.css');
+$STYLES[] = new Style(URL.'/themes/bootstrap/css/common.css?v='.$theme_version);
 
 if (preg_match('#^dependances/service/[0-9]+/group/[0-9]+/content/edit/0$#', implode('/', $PAGE_NAME)) === 1) {
     $SCRIPTS[] = new Script(URL.'/scripts/dependencies.js');
@@ -24,3 +25,5 @@ if (preg_match('#^dependances/service/[0-9]+/group/[0-9]+/content/edit/0$#', imp
     $SCRIPTS[] = new Script(URL.'/scripts/tinymce/tinymce.min.js');
     $SCRIPTS[] = new Script(URL.'/scripts/announcement.js');
 }
+
+$SCRIPTS[] = new Script('//unpkg.com/bootstrap@5.3/dist/js/bootstrap.bundle.min.js');
