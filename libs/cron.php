@@ -391,8 +391,6 @@ function cron_gather_statistics() {
  */
 function cron_regenerate_json() {
     $json_data = array();
-    $json_data['fisou'] = array();
-    $json_data['fisou']['services'] = array();
 
     $services = Service::get_records(array('plugin' => PLUGIN_ISOU));
     foreach ($services as $service) {
@@ -423,7 +421,7 @@ function cron_regenerate_json() {
         $data['state'] = $service->state;
         $data['date'] = $event->startdate->getTimestamp();
         $data['description'] = explode("\n", $event->description);
-        $json_data['fisou']['services'][] = $data;
+        $json_data[] = $data;
     }
 
     $json_data = json_encode($json_data, JSON_PRETTY_PRINT);
