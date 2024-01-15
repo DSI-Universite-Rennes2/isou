@@ -10,14 +10,60 @@ declare(strict_types=1);
 
 use Minishlink\WebPush\VAPID;
 
-$TITLE .= ' - Configuration des notifications par webpush';
+require_once PRIVATE_PATH.'/libs/cron.php';
+
+$TITLE .= ' - Configuration des flux de suivi';
 
 $options_yes_no = array(
-    1 => 'Oui',
-    0 => 'Non',
+    '1' => 'Oui',
+    '0' => 'Non',
 );
 
-if (isset($_POST['notifications_enabled']) === true) {
+if (isset($_POST['rss_enabled'], $_POST['ical_enabled'], $_POST['notifications_enabled'], $_POST['json_enabled']) === true) {
+    $post_updates = array();
+    $post_updates['ical_enabled'] = array('enabled' => 'UniversiteRennes2\Isou\Event::regenerate_ics', 'disabled' => PUBLIC_PATH.'/isou.ics');
+    $post_updates['json_enabled'] = array('enabled' => 'cron_regenerate_json', 'disabled' => PUBLIC_PATH.'/isou.json');
+
+    // Enregistre l'activation des flux.
+    foreach (array('rss_enabled', 'ical_enabled', 'json_enabled') as $key) {
+        if (isset($options_yes_no[$_POST[$key]]) === false) {
+            continue;
+        }
+
+        if ($CFG[$key] === $_POST[$key]) {
+            continue;
+        }
+
+        if (set_configuration($key, $_POST[$key]) === false) {
+            continue;
+        }
+
+        $CFG[$key] = $_POST[$key];
+
+        // Traitement post-update.
+        if (isset($post_updates[$key]) === false) {
+            continue;
+        }
+
+        if (empty($CFG[$key]) === false) {
+            // L'option a été activée.
+            call_user_func($post_updates[$key]['enabled']);
+            continue;
+        }
+
+        // L'option a été désactivée.
+        $filename = $post_updates[$key]['disabled'];
+        if (is_file($filename) === false) {
+            continue;
+        }
+
+        if (unlink($filename) === true) {
+            $_POST['successes'][] = 'Information : le fichier "'.$filename.'" a été supprimé.';
+        } else {
+            $_POST['errors'][] = 'Le fichier "'.$filename.'" n\'a pas pu être supprimé.';
+        }
+    }
+
     // Enregistre l'activation des notifications.
     if ($CFG['notifications_enabled'] !== $_POST['notifications_enabled'] && set_configuration('notifications_enabled', $_POST['notifications_enabled']) === true) {
         $CFG['notifications_enabled'] = $_POST['notifications_enabled'];
@@ -57,4 +103,4 @@ if (isset($_POST['notifications_enabled']) === true) {
 
 $smarty->assign('options_yes_no', $options_yes_no);
 
-$SUBTEMPLATE = 'settings/notifications.tpl';
+$SUBTEMPLATE = 'settings/feeds.tpl';

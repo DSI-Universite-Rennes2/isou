@@ -29,8 +29,8 @@ switch ($PAGE_NAME[1]) {
     case 'monitoring':
         require PRIVATE_PATH.'/php/settings/monitoring.php';
         break;
-    case 'notifications':
-        require PRIVATE_PATH.'/php/settings/notifications.php';
+    case 'flux':
+        require PRIVATE_PATH.'/php/settings/feeds.php';
         break;
     case 'proxy':
         require PRIVATE_PATH.'/php/settings/proxy.php';
@@ -56,7 +56,7 @@ $services_menu['apparence'] = new SimpleMenu('Apparence', 'Configuration des vue
 $services_menu['authentification'] = new SimpleMenu('Authentification', 'Gestion de l\'authentification', URL.'/index.php/configuration/authentification');
 $services_menu['utilisateurs'] = new SimpleMenu('Utilisateurs', 'Afficher les utilisateurs', URL.'/index.php/configuration/utilisateurs');
 $services_menu['monitoring'] = new SimpleMenu('Monitoring', 'Gestion des plugins de monitoring', URL.'/index.php/configuration/monitoring');
-$services_menu['notifications'] = new SimpleMenu('Notifications web', 'Gestion des notifications', URL.'/index.php/configuration/notifications');
+$services_menu['flux'] = new SimpleMenu('Flux de suivi', 'Gestion des flux de suivi', URL.'/index.php/configuration/flux');
 $services_menu['rapport'] = new SimpleMenu('Rapport', 'Gestion du rapport quotidien', URL.'/index.php/configuration/rapport');
 $services_menu['diagnostics'] = new SimpleMenu('Diagnostics', 'Diagnostics de l\'application ISOU', URL.'/index.php/configuration/diagnostics');
 $services_menu['changelog'] = new SimpleMenu('Changelog', 'Afficher le changelog', URL.'/index.php/configuration/changelog');

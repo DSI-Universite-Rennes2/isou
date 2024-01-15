@@ -1,6 +1,8 @@
 <h1 class="visually-hidden">Flux RSS</h1>
 
-{if count($categories) === 0}
+{if empty($CFG.rss_enabled) === true}
+	<p class="alert alert-info">Le suivi par flux RSS n'est pas activé.</p>
+{elseif count($categories) === 0}
 	<p class="alert alert-info">Aucun service disponible pour le moment.</p>
 {else}
 	<div class="row">

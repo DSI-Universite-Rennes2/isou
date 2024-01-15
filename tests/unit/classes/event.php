@@ -728,6 +728,7 @@ class Event extends atoum {
         $this->assert(__METHOD__.' : test #'.$i++)
             ->given($this->newTestedInstance)
             ->and($this->testedInstance->id = 0)
+            ->and($this->testedInstance->type = IsouEvent::TYPE_UNSCHEDULED)
             ->and($this->testedInstance->enddate = new \DateTime('2000-01-01T00:00:00'))
             ->then($this->testedInstance->save())
                 ->variable($this->testedInstance->id)->isNotEqualTo(0);
@@ -736,6 +737,7 @@ class Event extends atoum {
         $this->assert(__METHOD__.' : test #'.$i++)
             ->given($this->newTestedInstance)
             ->and($this->testedInstance->id = 42)
+            ->and($this->testedInstance->type = IsouEvent::TYPE_UNSCHEDULED)
             ->then($this->testedInstance->save())
                 ->variable($this->testedInstance->id)->isEqualTo(42);
 

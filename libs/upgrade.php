@@ -46,6 +46,44 @@ function isou_update_version() {
 }
 
 /**
+ * Procède à la migration vers la version 4.0.0.
+ *
+ * @throws Exception Lève une exception lorsqu'une erreur survient.
+ *
+ * @return void
+ */
+function upgrade_to_4_0_0() {
+    global $DB;
+
+    echo '- Procédure de mise à jour du schéma de base de données vers la version 4.0.0.'.PHP_EOL;
+
+    // Met à jour le schéma de la base de données.
+    $phinx = new PhinxApplication();
+    $phinx->setAutoExit(false);
+
+    $arguments = new StringInput('--verbose --environment=production --target=20240115000000 migrate');
+    if ($phinx->run($arguments, new NullOutput()) !== 0) {
+        throw new Exception('Une erreur est survenue lors de la mise à jour vers la version 4.0.0.');
+    }
+
+    // Supprime les fichiers générés automatiquement par défaut dans les précédentes versions.
+    $files = array();
+    $files[] = PUBLIC_PATH.'/isou.ics';
+    $files[] = PUBLIC_PATH.'/isou.json';
+    foreach ($files as $filename) {
+        if (is_file($filename) === false) {
+            continue;
+        }
+
+        if (unlink($filename) === true) {
+            echo 'Information : le fichier "'.$filename.'" a été supprimé.'.PHP_EOL;
+        } else {
+            echo 'Warning : le fichier "'.$filename.'" n\'a pas pu être supprimé.'.PHP_EOL;
+        }
+    }
+}
+
+/**
  * Procède à la migration vers la version 3.3.0.
  *
  * @throws Exception Lève une exception lorsqu'une erreur survient.

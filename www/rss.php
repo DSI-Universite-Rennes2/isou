@@ -11,8 +11,6 @@ declare(strict_types=1);
 use UniversiteRennes2\Isou\Event;
 use UniversiteRennes2\Isou\Service;
 
-header('content-type: application/xml');
-
 define('MAXFEED', 100);
 
 require __DIR__.'/../config.php';
@@ -21,6 +19,15 @@ require PRIVATE_PATH.'/php/common/database.php';
 // Charge la configuration.
 require PRIVATE_PATH.'/libs/configuration.php';
 $CFG = get_configurations();
+
+if (empty($CFG['rss_enabled']) === true) {
+    // Forbidden.
+    http_response_code(403);
+    echo 'Le suivi par flux RSS n\'est pas activé.';
+    exit(0);
+}
+
+header('content-type: application/xml');
 
 // Charge les plugins.
 $plugins = get_plugins();

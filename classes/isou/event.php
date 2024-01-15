@@ -552,6 +552,12 @@ class Event {
      * @return void
      */
     public static function regenerate_ics() {
+        global $CFG;
+
+        if ($CFG['ical_enabled'] === '0') {
+            return;
+        }
+
         $since = new DateTime();
         $since->setTime(0, 0, 0);
         $since->sub(new DateInterval('P3M'));

@@ -31,10 +31,20 @@
 					<li class="nav-item dropdown">
 						<button class="border btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{if $USER === false}Non connecté{else}{$USER}{/if}</button>
 						<ul class="dropdown-menu dropdown-menu-dark">
+							<li><a aria-hidden="true" class="dropdown-item" href="#" id="toggle-theme"><i aria-hidden="true" class="bi-moon-fill me-1"></i>Activer le mode sombre</a></li>
+							<li><hr class="dropdown-divider"></li>
+							{if $CFG.ical_enabled === '1'}
+							<li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-ical" href="#"><i aria-hidden="true" class="bi-calendar-date-fill me-1"></i>Importer le flux iCal</a></li>
+							<li><hr class="dropdown-divider"></li>
+							{/if}
+							{if $CFG.rss_enabled === '1'}
+							<li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-rss" href="#"><i aria-hidden="true" class="bi-rss-fill me-1"></i>Suivre le flux RSS</a></li>
+							<li><hr class="dropdown-divider"></li>
+							{/if}
 							{if $CFG.notifications_enabled === '1' && $USER !== false}
 							<li id="toggle-webnotification-li"><a data-bs-toggle="modal" data-bs-target="#modal-notifications" class="dropdown-item" href="#" id="toggle-webnotification"><i aria-hidden="true" class="bi-bell-fill me-1"></i>Activer les notifications web</a></li>
+							<li><hr class="dropdown-divider"></li>
 							{/if}
-							<li><a aria-hidden="true" class="dropdown-item" href="#" id="toggle-theme"><i aria-hidden="true" class="bi-moon-fill me-1"></i>Activer le mode sombre</a></li>
 							{if $USER === false}
 							<li><a class="dropdown-item" href="{$smarty.const.URL}/index.php/connexion"><i aria-hidden="true" class="bi-power me-1"></i>Se connecter</a></li>
 							{else}
@@ -43,6 +53,42 @@
 						</ul>
 					</li>
 				</ul>
+
+				{if $CFG.ical_enabled === '1'}
+				{* Modal pour le flux iCal. *}
+				<div class="modal fade in text-start hidden" id="modal-ical" tabindex="-1" role="dialog" aria-labelledby="modal-notifications-label">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">Importer le flux iCal</h4>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+							</div>
+							<div class="modal-body">
+								<p>Le <em>flux iCal</em> vous permet d'ajouter à votre agenda toutes les interruptions de services prévues dans ISOU.</p>
+								<p>Importer le flux iCal : <a href="{$smarty.const.URL}/isou.ics">{$smarty.const.URL}/isou.ics</a></p>
+							</div>
+						</div>
+					</div>
+				</div>
+				{/if}
+
+				{if $CFG.rss_enabled === '1'}
+				{* Modal pour le flux RSS. *}
+				<div class="modal fade in text-start hidden" id="modal-rss" tabindex="-1" role="dialog" aria-labelledby="modal-notifications-label">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">Suivre le flux RSS</h4>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+							</div>
+							<div class="modal-body">
+								<p>Le <em>flux RSS</em> vous permet de suivre toutes les interruptions de services signalées dans ISOU.</p>
+								<p>Suivre le flux RSS : <a href="{$smarty.const.URL}/rss.php">{$smarty.const.URL}/rss.php</a></p>
+							</div>
+						</div>
+					</div>
+				</div>
+				{/if}
 
 				{if $CFG.notifications_enabled === '1' && $USER !== false}
 				{* Modal pour les notifications web. *}
