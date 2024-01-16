@@ -61,7 +61,7 @@ function upgrade_to_4_0_0() {
     $phinx = new PhinxApplication();
     $phinx->setAutoExit(false);
 
-    $arguments = new StringInput('--verbose --environment=production --target=20240115000000 migrate');
+    $arguments = new StringInput('--verbose --environment=production --target=20240116000000 migrate');
     if ($phinx->run($arguments, new NullOutput()) !== 0) {
         throw new Exception('Une erreur est survenue lors de la mise à jour vers la version 4.0.0.');
     }
