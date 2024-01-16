@@ -16,7 +16,7 @@ use UniversiteRennes2\Isou\User;
  *
  * @return string
  */
-function authentification_get_service_base_url() {
+function authentication_get_service_base_url() {
     $service_base_url = URL;
 
     if (preg_match('#^(https?://.*)/.*$#', $service_base_url, $matches) === 1) {
@@ -34,11 +34,11 @@ function authentification_get_service_base_url() {
  *
  * @return void
  */
-function authentification_login(Plugin $plugin) {
+function authentication_login(Plugin $plugin) {
     phpCAS::setVerbose($plugin->settings->cas_verbose);
 
     // Initialize phpCAS client.
-    phpCAS::client($plugin->settings->cas_protocol, $plugin->settings->cas_host, $plugin->settings->cas_port, $plugin->settings->cas_path, authentification_get_service_base_url());
+    phpCAS::client($plugin->settings->cas_protocol, $plugin->settings->cas_host, $plugin->settings->cas_port, $plugin->settings->cas_path, authentication_get_service_base_url());
 
     if (isset($_SESSION['username']) === false) {
         if (empty($plugin->settings->cas_certificate_path) === false) {
@@ -51,11 +51,11 @@ function authentification_login(Plugin $plugin) {
     }
 
     $_SESSION['username'] = phpCAS::getUser();
-    $_SESSION['authentification'] = 'cas';
-    $USER = User::get_record(array('username' => $_SESSION['username'], 'authentification' => 'cas'));
+    $_SESSION['authentication'] = 'cas';
+    $USER = User::get_record(array('username' => $_SESSION['username'], 'authentication' => 'cas'));
     if ($USER === false) {
         $USER = new User();
-        $USER->authentification = 'cas';
+        $USER->authentication = 'cas';
         $USER->username = $_SESSION['username'];
         $USER->admin = '0';
     }
@@ -112,7 +112,7 @@ function authentification_login(Plugin $plugin) {
                     try {
                         $USER->save();
                     } catch (\Exception $exception) {
-                        unset($_SESSION['username'], $_SESSION['authentification']);
+                        unset($_SESSION['username'], $_SESSION['authentication']);
                         $_POST['errors'][] = $exception->getMessage();
                     }
                 }
@@ -133,11 +133,11 @@ function authentification_login(Plugin $plugin) {
  *
  * @return void
  */
-function authentification_logout(Plugin $plugin) {
+function authentication_logout(Plugin $plugin) {
     phpCAS::setVerbose($plugin->settings->cas_verbose);
 
     // Initialize phpCAS client.
-    phpCAS::client($plugin->settings->cas_protocol, $plugin->settings->cas_host, $plugin->settings->cas_port, $plugin->settings->cas_path, authentification_get_service_base_url());
+    phpCAS::client($plugin->settings->cas_protocol, $plugin->settings->cas_host, $plugin->settings->cas_port, $plugin->settings->cas_path, authentication_get_service_base_url());
 
     if (empty($plugin->settings->cas_certificate_path) === false) {
         phpCAS::setCasServerCACert($plugin->settings->cas_certificate_path);

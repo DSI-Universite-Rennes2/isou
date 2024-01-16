@@ -7,16 +7,16 @@ Le sous-onglet [apparence](../configuration/apparence) permet de :
 - choisir les vues présentées sur la page d'accueil
 - sélectionner le thème graphique de l'application
 
-## <span id="authentification"></span>Authentification
+## <span id="authentication"></span>Authentification
 Le sous-onglet [authentification](../configuration/authentification) gère les différents modules d'authentification.
 Il existe 2 modules :
 - [locale](../configuration/authentification/manual)
 - [CAS](../configuration/authentification/cas)
 
-### <span id="authentification-locale"></span>Authentification locale
+### <span id="authentication-locale"></span>Authentification locale
 Ce module sert uniquement à ouvrir une session administrateur après l'installation. Une fois l'authentification CAS configurée, testée et validée, ce module DOIT être désactivé.
 
-### <span id="authentification-cas"></span>Authentification CAS
+### <span id="authentication-cas"></span>Authentification CAS
 Ce module permet de s'authentifier auprès d'un [serveur CAS](https://www.apereo.org/projects/cas). Il peut être couplé avec un serveur LDAP afin d'attribuer automatiquement des droits aux utilisateurs.
 
 ## <span id="utilisateurs"></span>Utilisateurs

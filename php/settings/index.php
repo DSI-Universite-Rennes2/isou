@@ -18,7 +18,7 @@ if (isset($PAGE_NAME[1]) === false) {
 
 switch ($PAGE_NAME[1]) {
     case 'authentification':
-        require PRIVATE_PATH.'/php/settings/authentification.php';
+        require PRIVATE_PATH.'/php/settings/authentication.php';
         break;
     case 'changelog':
         require PRIVATE_PATH.'/php/settings/changelog.php';

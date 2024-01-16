@@ -6,4 +6,4 @@
 {/foreach}
 </ul>
 
-{include file=$AUTHENTIFICATION_TEMPLATE}
+{include file=$AUTHENTICATION_TEMPLATE}

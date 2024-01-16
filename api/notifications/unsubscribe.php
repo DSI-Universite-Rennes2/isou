@@ -18,7 +18,7 @@ if (isset($_DELETE['endpoint'], $_DELETE['publicKey'], $_DELETE['authToken'], $_
     $response->status = 200;
     $response->message = '';
 
-    $subscription = Subscription::get_record(array('endpoint' => $_DELETE['endpoint'], 'public_key' => $_DELETE['publicKey'], 'authentification_token' => $_DELETE['authToken']));
+    $subscription = Subscription::get_record(array('endpoint' => $_DELETE['endpoint'], 'public_key' => $_DELETE['publicKey'], 'authentication_token' => $_DELETE['authToken']));
     if ($subscription !== false) {
         try {
             $subscription->delete();

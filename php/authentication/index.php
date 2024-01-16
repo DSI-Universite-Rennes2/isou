@@ -17,7 +17,7 @@ switch ($PAGE_NAME[0]) {
 
             $plugins = array();
             $count_plugins = 0;
-            foreach (Plugin::get_records(array('type' => 'authentification', 'active' => true)) as $plugin) {
+            foreach (Plugin::get_records(array('type' => 'authentication', 'active' => true)) as $plugin) {
                 $count_plugins++;
                 $plugins[$plugin->codename] = $plugin;
             }
@@ -29,30 +29,30 @@ switch ($PAGE_NAME[0]) {
             if (isset($PAGE_NAME[1], $plugins[$PAGE_NAME[1]]) === true) {
                 $plugin = $plugins[$PAGE_NAME[1]];
 
-                require PRIVATE_PATH.'/plugins/authentification/'.$plugin->codename.'/lib.php';
+                require PRIVATE_PATH.'/plugins/authentication/'.$plugin->codename.'/lib.php';
 
-                $form = authentification_login($plugin);
+                $form = authentication_login($plugin);
             }
 
             $smarty->assign('form', $form);
             $smarty->assign('plugins', $plugins);
             $smarty->assign('count_plugins', $count_plugins);
 
-            $TEMPLATE = 'authentification/index.tpl';
+            $TEMPLATE = 'authentication/index.tpl';
         }
         break;
     case 'deconnexion':
         if (isset($USER) === true && $USER !== false) {
-            $authentification_lib = PRIVATE_PATH.'/plugins/authentification/'.$USER->authentification.'/lib.php';
+            $authentication_lib = PRIVATE_PATH.'/plugins/authentication/'.$USER->authentication.'/lib.php';
 
-            $plugin = Plugin::get_record(array('type' => 'authentification', 'codename' => $USER->authentification));
-            if (is_file($authentification_lib) === true) {
-                require $authentification_lib;
+            $plugin = Plugin::get_record(array('type' => 'authentication', 'codename' => $USER->authentication));
+            if (is_file($authentication_lib) === true) {
+                require $authentication_lib;
             } else {
-                require PRIVATE_PATH.'/plugins/authentification/manual/lib.php';
+                require PRIVATE_PATH.'/plugins/authentication/manual/lib.php';
             }
 
-            authentification_logout($plugin);
+            authentication_logout($plugin);
         }
         break;
 }

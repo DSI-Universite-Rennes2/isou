@@ -19,7 +19,7 @@ summary {
     text-decoration: underline;
 }
 
-#isou-top-aside-authentification-dropdown .dropdown-toggle::after {
+#isou-top-aside-authentication-dropdown .dropdown-toggle::after {
     margin-left: .5em;
 }
 

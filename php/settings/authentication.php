@@ -18,7 +18,7 @@ if (isset($PAGE_NAME[2]) === false) {
 }
 
 $submenus = array();
-$modules = Plugin::get_records(array('type' => 'authentification'));
+$modules = Plugin::get_records(array('type' => 'authentication'));
 foreach ($modules as $module) {
     // Set up menu.
     $submenus[$module->codename] = new SimpleMenu($module->name, '', URL.'/index.php/configuration/authentification/'.$module->codename);
@@ -37,10 +37,10 @@ if (isset($plugin) === false) {
 }
 
 // Load page.
-require PRIVATE_PATH.'/plugins/authentification/'.$plugin->codename.'/php/settings.php';
+require PRIVATE_PATH.'/plugins/authentication/'.$plugin->codename.'/php/settings.php';
 
 $smarty->assign('submenus', $submenus);
 
-$smarty->assign('AUTHENTIFICATION_TEMPLATE', $AUTHENTIFICATION_TEMPLATE);
+$smarty->assign('AUTHENTICATION_TEMPLATE', $AUTHENTICATION_TEMPLATE);
 
-$SUBTEMPLATE = 'settings/authentification.tpl';
+$SUBTEMPLATE = 'settings/authentication.tpl';

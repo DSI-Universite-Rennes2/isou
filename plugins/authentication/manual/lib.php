@@ -18,16 +18,16 @@ use UniversiteRennes2\Isou\User;
  *
  * @return string|void
  */
-function authentification_login(Plugin $plugin) {
+function authentication_login(Plugin $plugin) {
     global $smarty;
 
     if (isset($_POST['username'], $_POST['password']) === true) {
-        $user = User::get_record(array('username' => $_POST['username'], 'authentification' => 'manual'));
+        $user = User::get_record(array('username' => $_POST['username'], 'authentication' => 'manual'));
 
         if ($user !== false) {
             if (password_verify($_POST['password'], $user->password) === true) {
                 $_SESSION['username'] = $user->username;
-                $_SESSION['authentification'] = 'manual';
+                $_SESSION['authentication'] = 'manual';
 
                 $user->lastaccess = new \DateTime();
                 $user->save();
@@ -40,7 +40,7 @@ function authentification_login(Plugin $plugin) {
         $_POST['errors'][] = 'Les informations transmises n\'ont pas permis de vous authentifier.';
     }
 
-    $smarty->addTemplateDir(PRIVATE_PATH.'/plugins/authentification/manual/html');
+    $smarty->addTemplateDir(PRIVATE_PATH.'/plugins/authentication/manual/html');
 
     return $smarty->fetch('login.tpl');
 }
@@ -52,7 +52,7 @@ function authentification_login(Plugin $plugin) {
  *
  * @return void
  */
-function authentification_logout(Plugin $plugin = null) {
+function authentication_logout(Plugin $plugin = null) {
     $_SESSION = array();
 
     if (isset($_COOKIE[session_name()]) === true) {

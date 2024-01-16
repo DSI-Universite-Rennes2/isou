@@ -13,7 +13,7 @@
 	<tbody>
 		{foreach $users as $user}
 		<tr>
-			<td>{$user->authentification}</td>
+			<td>{$user->authentication}</td>
 			<td>{$user->username}</td>
 			<td>{$user}</td>
 			<td>{$user->email}</td>

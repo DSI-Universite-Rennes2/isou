@@ -22,7 +22,7 @@ class User {
      */
     public function __construct() {
         $this->id = 1;
-        $this->authentification = 'manual';
+        $this->authentication = 'manual';
         $this->username = 'isou';
         $this->password = '';
         $this->firstname = '';

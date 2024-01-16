@@ -15,12 +15,12 @@ if (isset($_POST['endpoint'], $_POST['publicKey'], $_POST['authToken'], $_POST['
     $response->status = 200;
     $response->message = '';
 
-    $subscription = Subscription::get_record(array('endpoint' => $_POST['endpoint'], 'public_key' => $_POST['publicKey'], 'authentification_token' => $_POST['authToken']));
+    $subscription = Subscription::get_record(array('endpoint' => $_POST['endpoint'], 'public_key' => $_POST['publicKey'], 'authentication_token' => $_POST['authToken']));
     if ($subscription === false) {
         $subscription = new Subscription();
         $subscription->endpoint = $_POST['endpoint'];
         $subscription->public_key = $_POST['publicKey'];
-        $subscription->authentification_token = $_POST['authToken'];
+        $subscription->authentication_token = $_POST['authToken'];
         $subscription->content_encoding = $_POST['contentEncoding'];
         $subscription->iduser = $USER->id;
 

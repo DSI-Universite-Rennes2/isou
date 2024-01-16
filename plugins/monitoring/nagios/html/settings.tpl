@@ -19,7 +19,7 @@
 				</dt>
 				<dd>
 					<input class="form-control" type="text" name="plugin_nagios_path" id="plugin-nagios-path" value="{$plugin->settings->statusdat_path}" />
-					<span class="d-block small" id="localauthentificationpath-aria-describedby">exemple : /var/share/nagios/status.dat</span>
+					<span class="d-block small" id="localauthenticationpath-aria-describedby">exemple : /var/share/nagios/status.dat</span>
 				</dd>
 			</div>
 		</dl>

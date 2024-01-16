@@ -61,7 +61,7 @@ function upgrade_to_4_0_0() {
     $phinx = new PhinxApplication();
     $phinx->setAutoExit(false);
 
-    $arguments = new StringInput('--verbose --environment=production --target=20240116000002 migrate');
+    $arguments = new StringInput('--verbose --environment=production --target=20240116000003 migrate');
     if ($phinx->run($arguments, new NullOutput()) !== 0) {
         throw new Exception('Une erreur est survenue lors de la mise à jour vers la version 4.0.0.');
     }
@@ -506,7 +506,7 @@ function upgrade_plugins(bool $check_only = false) {
     global $DB, $LOGGER;
 
     $plugins_paths = array();
-    $plugins_paths['authentification'] = PRIVATE_PATH.'/plugins/authentification';
+    $plugins_paths['authentication'] = PRIVATE_PATH.'/plugins/authentication';
     $plugins_paths['monitoring'] = PRIVATE_PATH.'/plugins/monitoring';
     $plugins_paths['view'] = PRIVATE_PATH.'/plugins/view';
 

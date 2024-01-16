@@ -110,7 +110,7 @@ class Notification {
         global $CFG;
 
         // Paramètres d'authentification du message.
-        $authentification = array(
+        $authentication = array(
             'VAPID' => array(
                 'subject' => $this->website_address,
                 'publicKey' => $this->public_key,
@@ -134,6 +134,6 @@ class Notification {
             $curl_options['proxy']['no'] = $CFG['no_proxy'];
         }
 
-        return new WebPush($authentification, $default_options, $timeout, $curl_options);
+        return new WebPush($authentication, $default_options, $timeout, $curl_options);
     }
 }

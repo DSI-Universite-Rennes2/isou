@@ -36,7 +36,7 @@ class Plugin {
     public $codename;
 
     /**
-     * Type du module (authentification, monitoring ou view).
+     * Type du module (authentication, monitoring ou view).
      *
      * @var string
      */

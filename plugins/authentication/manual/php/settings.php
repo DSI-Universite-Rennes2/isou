@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-$smarty->addTemplateDir(PRIVATE_PATH.'/plugins/authentification/manual/html');
+$smarty->addTemplateDir(PRIVATE_PATH.'/plugins/authentication/manual/html');
 
 $options_yes_no = array(
     1 => 'Oui',
@@ -19,14 +19,14 @@ if (isset($_POST['plugin_manual_enable'], $options_yes_no[$_POST['plugin_manual_
     if ($plugin->active !== $_POST['plugin_manual_enable']) {
         // Vérifie qu'il reste au moins une méthode d'authentification activée.
         if ($_POST['plugin_manual_enable'] === '0') {
-            $count_authentification_method = 0;
+            $count_authentication_method = 0;
             foreach ($modules as $module) {
                 if ($module->active === '1' && $module->codename !== $plugin->codename) {
-                    $count_authentification_method++;
+                    $count_authentication_method++;
                 }
             }
 
-            if ($count_authentification_method === 0) {
+            if ($count_authentication_method === 0) {
                 $_POST['errors'][] = 'Il n\'est pas possible de désactiver cette méthode d\'authentification car c\'est la dernière méthode d\'authentification activée.';
             }
         }
@@ -48,4 +48,4 @@ $smarty->assign('options_yes_no', $options_yes_no);
 
 $smarty->assign('plugin', $plugin);
 
-$AUTHENTIFICATION_TEMPLATE = 'settings.tpl';
+$AUTHENTICATION_TEMPLATE = 'settings.tpl';

@@ -50,10 +50,10 @@ if (isset($CFG['site_name']) === true) {
 }
 
 $USER = false;
-if (isset($_SESSION['username'], $_SESSION['authentification']) === true) {
-    $USER = User::get_record(array('username' => $_SESSION['username'], 'authentification' => $_SESSION['authentification']));
+if (isset($_SESSION['username'], $_SESSION['authentication']) === true) {
+    $USER = User::get_record(array('username' => $_SESSION['username'], 'authentication' => $_SESSION['authentication']));
 } elseif (defined('DEV') === true && DEV === true) {
-    $USER = User::get_record(array('username' => 'isou', 'authentification' => 'manual'));
+    $USER = User::get_record(array('username' => 'isou', 'authentication' => 'manual'));
 }
 
 // Calcule la route de la page.
@@ -73,14 +73,14 @@ if (has_new_version() === true) {
 } else {
     // Display default pages.
     if (in_array($PAGE_NAME[0], array('connexion', 'deconnexion'), $strict = true) === true) {
-        require PRIVATE_PATH.'/php/authentification/index.php';
+        require PRIVATE_PATH.'/php/authentication/index.php';
     }
 
     if (isset($USER->admin) === true && empty($USER->admin) === false) {
         $MENUS->administration = SimpleMenu::get_adminitration_menus();
 
         // TODO: À supprimer, lorsque l'implémentation du changement de mot de passe sera faite.
-        $local_auth = Plugin::get_record(array('codename' => 'manual', 'type' => 'authentification', 'active' => true));
+        $local_auth = Plugin::get_record(array('codename' => 'manual', 'type' => 'authentication', 'active' => true));
         $smarty->assign('security_local_auth', ($local_auth !== false));
     }
 

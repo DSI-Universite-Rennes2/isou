@@ -27,7 +27,7 @@
 
 			<aside class="isou-top-aside text-end">
 				<h1 class="visually-hidden">Authentification</h1>
-				<ul id="isou-top-aside-authentification-dropdown" class="navbar-nav">
+				<ul id="isou-top-aside-authentication-dropdown" class="navbar-nav">
 					<li class="nav-item dropdown">
 						<button class="border btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{if $USER === false}Non connecté{else}{$USER}{/if}</button>
 						<ul class="dropdown-menu dropdown-menu-dark">

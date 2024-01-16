@@ -26,8 +26,8 @@ require PRIVATE_PATH.'/libs/configuration.php';
 $CFG = get_configurations();
 
 $USER = false;
-if (isset($_SESSION['username'], $_SESSION['authentification']) === true) {
-    $USER = User::get_record(array('username' => $_SESSION['username'], 'authentification' => $_SESSION['authentification']));
+if (isset($_SESSION['username'], $_SESSION['authentication']) === true) {
+    $USER = User::get_record(array('username' => $_SESSION['username'], 'authentication' => $_SESSION['authentication']));
 }
 
 $PAGE_NAME = explode('/', get_page_name(basename(__FILE__)));

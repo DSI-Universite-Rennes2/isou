@@ -26,7 +26,7 @@ class User {
      *
      * @var string
      */
-    public $authentification;
+    public $authentication;
 
     /**
      * Identifiant de connexion.
@@ -108,7 +108,7 @@ class User {
         } else {
             // Instance manuelle.
             $this->id = '0';
-            $this->authentification = 'manual';
+            $this->authentication = 'manual';
             $this->username = 'anonymous';
             $this->password = '';
             $this->firstname = '';
@@ -143,8 +143,8 @@ class User {
      * @return User|false
      */
     public static function get_record(array $options = array()) {
-        if (isset($options['id']) === false && isset($options['username'], $options['authentification']) === false) {
-            throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] ou les deux paramètres $options[\'username\'] et $options[\'authentification\'] sont requis.');
+        if (isset($options['id']) === false && isset($options['username'], $options['authentication']) === false) {
+            throw new \Exception(__METHOD__.': le paramètre $options[\'id\'] ou les deux paramètres $options[\'username\'] et $options[\'authentication\'] sont requis.');
         }
 
         $options['fetch_one'] = true;
@@ -192,15 +192,15 @@ class User {
             unset($options['username']);
         }
 
-        if (isset($options['authentification']) === true) {
-            if (is_string($options['authentification']) === true) {
-                $conditions[] = 'u.authentification = :authentification';
-                $parameters[':authentification'] = $options['authentification'];
+        if (isset($options['authentication']) === true) {
+            if (is_string($options['authentication']) === true) {
+                $conditions[] = 'u.authentication = :authentication';
+                $parameters[':authentication'] = $options['authentication'];
             } else {
-                throw new \Exception(__METHOD__.': l\'option \'authentification\' doit être une chaine de caractères. Valeur donnée : '.var_export($options['authentification'], $return = true));
+                throw new \Exception(__METHOD__.': l\'option \'authentication\' doit être une chaine de caractères. Valeur donnée : '.var_export($options['authentication'], $return = true));
             }
 
-            unset($options['authentification']);
+            unset($options['authentication']);
         }
 
         // Construit le WHERE.
@@ -220,7 +220,7 @@ class User {
         }
 
         // Construit la requête.
-        $sql = 'SELECT u.id, u.authentification, u.username, u.password, u.firstname, u.lastname, u.email, u.admin, u.lastaccess, u.timecreated'.
+        $sql = 'SELECT u.id, u.authentication, u.username, u.password, u.firstname, u.lastname, u.email, u.admin, u.lastaccess, u.timecreated'.
            ' FROM users u'.
             $sql_conditions;
         $query = $DB->prepare($sql);
@@ -252,7 +252,7 @@ class User {
         }
 
         $params = array(
-            ':authentification' => $this->authentification,
+            ':authentication' => $this->authentication,
             ':username' => $this->username,
             ':password' => $this->password,
             ':firstname' => $this->firstname,
@@ -264,10 +264,10 @@ class User {
         );
 
         if (empty($this->id) === true) {
-            $sql = 'INSERT INTO users(authentification, username, password, firstname, lastname, email, admin, lastaccess, timecreated)'.
-                ' VALUES(:authentification, :username, :password, :firstname, :lastname, :email, :admin, :lastaccess, :timecreated)';
+            $sql = 'INSERT INTO users(authentication, username, password, firstname, lastname, email, admin, lastaccess, timecreated)'.
+                ' VALUES(:authentication, :username, :password, :firstname, :lastname, :email, :admin, :lastaccess, :timecreated)';
         } else {
-            $sql = 'UPDATE users SET authentification=:authentification, username=:username, password=:password, firstname=:firstname, lastname=:lastname,'.
+            $sql = 'UPDATE users SET authentication=:authentication, username=:username, password=:password, firstname=:firstname, lastname=:lastname,'.
                 ' email=:email, admin=:admin, lastaccess=:lastaccess, timecreated=:timecreated WHERE id = :id';
             $params[':id'] = $this->id;
         }

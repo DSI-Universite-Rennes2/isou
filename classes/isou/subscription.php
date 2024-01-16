@@ -43,7 +43,7 @@ class Subscription {
      *
      * @var string
      */
-    public $authentification_token;
+    public $authentication_token;
 
     /**
      * Algorythme d'encodage du message.
@@ -84,7 +84,7 @@ class Subscription {
             $this->id = '0';
             $this->endpoint = '';
             $this->public_key = '';
-            $this->authentification_token = '';
+            $this->authentication_token = '';
             $this->content_encoding = '';
             $this->lastnotification = null;
             $this->iduser = '0';
@@ -178,15 +178,15 @@ class Subscription {
             unset($options['public_key']);
         }
 
-        if (isset($options['authentification_token']) === true) {
-            if (is_string($options['authentification_token']) === true) {
-                $conditions[] = 's.authentification_token = :authentification_token';
-                $parameters[':authentification_token'] = $options['authentification_token'];
+        if (isset($options['authentication_token']) === true) {
+            if (is_string($options['authentication_token']) === true) {
+                $conditions[] = 's.authentication_token = :authentication_token';
+                $parameters[':authentication_token'] = $options['authentication_token'];
             } else {
-                throw new \Exception(__METHOD__.': l\'option \'authentification_token\' doit être un entier. Valeur donnée : '.var_export($options['authentification_token'], $return = true));
+                throw new \Exception(__METHOD__.': l\'option \'authentication_token\' doit être un entier. Valeur donnée : '.var_export($options['authentication_token'], $return = true));
             }
 
-            unset($options['authentification_token']);
+            unset($options['authentication_token']);
         }
 
         if (isset($options['userid']) === true) {
@@ -217,7 +217,7 @@ class Subscription {
         }
 
         // Construit la requête.
-        $sql = 'SELECT s.id, s.endpoint, s.public_key, s.authentification_token, s.content_encoding, s.lastnotification, s.iduser'.
+        $sql = 'SELECT s.id, s.endpoint, s.public_key, s.authentication_token, s.content_encoding, s.lastnotification, s.iduser'.
                 ' FROM subscriptions s'.
                 ' '.$sql_conditions;
         $query = $DB->prepare($sql);
@@ -244,7 +244,7 @@ class Subscription {
         $parameters = array();
         $parameters['endpoint'] = $this->endpoint;
         $parameters['publicKey'] = $this->public_key;
-        $parameters['authToken'] = $this->authentification_token;
+        $parameters['authToken'] = $this->authentication_token;
         $parameters['contentEncoding'] = $this->content_encoding;
         $subscription = SubscriptionInterface::create($parameters);
 
@@ -264,7 +264,7 @@ class Subscription {
         $params = array(
             ':endpoint' => $this->endpoint,
             ':public_key' => $this->public_key,
-            ':authentification_token' => $this->authentification_token,
+            ':authentication_token' => $this->authentication_token,
             ':content_encoding' => $this->content_encoding,
             ':iduser' => $this->iduser,
         );
@@ -276,10 +276,10 @@ class Subscription {
         }
 
         if (empty($this->id) === true) {
-            $sql = 'INSERT INTO subscriptions(endpoint, public_key, authentification_token, content_encoding, lastnotification, iduser)'.
-                ' VALUES(:endpoint, :public_key, :authentification_token, :content_encoding, :lastnotification, :iduser)';
+            $sql = 'INSERT INTO subscriptions(endpoint, public_key, authentication_token, content_encoding, lastnotification, iduser)'.
+                ' VALUES(:endpoint, :public_key, :authentication_token, :content_encoding, :lastnotification, :iduser)';
         } else {
-            $sql = 'UPDATE subscriptions SET endpoint=:endpoint, public_key=:public_key, authentification_token=:authentification_token, content_encoding=:content_encoding,'.
+            $sql = 'UPDATE subscriptions SET endpoint=:endpoint, public_key=:public_key, authentication_token=:authentication_token, content_encoding=:content_encoding,'.
                 ' lastnotification=:lastnotification, iduser=:iduser WHERE id = :id';
             $params[':id'] = $this->id;
         }
