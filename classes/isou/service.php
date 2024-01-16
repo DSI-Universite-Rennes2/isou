@@ -72,13 +72,6 @@ class Service {
     public $locked;
 
     /**
-     * Identifiant utilisé pour la construction du flux RSS.
-     *
-     * @var string
-     */
-    public $rsskey;
-
-    /**
      * Date de dernière modification du service.
      *
      * @var \DateTime
@@ -122,7 +115,6 @@ class Service {
             $this->enable = '1';
             $this->visible = '1';
             $this->locked = '0';
-            $this->rsskey = null;
             $this->timemodified = date('Y-m-d\TH:i:s');
             $this->idplugin = PLUGIN_ISOU;
             $this->idcategory = null;
@@ -180,22 +172,6 @@ class Service {
                 $this->url = null;
             }
 
-            // TODO: créer une fonction set_rsskey().
-            if ($this->rsskey === null) {
-                global $DB;
-
-                $sql = 'SELECT rsskey FROM services WHERE rsskey IS NOT NULL ORDER BY rsskey DESC';
-                $query = $DB->query($sql);
-
-                $key = $query->fetch(\PDO::FETCH_OBJ);
-                if (isset($key->rsskey) === true) {
-                    $this->rsskey = ++$key->rsskey;
-                } else {
-                    $this->rsskey = 1;
-                    // $errors[] = 'La clé rss n\'a pu être générée.';
-                }
-            }
-
             $category = Category::get_record(array('id' => $this->idcategory));
             if ($category === false) {
                 $errors[] = 'La catégorie choisie est invalide.';
@@ -204,7 +180,6 @@ class Service {
             $this->url = null;
             $this->enable = '0';
             $this->visible = '0';
-            $this->rsskey = null;
             $this->idcategory = null;
         }
 
@@ -401,7 +376,7 @@ class Service {
             return $query->fetchAll(\PDO::FETCH_COLUMN | \PDO::FETCH_UNIQUE);
         }
 
-        $sql = 'SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.rsskey, s.idplugin, s.idcategory'.
+        $sql = 'SELECT s.id, s.name, s.url, s.state, s.comment, s.enable, s.visible, s.locked, s.idplugin, s.idcategory'.
                 ' FROM services s'.
                 ' JOIN plugins p ON p.id = s.idplugin AND p.active = 1'.
                 ' '.implode(' ', $joins).
@@ -442,18 +417,17 @@ class Service {
             ':enable' => $this->enable,
             ':visible' => $this->visible,
             ':locked' => $this->locked,
-            ':rsskey' => $this->rsskey,
             ':timemodified' => $this->timemodified,
             ':idplugin' => $this->idplugin,
             ':idcategory' => $this->idcategory,
         );
 
         if (empty($this->id) === true) {
-            $sql = 'INSERT INTO services(name, url, state, comment, enable, visible, locked, rsskey, timemodified, idplugin, idcategory)'.
-                ' VALUES(:name, :url, :state, :comment, :enable, :visible, :locked, :rsskey, :timemodified, :idplugin, :idcategory)';
+            $sql = 'INSERT INTO services(name, url, state, comment, enable, visible, locked, timemodified, idplugin, idcategory)'.
+                ' VALUES(:name, :url, :state, :comment, :enable, :visible, :locked, :timemodified, :idplugin, :idcategory)';
         } else {
             $sql = 'UPDATE services SET name=:name, url=:url, state=:state, comment=:comment, enable=:enable, visible=:visible, locked=:locked,'.
-                ' rsskey=:rsskey, timemodified=:timemodified, idplugin=:idplugin, idcategory=:idcategory WHERE id = :id';
+                ' timemodified=:timemodified, idplugin=:idplugin, idcategory=:idcategory WHERE id = :id';
             $params[':id'] = $this->id;
         }
         $query = $DB->prepare($sql);

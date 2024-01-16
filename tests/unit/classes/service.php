@@ -70,7 +70,6 @@ class Service extends atoum {
             ->and($this->testedInstance->visible = '1')
             ->and($this->testedInstance->locked = '1')
             ->and($this->testedInstance->idcategory = '1')
-            ->and($this->testedInstance->rsskey = '1')
             ->and($this->testedInstance->url = '')
             ->then
                 ->array($this->testedInstance->check_data())
@@ -84,7 +83,6 @@ class Service extends atoum {
             ->and($this->testedInstance->visible = '1')
             ->and($this->testedInstance->locked = '1')
             ->and($this->testedInstance->idcategory = '1')
-            ->and($this->testedInstance->rsskey = '1')
             ->then
                 ->array($this->testedInstance->check_data())
                 ->isEmpty();
@@ -98,7 +96,6 @@ class Service extends atoum {
             ->and($this->testedInstance->visible = '1')
             ->and($this->testedInstance->locked = '1')
             ->and($this->testedInstance->idcategory = '1')
-            ->and($this->testedInstance->rsskey = '1')
             ->then
                 ->array($this->testedInstance->check_data())
                 ->contains('Le type de service choisi est invalide.');
@@ -112,7 +109,6 @@ class Service extends atoum {
             ->and($this->testedInstance->visible = 1)
             ->and($this->testedInstance->locked = '1')
             ->and($this->testedInstance->idcategory = '1')
-            ->and($this->testedInstance->rsskey = '1')
             ->then
                 ->array($this->testedInstance->check_data())
                 ->contains('La valeur choisie pour la visibilité n\'est pas valide.');
@@ -126,7 +122,6 @@ class Service extends atoum {
             ->and($this->testedInstance->visible = '1')
             ->and($this->testedInstance->locked = 1)
             ->and($this->testedInstance->idcategory = '1')
-            ->and($this->testedInstance->rsskey = '1')
             ->then
                 ->array($this->testedInstance->check_data())
                 ->contains('La valeur choisie pour le verrouillage n\'est pas valide.');
