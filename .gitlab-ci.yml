@@ -1,0 +1,103 @@
+---
+# yamllint disable rule:line-length
+
+variables:
+    # Configuration d'un éventuel proxy http.
+    HTTP_PROXY: ""
+    HTTPS_PROXY: ""
+    NO_PROXY: ""
+
+default:
+    # Récupère une image slim de Debian 12.
+    image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/debian:bookworm-slim
+
+stages:
+    - build
+    - tests
+
+cache:
+    paths:
+        - $CI_PROJECT_DIR/.cache/apt/
+        - $CI_PROJECT_DIR/.cache/composer/
+        - $CI_PROJECT_DIR/vendor/
+
+# Commandes lancées avant chaque job.
+before_script:
+    # Définit les variables.
+    - export COMPOSER_HOME=$CI_PROJECT_DIR/.cache/composer
+    - export http_proxy=$HTTP_PROXY
+    - export https_proxy=$HTTPS_PROXY
+    - export no_proxy=$NO_PROXY
+
+    # Prépare le cache pour APT.
+    - mkdir -p $CI_PROJECT_DIR/.cache/apt
+    - export apt_options='-y -qq -o dir::cache::archives="$CI_PROJECT_DIR/.cache/apt"'
+
+    # Met à jour l'OS.
+    - apt $apt_options update 1> /dev/null
+    - apt $apt_options upgrade 1> /dev/null
+
+    # Installe les paquets PHP.
+    - apt $apt_options install composer 1> /dev/null
+    - apt $apt_options install php-bcmath php-cli php-curl php-json php-ldap php-mbstring php-sqlite3 php-xml php-zip 1> /dev/null
+
+    # Installe le paquet xdebug (nécessaire pour afficher le code coverage via Atoum).
+    - apt $apt_options install php-xdebug 1> /dev/null
+    - echo "xdebug.mode=coverage" >> /etc/php/$(php -r "echo substr(PHP_VERSION, 0, 3);")/mods-available/xdebug.ini
+
+# Job install.
+# Note: n'exécute pas le job pour des push de tags et les tâches planifiées.
+install:
+    stage: build
+    cache:
+        paths:
+            - vendor/
+    except:
+        - schedules
+        - tags
+    script:
+        - /usr/bin/composer install
+
+# Job composer.
+# Note: n'exécute pas le job pour des push de tags et les tâches planifiées.
+composer:
+    stage: tests
+    except:
+        - schedules
+        - tags
+    script:
+        - /usr/bin/composer validate
+
+# Job atoum.
+# Note: n'exécute pas le job pour des push de tags et les tâches planifiées.
+atoum:
+    stage: tests
+    except:
+        - schedules
+        - tags
+    script:
+        - cp distribution/config.php .
+        - /usr/bin/php tests/regression/run.php
+        - /usr/bin/php vendor/bin/atoum -d tests/unit/classes/ -af .atoum.php
+
+# Job codingstyle.
+# Note: n'exécute pas le job pour des push de tags et les tâches planifiées.
+codingstyle:
+    stage: tests
+    except:
+        - schedules
+        - tags
+    script:
+        - mkdir -p cache/php_codesniffer
+        - /usr/bin/php vendor/bin/phpcs --extensions=php --standard=.phpcs.xml --warning-severity=0
+    allow_failure: false
+
+# Job security.
+# Note: exécute le job uniquement sur les tâches planifiées.
+security:
+    stage: tests
+    only:
+        - schedules
+    script:
+        - /usr/bin/composer audit
+        - /usr/bin/composer outdated
