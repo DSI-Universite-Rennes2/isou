@@ -13,7 +13,7 @@ Isou est une application permettant d'informer de l'état des services numériqu
 ## Configuration
 ### Configuration requise
 - Serveur HTTP (ex: Apache, Nginx)
-- PHP 7.0 ou supérieur
+- PHP 8.2 ou supérieur
 - [Composer](https://getcomposer.org)
 - Un shell PHP
 - Un système de tâches planifiées (cronie, vixie-cron, dcron, etc)
