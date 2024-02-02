@@ -188,14 +188,14 @@
 			</p>
 		</footer>
 
-		<script src="{$smarty.const.URL}/scripts/darkmode.js" type="text/javascript"></script>
+		<script src="{$smarty.const.URL}/scripts/darkmode.js?v={$CFG.version}" type="text/javascript"></script>
 
 		{foreach $SCRIPTS as $SCRIPT}
 			<script src="{$SCRIPT->src}" type="{$SCRIPT->type}"></script>
 		{/foreach}
 
 		{if $CFG.notifications_enabled === '1'}
-			<script src="{$smarty.const.URL}/scripts/notifications.js" type="text/javascript"></script>
+			<script src="{$smarty.const.URL}/scripts/notifications.js?v={$CFG.version}" type="text/javascript"></script>
 		{/if}
 
 		{if isset($ADDITIONAL_CONTENT) === true}
