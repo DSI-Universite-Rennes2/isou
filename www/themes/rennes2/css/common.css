@@ -86,3 +86,9 @@ body > .container {
 #isou-plugin-isou-services-edit-form input[name='url'] {
     display: none;
 }
+
+#barre-menu-ent,
+#barre-menu-ent a {
+    background-color: var(--bs-body-bg) !important;
+    color: var(--bs-body-color) !important;
+}
