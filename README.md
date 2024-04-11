@@ -4,7 +4,7 @@ Isou est une application permettant d'informer de l'état des services numériqu
 
 ## Fonctionnalités
 - propose différentes vues des états passés, présents et à venir
-- s'interface avec un ou plusieurs logiciels de monitoring comme Nagios (en natif) ou Nagios, Icinga, Shinken et Naemon (via Thruk)
+- s'interface avec un ou plusieurs logiciels de monitoring comme Nagios (en natif), Nagios, Icinga, Shinken et Naemon (via Thruk) ou Zabbix (en natif)
 - permet de regrouper les services en catégorie
 - dispose de plusieurs types d'évènements
 - garde un historique des incidents
@@ -22,6 +22,7 @@ Isou est une application permettant d'informer de l'état des services numériqu
 - Un système d'authentification CAS/LDAP
 - Un système de monitoring Nagios
 - Un système de monitoring Thruk
+- Un système de monitoring Zabbix
 
 ## Installation et mise à jour
 ```bash
