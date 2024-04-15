@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html data-bs-theme="auto" lang="fr">
 	<head>
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,13 +9,13 @@
 
 		<link rel="shortcut icon" type="image/png" href="{$smarty.const.URL}/themes/bootstrap3/favicon.png" />
 
-		<link href="//unpkg.com/bootstrap@3.3/dist/css/bootstrap.min.css" type="text/css" media="screen" rel="stylesheet" />
-		<link href="{$smarty.const.URL}/themes/bootstrap3/css/common.css" type="text/css" media="screen" rel="stylesheet" />
+		<link href="//unpkg.com/bootstrap@5.3/dist/css/bootstrap.min.css" type="text/css" media="screen" rel="stylesheet" />
+		<link href="{$smarty.const.URL}/themes/bootstrap/css/common.css" type="text/css" media="screen" rel="stylesheet" />
 	</head>
 	<body role="document">
 
 		<div class="container">
-			<header class="page-header" role="banner">
+			<header class="page-header my-4" role="banner">
 				<h1 id="isou-header">ISOU</h1>
 			</header>
 			<main id="content" role="main">
@@ -24,6 +24,8 @@
 				</article>
 			</main>
 		</div>
+
+		<script src="{$smarty.const.URL}/scripts/darkmode.js" type="text/javascript"></script>
 
 	</body>
 </html>
