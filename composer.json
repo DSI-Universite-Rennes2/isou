@@ -40,12 +40,6 @@
     },
     "scripts": {
         "post-autoload-dump": [
-            "php -r \"mkdir('www/scripts/tinymce', 0755, true);\"",
-            "php -r \"symlink('../../../vendor/tinymce/tinymce/tinymce.min.js', 'www/scripts/tinymce/tinymce.min.js');\"",
-            "php -r \"symlink('../../../vendor/tinymce/tinymce/icons', 'www/scripts/tinymce/icons');\"",
-            "php -r \"symlink('../../../vendor/tinymce/tinymce/plugins', 'www/scripts/tinymce/plugins');\"",
-            "php -r \"symlink('../../../vendor/tinymce/tinymce/skins', 'www/scripts/tinymce/skins');\"",
-            "php -r \"symlink('../../../vendor/tinymce/tinymce/themes', 'www/scripts/tinymce/themes');\"",
             "@php upgrade.php"
         ]
     }

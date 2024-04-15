@@ -14,6 +14,30 @@ if (getenv('COMPOSER_DEV_MODE') === false) {
     exit(1);
 }
 
+// Positionne les liens symboliques pour TinyMCE.
+$tinymce_directory = __DIR__.'/www/scripts/tinymce';
+if (is_dir($tinymce_directory) === false) {
+    if (mkdir($tinymce_directory, 0755, $recursive = true) === false) {
+        echo 'Une erreur est survenue lors de la création du répertoire "'.$tinymce_directory.'"'.PHP_EOL;
+        exit(1);
+    }
+}
+
+$symlinks = array();
+$symlinks['../../../vendor/tinymce/tinymce/tinymce.min.js'] = __DIR__.'/www/scripts/tinymce/tinymce.min.js';
+$symlinks['../../../vendor/tinymce/tinymce/icons'] = __DIR__.'/www/scripts/tinymce/icons';
+$symlinks['../../../vendor/tinymce/tinymce/plugins'] = __DIR__.'/www/scripts/tinymce/plugins';
+$symlinks['../../../vendor/tinymce/tinymce/skins'] = __DIR__.'/www/scripts/tinymce/skins';
+$symlinks['../../../vendor/tinymce/tinymce/themes'] = __DIR__.'/www/scripts/tinymce/themes';
+foreach ($symlinks as $target => $link) {
+    if (file_exists($link) === true) {
+        continue;
+    }
+
+    symlink($target, $link);
+}
+
+// Charge la configuration pour initialiser la procédure d'installation ou de mise à jour.
 require __DIR__.'/config.php';
 require PRIVATE_PATH.'/libs/upgrade.php';
 
