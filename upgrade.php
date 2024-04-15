@@ -8,6 +8,12 @@
 
 declare(strict_types=1);
 
+// Contrôle que le script est bien exécuté par Composer.
+if (getenv('COMPOSER_DEV_MODE') === false) {
+    echo 'Le script `upgrade.php` ne peut plus être exécuté directement. Merci d\'utiliser la commande `composer install` pour mettre à jour Isou.'.PHP_EOL;
+    exit(1);
+}
+
 require __DIR__.'/config.php';
 require PRIVATE_PATH.'/libs/upgrade.php';
 

@@ -32,14 +32,12 @@ git clone git://git.renater.fr/isou.git
 cd isou
 cp -i distribution/config.php .
 composer install
-php upgrade.php
 ```
 
 ### Mise à jour
 ```bash
 git pull origin master
 composer install
-php upgrade.php
 ```
 
 ## Fonctionnement

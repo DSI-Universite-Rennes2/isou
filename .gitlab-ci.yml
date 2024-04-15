@@ -56,6 +56,7 @@ install:
         - schedules
         - tags
     script:
+        - cp distribution/config.php .
         - /usr/bin/composer install
 
 # Job composer.
