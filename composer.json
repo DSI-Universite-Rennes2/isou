@@ -2,13 +2,13 @@
     "name": "universiterennes2/isou",
     "type": "project",
     "description": "Application to show status of your services.",
-    "keywords": ["monitoring", "status", "nagios", "shinken", "icinga", "naemon", "thruk"],
+    "keywords": ["monitoring", "status", "nagios", "shinken", "icinga", "naemon", "thruk", "zabbix"],
     "homepage": "https://sourcesup.renater.fr/projects/isou/",
     "license": "Unlicense",
     "authors": [{
         "name": "Université Rennes 2 - DSI",
         "email": "dsi-contact@univ-rennes2.fr",
-        "homepage": "https://intranet.univ-rennes2.fr/dsi",
+        "homepage": "https://www.univ-rennes2.fr/structure/dsi",
         "role": "Developer"
     }],
     "autoload": {
