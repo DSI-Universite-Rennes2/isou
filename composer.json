@@ -30,7 +30,7 @@
         "minishlink/web-push": "8.*",
         "monolog/monolog": "3.*",
         "robmorgan/phinx": "0.15.*",
-        "smarty/smarty": "4.3.*",
+        "smarty/smarty": "4.5.*",
         "symfony/yaml": "7.*",
         "tinymce/tinymce": "7.*"
     },
