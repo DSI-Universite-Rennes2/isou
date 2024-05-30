@@ -1,22 +1,22 @@
 <ul class="breadcrumb">
-	<li><a href="{$smarty.const.URL}/index.php/dependances">dépendances</a></li>
-	<li><a href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}">{$service->name}</a></li>
-	<li class="active">simuler</li>
+	<li class="breadcrumb-item"><a href="{$smarty.const.URL}/index.php/dependances">dépendances</a></li>
+	<li class="breadcrumb-item"><a href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}">{$service->name}</a></li>
+	<li class="active breadcrumb-item">simuler</li>
 </ul>
 
 <form action="{$smarty.const.URL}/index.php/dependances/service/{$service->id}/simulate" class="well" method="post">
 	<h2>État des dépendances :</h2>
 	{foreach $dependencies as $iddependency => $dependency}
-	<div class="form-group">
+	<div class="form-group my-3">
 		<label>{html_options name="state[$iddependency]" options=$options_states selected=$smarty.post.state[$iddependency]|default:""}{$dependency}</label>
 	</div>
 	{/foreach}
 
 	<ul class="list-inline">
-		<li>
+		<li class="list-inline-item">
 			<input class="btn btn-primary" name="submit" type="submit" value="simuler" />
 		</li>
-		<li>
+		<li class="list-inline-item">
 			<a class="btn btn-default" href="{$smarty.const.URL}/index.php/dependances/service/{$service->id}">annuler</a>
 		</li>
 	</ul>
