@@ -11,7 +11,7 @@
 {include file="common/messages_session.tpl"}
 
 <div class="row">
-{if count($groups) === 0}
+{if $groups|count === 0}
 	<p class="alert alert-info text-center">Aucun groupe de dépendances défini.</p>
 {else}
 	<div class="row">
@@ -36,7 +36,7 @@
 			</ul>
 
 			<div class="isou-dependencies-content-div">
-				{if count($group->contents) === 0}
+				{if $group->contents|count === 0}
 				<p class="alert alert-danger">Groupe vide.</p>
 				{else}
 				<ul class="alert list-unstyled isou-dependencies-content-ul">

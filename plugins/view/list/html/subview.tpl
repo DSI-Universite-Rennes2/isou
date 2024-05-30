@@ -38,7 +38,7 @@
 					{if isset($service->more) === true}
 						{* Liste des interruptions en plus *}
 						<details class="isou-list-events-details isou-list-events-more-details">
-							<summary class="isou-list-hideable-summary text-end small">{count($service->more)} interruption{if count($service->more) !== 1}s{/if} en plus</summary>
+							<summary class="isou-list-hideable-summary text-end small">{$service->more|count} interruption{if $service->more|count !== 1}s{/if} en plus</summary>
 							<ul class="list-unstyled">
 							{foreach $service->more as $event}
 								{if $event->type === UniversiteRennes2\Isou\Event::TYPE_SCHEDULED}

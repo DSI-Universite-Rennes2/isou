@@ -133,7 +133,7 @@
 					<p class="alert alert-info">Nouvelle mise à jour : la version {$CFG.available_update} d'Isou est disponible.</p>
 				{/if}
 
-				{if count($MENUS->public) > 1 || empty($MENUS->administration) === false}
+				{if $MENUS->public|count > 1 || empty($MENUS->administration) === false}
 				<nav class="mb-2" id="navigation" role="navigation">
 					<h1 class="visually-hidden">Navigation</h1>
 

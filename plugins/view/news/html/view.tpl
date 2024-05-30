@@ -2,7 +2,7 @@
 
 <p class="alert alert-info text-center">Liste des interruptions en cours.</p>
 
-{if count($categories) === 0}
+{if $categories|count === 0}
 	<p class="alert alert-success">Aucun évènement en cours.</p>
 {else}
 	{foreach $categories as $category}

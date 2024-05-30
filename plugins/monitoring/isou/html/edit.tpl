@@ -1,4 +1,4 @@
-{if count($categories) === 0}
+{if $categories|count === 0}
 	<p class="alert alert-danger">Vous n'avez pas encore défini de catégorie. Avant d'ajouter un service isou, vous devez <a class="text-danger" href="{$smarty.const.URL}/index.php/categories/edit/0"><strong>créer une catégorie</strong></a>.</p>
 {else}
 <form action="{$smarty.const.URL}/index.php/services/isou/edit/{$service->id}" class="form-horizontal" id="isou-plugin-isou-services-edit-form" method="post">

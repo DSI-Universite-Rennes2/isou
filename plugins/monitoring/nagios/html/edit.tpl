@@ -32,7 +32,7 @@
 
 	{if isset($results[0]) === true}
 	<div class="well">
-		<p>{count($results)} services trouvés :</p>
+		<p>{$results|count} services trouvés :</p>
 		{if empty($service->id) === true}
     {html_checkboxes id="services" name="services" output=$results separator='<br />' style="margin-right:.5em;" values=$results}
 		{else}

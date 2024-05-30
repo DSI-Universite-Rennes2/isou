@@ -9,7 +9,7 @@ Nombre de services uniques indisponibles : {$count_critical_events}
 Nombre d'évènements prévus : {$count_scheduled_events}
 Nombre d'évènements non prévus : {$count_unscheduled_events}
 {* Liste des services actuellement forcés *}
-{if count($locked_services) > 0}
+{if $locked_services|count > 0}
 
 
 Liste des services actuellement forcés
@@ -19,7 +19,7 @@ Liste des services actuellement forcés
 {/foreach}
 {/if}
 {* Liste des services actuellement fermés *}
-{if count($closed_services) > 0}
+{if $closed_services|count > 0}
 
 
 Liste des services actuellement fermés
@@ -29,7 +29,7 @@ Liste des services actuellement fermés
 {/foreach}
 {/if}
 {* Liste des interruptions régulières *}
-{if count($regular_events) > 0}
+{if $regular_events|count > 0}
 
 
 Liste des interruptions régulières
@@ -39,7 +39,7 @@ Liste des interruptions régulières
 {/foreach}
 {/if}
 {* Liste des services indisponibles de la journée *}
-{if count($events) > 0}
+{if $events|count > 0}
 
 
 Liste des services indisponibles de la journée

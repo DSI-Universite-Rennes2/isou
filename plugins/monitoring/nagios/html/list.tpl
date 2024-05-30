@@ -7,11 +7,11 @@
 		<a class="btn btn-primary" href="{$smarty.const.URL}/index.php/services/{$plugin->codename}/edit/0">Ajouter un service {$plugin->name}</a>
 	</p>
 
-	{if count($services) === 0}
+	{if $services|count === 0}
 		<p class="alert alert-info">Aucun service {$plugin->name} utilisé.</p>
 	{else}
 	<table class="caption-top table table-condensed" summary="liste des services {$plugin->name}">
-		<caption>{count($services)} services {$plugin->name} gérés dans Isou</caption>
+		<caption>{$services|count} services {$plugin->name} gérés dans Isou</caption>
 		<thead>
 		<tr>
 			<th class="col-md-5" id="head-name">Nom du service</th>

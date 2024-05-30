@@ -18,7 +18,7 @@
 		{foreach $services as $service}
 		<tr>
 			<td>{$service->name}</td>
-			{if count($service->dependencies_content) === 0}
+			{if $service->dependencies_content|count === 0}
 			<td class="table-danger text-danger">Aucun service.</td>
 			{else}
 			<td>

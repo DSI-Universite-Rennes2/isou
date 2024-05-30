@@ -2,7 +2,7 @@
 
 {if empty($CFG.rss_enabled) === true}
 	<p class="alert alert-info">Le suivi par flux RSS n'est pas activé.</p>
-{elseif count($categories) === 0}
+{elseif $categories|count === 0}
 	<p class="alert alert-info">Aucun service disponible pour le moment.</p>
 {else}
 	<div class="row">
@@ -13,7 +13,7 @@
 			<form method="post" action="{$smarty.const.URL}/index.php/rss/config#rss-url">
 				<ul class="list-unstyled">
 				{foreach $categories as $category}
-					{if count($category->services) === 0}
+					{if $category->services|count === 0}
 						{continue}
 					{/if}
 					<li>

@@ -1,4 +1,4 @@
-{if count($categories) === 0}
+{if $categories|count === 0}
 	<p class="alert alert-info">Aucun service disponible pour le moment.</p>
 {else}
 	<div class="visually-hidden">

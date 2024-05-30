@@ -1,6 +1,6 @@
 {include file="common/messages_session.tpl"}
 
-{if count($categories) === 0}
+{if $categories|count === 0}
 	<p class="alert alert-info">Aucun service ISOU trouvé (<a href="{$smarty.const.URL}/index.php/services">créer un service ISOU</a>).</p>
 {else}
 	<h1 class="visually-hidden">Dépendances</h1>
