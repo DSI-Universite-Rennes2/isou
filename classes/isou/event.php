@@ -172,7 +172,7 @@ class Event {
 
             switch ($this->period) {
                 case self::PERIOD_WEEKLY:
-                    $str = 'Tous les '.IntlDateFormatter::formatObject($this->startdate, 'eeee').' de '.$starttime.' à '.$endtime.'.';
+                    $str = 'Tous les '.IntlDateFormatter::formatObject($this->startdate, 'eeee').'s de '.$starttime.' à '.$endtime.'.';
                     break;
                 case self::PERIOD_DAILY:
                 default:
