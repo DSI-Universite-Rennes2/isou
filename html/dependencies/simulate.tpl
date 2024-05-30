@@ -26,12 +26,12 @@
 <div class="row">
 	<h2>Résultat de la simulation :</h2>
 	<div class="col-md-12">
-	{if $service->state === \UniversiteRennes2\Isou\State::OK}
-	<p class="alert alert-success">{\UniversiteRennes2\Isou\State::get_unicode_character($service->state)} {$service->name}</p>
-	{elseif $service->state === \UniversiteRennes2\Isou\State::WARNING}
-	<p class="alert alert-warning">{\UniversiteRennes2\Isou\State::get_unicode_character($service->state)} {$service->name}</p>
-	{elseif $service->state === \UniversiteRennes2\Isou\State::CRITICAL}
-	<p class="alert alert-danger">{\UniversiteRennes2\Isou\State::get_unicode_character($service->state)} {$service->name}</p>
+	{if $service->state === State::OK}
+	<p class="alert alert-success">{State::get_unicode_character($service->state)} {$service->name}</p>
+	{elseif $service->state === State::WARNING}
+	<p class="alert alert-warning">{State::get_unicode_character($service->state)} {$service->name}</p>
+	{elseif $service->state === State::CRITICAL}
+	<p class="alert alert-danger">{State::get_unicode_character($service->state)} {$service->name}</p>
 	{/if}
 	</div>
 
@@ -39,15 +39,15 @@
 		<div class="col-md-6">
 			<ul class="list-unstyled">
 			{foreach $groups as $group}
-				{if $group->groupstate === \UniversiteRennes2\Isou\State::WARNING && $service->state === $group->groupstate}
+				{if $group->groupstate === State::WARNING && $service->state === $group->groupstate}
 				<li class="alert alert-warning">
-				{elseif $group->groupstate === \UniversiteRennes2\Isou\State::CRITICAL && $service->state === $group->groupstate}
+				{elseif $group->groupstate === State::CRITICAL && $service->state === $group->groupstate}
 				<li class="alert alert-danger">
 				{else}
 				<li class="well">
 				{/if}
 
-					<h4>{\UniversiteRennes2\Isou\State::get_unicode_character($group->groupstate)} {$group->name}</h4>
+					<h4>{State::get_unicode_character($group->groupstate)} {$group->name}</h4>
 					{if $group->redundant === "0"}
 					<p class="small isou-non-redundant-groups">Groupe de services non-redondés<br />Une seule anomalie dans ce groupe suffit à modifier l'état du service.</p>
 					{else}
@@ -56,7 +56,7 @@
 
 					<ul class="list-unstyled well">
 					{foreach $group->contents as $content}
-						<li>{\UniversiteRennes2\Isou\State::get_unicode_character($content->servicestate)} {$content->name}</li>
+						<li>{State::get_unicode_character($content->servicestate)} {$content->name}</li>
 					{/foreach}
 					</ul>
 				</li>

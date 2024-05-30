@@ -25,11 +25,11 @@
 				{if isset($service->events[0]) === true}
 					<ul class="list-unstyled">
 					{foreach $service->events as $event}
-						{if $event->type === UniversiteRennes2\Isou\Event::TYPE_SCHEDULED}
+						{if $event->type === Event::TYPE_SCHEDULED}
 							<li class="isou-list-event-scheduled">{$event}{if empty($event->description) === false}<div class="isou-list-event-description">{$event->description|nl2br}</div>{/if}</li>
-						{else if $event->type === UniversiteRennes2\Isou\Event::TYPE_UNSCHEDULED}
+						{else if $event->type === Event::TYPE_UNSCHEDULED}
 							<li class="isou-list-event-unscheduled">{$event}{if empty($event->description) === false}<div class="isou-list-event-description">{$event->description|nl2br}</div>{/if}</li>
-						{else if $event->type === UniversiteRennes2\Isou\Event::TYPE_CLOSED}
+						{else if $event->type === Event::TYPE_CLOSED}
 							<li class="isou-list-event-closed">{if empty($event->description) === false}<div class="isou-list-event-description">{$event->description|nl2br}</div>{/if}</li>
 						{/if}
 					{/foreach}
@@ -41,9 +41,9 @@
 							<summary class="isou-list-hideable-summary text-end small">{$service->more|count} interruption{if $service->more|count !== 1}s{/if} en plus</summary>
 							<ul class="list-unstyled">
 							{foreach $service->more as $event}
-								{if $event->type === UniversiteRennes2\Isou\Event::TYPE_SCHEDULED}
+								{if $event->type === Event::TYPE_SCHEDULED}
 								<li class="isou-list-event-scheduled">{$event}{if empty($event->description) === false}<div class="isou-list-event-description">{$event->description|nl2br}</div>{/if}</li>
-								{else if $event->type === UniversiteRennes2\Isou\Event::TYPE_UNSCHEDULED}
+								{else if $event->type === Event::TYPE_UNSCHEDULED}
 								<li class="isou-list-event-unscheduled">{$event}{if empty($event->description) === false}<div class="isou-list-event-description">{$event->description|nl2br}</div>{/if}</li>
 								{/if}
 							{/foreach}

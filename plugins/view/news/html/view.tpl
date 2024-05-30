@@ -25,7 +25,7 @@
 					<li class="services-event-li">
 
 						<p class="events-date-p">
-						{if empty($event->period) === false || $event->state === "UniversiteRennes2\Isou\State::CLOSED|constant"}
+						{if empty($event->period) === false || $event->state === State::CLOSED}
 							<span class="events-maintenance-span">{$event}</span>
 						{else}
 							{if $event->startdate->getTimestamp() > $smarty.const.TIME}

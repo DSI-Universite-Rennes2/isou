@@ -17,8 +17,8 @@
 	<div class="row">
 	{foreach $groups as $state => $grps}
 	<div class="col-md-6">
-		<h2 class="isou-dependencies-group-h1 alert alert-{if (string) $state === UniversiteRennes2\Isou\State::WARNING}warning{else}danger{/if} text-center">
-			<span aria-hidden="true">{$STATES[$state]}</span> Groupes {UniversiteRennes2\Isou\State::$STATES[$state]|lower}s
+		<h2 class="isou-dependencies-group-h1 alert alert-{if (string) $state === State::WARNING}warning{else}danger{/if} text-center">
+			<span aria-hidden="true">{$STATES[$state]}</span> Groupes {State::$STATES[$state]|lower}s
 		</h2>
 		<ul class="list-unstyled">
 		{foreach $grps as $group}

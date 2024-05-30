@@ -83,4 +83,6 @@ $smarty->assign('dependencies', $dependencies);
 $smarty->assign('options_states', $options_states);
 $smarty->assign('service', $service);
 
+$smarty->registerClass('State', 'UniversiteRennes2\Isou\State');
+
 $TEMPLATE = 'dependencies/simulate.tpl';

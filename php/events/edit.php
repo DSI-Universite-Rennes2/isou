@@ -173,4 +173,7 @@ $smarty->assign('options_types', $options_types);
 
 $smarty->assign('event', $event);
 
+$smarty->registerClass('Event', 'UniversiteRennes2\Isou\Event');
+$smarty->registerClass('State', 'UniversiteRennes2\Isou\State');
+
 $subtemplate = 'events/edit.tpl';

@@ -303,4 +303,5 @@ if (isset($_POST['enddate']) === false) {
     $_POST['enddate'] = '';
 }
 
+$smarty->registerClass('Event', 'UniversiteRennes2\Isou\Event');
 $TEMPLATE = 'history/index.tpl';

@@ -94,8 +94,7 @@
 			<td>{$event->total_minutes}</td>
 			<td width="40%">{$event->description|default:''}</td>
 			<td>
-				{* TODO: update smarty and remove this hook *}
-				{if $event->type === {"UniversiteRennes2\Isou\Event::TYPE_SCHEDULED"|constant}}
+				{if $event->type === Event::TYPE_SCHEDULED}
 					Prévues
 				{else}
 					Non prévues

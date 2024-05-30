@@ -101,4 +101,8 @@ foreach ($services as $service) {
 $smarty->assign('categories', $categories);
 
 $smarty->addTemplateDir(PRIVATE_PATH.'/plugins/view/list/html');
+
+$smarty->registerClass('Event', 'UniversiteRennes2\Isou\Event');
+$smarty->registerClass('State', 'UniversiteRennes2\Isou\State');
+
 $TEMPLATE = 'view.tpl';
