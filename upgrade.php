@@ -26,6 +26,7 @@ if (is_dir($tinymce_directory) === false) {
 $symlinks = array();
 $symlinks['../../../vendor/tinymce/tinymce/tinymce.min.js'] = __DIR__.'/www/scripts/tinymce/tinymce.min.js';
 $symlinks['../../../vendor/tinymce/tinymce/icons'] = __DIR__.'/www/scripts/tinymce/icons';
+$symlinks['../../../vendor/tinymce/tinymce/models'] = __DIR__.'/www/scripts/tinymce/models';
 $symlinks['../../../vendor/tinymce/tinymce/plugins'] = __DIR__.'/www/scripts/tinymce/plugins';
 $symlinks['../../../vendor/tinymce/tinymce/skins'] = __DIR__.'/www/scripts/tinymce/skins';
 $symlinks['../../../vendor/tinymce/tinymce/themes'] = __DIR__.'/www/scripts/tinymce/themes';
