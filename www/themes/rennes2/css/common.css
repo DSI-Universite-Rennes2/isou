@@ -39,7 +39,17 @@ body {
     background-image: url("//static.univ-rennes2.fr/bootstrap/3.3/rennes2/logo-rennes2-128x128-noir.png");
     background-position: left center;
     background-repeat: no-repeat;
-    padding-left: 128px;
+    background-size: 64px;
+    min-height: 64px;
+    padding-left: 64px;
+}
+
+@media (min-width: 576px) {
+    .page-header .container-fluid {
+        background-size: 128px;
+        min-height: 128px;
+        padding-left: 128px;
+    }
 }
 
 html[data-bs-theme="auto"] .page-header .container-fluid {

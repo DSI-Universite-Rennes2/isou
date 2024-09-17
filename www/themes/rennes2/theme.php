@@ -11,7 +11,7 @@ declare(strict_types=1);
 use Isou\Helpers\Script;
 use Isou\Helpers\Style;
 
-$theme_version = '4.0.1';
+$theme_version = '4.0.2';
 
 $STYLES[] = new Style('//static.univ-rennes2.fr/bootstrap/5.3/css/bootstrap.min.css');
 $STYLES[] = new Style('//static.univ-rennes2.fr/bootstrap-icons/1.11/font/bootstrap-icons.min.css');
