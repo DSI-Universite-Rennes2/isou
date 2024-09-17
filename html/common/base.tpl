@@ -118,10 +118,10 @@
 			</aside>
 
 			<div class="container">
-				<header class="bg-body-secondary mb-4 p-5 page-header rounded-3" role="banner">
-					<div class="container-fluid">
+				<header class="bg-body-secondary mb-2 mb-sm-4 p-3 p-sm-5 page-header rounded-3" role="banner">
+					<div class="align-items-center align-items-sm-start container-fluid d-flex flex-sm-column">
 						<h1 class="display-5 fw-bold" id="isou-header">{$CFG.site_name}</h1>
-						<p class="fs-4">{$CFG.site_header}</p>
+						<p class="fs-4 d-none d-sm-block">{$CFG.site_header}</p>
 					</div>
 				</header>
 
