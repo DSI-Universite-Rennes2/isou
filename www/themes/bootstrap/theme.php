@@ -23,7 +23,7 @@ if (preg_match('#^dependances/service/[0-9]+/group/[0-9]+/content/edit/0$#', imp
     $SCRIPTS[] = new Script(URL.'/scripts/events.js');
 } elseif ($PAGE_NAME[0] === 'annonce') {
     $SCRIPTS[] = new Script(URL.'/scripts/tinymce/tinymce.min.js');
-    $SCRIPTS[] = new Script(URL.'/scripts/announcement.js');
+    $SCRIPTS[] = new Script(URL.'/scripts/announcement.js?v=2');
 }
 
 $SCRIPTS[] = new Script('//unpkg.com/bootstrap@5.3/dist/js/bootstrap.bundle.min.js');
