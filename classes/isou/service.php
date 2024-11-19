@@ -673,11 +673,11 @@ class Service {
     /**
      * Retourne toutes les dépendances inversées.
      *
-     * @param string $state Identifiant de l'état.
+     * @param string|null $state Identifiant de l'état.
      *
      * @return Dependency[]
      */
-    public function get_reverse_dependencies(string $state = null) {
+    public function get_reverse_dependencies(?string $state = null) {
         if ($this->reverse_dependencies === null) {
             $this->reverse_dependencies = Dependency_Group::get_service_reverse_dependency_groups($this->id, $state);
         }
@@ -688,11 +688,11 @@ class Service {
     /**
      * Définit les dépendances inversées.
      *
-     * @param string $state Identifiant de l'état.
+     * @param string|null $state Identifiant de l'état.
      *
      * @return void
      */
-    public function set_reverse_dependencies(string $state = null) {
+    public function set_reverse_dependencies(?string $state = null) {
         $this->reverse_dependencies = $this->get_reverse_dependencies($state);
     }
 

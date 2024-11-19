@@ -142,7 +142,7 @@ foreach (array('ldap_uri', 'logout_redirection') as $attribute) {
         $setting_attribute = 'cas_'.$attribute;
 
         if ($plugin->settings->$setting_attribute !== $post_value) {
-            if (empty($post_value) === true || filter_var($post_value, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED | FILTER_FLAG_HOST_REQUIRED) !== false) {
+            if (empty($post_value) === true || filter_var($post_value, FILTER_VALIDATE_URL) !== false) {
                 $plugin->settings->$setting_attribute = $post_value;
                 $plugin->update_settings($overwrite = true);
 

@@ -613,13 +613,13 @@ class Event {
      * Permet de définir un service.
      *
      * @param string $idservice Identifiant du service à associer à l'évènement.
-     * @param array $options_services Tableau indexé des services.
+     * @param array|null $options_services Tableau indexé des services.
      *
      * @throws \Exception Lève une exception lorsque l'identifiant du service n'est pas valide.
      *
      * @return void
      */
-    public function set_service(string $idservice, array $options_services = null) {
+    public function set_service(string $idservice, ?array $options_services = null) {
         global $DB;
 
         if ($options_services === null) {
@@ -799,13 +799,13 @@ class Event {
      * Permet de définir l'état de l'évènement.
      *
      * @param string $state Etat à attribuer à l'évènement.
-     * @param array $options_states Tableau indexé des états.
+     * @param array|null $options_states Tableau indexé des états.
      *
      * @throws \Exception Lève une exception lorsque l'identifiant de l'état n'est pas valide.
      *
      * @return void
      */
-    public function set_state(string $state, array $options_states = null) {
+    public function set_state(string $state, ?array $options_states = null) {
         $this->state = $state;
 
         if ($options_states === null) {

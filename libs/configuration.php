@@ -82,11 +82,11 @@ function get_plugins() {
  *
  * @param string $key Nom du paramètre.
  * @param string $value Valeur du paramètre.
- * @param string $field Libellé du paramètre.
+ * @param string|null $field Libellé du paramètre.
  *
  * @return boolean
  */
-function set_configuration(string $key, string $value, string $field = null) {
+function set_configuration(string $key, string $value, ?string $field = null) {
     global $DB;
 
     $sql = "UPDATE configuration SET value=? WHERE key=?";

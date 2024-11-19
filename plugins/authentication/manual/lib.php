@@ -48,11 +48,11 @@ function authentication_login(Plugin $plugin) {
 /**
  * Déconnecte l'utilisateur.
  *
- * @param Plugin $plugin Instance du plugin manual.
+ * @param Plugin|null $plugin Instance du plugin manual.
  *
  * @return void
  */
-function authentication_logout(Plugin $plugin = null) {
+function authentication_logout(?Plugin $plugin = null) {
     $_SESSION = array();
 
     if (isset($_COOKIE[session_name()]) === true) {

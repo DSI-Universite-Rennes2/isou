@@ -237,7 +237,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
         $headers[] = 'Type d\'interruption';
 
         $file = fopen('php://output', 'w');
-        fputcsv($file, $headers);
+        fputcsv($file, $headers, $separator = ',', $enclosure = '"', $escape = '');
 
         foreach ($events as $event) {
             $data = array();
@@ -260,7 +260,7 @@ if (isset($_POST['services'], $_POST['event_type'], $_POST['startdate'], $_POST[
                 $data[] = 'Non prévues';
             }
 
-            fputcsv($file, $data);
+            fputcsv($file, $data, $separator = ',', $enclosure = '"', $escape = '');
         }
 
         fclose($file);

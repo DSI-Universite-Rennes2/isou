@@ -356,7 +356,7 @@ class Category {
      *
      * @return array
      */
-    public function move_down(int $limit = null) {
+    public function move_down(?int $limit = null) {
         global $DB, $LOGGER;
 
         $results = array(

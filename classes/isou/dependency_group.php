@@ -319,11 +319,11 @@ class Dependency_Group {
      * Retourne les groupes de dépendances inversés.
      *
      * @param string $idservice Identifiant du service.
-     * @param string $state Identifiant de l'état.
+     * @param string|null $state Identifiant de l'état.
      *
      * @return array
      */
-    public static function get_service_reverse_dependency_groups(string $idservice, string $state = null) {
+    public static function get_service_reverse_dependency_groups(string $idservice, ?string $state = null) {
         global $DB;
 
         $conditions = array();

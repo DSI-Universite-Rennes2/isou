@@ -50,12 +50,12 @@ class SimpleMenu {
      *
      * @param string $label Libellé du menu.
      * @param string $title Titre de l'onglet.
-     * @param string $url URL de l'onglet.
+     * @param string|null $url URL de l'onglet.
      * @param boolean $selected Témoin de sélection de l'onglet.
      *
      * @return void
      */
-    public function __construct(string $label, string $title, string $url = null, bool $selected = false) {
+    public function __construct(string $label, string $title, ?string $url = null, bool $selected = false) {
         $this->label = $label;
         $this->title = $title;
         $this->url = $url;
