@@ -18,7 +18,10 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": false
+        }
     },
     "require": {
         "php": ">=8.2",
@@ -36,6 +39,7 @@
     },
     "require-dev": {
         "atoum/atoum": "4.*",
+        "phpcompatibility/php-compatibility": "10.x-dev",
         "squizlabs/php_codesniffer": "3.*"
     },
     "scripts": {

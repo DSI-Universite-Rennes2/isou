@@ -93,6 +93,17 @@ codingstyle:
         - /usr/bin/php vendor/bin/phpcs --extensions=php --standard=.phpcs.xml --warning-severity=0
     allow_failure: false
 
+# Job phpcompatibility.
+# Note: n'exécute pas le job pour des push de tags.
+phpcompatibility:
+    stage: tests
+    except:
+        - tags
+    script:
+        - mkdir -p cache/php_codesniffer
+        - touch vendor/phpcompatibility/php-compatibility/PHPCompatibility/ruleset.xml
+        - /usr/bin/php vendor/bin/phpcs --standard=.phpcompatibility.xml
+
 # Job security.
 # Note: exécute le job uniquement sur les tâches planifiées.
 security:

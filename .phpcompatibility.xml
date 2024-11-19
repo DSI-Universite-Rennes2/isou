@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<ruleset>
+    <!-- Fichiers/répertoires à contrôler. -->
+    <file>.</file>
+
+    <!-- Fichiers/répertoires à ignorer. -->
+    <exclude-pattern>/cache/</exclude-pattern>
+    <exclude-pattern>/vendor/</exclude-pattern>
+
+    <!-- Active le cache. -->
+    <arg name="cache" value="cache/php_codesniffer/phpcompatibility.json" />
+
+    <!-- Active la couleur à l'affichage. -->
+    <arg name="colors" />
+
+    <!-- Liste des extensions de fichiers à contrôler (séparés par des virgules). -->
+    <arg name="extensions" value="php" />
+
+    <!-- Nombre d'analyses en parallèle. -->
+    <arg name="parallel" value="75" />
+
+    <!-- Affiche la progression. -->
+    <arg value="p" />
+
+    <!-- Affiche la progression. -->
+    <arg value="s" />
+
+    <!-- Affiche les warnings. -->
+    <arg name="warning-severity" value="1" />
+
+    <!-- Affiche les errors. -->
+    <arg name="error-severity" value="1" />
+
+    <rule ref="vendor/phpcompatibility/php-compatibility/PHPCompatibility" />
+</ruleset>

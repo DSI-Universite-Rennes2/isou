@@ -1,3 +1,4 @@
+---
 # Title of the workflow.
 name: phpcs
 
@@ -35,8 +36,15 @@ jobs:
           cp distribution/config.php .
           composer install
 
-      # Run atoum.
+      # Run phpcs.
       - name: Run phpcs.
         run: |
           mkdir -p cache/php_codesniffer
-          php vendor/bin/phpcs --extensions=php --standard=.phpcs.xml --warning-severity=0
+          /usr/bin/php vendor/bin/phpcs --extensions=php --standard=.phpcs.xml --warning-severity=0
+
+      # Run phpcompatibility.
+      - name: Run phpcompatibility.
+        run: |
+          mkdir -p cache/php_codesniffer
+          touch vendor/phpcompatibility/php-compatibility/PHPCompatibility/ruleset.xml
+          /usr/bin/php vendor/bin/phpcs --standard=.phpcompatibility.xml
