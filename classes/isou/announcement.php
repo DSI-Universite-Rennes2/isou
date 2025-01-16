@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou;
 
+use Exception;
+
 /**
  * Classe décrivant une annonce.
  */
