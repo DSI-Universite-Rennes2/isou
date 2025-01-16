@@ -111,6 +111,7 @@ function upgrade_to_3_3_0() {
     // Calcule les descriptions d'évènement en double.
     $count_descriptions = 0;
     $count_duplicated_descriptions = 0;
+    $descriptions = array();
     foreach (Event_Description::get_records() as $record) {
         if (isset($descriptions[$record->autogen]) === false) {
             $descriptions[$record->autogen] = array();
