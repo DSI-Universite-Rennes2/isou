@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou;
 
+use Exception;
+use stdClass;
+
 /**
  * Classe décrivant un module.
  */
@@ -69,7 +72,7 @@ class Plugin {
      * @return void
      */
     public function __construct() {
-        $this->settings = new \stdClass();
+        $this->settings = new stdClass();
         $this->set_settings();
     }
 
