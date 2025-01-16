@@ -238,7 +238,7 @@ class Subscription {
      * @param WebPush $webpush Objet webpush prêt à envoyer des notifications.
      * @param Notification $notification Object notification à envoyer contenant l'authentification, les entêtes, les options et le corps du message.
      *
-     * @return true|array Retourne true en cas de succès, ou un tableau contenant les erreurs rencontrées à l'envoi du message.
+     * @return \Minishlink\WebPush\MessageSentReport
      */
     public function notify(WebPush $webpush, Notification $notification) {
         $parameters = array();

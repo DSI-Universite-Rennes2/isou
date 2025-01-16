@@ -162,7 +162,7 @@ class Dependency_Group {
      *
      * @param string $idservice Identifiant du service.
      *
-     * @return integer|false
+     * @return array
      */
     public static function get_dependencies_groups_and_groups_contents_by_service_sorted_by_flags(string $idservice) {
         global $DB;
@@ -250,7 +250,7 @@ class Dependency_Group {
      *
      * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
      *
-     * @return Dependency_Group[]Dependency_Group|false
+     * @return Dependency_Group[]|Dependency_Group|false
      */
     public static function get_records(array $options = array()) {
         global $DB;

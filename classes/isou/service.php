@@ -651,7 +651,7 @@ class Service {
     /**
      * Retourne toutes les dépendances.
      *
-     * @return Dependency[]
+     * @return Dependency_Group[]
      */
     public function get_dependencies() {
         if ($this->dependencies === null) {
@@ -675,7 +675,7 @@ class Service {
      *
      * @param string|null $state Identifiant de l'état.
      *
-     * @return Dependency[]
+     * @return Dependency_Group[]
      */
     public function get_reverse_dependencies(?string $state = null) {
         if ($this->reverse_dependencies === null) {

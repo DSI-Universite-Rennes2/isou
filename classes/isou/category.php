@@ -123,7 +123,7 @@ class Category {
      *
      * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
      *
-     * @return Category[]
+     * @return Category[]|Category|false
      */
     public static function get_records(array $options = array()) {
         global $DB;

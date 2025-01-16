@@ -97,7 +97,7 @@ class Dependency_Group_Content {
      *
      * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
      *
-     * @return Group_Content|false
+     * @return Dependency_Group_Content|false
      */
     public static function get_record(array $options = array()) {
         if (isset($options['id']) === false) {
@@ -118,7 +118,7 @@ class Dependency_Group_Content {
      *
      * @throws \Exception Lève une exception lorsqu'une option n'est pas valide.
      *
-     * @return Group_Content[]|Group_Content|false
+     * @return Dependency_Group_Content[]|Dependency_Group_Content|false
      */
     public static function get_records(array $options = array()) {
         global $DB;

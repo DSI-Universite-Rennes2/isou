@@ -82,7 +82,7 @@ class Event {
     /**
      * Description.
      *
-     * @var string
+     * @var string|Event_Description
      */
     public $description;
 

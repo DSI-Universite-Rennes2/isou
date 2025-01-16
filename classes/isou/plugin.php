@@ -59,7 +59,7 @@ class Plugin {
     /**
      * Paramètres du module.
      *
-     * @var stdClass[]
+     * @var stdClass
      */
     public $settings;
 
