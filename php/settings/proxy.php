@@ -32,7 +32,7 @@ if (isset($_POST['http_proxy'], $_POST['https_proxy'], $_POST['no_proxy']) === t
     }
 
     if ($no_proxy === array()) {
-        if (empty($no_proxy) !== empty($CFG['no_proxy']) && set_configuration('no_proxy', '') === true) {
+        if (empty($CFG['no_proxy']) === false && set_configuration('no_proxy', '') === true) {
             $CFG['no_proxy'] = null;
         }
     } else {
