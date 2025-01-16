@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou;
 
+use DateTime;
+use Exception;
 use Minishlink\WebPush\Subscription as SubscriptionInterface;
 use Minishlink\WebPush\WebPush;
 
