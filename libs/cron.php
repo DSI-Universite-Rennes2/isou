@@ -390,7 +390,7 @@ function cron_gather_statistics() {
  * @return void
  */
 function cron_regenerate_json() {
-    global $CFG;
+    global $CFG, $LOGGER;
 
     if ($CFG['json_enabled'] === '0') {
         $LOGGER->notice('Le flux de suivi au format JSON n\'est pas activé.');
