@@ -104,6 +104,15 @@ phpcompatibility:
         - touch vendor/phpcompatibility/php-compatibility/PHPCompatibility/ruleset.xml
         - /usr/bin/php vendor/bin/phpcs --standard=.phpcompatibility.xml
 
+# Job phpstan.
+# Note: n'exécute pas le job pour des push de tags.
+phpstan:
+    stage: tests
+    except:
+        - tags
+    script:
+        - /usr/bin/php vendor/bin/phpstan analyse
+
 # Job security.
 # Note: exécute le job uniquement sur les tâches planifiées.
 security:

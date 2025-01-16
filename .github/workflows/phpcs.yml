@@ -48,3 +48,7 @@ jobs:
           mkdir -p cache/php_codesniffer
           touch vendor/phpcompatibility/php-compatibility/PHPCompatibility/ruleset.xml
           /usr/bin/php vendor/bin/phpcs --standard=.phpcompatibility.xml
+
+      # Run phpstan.
+      - name: Run phpstan.
+        run: /usr/bin/php vendor/bin/phpstan analyse

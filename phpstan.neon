@@ -1,0 +1,58 @@
+parameters:
+    # Level of rule options (0 to 10) - the higher the stricter.
+    # Use "max" as an alias for the highest level.
+    level: 3
+    # Paths to analyse your code.
+    paths:
+      - api
+      - classes
+      - common
+      - database
+      - distribution
+      - html
+      - libs
+      - markdown
+      - php
+      - plugins
+      # - tests
+      - www
+      - .atoum.php
+      - cron.php
+      - index.php
+      - upgrade.php
+      - version.php
+    ignoreErrors:
+       - path: classes/isou/event.php
+         message: '#Constant STR_TIME not found.#'
+       - path: database/migrations/
+         message: '#Call to an undefined method .*::dropTable\(\).#'
+       - path: plugins/monitoring/nagios/
+         message: '#Constant PLUGIN_NAGIOS not found.#'
+       - path: plugins/monitoring/thruk/
+         message: '#Constant PLUGIN_THRUK not found.#'
+       - path: plugins/monitoring/zabbix/
+         message: '#Constant PLUGIN_ZABBIX not found.#'
+       # Erreurs génériques.
+       - identifier: assign.propertyType
+       - '#Access to an undefined property .*#'
+       - '#Constant TIME not found.#'
+       - '#Variable \$AUTHENTICATION_TEMPLATE might not be defined.#'
+       - '#Variable \$CFG might not be defined.#'
+       - '#Variable \$DB might not be defined.#'
+       - '#Variable \$LOGGER might not be defined.#'
+       - '#Variable \$MENUS might not be defined.#'
+       - '#Variable \$modules might not be defined.#'
+       - '#Variable \$MONITORING_TEMPLATE might not be defined.#'
+       - '#Variable \$options_yes_no might not be defined.#'
+       - '#Variable \$PAGE_NAME might not be defined.#'
+       - '#Variable \$plugin might not be defined.#'
+       - '#Variable \$plugins might not be defined.#'
+       - '#Variable \$service might not be defined.#'
+       - '#Variable \$smarty might not be defined.#'
+       - '#Variable \$STATES might not be defined.#'
+       - '#Variable \$subtemplate might not be defined.#'
+       - '#Variable \$SUBTEMPLATE might not be defined.#'
+       - '#Variable \$TEMPLATE might not be defined.#'
+       - '#Variable \$TITLE might not be defined.#'
+       - '#Variable \$USER might not be defined.#'
+       - '#Variable \$VIEW_TEMPLATE might not be defined.#'
