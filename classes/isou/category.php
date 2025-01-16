@@ -295,7 +295,11 @@ class Category {
             $results['successes'] = array('Les données ont été correctement supprimées.');
         } else {
             // Enregistre le message d'erreur.
-            $LOGGER->error(implode(', ', $query->errorInfo()));
+            if (isset($query) === true) {
+                $LOGGER->error(implode(', ', $query->errorInfo()));
+            } else {
+                $LOGGER->error(implode(', ', $results['errors']));
+            }
 
             $DB->rollBack();
             $results['errors'] = array('Une erreur est survenue lors de la suppression des données.');
