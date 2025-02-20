@@ -2,7 +2,7 @@
 /**
  * This file is part of isou project.
  *
- * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @author  Université Rennes 2
  * @license The Unlicense <http://unlicense.org>
  */
 

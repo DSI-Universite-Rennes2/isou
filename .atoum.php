@@ -10,7 +10,7 @@
  * - [en] http://docs.atoum.org/en/chapter3.html#Bootstrap-file
  * - [fr] http://docs.atoum.org/fr/chapter3.html#Fichier-de-bootstrap
  *
- * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @author  Université Rennes 2
  * @license The Unlicense <http://unlicense.org>
  */
 

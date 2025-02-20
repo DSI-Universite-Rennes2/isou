@@ -5,7 +5,7 @@
  * Désactive la vérification phpcs sur ce fichier.
  * phpcs:disable
  *
- * @author  Université Rennes 2 - DSI <dsi-contact@univ-rennes2.fr>
+ * @author  Université Rennes 2
  * @license The Unlicense <http://unlicense.org>
  */
 
