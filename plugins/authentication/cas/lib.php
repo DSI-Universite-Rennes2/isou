@@ -32,7 +32,7 @@ function authentication_get_service_base_url() {
  *
  * @param Plugin $plugin Instance du plugin CAS.
  *
- * @return void
+ * @return string|void
  */
 function authentication_login(Plugin $plugin) {
     phpCAS::setVerbose($plugin->settings->cas_verbose);
