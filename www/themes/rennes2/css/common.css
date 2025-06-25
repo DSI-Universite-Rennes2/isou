@@ -64,14 +64,6 @@ html[data-bs-theme="dark"] .page-header .container-fluid {
     text-decoration: none;
 }
 
-.isou-list-event-scheduled {
-    background-image: url('../images/calendar.gif');
-}
-
-.isou-list-event-unscheduled {
-    background-image: url('../images/caution.gif');
-}
-
 #administration-menu li.active a,
 .navbar-inverse .navbar-nav > .active > a {
     background-color: white;

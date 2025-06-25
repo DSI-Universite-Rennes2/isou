@@ -123,7 +123,20 @@ class State {
     public function get_flag_html_renderer() {
         global $CFG;
 
-        return '<img src="'.URL.'/themes/'.$CFG['theme'].'/images/'.$this->image.'" alt="'.$this->alternate_text.'" width="16px" height="16px" />';
+        switch ($this->id) {
+            case self::OK:
+                return '<span class="text-success"><i aria-hidden="true" class="bi bi-check-circle" title="'.$this->title.'"></i><span class="visually-hidden">'.$this->alternate_text.'</span></span>';
+            case self::WARNING:
+                return '<span class="text-warning"><i aria-hidden="true" class="bi bi-exclamation-circle" title="'.$this->title.'"></i><span class="visually-hidden">'.$this->alternate_text.'</span></span>';
+            case self::CRITICAL:
+                return '<span class="text-danger"><i aria-hidden="true" class="bi bi-x-circle" title="'.$this->title.'"></i><span class="visually-hidden">'.$this->alternate_text.'</span></span>';
+            case self::UNKNOWN:
+                return '<span class="text-info"><i aria-hidden="true" class="bi bi-question-circle" title="'.$this->title.'"></i><span class="visually-hidden">'.$this->alternate_text.'</span></span>';
+            case self::CLOSED:
+                return '<span class="text-info"><i aria-hidden="true" class="bi bi-pause-circle" title="'.$this->title.'"></i><span class="visually-hidden">'.$this->alternate_text.'</span></span>';
+        }
+
+        return '';
     }
 
     /**

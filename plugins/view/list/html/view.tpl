@@ -16,16 +16,16 @@
 				<ul class="list-inline text-end">
 					{if $category->scheduled_events_count > 0}
 						{if $category->scheduled_events_count === 1}
-						<li class="list-inline-item"><span class="isou-list-event-scheduled">{$category->scheduled_events_count} évènement prévu</span></li>
+						<li class="list-inline-item"><i aria-hidden="true" class="bi bi-calendar4 me-2"></i>{$category->scheduled_events_count} évènement prévu</li>
 						{else}
-						<li class="list-inline-item"><span class="isou-list-event-scheduled">{$category->scheduled_events_count} évènements prévus</span></li>
+						<li class="list-inline-item"><i aria-hidden="true" class="bi bi-calendar4 me-2"></i>{$category->scheduled_events_count} évènements prévus</li>
 						{/if}
 					{/if}
 					{if $category->past_events_count > 0}
 						{if $category->past_events_count === 1}
-						<li class="list-inline-item"><span class="isou-list-event-unscheduled">{$category->past_events_count} évènement passé</span></li>
+						<li class="list-inline-item"><i aria-hidden="true" class="bi bi-patch-exclamation-fill me-2 text-danger"></i>{$category->past_events_count} évènement passé</li>
 						{else}
-						<li class="list-inline-item"><span class="isou-list-event-unscheduled">{$category->past_events_count} évènements passés</span></li>
+						<li class="list-inline-item"><i aria-hidden="true" class="bi bi-patch-exclamation-fill me-2 text-danger"></i>{$category->past_events_count} évènements passés</li>
 						{/if}
 					{/if}
 				</ul>

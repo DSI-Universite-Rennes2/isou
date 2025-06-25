@@ -1,3 +1,19 @@
+html[data-bs-theme=dark] .text-danger {
+    color: #ff6347 !important;
+}
+
+html[data-bs-theme=dark] .text-success {
+    color: #00ff7f !important;
+}
+
+html[data-bs-theme=light] .text-info {
+    color: #007faa !important;
+}
+
+html[data-bs-theme=light] .text-warning {
+    color: #8d6708 !important;
+}
+
 #isou-main-content {
     min-height: 90vh;
     margin: 0;
@@ -71,26 +87,6 @@ input[type="date"].form-control {
 }
 
 /* Vue liste. */
-.isou-list-event-scheduled {
-    background-image: url('../images/calendar.gif');
-    background-repeat: no-repeat;
-    padding-left: 20px;
-    text-indent: .5em;
-}
-
-.isou-list-event-unscheduled {
-    background-image: url('../images/caution.gif');
-    background-repeat: no-repeat;
-    padding-left: 20px;
-    text-indent: .5em;
-}
-
-.isou-list-event-regular {
-    background-image: url('../images/clock.gif');
-    background-repeat: no-repeat;
-    padding-left: 20px;
-}
-
 .isou-list-event-description,
 .isou-calendar-description {
     font-style: italic;

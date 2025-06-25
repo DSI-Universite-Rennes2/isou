@@ -66,7 +66,7 @@ class State extends atoum {
             ->given($this->newTestedInstance)
             ->then
                 ->string($this->testedInstance->get_flag_html_renderer())
-                ->isEqualTo('<img src="/themes//images/" alt="" width="16px" height="16px" />');
+                ->isEqualTo('<span class="text-success"><i aria-hidden="true" class="bi bi-check-circle" title=""></i><span class="visually-hidden"></span></span>');
     }
 
     /**
