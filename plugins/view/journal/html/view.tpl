@@ -19,15 +19,15 @@
 		{else}
 		{foreach $day->events as $event}
 			<tr>
-				<td class="text-center">{$STATES[$event->state]}</td>
-				<td>{$event->service}</td>
-				<td>{$event->startdate|date_format:"%a %e %b %Hh%M"}</td>
+				<td class="text-center" headers="lth2">{$STATES[$event->state]}</td>
+				<td headers="lth1">{$event->service}</td>
+				<td headers="lth4">{$event->startdate|date_format:"%a %e %b %Hh%M"}</td>
 				{if $event->enddate === null}
-				<td class="table-danger text-danger">en cours</td>
+				<td class="table-danger text-danger" headers="lth5">en cours</td>
 				{else}
-				<td>{$event->enddate|date_format:"%a %e %b %Hh%M"}</td>
+				<td headers="lth5">{$event->enddate|date_format:"%a %e %b %Hh%M"}</td>
 				{/if}
-				<td>{$event->description|nl2br}</td>
+				<td headers="lth3">{$event->description|nl2br}</td>
 			</tr>
 		{/foreach}
 		{/if}
