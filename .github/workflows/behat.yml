@@ -36,7 +36,7 @@ jobs:
       # Initialise Chromium.
       - name: Installe Chromium
         run: |
-          apt install chromium
+          sudo apt install -y chromium
           /usr/bin/chromium --disable-gpu --headless --remote-debugging-address=localhost --remote-debugging-port=9222  --disable-extensions --temp-profile --no-sandbox &
 
       # Initialise composer.
