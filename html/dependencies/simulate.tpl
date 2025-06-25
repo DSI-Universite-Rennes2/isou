@@ -49,9 +49,9 @@
 
 					<h4>{State::get_unicode_character($group->groupstate)} {$group->name}</h4>
 					{if $group->redundant === "0"}
-					<p class="small isou-non-redundant-groups">Groupe de services non-redondés<br />Une seule anomalie dans ce groupe suffit à modifier l'état du service.</p>
+					<p class="small"><i aria-hidden="true" class="bi bi-shield-slash me-1"></i>Groupe de services non-redondés<br />Une seule anomalie dans ce groupe suffit à modifier l'état du service.</p>
 					{else}
-					<p class="small isou-redundant-groups">Groupe de services redondés<br />Toutes les dépendances de ce groupe doivent être en anomalie pour modifier l'état du service.</p>
+					<p class="small"><i aria-hidden="true" class="bi bi-shield-check me-1"></i>Groupe de services redondés<br />Toutes les dépendances de ce groupe doivent être en anomalie pour modifier l'état du service.</p>
 					{/if}
 
 					<ul class="list-unstyled well">

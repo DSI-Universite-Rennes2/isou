@@ -25,13 +25,13 @@
                 <ul class="list-inline">
                 {if $category->position > 1}
                 <li class="list-inline-item">
-                    <a class="btn" href="{$smarty.const.URL}/index.php/categories/up/{$category->id}"><img alt="Monter la catégorie" src="{$smarty.const.URL}/themes/{$CFG.theme}/images/arrow-up.gif" /></a>
+                    <a class="btn" href="{$smarty.const.URL}/index.php/categories/up/{$category->id}"><i aria-hidden="true" class="bi bi-arrow-up-square-fill" title="Monter la catégorie"></i><span class="visually-hidden">Monter la catégorie</span></a>
                 </li>
                 {/if}
 
                 {if $category->position < $count_categories}
                 <li class="list-inline-item">
-                    <a class="btn" href="{$smarty.const.URL}/index.php/categories/down/{$category->id}"><img alt="Descendre la catégorie" src="{$smarty.const.URL}/themes/{$CFG.theme}/images/arrow-down.gif" /></a>
+                    <a class="btn" href="{$smarty.const.URL}/index.php/categories/down/{$category->id}"><i aria-hidden="true" class="bi bi-arrow-down-square-fill" title="Descendre la catégorie"></i><span class="visually-hidden">Descendre la catégorie</span></a>
                 </li>
                 {/if}
                 </ul>

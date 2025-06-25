@@ -25,9 +25,9 @@
 		<li class="border mb-4 px-4 py-2 rounded">
 			<h3 class="isou-dependencies-group-h3">{$STATES[$state]} {$group->name}</h2>
 			{if $group->redundant === "0"}
-			<p class="small isou-non-redundant-groups">Groupe de services non-redondés<br />Une seule anomalie dans ce groupe suffit à modifier l'état du service.</p>
+			<p class="small"><i aria-hidden="true" class="bi bi-shield-slash me-1"></i>Groupe de services non-redondés<br />Une seule anomalie dans ce groupe suffit à modifier l'état du service.</p>
 			{else}
-			<p class="small isou-redundant-groups">Groupe de services redondés<br />Toutes les dépendances de ce groupe doivent être en anomalie pour modifier l'état du service.</p>
+			<p class="small"><i aria-hidden="true" class="bi bi-shield-check me-1"></i>Groupe de services redondés<br />Toutes les dépendances de ce groupe doivent être en anomalie pour modifier l'état du service.</p>
 			{/if}
 
 			<h4 class="isou-dependencies-group-h4">Contenu du groupe</h4>

@@ -9,12 +9,12 @@
 		<ul class="list-unstyled row">
 			{if $smarty.get.page > 1}
 			<li class="col-md-6 text-start">
-				<a class="btn" href="{$smarty.const.URL}/index.php/calendrier/{$smarty.get.page - 1}"><img alt="Page précédente" src="{$smarty.const.URL}/themes/{$CFG.theme}/images/arrow-left.gif" /></a>
+				<a class="btn" href="{$smarty.const.URL}/index.php/calendrier/{$smarty.get.page - 1}"><i aria-hidden="true" class="bi bi-arrow-left-square-fill" title="Page précédente"></i><span class="visually-hidden">Page précédente</span></a>
 			</li>
 			{/if}
 			{if $smarty.get.page < 5}
-			<li class="col-md-6-offset text-end">
-				<a class="btn" href="{$smarty.const.URL}/index.php/calendrier/{$smarty.get.page + 1}"><img alt="Page suivante" src="{$smarty.const.URL}/themes/{$CFG.theme}/images/arrow-right.gif" /></a>
+			<li class="col-md-6 ms-auto text-end">
+				<a class="btn" href="{$smarty.const.URL}/index.php/calendrier/{$smarty.get.page + 1}"><i aria-hidden="true" class="bi bi-arrow-right-square-fill" title="Page suivante"></i><span class="visually-hidden">Page suivante</span></a>
 			</li>
 			{/if}
 		</ul>

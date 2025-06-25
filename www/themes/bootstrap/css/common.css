@@ -190,18 +190,6 @@ input[type="date"].form-control {
     padding: .5em 0;
 }
 
-.isou-redundant-groups {
-    background-image: url('../images/redundant-on.gif');
-    background-repeat: no-repeat;
-    padding-left: 20px;
-}
-
-.isou-non-redundant-groups {
-    background-image: url('../images/redundant-off.gif');
-    background-repeat: no-repeat;
-    padding-left: 20px;
-}
-
 .isou-dependencies-group-h2 {
     font-size: 1.2em;
     margin: .5em 0 0 0;

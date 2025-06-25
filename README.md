@@ -62,11 +62,7 @@ Pour faire fonctionner les notifications web avec Firefox 60 ESR, il faut active
 Voir aussi [https://caniuse.com/#feat=serviceworkers](https://caniuse.com/#feat=serviceworkers).
 
 ## Licence
-Isou est dans le [domaine public](LICENSE), à l'exception des ressources graphiques.
-
-Isou utilise les ressources graphiques suivantes :
-- [Mini Icons](http://www.famfamfam.com/lab/icons/mini/) (Free use for any purpose)
-- [twotiny](https://code.google.com/archive/p/twotiny/) (Licence [Artistic License/GPL](http://dev.perl.org/licenses/))
+Isou est dans le [domaine public](LICENSE).
 
 Isou utilise le CDN [Unpkg.com](https://unpkg.com/) pour le thème [bootstrap](https://getbootstrap.com/).
 
