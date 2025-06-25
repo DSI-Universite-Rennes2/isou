@@ -18,7 +18,7 @@
 			{/if}
 
 			{* States column. *}
-			<td headers="column-2">{$STATES[$service->state]}</td>
+			<td headers="column-2" class="text-center">{$STATES[$service->state]}</td>
 
 			{* Events column. *}
 			<td headers="column-3">

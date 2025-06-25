@@ -2,7 +2,7 @@
 	<caption class="text-center">Journal des services monitorés</caption>
 	<thead>
 		<tr class="header">
-			<th id="lth2">État</th>
+			<th class="text-center" id="lth2">État</th>
 			<th id="lth1">Service</th>
 			<th id="lth4">Début</th>
 			<th id="lth5">Fin</th>
@@ -19,7 +19,7 @@
 		{else}
 		{foreach $day->events as $event}
 			<tr>
-				<td>{$STATES[$event->state]}</td>
+				<td class="text-center">{$STATES[$event->state]}</td>
 				<td>{$event->service}</td>
 				<td>{$event->startdate|date_format:"%a %e %b %Hh%M"}</td>
 				{if $event->enddate === null}

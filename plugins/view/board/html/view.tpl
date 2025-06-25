@@ -24,7 +24,7 @@
 		{foreach $category->services as $service}
 		<tr class="text-end">
 			<td headers="lth1" class="text-start">{$service->name}</td>
-			<td headers="lth2" class="text-end">{$STATES[$service->state]}</td>
+			<td headers="lth2" class="text-center">{$STATES[$service->state]}</td>
 
 			{foreach $service->availabilities as $i => $availability}
 			{if $availability > 89}
