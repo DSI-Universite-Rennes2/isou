@@ -35,8 +35,10 @@ jobs:
 
       # Initialise Chromium.
       - name: Installe Chromium
+        uses: nanasess/setup-chromedriver@v2
         run: |
-          sudo apt install -y chromium
+          apt search chrome
+          # sudo apt install -y chromium
           /usr/bin/chromium --disable-gpu --headless --remote-debugging-address=localhost --remote-debugging-port=9222  --disable-extensions --temp-profile --no-sandbox &
 
       # Initialise composer.
