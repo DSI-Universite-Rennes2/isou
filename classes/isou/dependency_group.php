@@ -500,6 +500,11 @@ class Dependency_Group {
 
         $services = Service::get_records(array('dependencies_group' => $this->id));
 
+        if (empty($services) === true) {
+            // Si le groupe ne contient aucune dépendance, on indique systématiquement que le groupe fonctionne.
+            return true;
+        }
+
         foreach ($services as $service) {
             $sql = 'SELECT idgroup, idservice, servicestate'.
                 ' FROM dependencies_groups_content dgc'.

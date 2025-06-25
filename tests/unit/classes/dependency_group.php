@@ -342,7 +342,7 @@ class Dependency_Group extends atoum {
     public function test_is_up() {
         $i = 1;
 
-        // Teste si un booléen est bien renvoyé.
+        // Teste qu'un groupe non-redondé fonctionne lorsqu'aucun service n'est associé au groupe.
         $this->assert(__METHOD__.' : test #'.$i++)
             ->given($this->newTestedInstance)
             ->and($this->testedInstance->id = '1')
@@ -350,12 +350,14 @@ class Dependency_Group extends atoum {
             ->then
                 ->boolean($this->testedInstance->is_up())->isEqualTo(true);
 
-        // Teste si un booléen est bien renvoyé.
+        // Teste qu'un groupe redondé fonctionne lorsqu'aucun service n'est associé au groupe.
         $this->assert(__METHOD__.' : test #'.$i++)
             ->given($this->newTestedInstance)
             ->and($this->testedInstance->id = '1')
             ->and($this->testedInstance->redundant = '1')
             ->then
-                ->boolean($this->testedInstance->is_up())->isEqualTo(false);
+                ->boolean($this->testedInstance->is_up())->isEqualTo(true);
+
+        // TODO: tester les cas où les groupes sont associés à des services.
     }
 }
