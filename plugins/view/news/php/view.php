@@ -83,5 +83,7 @@ foreach ($categories as $idcategory => $category) {
 
 $smarty->assign('categories', $categories);
 
+$smarty->registerClass('State', 'UniversiteRennes2\Isou\State');
+
 $smarty->addTemplateDir(PRIVATE_PATH.'/plugins/view/news/html');
 $TEMPLATE = 'view.tpl';
