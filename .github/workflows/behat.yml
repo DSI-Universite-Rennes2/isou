@@ -57,7 +57,7 @@ jobs:
 
       # Run behat.
       - name: Run behat.
-        run: vendor/bin/behat --config=.behat.yml --verbose=2 --stop-on-failure .
+        run: vendor/bin/behat --config=.behat.yml --verbose=2 --stop-on-failure tests/behat/
       # - name: Run behat.
       #  uses: php-actions/behat@v1
       #  with:
