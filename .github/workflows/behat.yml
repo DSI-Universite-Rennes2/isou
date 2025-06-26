@@ -33,9 +33,12 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: none
 
+      # Setup Chromedriver.
+      - name: Setup Chromedriver
+        uses: nanasess/setup-chromedriver@v2
+
       # Initialise Chromium.
       - name: Installe Chromium
-        uses: nanasess/setup-chromedriver@v2
         run: |
           apt search chrome
           # sudo apt install -y chromium
