@@ -44,7 +44,7 @@
 								{if $event->type === Event::TYPE_SCHEDULED}
 								<li><i aria-hidden="true" class="bi bi-calendar4 me-2"></i>{$event}{if empty($event->description) === false}<div class="isou-list-event-description">{$event->description|nl2br}</div>{/if}</li>
 								{else if $event->type === Event::TYPE_UNSCHEDULED}
-								<li><i aria-hidden="true" class="bi bi-exclamation-triangle-fill me-2 text-danger"></i>{$event}{if empty($event->description) === false}<div class="isou-list-event-description">{$event->description|nl2br}</div>{/if}</li>
+								<li><i aria-hidden="true" class="bi bi-patch-exclamation-fill me-2 text-danger"></i>{$event}{if empty($event->description) === false}<div class="isou-list-event-description">{$event->description|nl2br}</div>{/if}</li>
 								{/if}
 							{/foreach}
 							</ul>
