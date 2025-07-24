@@ -45,7 +45,8 @@
     },
     "scripts": {
         "post-autoload-dump": [
-            "@php upgrade.php"
+            "@php upgrade.php",
+            "@php tests/regression/run.php"
         ]
     }
 }

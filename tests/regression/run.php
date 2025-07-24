@@ -16,34 +16,22 @@ use Symfony\Component\Console\Output\NullOutput;
 use UniversiteRennes2\Isou\Service;
 use UniversiteRennes2\Isou\State;
 
+// Contrôle que le script est bien exécuté par Composer.
+if (getenv('COMPOSER_DEV_MODE') === false) {
+    echo 'Le script `tests/regression/run.php` ne peut plus être exécuté directement. Merci d’utiliser la commande `ISOU_ENV=tests composer install` pour exécuter l’environnement de tests.'.PHP_EOL;
+    exit(1);
+}
+
+$environment = getenv('ISOU_ENV');
+if ($environment === false || $environment !== 'tests') {
+    exit(0);
+}
+
 require __DIR__.'/../../config.php';
 require PRIVATE_PATH.'/libs/cron.php';
 
-$db_file_path = PRIVATE_PATH.'/database/tests.sqlite3';
-if (is_file($db_file_path) === true) {
-    if (unlink($db_file_path) === false) {
-        echo 'Impossible de supprimer le fichier '.$db_file_path.PHP_EOL;
-        exit(1);
-    }
-}
-
 $phinx = new PhinxApplication();
 $phinx->setAutoExit(false);
-
-// Initialize database.
-$arguments = new StringInput('--environment=tests migrate');
-echo PHP_EOL.'* Initialise une base de données de tests'.PHP_EOL;
-
-ob_start();
-$result = $phinx->run($arguments, new NullOutput());
-ob_end_clean();
-
-if ($result === 0) {
-    echo str_repeat(' ', 3).'- OK'.PHP_EOL;
-} else {
-    echo str_repeat(' ', 3).'- Erreur'.PHP_EOL.PHP_EOL;
-    exit(1);
-}
 
 // Set UseCases.
 $cases_path = __DIR__.'/cases';
@@ -83,7 +71,7 @@ if ($handle !== false) {
 // Run cases.
 echo PHP_EOL;
 
-$DB = new PDO('sqlite:'.$db_file_path, '', '', array(PDO::ATTR_STRINGIFY_FETCHES => 1));
+require PRIVATE_PATH.'/php/common/database.php';
 
 // Charge la configuration.
 require PRIVATE_PATH.'/libs/configuration.php';

@@ -78,7 +78,8 @@ atoum:
         - tags
     script:
         - cp distribution/config.php .
-        - /usr/bin/php tests/regression/run.php
+        - sed -i 's/isou.sqlite3/tests.sqlite3/' config.php
+        - ISOU_ENV=tests composer install
         - /usr/bin/php vendor/bin/atoum -d tests/unit/classes/ -af .atoum.php
 
 # Job codingstyle.

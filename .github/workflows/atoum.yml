@@ -44,4 +44,5 @@ jobs:
       - name: Run regression tests.
         run: |
           cp distribution/config.php .
-          php tests/regression/run.php
+          sed -i 's/isou.sqlite3/tests.sqlite3/' config.php
+          ISOU_ENV=tests composer install

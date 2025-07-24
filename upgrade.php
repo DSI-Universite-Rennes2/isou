@@ -45,7 +45,32 @@ require PRIVATE_PATH.'/libs/upgrade.php';
 $db_file_path = substr(DB_PATH, 7);
 
 // Définit l'environnement qui doit être utilisé par Phinx.
-$environment = 'production';
+$environment = getenv('ISOU_ENV');
+if ($environment === false || $environment !== 'tests') {
+    $environment = 'production';
+}
+
+if ($environment === 'tests') {
+    // Supprime la base de données à chaque exécution des tests.
+    if (basename($db_file_path, '.sqlite3') !== $environment) {
+        echo PHP_EOL;
+
+        echo 'Échec lors de l’installation !'.PHP_EOL;
+        echo PHP_EOL;
+        echo 'Vous avez utilisé la variable d’environnement ISOU_ENV=tests.'.PHP_EOL;
+        echo 'Cependant, la constante DB_PATH dans votre fichier config.php ne pointe pas vers la base de données tests.sqlite3.'.PHP_EOL;
+        echo PHP_EOL;
+        exit(1);
+    }
+
+    if (is_file($db_file_path) === true && unlink($db_file_path) === false) {
+        echo 'Échec lors de l’installation !'.PHP_EOL;
+        echo PHP_EOL;
+        echo 'Impossible de supprimer le fichier '.$db_file_path.'.'.PHP_EOL;
+        echo PHP_EOL;
+        exit(1);
+    }
+}
 
 if (is_file($db_file_path) === false) {
     // Installation.
