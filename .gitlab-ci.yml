@@ -114,6 +114,25 @@ phpstan:
     script:
         - /usr/bin/php vendor/bin/phpstan analyse
 
+# Job behat.
+# Note: n'exécute pas le job pour des push de tags.
+behat:
+    stage: tests
+    except:
+        - tags
+    script:
+        - apt install -y chromium-driver
+        - /usr/bin/chromium --disable-gpu --headless --remote-debugging-address=127.0.0.1 --remote-debugging-port=9222 --disable-extensions --temp-profile --no-sandbox &
+        - /usr/bin/php -S 127.0.0.1:8080 -t ./www/ > /dev/null 2>&1 &
+        - mkdir -p cache/mink/
+        - cp distribution/config.php .
+        - sed -i "s/define('HTTPS', true);/define('HTTPS', false);" config.php
+        - sed -i "s/define('DEBUG', false);/define('DEBUG', true);" config.php
+        - sed -i "s/define('DEV', false);/define('DEV', true);" config.php
+        - sed -i 's/isou.sqlite3/demo.sqlite3/' config.php
+        - ISOU_ENV=demo composer install
+        - vendor/bin/behat --config=.behat.yml --verbose=2 --stop-on-failure tests/behat
+
 # Job security.
 # Note: exécute le job uniquement sur les tâches planifiées.
 security:

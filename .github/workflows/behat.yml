@@ -1,0 +1,64 @@
+---
+# yamllint disable rule:line-length
+
+# Title of the workflow.
+name: Behat
+
+# Run this workflow every time a new commit pushed to your repository or PR created.
+# yamllint disable-line rule:truthy
+on: [push, pull_request]
+
+jobs:
+  # Set the job key. The key is displayed as the job name
+  # when a job name is not provided.
+  test:
+    # Virtual environment to use.
+    runs-on: ubuntu-22.04
+
+    # Determines build matrix.
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3', '8.4']
+
+    steps:
+      # Installe Chrome.
+      - name: Installe Chrome
+        uses: browser-actions/setup-chrome@v2
+
+      # Démarre Chrome (en 1er, pour éviter les erreurs "Check if Chrome is running" lors du lancement de Behat).
+      - name: Démarre Chrome
+        run: |
+          chrome --version
+          chrome --disable-gpu --headless=new --remote-debugging-address=127.0.0.1 --remote-debugging-port=9222 --disable-extensions --temp-profile --no-sandbox > /tmp/chrome.log 2>&1 &
+
+      # Check out this repository code in ./plugin directory
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      # Install PHP of required version. For possible options see https://github.com/shivammathur/setup-php
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      # Run PHP server.
+      - name: Local development server.
+        run: /usr/bin/php -S 127.0.0.1:8080 -t ./www/ > /dev/null 2>&1 &
+
+      # Initialise composer.
+      - name: Initialise composer
+        run: |
+          mkdir -p cache/mink/
+          cp distribution/config.php .
+          sed -i "s/define('HTTPS', true);/define('HTTPS', false);/" config.php
+          sed -i "s/define('DEBUG', false);/define('DEBUG', true);/" config.php
+          sed -i "s/define('DEV', false);/define('DEV', true);/" config.php
+          sed -i 's/isou.sqlite3/demo.sqlite3/' config.php
+          ISOU_ENV=demo composer install
+
+      # Run behat.
+      - name: Run behat.
+        run: |
+          vendor/bin/behat --config=.behat.yml --verbose=2 --stop-on-failure tests/behat/ || cat /tmp/chrome.log

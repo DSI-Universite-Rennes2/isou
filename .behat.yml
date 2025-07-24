@@ -1,0 +1,32 @@
+---
+default:
+  autoload:
+    '': '%paths.base%/tests/behat'
+  translation:
+    locale: fr
+  suites:
+    default:
+      serverAddress: 127.0.0.1
+      serverPort: 8080
+      contexts:
+        - FeatureContext: ~
+      paths:
+        - '%paths.base%/tests/behat'
+  extensions:
+    Behat\MinkExtension:
+      base_url: 'http://127.0.0.1:8080/index.php'
+      default_session: default
+      javascript_session: default
+      browser_name: chrome
+      sessions:
+        default:
+          chrome:
+            api_url: "http://localhost:9222"
+    DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension: ~
+    FriendsOfBehat\MinkDebugExtension:
+      # Répertoire pour stocker une trace des différentes pages visitées.
+      directory: '%paths.base%/cache/mink'
+      # Nettoyer le répertoire à chaque exécution de Behat.
+      clean_start: true
+      # Enregistrer une capture d'écran des pages visitées.
+      screenshot: true
