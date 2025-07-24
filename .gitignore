@@ -21,6 +21,7 @@ CVS
 /config.php
 /cron.pid
 /database/*.sqlite3
+/database/demo.sqlite3.lock
 /database/vapid_private.key
 /database/vapid_public.key
 /log/*

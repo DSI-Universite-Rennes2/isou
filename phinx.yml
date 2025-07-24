@@ -1,9 +1,14 @@
+---
 paths:
     migrations: "%%PHINX_CONFIG_DIR%%/database/migrations"
     seeds: "%%PHINX_CONFIG_DIR%%/database/seeds"
 environments:
     default_migration_table: "phinx"
     default_database: "production"
+    demo:
+        adapter: "sqlite"
+        name: "%%PHINX_CONFIG_DIR%%/database/demo.sqlite3"
+        suffix: ""
     production:
         adapter: "sqlite"
         name: "%%PHINX_CONFIG_DIR%%/database/isou.sqlite3"

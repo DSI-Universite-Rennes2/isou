@@ -46,28 +46,47 @@ $db_file_path = substr(DB_PATH, 7);
 
 // Définit l'environnement qui doit être utilisé par Phinx.
 $environment = getenv('ISOU_ENV');
-if ($environment === false || $environment !== 'tests') {
+if ($environment === false || in_array($environment, array('demo', 'tests'), $strict = true) === false) {
     $environment = 'production';
 }
 
-if ($environment === 'tests') {
-    // Supprime la base de données à chaque exécution des tests.
-    if (basename($db_file_path, '.sqlite3') !== $environment) {
-        echo PHP_EOL;
+if ($environment !== 'production') {
+    try {
+        // Contrôle la cohérence entre le nom de l'environnement et le nom de la base de données.
+        if (basename($db_file_path, '.sqlite3') !== $environment) {
+            throw new Exception('Vous avez utilisé la variable d’environnement ISOU_ENV='.$environment.'.'.PHP_EOL.
+                'Cependant, la constante DB_PATH dans votre fichier config.php ne pointe pas vers la base de données '.$environment.'.sqlite3.'.PHP_EOL);
+        }
 
+        // Demande confirmation avant de supprimer la base de données de démo.
+        $delete_database = true;
+        if ($environment === 'demo' && is_file($db_file_path) === true) {
+            $db_lock_file_path = $db_file_path.'.lock';
+            if (is_file($db_lock_file_path) === true && unlink($db_lock_file_path) === false) {
+                throw new Exception('Impossible de supprimer le fichier '.$db_lock_file_path.'.'.PHP_EOL);
+            }
+
+            echo PHP_EOL;
+            echo 'Souhaitez-vous réinstaller la base de données '.$db_file_path.' ? (o/n)'.PHP_EOL;
+            $response = trim(fgets(STDIN));
+            if (in_array($response, array('o', 'y', 'O', 'Y'), $strict = true) === false) {
+                $delete_database = false;
+
+                if (touch($db_lock_file_path) === false) {
+                    throw new Exception('Impossible de créer le fichier '.$db_lock_file_path.'.'.PHP_EOL);
+                }
+            }
+        }
+
+        // Supprime la base de données à chaque exécution des environnements de démo ou de tests.
+        if ($delete_database === true && is_file($db_file_path) === true && unlink($db_file_path) === false) {
+            throw new Exception('Impossible de supprimer le fichier '.$db_file_path.'.'.PHP_EOL);
+        }
+    } catch (Exception $exception) {
+        echo PHP_EOL;
         echo 'Échec lors de l’installation !'.PHP_EOL;
         echo PHP_EOL;
-        echo 'Vous avez utilisé la variable d’environnement ISOU_ENV=tests.'.PHP_EOL;
-        echo 'Cependant, la constante DB_PATH dans votre fichier config.php ne pointe pas vers la base de données tests.sqlite3.'.PHP_EOL;
-        echo PHP_EOL;
-        exit(1);
-    }
-
-    if (is_file($db_file_path) === true && unlink($db_file_path) === false) {
-        echo 'Échec lors de l’installation !'.PHP_EOL;
-        echo PHP_EOL;
-        echo 'Impossible de supprimer le fichier '.$db_file_path.'.'.PHP_EOL;
-        echo PHP_EOL;
+        echo $exception->getMessage().PHP_EOL;
         exit(1);
     }
 }
