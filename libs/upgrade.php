@@ -48,11 +48,13 @@ function isou_update_version() {
 /**
  * Procède à la migration vers la version 4.0.0.
  *
+ * @param string $environment Indique l'environnement Phinx à utiliser. La valeur peut être "demo", "production" ou "tests".
+ *
  * @throws Exception Lève une exception lorsqu'une erreur survient.
  *
  * @return void
  */
-function upgrade_to_4_0_0() {
+function upgrade_to_4_0_0(string $environment) {
     global $DB;
 
     echo '- Procédure de mise à jour du schéma de base de données vers la version 4.0.0.'.PHP_EOL;
@@ -61,7 +63,7 @@ function upgrade_to_4_0_0() {
     $phinx = new PhinxApplication();
     $phinx->setAutoExit(false);
 
-    $arguments = new StringInput('--verbose --environment=production --target=20240116000003 migrate');
+    $arguments = new StringInput('--verbose --environment='.$environment.' --target=20240116000003 migrate');
     if ($phinx->run($arguments, new NullOutput()) !== 0) {
         throw new Exception('Une erreur est survenue lors de la mise à jour vers la version 4.0.0.');
     }
@@ -86,11 +88,13 @@ function upgrade_to_4_0_0() {
 /**
  * Procède à la migration vers la version 3.3.0.
  *
+ * @param string $environment Indique l'environnement Phinx à utiliser. La valeur peut être "demo", "production" ou "tests".
+ *
  * @throws Exception Lève une exception lorsqu'une erreur survient.
  *
  * @return void
  */
-function upgrade_to_3_3_0() {
+function upgrade_to_3_3_0(string $environment) {
     global $DB;
 
     echo '- Procédure de mise à jour du schéma de base de données vers la version 3.3.0.'.PHP_EOL;
@@ -230,11 +234,13 @@ function delete_unused_event_descriptions() {
 /**
  * Procède à la migration de la version 3.0.1 à la version 3.0.2.
  *
+ * @param string $environment Indique l'environnement Phinx à utiliser. La valeur peut être "demo", "production" ou "tests".
+ *
  * @throws Exception Lève une exception lorsqu'une erreur survient.
  *
  * @return void
  */
-function upgrade_301_to_302() {
+function upgrade_301_to_302(string $environment) {
     global $DB;
 
     echo '- Procédure de mise à jour du schéma de base de données de la version 3.0.1 vers la version 3.0.2.'.PHP_EOL;
@@ -256,17 +262,19 @@ function upgrade_301_to_302() {
 /**
  * Procède à la migration de la version 3.0.0 à la version 3.0.1.
  *
+ * @param string $environment Indique l'environnement Phinx à utiliser. La valeur peut être "demo", "production" ou "tests".
+ *
  * @throws Exception Lève une exception lorsqu'une erreur survient.
  *
  * @return void
  */
-function upgrade_300_to_301() {
+function upgrade_300_to_301(string $environment) {
     echo '- Procédure de mise à jour du schéma de base de données de la version 3.0.0 vers la version 3.0.1.'.PHP_EOL;
 
     $phinx = new PhinxApplication();
     $phinx->setAutoExit(false);
 
-    $arguments = new StringInput('--verbose --environment=production --target=20210819000000 migrate');
+    $arguments = new StringInput('--verbose --environment='.$environment.' --target=20210819000000 migrate');
     if ($phinx->run($arguments, new NullOutput()) !== 0) {
         throw new Exception('Une erreur est survenue lors de la mise à jour vers la version 3.0.1.');
     }
@@ -275,17 +283,19 @@ function upgrade_300_to_301() {
 /**
  * Procède à la migration de la version 2.0.0 à la version 3.0.0.
  *
+ * @param string $environment Indique l'environnement Phinx à utiliser. La valeur peut être "demo", "production" ou "tests".
+ *
  * @throws Exception Lève une exception lorsqu'une erreur survient.
  *
  * @return void
  */
-function upgrade_200_to_300() {
+function upgrade_200_to_300(string $environment) {
     echo '- Procédure de mise à jour du schéma de base de données de la version 2.0.0 vers la version 3.0.0.'.PHP_EOL;
 
     $phinx = new PhinxApplication();
     $phinx->setAutoExit(false);
 
-    $arguments = new StringInput('--verbose --environment=production --target=20210616000000 migrate');
+    $arguments = new StringInput('--verbose --environment='.$environment.' --target=20210616000000 migrate');
     if ($phinx->run($arguments, new NullOutput()) !== 0) {
         throw new Exception('Une erreur est survenue lors de la mise à jour vers la version 3.0.0.');
     }
@@ -294,17 +304,19 @@ function upgrade_200_to_300() {
 /**
  * Procède à la migration de la version 1.0.0 (2013-00-00.1) à la version 2.0.0.
  *
+ * @param string $environment Indique l'environnement Phinx à utiliser. La valeur peut être "demo", "production" ou "tests".
+ *
  * @throws Exception Lève une exception lorsqu'une erreur survient.
  *
  * @return void
  */
-function upgrade_100_to_200() {
+function upgrade_100_to_200(string $environment) {
     echo '- Procédure de mise à jour du schéma de base de données de la version 1.0.0 (2013-00-00.1). vers la version 2.0.0.'.PHP_EOL;
 
     $phinx = new PhinxApplication();
     $phinx->setAutoExit(false);
 
-    $arguments = new StringInput('--verbose --environment=production --target=20160110000001 migrate');
+    $arguments = new StringInput('--verbose --environment='.$environment.' --target=20160110000001 migrate');
     if ($phinx->run($arguments, new NullOutput()) !== 0) {
         throw new Exception('Une erreur est survenue lors de la mise à jour vers la version 2.0.0.');
     }
@@ -434,11 +446,13 @@ function upgrade_100_to_200() {
 /**
  * Procède à la migration de la version 0.11.0 (2012-03-16.1) à la version 1.0.0 (2013-00-00.1).
  *
+ * @param string $environment Indique l'environnement Phinx à utiliser. La valeur peut être "demo", "production" ou "tests".
+ *
  * @throws Exception Lève une exception lorsqu'une erreur survient.
  *
  * @return void
  */
-function upgrade_0110_to_100() {
+function upgrade_0110_to_100(string $environment) {
     echo '- Procédure de mise à jour du schéma de base de données de la version 0.11.0 (2012-03-16.1) vers la version 1.0.0 (2013-00-00.1).'.PHP_EOL;
 
     throw new Exception('Not implemented. TODO...');
@@ -447,11 +461,13 @@ function upgrade_0110_to_100() {
 /**
  * Procède à la migration de la version 0.10.0 (2012-02-16.1) à la version 0.11.0 (2012-03-16.1).
  *
+ * @param string $environment Indique l'environnement Phinx à utiliser. La valeur peut être "demo", "production" ou "tests".
+ *
  * @throws Exception Lève une exception lorsqu'une erreur survient.
  *
  * @return void
  */
-function upgrade_0100_to_0110() {
+function upgrade_0100_to_0110(string $environment) {
     echo '- Procédure de mise à jour du schéma de base de données de la version 0.10.0 (2012-02-16.1) vers la version 0.11.0 (2012-03-16.1).'.PHP_EOL;
 
     throw new Exception('Not implemented. TODO...');
@@ -460,11 +476,13 @@ function upgrade_0100_to_0110() {
 /**
  * Procède à la migration de la version 0.9.6 à la version 0.10.0 (2012-02-16.1).
  *
+ * @param string $environment Indique l'environnement Phinx à utiliser. La valeur peut être "demo", "production" ou "tests".
+ *
  * @throws Exception Lève une exception lorsqu'une erreur survient.
  *
  * @return void
  */
-function upgrade_096_to_0100() {
+function upgrade_096_to_0100(string $environment) {
     echo '- Procédure de mise à jour du schéma de base de données de la version 0.9.6 vers la version 0.10.0 (2012-02-16.1).'.PHP_EOL;
 
     throw new Exception('Not implemented. TODO...');
@@ -473,11 +491,13 @@ function upgrade_096_to_0100() {
 /**
  * Procède à la migration de la version 0.9.5 à la version 0.9.6.
  *
+ * @param string $environment Indique l'environnement Phinx à utiliser. La valeur peut être "demo", "production" ou "tests".
+ *
  * @throws Exception Lève une exception lorsqu'une erreur survient.
  *
  * @return void
  */
-function upgrade_095_to_096() {
+function upgrade_095_to_096(string $environment) {
     echo '- Procédure de mise à jour du schéma de base de données de la version 0.9.5 vers la version 0.9.6.'.PHP_EOL;
 
     throw new Exception('Not implemented. TODO...');
@@ -486,11 +506,13 @@ function upgrade_095_to_096() {
 /**
  * Procède à la migration de la version 0.9.0 à la version 0.9.5.
  *
+ * @param string $environment Indique l'environnement Phinx à utiliser. La valeur peut être "demo", "production" ou "tests".
+ *
  * @throws Exception Lève une exception lorsqu'une erreur survient.
  *
  * @return void
  */
-function upgrade_090_to_095() {
+function upgrade_090_to_095(string $environment) {
     echo '- Procédure de mise à jour du schéma de base de données de la version 0.9.0 vers la version 0.9.5.'.PHP_EOL;
 
     throw new Exception('Not implemented. TODO...');
@@ -596,17 +618,19 @@ function upgrade_plugins(bool $check_only = false) {
 /**
  * Initialise la création de la base de données.
  *
+ * @param string $environment Indique l'environnement Phinx à utiliser. La valeur peut être "demo", "production" ou "tests".
+ *
  * @throws Exception Lève une exception lorsqu'une erreur survient.
  *
  * @return void
  */
-function initialize_phinx() {
+function initialize_phinx(string $environment) {
     echo 'Initialise la base de donnnées'.PHP_EOL;
 
     $phinx = new PhinxApplication();
     $phinx->setAutoExit(false);
 
-    $arguments = new StringInput('--verbose --environment=production migrate');
+    $arguments = new StringInput('--verbose --environment='.$environment.' migrate');
     if ($phinx->run($arguments, new NullOutput()) !== 0) {
         throw new Exception('Une erreur est survenue lors de l\'initialisation de la base de données.');
     }

@@ -43,10 +43,14 @@ require __DIR__.'/config.php';
 require PRIVATE_PATH.'/libs/upgrade.php';
 
 $db_file_path = substr(DB_PATH, 7);
+
+// Définit l'environnement qui doit être utilisé par Phinx.
+$environment = 'production';
+
 if (is_file($db_file_path) === false) {
     // Installation.
     try {
-        initialize_phinx();
+        initialize_phinx($environment);
     } catch (Exception $exception) {
         echo 'Echec lors de l\'installation !'.PHP_EOL;
         echo $exception->getMessage().PHP_EOL;
@@ -102,37 +106,37 @@ try {
     switch ($CFG['version']) {
         case '':
         case '0.9.0':
-            upgrade_090_to_095();
+            upgrade_090_to_095($environment);
             // Pas de break. On enchaine sur l'upgrade de la version 0.9.0 à 0.9.5.
         case '0.9.5':
-            upgrade_095_to_096();
+            upgrade_095_to_096($environment);
             // Pas de break. On enchaine sur l'upgrade de la version 0.9.5 à 0.9.6.
         case '0.9.6':
-            upgrade_096_to_0100();
+            upgrade_096_to_0100($environment);
             // Pas de break. On enchaine sur l'upgrade de la version 0.9.6 à 0.10.0.
         case '0.10.0':
         case '2012-02-16.1':
-            upgrade_0100_to_0110();
+            upgrade_0100_to_0110($environment);
             // Pas de break. On enchaine sur l'upgrade de la version 0.10.0 à 0.11.0.
         case '0.11.0':
         case '2012-03-16.1':
-            upgrade_0110_to_100();
+            upgrade_0110_to_100($environment);
             // Pas de break. On enchaine sur l'upgrade de la version 0.11.0 à 1.0.0.
         case '1.0.0':
         case '2013-00-00.1':
-            upgrade_100_to_200();
+            upgrade_100_to_200($environment);
             // Pas de break. On enchaine sur l'upgrade de la version 1.0.0 à 2.0.0.
         case '2.0.0':
         case '2.1.0':
         case '2.1.1':
         case '2.1.2':
-            upgrade_200_to_300();
+            upgrade_200_to_300($environment);
             // Pas de break. On enchaine les mises à jour.
         case '3.0.0':
-            upgrade_300_to_301();
+            upgrade_300_to_301($environment);
             // Pas de break. On enchaine les mises à jour.
         case '3.0.1':
-            upgrade_301_to_302();
+            upgrade_301_to_302($environment);
             // Pas de break. On enchaine les mises à jour.
         case '3.0.2':
         case '3.0.3':
@@ -143,11 +147,11 @@ try {
         case '3.2.0':
         case '3.2.1':
         case '3.2.2':
-            upgrade_to_3_3_0();
+            upgrade_to_3_3_0($environment);
             // Pas de break. On enchaine les mises à jour.
         case '3.3.0':
         case '3.3.1':
-            upgrade_to_4_0_0();
+            upgrade_to_4_0_0($environment);
             // Pas de break. On enchaine les mises à jour.
         case '4.0.0':
         case '4.0.1':
