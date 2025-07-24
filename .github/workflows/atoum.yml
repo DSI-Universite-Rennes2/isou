@@ -1,8 +1,11 @@
+---
+# yamllint disable rule:line-length
+
 # Title of the workflow.
 name: Atoum
 
 # Run this workflow every time a new commit pushed to your repository or PR created.
-on: [push, pull_request]
+on: [push, pull_request]  # yamllint disable-line rule:truthy
 
 jobs:
   # Set the job key. The key is displayed as the job name
