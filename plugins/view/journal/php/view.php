@@ -32,6 +32,12 @@ for ($i = 0; $i < 7; $i++) {
     $days[$i] = new stdClass();
     $days[$i]->date = new DateTime(date('Y-m-d 00:00:00', TIME - ($i * 24 * 60 * 60)));
 
+    if ($i === 0) {
+        $days[$i]->today = true;
+    } elseif ($i === 1) {
+        $days[$i]->yesterday = true;
+    }
+
     $options['since'] = $days[$i]->date;
     $options['before'] = clone $days[$i]->date;
     $options['before']->setTime(23, 59, 59);

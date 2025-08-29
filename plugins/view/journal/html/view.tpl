@@ -12,7 +12,13 @@
 	{foreach $days as $day}
 	<tbody>
 		<tr class="header">
+			{if isset($day->today) === true}
+			<th colspan="5" class="thdate active">Aujourd'hui</span></th>
+			{else if isset($day->yesterday) === true}
+			<th colspan="5" class="thdate active">Hier</th>
+			{else}
 			<th colspan="5" class="thdate active">{$day->date|date_format:"%A %e %B"}</th>
+			{/if}
 		</tr>
 		{if isset($day->events[0]) === false}
 		<tr><td colspan="5" class="table-info text-info">Aucun évènement</td></tr>
