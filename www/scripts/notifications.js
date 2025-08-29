@@ -4,7 +4,7 @@ function setIsouActiveNotificationImage(active = true) {
     var link = document.getElementById('toggle-webnotification');
     var submit = document.getElementById('modal-notifications-submit');
 
-    if (link === false || submit === false) {
+    if (link === null || submit === null) {
         return;
     }
 
@@ -112,7 +112,7 @@ function unsubscribeIsouNotifications() {
 document.addEventListener('DOMContentLoaded', function() {
     var notificationsListItem = document.getElementById('toggle-webnotification-li');
 
-    if (notificationsListItem === false) {
+    if (notificationsListItem === null) {
         // Les notifications ne sont pas activées sur Isou.
         return;
     }
