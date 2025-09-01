@@ -99,6 +99,7 @@ foreach ($services as $service) {
 }
 
 $smarty->assign('categories', $categories);
+$smarty->assign('statelegend', State::get_all_flags_html_renderer());
 
 $smarty->addTemplateDir(PRIVATE_PATH.'/plugins/view/list/html');
 

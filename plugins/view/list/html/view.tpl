@@ -10,9 +10,11 @@
 		</ul>
 	</div>
 
+	{$statelegend}
+
 	{foreach $categories as $category}
 		<details class="isou-list-events-details">
-			<summary><span>{$STATES[$category->state]} {$category->name}</span>
+			<summary><span>{$STATES[$category->state]} <span class="ms-1">{$category->name}</span></span>
 				<ul class="list-inline text-end">
 					{if $category->scheduled_events_count > 0}
 						{if $category->scheduled_events_count === 1}
