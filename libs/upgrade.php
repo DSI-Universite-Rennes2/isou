@@ -55,8 +55,6 @@ function isou_update_version() {
  * @return void
  */
 function upgrade_to_4_0_0(string $environment) {
-    global $DB;
-
     echo '- Procédure de mise à jour du schéma de base de données vers la version 4.0.0.'.PHP_EOL;
 
     // Met à jour le schéma de la base de données.
