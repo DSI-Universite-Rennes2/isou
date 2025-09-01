@@ -200,6 +200,16 @@ try {
         case '4.0.0':
         case '4.0.1':
         case '4.1.0':
+        case '4.1.1':
+        case '4.1.2':
+        case '4.1.3':
+        case '4.1.4':
+        case '4.1.5':
+        case '4.1.6':
+        case '4.1.7':
+        case '4.2.0':
+        case '4.2.1':
+            upgrade_to_4_3_0($environment);
             // Pas de break. On enchaine les mises à jour.
         default:
             // Finally, upgrade plugins.
