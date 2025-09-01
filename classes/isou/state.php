@@ -65,6 +65,20 @@ class State {
     public $image;
 
     /**
+     * Nom de la classe bootstrap représentant l'icône de l'état.
+     *
+     * @var string
+     */
+    public $bootstrapicon;
+
+    /**
+     * Nom de la classe bootstrap représentant la couleur de l'état.
+     *
+     * @var string
+     */
+    public $bootstrapcolor;
+
+    /**
      * Liste des états de services.
      *
      * @var string[]
@@ -116,27 +130,32 @@ class State {
     }
 
     /**
+     * Retourne le code HTML permettant d'afficher tous les états et obtenir une légende.
+     *
+     * @return string
+     */
+    public static function get_all_flags_html_renderer() {
+        $html = '<div aria-hidden="true" class="small text-center"><dl>';
+
+        foreach (self::get_records() as $state) {
+            $html .= sprintf('<dt class="d-inline me-1"><i class="bi bi-%s %s"></i></dt><dd class="d-inline me-4">%s</dd>', $state->bootstrapicon, $state->bootstrapcolor, $state->alternate_text);
+        }
+
+        $html .= '</dl></div>';
+
+        return $html;
+    }
+
+    /**
      * Retourne le code HTML permettant d'afficher l'image de l'état.
      *
      * @return string
      */
     public function get_flag_html_renderer() {
-        global $CFG;
-
-        switch ($this->id) {
-            case self::OK:
-                return '<span class="text-success"><i aria-hidden="true" class="bi bi-check-circle" title="'.$this->title.'"></i><span class="visually-hidden">'.$this->alternate_text.'</span></span>';
-            case self::WARNING:
-                return '<span class="text-warning"><i aria-hidden="true" class="bi bi-exclamation-circle" title="'.$this->title.'"></i><span class="visually-hidden">'.$this->alternate_text.'</span></span>';
-            case self::CRITICAL:
-                return '<span class="text-danger"><i aria-hidden="true" class="bi bi-x-circle" title="'.$this->title.'"></i><span class="visually-hidden">'.$this->alternate_text.'</span></span>';
-            case self::UNKNOWN:
-                return '<span class="text-info"><i aria-hidden="true" class="bi bi-question-circle" title="'.$this->title.'"></i><span class="visually-hidden">'.$this->alternate_text.'</span></span>';
-            case self::CLOSED:
-                return '<span class="text-info"><i aria-hidden="true" class="bi bi-pause-circle" title="'.$this->title.'"></i><span class="visually-hidden">'.$this->alternate_text.'</span></span>';
-        }
-
-        return '';
+        return '<span class="'.$this->bootstrapcolor.'">'.
+            '<i aria-hidden="true" class="bi bi-'.$this->bootstrapicon.'" title="'.$this->title.'"></i>'.
+            '<span class="visually-hidden">'.$this->alternate_text.'</span>'.
+            '</span>';
     }
 
     /**
@@ -205,7 +224,7 @@ class State {
         }
 
         // Construit la requête.
-        $sql = 'SELECT s.id, s.name, s.title, s.alternate_text, s.image'.
+        $sql = 'SELECT s.id, s.name, s.title, s.alternate_text, s.image, s.bootstrapicon, s.bootstrapcolor'.
            ' FROM states s'.
             $sql_conditions;
         $query = $DB->prepare($sql);

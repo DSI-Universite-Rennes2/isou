@@ -64,9 +64,13 @@ class State extends atoum {
 
         $this->assert(__METHOD__.' : test #'.$i++)
             ->given($this->newTestedInstance)
+            ->and($this->testedInstance->title = 'Fonctionne')
+            ->and($this->testedInstance->alternate_text = 'Fonctionne')
+            ->and($this->testedInstance->bootstrapicon = 'check-circle')
+            ->and($this->testedInstance->bootstrapcolor = 'text-success')
             ->then
                 ->string($this->testedInstance->get_flag_html_renderer())
-                ->isEqualTo('<span class="text-success"><i aria-hidden="true" class="bi bi-check-circle" title=""></i><span class="visually-hidden"></span></span>');
+                ->isEqualTo('<span class="text-success"><i aria-hidden="true" class="bi bi-check-circle" title="Fonctionne"></i><span class="visually-hidden">Fonctionne</span></span>');
     }
 
     /**
