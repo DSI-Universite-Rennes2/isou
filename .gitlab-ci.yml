@@ -126,9 +126,9 @@ behat:
         - /usr/bin/php -S 127.0.0.1:8080 -t ./www/ > /dev/null 2>&1 &
         - mkdir -p cache/mink/
         - cp distribution/config.php .
-        - sed -i "s/define('HTTPS', true);/define('HTTPS', false);" config.php
-        - sed -i "s/define('DEBUG', false);/define('DEBUG', true);" config.php
-        - sed -i "s/define('DEV', false);/define('DEV', true);" config.php
+        - sed -i "s/define('HTTPS', true);/define('HTTPS', false);/" config.php
+        - sed -i "s/define('DEBUG', false);/define('DEBUG', true);/" config.php
+        - sed -i "s/define('DEV', false);/define('DEV', true);/" config.php
         - sed -i 's/isou.sqlite3/demo.sqlite3/' config.php
         - ISOU_ENV=demo composer install
         - vendor/bin/behat --config=.behat.yml --verbose=2 --stop-on-failure tests/behat
