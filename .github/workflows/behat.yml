@@ -6,7 +6,13 @@ name: Behat
 
 # Run this workflow every time a new commit pushed to your repository or PR created.
 # yamllint disable-line rule:truthy
-on: [push, pull_request]
+on:
+  push:
+    tags-ignore: ['*']
+    branches: ['*']
+  pull_request:
+    tags-ignore: ['*']
+    branches: ['*']
 
 jobs:
   # Set the job key. The key is displayed as the job name
