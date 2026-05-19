@@ -68,6 +68,12 @@ input[type="date"].form-control {
     padding-left: 80px;
 }
 
+#isou-announcement-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 .nav-tabs {
     margin-bottom: 1em;
 }

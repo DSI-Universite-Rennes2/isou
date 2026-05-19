@@ -24,6 +24,13 @@ class Announcement {
     public $id;
 
     /**
+     * Titre facultatif de l'annonce.
+     *
+     * @var string
+     */
+    public $title = '';
+
+    /**
      * Message de l'annonce.
      *
      * @var string
@@ -77,6 +84,8 @@ class Announcement {
      */
     public function check_data(array $options_visible) {
         $errors = array();
+
+        $this->title = htmlentities(trim($this->title), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
 
         $HTMLPurifier = new \HTMLPurifier();
         $this->message = $HTMLPurifier->purify($this->message);
@@ -148,7 +157,7 @@ class Announcement {
         }
 
         // Construit la requête.
-        $sql = 'SELECT a.id, a.message, a.visible, a.author, a.last_modification'.
+        $sql = 'SELECT a.id, a.title, a.message, a.visible, a.author, a.last_modification'.
             ' FROM announcement a'.
             $sql_conditions;
         $query = $DB->prepare($sql);
@@ -173,13 +182,14 @@ class Announcement {
         );
 
         $parameters = array(
+            ':title' => $this->title,
             ':message' => $this->message,
             ':visible' => $this->visible,
             ':author' => $this->author,
             ':last_modification' => $this->last_modification->format(\DateTime::ATOM),
         );
 
-        $sql = 'UPDATE announcement SET message=:message, visible=:visible, author=:author, last_modification=:last_modification';
+        $sql = 'UPDATE announcement SET title=:title, message=:message, visible=:visible, author=:author, last_modification=:last_modification';
         $query = $DB->prepare($sql);
         if ($query->execute($parameters) === true) {
             if ($this->visible === '1') {

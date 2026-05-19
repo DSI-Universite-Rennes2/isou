@@ -17,7 +17,8 @@ $options_visible = array(
     0 => 'Non',
 );
 
-if (isset($_POST['message'], $_POST['visible']) === true) {
+if (isset($_POST['title'], $_POST['message'], $_POST['visible']) === true) {
+    $announcement->title = $_POST['title'];
     $announcement->message = $_POST['message'];
     $announcement->visible = $_POST['visible'];
     $announcement->author = sprintf('%s %s', $USER->firstname, $USER->lastname);

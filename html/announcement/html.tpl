@@ -6,6 +6,14 @@
 	<dl>
 		<div class="form-group">
 			<dt>
+				<label class="control-label" for="title">Titre de l'annonce (facultatif)</label>
+			</dt>
+			<dd>
+				<input class="form-control" id="title" name="title" value="{$announcement->title}" type="text">
+			</dd>
+		</div>
+		<div class="form-group">
+			<dt>
 				<label class="control-label" for="message">Contenu de l'annonce (html autorisé)</label>
 			</dt>
 			<dd>

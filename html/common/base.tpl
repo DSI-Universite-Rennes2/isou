@@ -170,6 +170,9 @@
 				{if isset($ANNOUNCEMENT) === true}
 				<aside id="announcement" class="alert alert-warning">
 						<h1 class="visually-hidden">Annonce</h1>
+						{if empty($ANNOUNCEMENT->title) === false}
+						<h2 id="isou-announcement-title">{$ANNOUNCEMENT->title}</h2>
+						{/if}
 						{$ANNOUNCEMENT->message}
 				</aside>
 				{/if}
