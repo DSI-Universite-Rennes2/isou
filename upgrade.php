@@ -211,6 +211,12 @@ try {
         case '4.2.1':
             upgrade_to_4_3_0($environment);
             // Pas de break. On enchaine les mises à jour.
+        case '4.3.0':
+        case '4.3.1':
+        case '4.3.2':
+            upgrade_to_4_4_0($environment);
+            // Pas de break. On enchaine les mises à jour.
+        case '4.4.0':
         default:
             // Finally, upgrade plugins.
             echo PHP_EOL;

@@ -46,6 +46,28 @@ function isou_update_version() {
 }
 
 /**
+ * Procède à la migration vers la version 4.4.0.
+ *
+ * @param string $environment Indique l'environnement Phinx à utiliser. La valeur peut être "demo", "production" ou "tests".
+ *
+ * @throws Exception Lève une exception lorsqu'une erreur survient.
+ *
+ * @return void
+ */
+function upgrade_to_4_4_0(string $environment) {
+    echo '- Procédure de mise à jour du schéma de base de données vers la version 4.4.0.'.PHP_EOL;
+
+    // Met à jour le schéma de la base de données.
+    $phinx = new PhinxApplication();
+    $phinx->setAutoExit(false);
+
+    $arguments = new StringInput('--verbose --environment='.$environment.' --target=20260520000000 migrate');
+    if ($phinx->run($arguments, new NullOutput()) !== 0) {
+        throw new Exception('Une erreur est survenue lors de la mise à jour vers la version 4.4.0.');
+    }
+}
+
+/**
  * Procède à la migration vers la version 4.3.0.
  *
  * @param string $environment Indique l'environnement Phinx à utiliser. La valeur peut être "demo", "production" ou "tests".
