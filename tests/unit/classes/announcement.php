@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace UniversiteRennes2\Isou\tests\unit;
 
 use atoum;
+use DateTime;
 use UniversiteRennes2\Mock\Logger;
 use UniversiteRennes2\Mock\PDO;
 use UniversiteRennes2\Mock\User;
@@ -51,20 +52,20 @@ class Announcement extends atoum {
         // Vérifie que la visibilité est bien valide.
         $this->assert(__METHOD__.' : test #'.$i++)
             ->given($this->newTestedInstance)
-            ->and($this->testedInstance->visible = '2')
+            ->and($this->testedInstance->startdate = false)
             ->then
-                ->array($this->testedInstance->check_data(array('1' => 'visible')))
+                ->array($this->testedInstance->check_data())
                 ->isNotEmpty();
 
         // Vérifie que la visibilité est bien sur 0, lorsque le message est vide.
         $this->assert(__METHOD__.' : test #'.$i++)
             ->given($this->newTestedInstance)
             ->and($this->testedInstance->message = '')
-            ->and($this->testedInstance->visible = '1')
+            ->and($this->testedInstance->startdate = new DateTime())
             ->then
-                ->array($this->testedInstance->check_data(array('1' => 'visible')))
+                ->array($this->testedInstance->check_data())
                 ->isEmpty()
-                ->variable($this->testedInstance->visible)->isEqualTo('0');
+                ->variable($this->testedInstance->startdate)->isNull();
     }
 
     /**
@@ -85,13 +86,13 @@ class Announcement extends atoum {
         $this->assert(__METHOD__.' : test #'.$i++)
             ->given($this->newTestedInstance)
             ->then
-                ->object($this->testedInstance->get_record(array('empty' => true, 'visible' => false)));
+                ->object($this->testedInstance->get_record(array('empty' => true)));
 
         // Teste si un objet est bien renvoyé.
         $this->assert(__METHOD__.' : test #'.$i++)
             ->given($this->newTestedInstance)
             ->then
-                ->object($this->testedInstance->get_record(array('empty' => false, 'visible' => true)));
+                ->object($this->testedInstance->get_record(array('empty' => false, 'now' => true)));
 
         // Teste lorsque les paramètres ne sont pas corrects.
         $this->assert(__METHOD__.' : test #'.$i++)
@@ -109,7 +110,7 @@ class Announcement extends atoum {
             ->then
                 ->exception(
                     function() {
-                        $this->testedInstance->get_record(array('visible' => '1'));
+                        $this->testedInstance->get_record(array('now' => 'false'));
                     }
                 );
 
@@ -137,7 +138,7 @@ class Announcement extends atoum {
         // Teste si un tableau est bien renvoyé.
         $this->assert(__METHOD__.' : test #'.$i++)
             ->given($this->newTestedInstance)
-            ->and($this->testedInstance->visible = '1')
+            ->and($this->testedInstance->startdate = new DateTime())
             ->then
                 ->array($this->testedInstance->save())
                     ->array['successes'];
@@ -146,7 +147,7 @@ class Announcement extends atoum {
         // Teste si un tableau est bien renvoyé.
         $this->assert(__METHOD__.' : test #'.$i++)
             ->given($this->newTestedInstance)
-            ->and($this->testedInstance->visible = '0')
+            ->and($this->testedInstance->startdate = null)
             ->then
                 ->array($this->testedInstance->save())
                     ->array['successes'];

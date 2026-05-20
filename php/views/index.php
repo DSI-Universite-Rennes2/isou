@@ -11,7 +11,7 @@ declare(strict_types=1);
 use UniversiteRennes2\Isou\Announcement;
 
 // Charge les annonces.
-$ANNOUNCEMENT = Announcement::get_record(array('empty' => false, 'visible' => true));
+$ANNOUNCEMENT = Announcement::get_record(array('empty' => false, 'now' => true));
 
 // Cherche la vue à charger.
 foreach ($MENUS->public as $menu) {

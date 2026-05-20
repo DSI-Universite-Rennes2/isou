@@ -21,9 +21,51 @@
 			</dd>
 		</div>
 		<div class="form-group">
-			<dt id="visible">Afficher l'annonce</dt>
+			<dt>
+				<label class="control-label" for="startdate">Date de début d'affichage</label>
+			</dt>
 			<dd>
-				{html_radios class="isou-radios" aria-labelledby="visible" name="visible" options=$options_visible selected=$announcement->visible}
+				{if $announcement->startdate === null}
+					<input class="form-control" type="date" name="startdate" id="startdate" maxlength="10" placeholder="aaaa-mm-jj" value="">
+				{else}
+					<input class="form-control" type="date" name="startdate" id="startdate" maxlength="10" placeholder="aaaa-mm-jj" value="{$announcement->startdate|date_format:'%Y-%m-%d'}">
+				{/if}
+			</dd>
+		</div>
+		<div class="form-group">
+			<dt>
+				<label class="control-label" for="starttime">Heure de début d'affichage</label>
+			</dt>
+			<dd>
+				{if $announcement->startdate === null}
+					<input class="form-control" type="time" name="starttime" id="starttime" maxlength="5" placeholder="hh:mm" value="">
+				{else}
+					<input class="form-control" type="time" name="starttime" id="starttime" maxlength="5" placeholder="hh:mm" value="{$announcement->startdate|date_format:'%H:%M'}">
+				{/if}
+			</dd>
+		</div>
+		<div class="form-group">
+			<dt>
+				<label class="control-label" for="enddate">Date de fin d'affichage</label>
+			</dt>
+			<dd>
+				{if $announcement->enddate === null}
+				<input class="form-control" type="date" name="enddate" id="enddate" maxlength="10" placeholder="aaaa-mm-jj" value="">
+				{else}
+				<input class="form-control" type="date" name="enddate" id="enddate" maxlength="10" placeholder="aaaa-mm-jj" value="{$announcement->enddate|date_format:'%Y-%m-%d'}">
+				{/if}
+			</dd>
+		</div>
+		<div class="form-group">
+			<dt>
+				<label class="control-label" for="endtime">Heure de fin d'affichage</label>
+			</dt>
+			<dd>
+				{if $announcement->enddate === null}
+				<input class="form-control" type="time" name="endtime" id="endtime" maxlength="5" placeholder="hh:mm" value="">
+				{else}
+				<input class="form-control" type="time" name="endtime" id="endtime" maxlength="5" placeholder="hh:mm" value="{$announcement->enddate|date_format:'%H:%M'}">
+				{/if}
 			</dd>
 		</div>
 	</dl>

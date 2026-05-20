@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace UniversiteRennes2\Isou;
 
+use DateTime;
 use Exception;
 
 /**
@@ -38,11 +39,18 @@ class Announcement {
     public $message;
 
     /**
-     * Témoin indiquant si l'annonce est affichée ou non. Valeurs possibles '0' ou '1'.
+     * Date de début.
      *
-     * @var integer
+     * @var DateTime|null|false
      */
-    public $visible;
+    public $startdate;
+
+    /**
+     * Date de fin.
+     *
+     * @var DateTime|null|false
+     */
+    public $enddate;
 
     /**
      * Nom utilisateur de l'auteur de l'annonce.
@@ -78,11 +86,9 @@ class Announcement {
     /**
      * Contrôle les données avant de les enregistrer en base de données.
      *
-     * @param string[] $options_visible Tableau associatif contenant les valeurs autorisés pour la propriété "visible".
-     *
      * @return string[] Retourne un tableau d'erreurs.
      */
-    public function check_data(array $options_visible) {
+    public function check_data() {
         $errors = array();
 
         $this->title = htmlentities(trim($this->title), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
@@ -90,13 +96,58 @@ class Announcement {
         $HTMLPurifier = new \HTMLPurifier();
         $this->message = $HTMLPurifier->purify($this->message);
 
-        if (isset($options_visible[$this->visible]) === false) {
-            $errors[] = 'La valeur du champ "afficher l\'annonce" n\'est pas valide.';
+        if ($this->startdate === false || $this->enddate === false) {
+            if ($this->startdate === false) {
+                $errors[] = 'La date de début de l\'annonce doit être au format AAAA-MM-JJ HH:MM.';
+            }
+
+            if ($this->enddate === false) {
+                $errors[] = 'La date de fin de l\'annonce doit être au format AAAA-MM-JJ HH:MM.';
+            }
         } elseif (empty($this->message) === true) {
-            $this->visible = '0';
+            $this->startdate = null;
+            $this->enddate = null;
+        } elseif ($this->startdate === null && $this->enddate !== null) {
+            $errors[] = 'La date de début de l\'annonce doit être définie.';
+        } elseif ($this->startdate !== null && $this->enddate !== null) {
+            if ($this->startdate >= $this->enddate) {
+                $errors[] = 'La date de début de l\'annonce doit être antérieure à la date de fin de l\'annonce.';
+            }
         }
 
         return $errors;
+    }
+
+    /**
+     * Calcule un objet datetime à partir des paramètres donnés.
+     *
+     * @param string $date Une chaîne au format YYYY-MM-DD.
+     * @param string $time Une chaîne au format hh:mm.
+     *
+     * @return DateTime|null|false Retourne false en cas d'erreur, null quand aucune info n'a été donnée et datetime quand c'est bon.
+     *
+     * phpcs:ignore Squiz.Commenting.FunctionCommentThrowTag.Missing
+     */
+    public function get_datetime(string $date, string $time): Datetime|null|false {
+        if (empty($date) === true || empty($time) === true) {
+            return null;
+        }
+
+        try {
+            $preg_match_date = preg_match('#^(?P<year>\d{4}).(?P<month>\d{2}).(?P<day>\d{2})$#', $date);
+            $preg_match_time = preg_match('#^(?P<hour>\d{2}).(?P<minute>\d{2})$#', $time);
+
+            if ($preg_match_date === 1 && $preg_match_time === 1) {
+                $datetime = sprintf('%sT%s:00', $date, $time);
+            } else {
+                throw new Exception();
+            }
+
+            return new DateTime($datetime);
+        } catch (\Exception $exception) {
+            // La date de fin d\'interruption doit être au format AAAA-MM-JJ HH:MM.
+            return false;
+        }
     }
 
     /**
@@ -129,15 +180,19 @@ class Announcement {
             unset($options['empty']);
         }
 
-        if (isset($options['visible']) === true) {
-            if (is_bool($options['visible']) === true) {
-                $conditions[] = 'a.visible = :visible';
-                $parameters[':visible'] = intval($options['visible']);
+        if (isset($options['now']) === true) {
+            if (is_bool($options['now']) === true) {
+                if ($options['now'] === true) {
+                    $conditions[] = 'a.startdate IS NOT NULL AND a.startdate <= :now AND (a.enddate IS NULL OR a.enddate >= :now)';
+                    $parameters['now'] = date('Y-m-d\TH:i:s');
+                } else {
+                    throw new \Exception(__METHOD__.': l\'option \'now\' ne peut pas être utilisée avec la valeur False.');
+                }
             } else {
-                throw new \Exception(__METHOD__.': l\'option \'visible\' doit être un booléan. Valeur donnée : '.var_export($options['visible'], $return = true));
+                throw new \Exception(__METHOD__.': l\'option \'now\' doit être un booléan. Valeur donnée : '.var_export($options['now'], $return = true));
             }
 
-            unset($options['visible']);
+            unset($options['now']);
         }
 
         // Construit le WHERE.
@@ -157,7 +212,7 @@ class Announcement {
         }
 
         // Construit la requête.
-        $sql = 'SELECT a.id, a.title, a.message, a.visible, a.author, a.last_modification'.
+        $sql = 'SELECT a.id, a.title, a.message, a.startdate, a.enddate, a.author, a.last_modification'.
             ' FROM announcement a'.
             $sql_conditions;
         $query = $DB->prepare($sql);
@@ -181,21 +236,36 @@ class Announcement {
             'errors' => array(),
         );
 
+        if ($this->startdate === null) {
+            $startdate = null;
+        } else {
+            $startdate = $this->startdate->format('Y-m-d\TH:i:s');
+        }
+
+        if ($this->enddate === null) {
+            $enddate = null;
+        } else {
+            $enddate = $this->enddate->format('Y-m-d\TH:i:s');
+        }
+
         $parameters = array(
             ':title' => $this->title,
             ':message' => $this->message,
-            ':visible' => $this->visible,
+            ':startdate' => $startdate,
+            ':enddate' => $enddate,
             ':author' => $this->author,
             ':last_modification' => $this->last_modification->format(\DateTime::ATOM),
         );
 
-        $sql = 'UPDATE announcement SET title=:title, message=:message, visible=:visible, author=:author, last_modification=:last_modification';
+        $sql = 'UPDATE announcement SET title=:title, message=:message, startdate=:startdate, enddate=:enddate, author=:author, last_modification=:last_modification';
         $query = $DB->prepare($sql);
         if ($query->execute($parameters) === true) {
-            if ($this->visible === '1') {
-                $results['successes'][] = 'L\'annonce a bien été enregistrée.';
+            $results['successes'][] = 'Les modifications de l\'annonce ont bien été enregistrées.';
+            $visible = self::get_record(array('empty' => false, 'now' => true));
+            if (empty($visible) === false) {
+                $results['successes'][] = 'Le message est visible sur les pages publiques.';
             } else {
-                $results['successes'][] = 'L\'annonce a bien été retirée.';
+                $results['successes'][] = 'Le message n\'est pas affichée sur les pages publiques.';
             }
 
             $LOGGER->info('Modification de l\'annonce', array('userid' => $USER->id, 'username' => $USER->username));

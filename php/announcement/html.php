@@ -12,25 +12,21 @@ use UniversiteRennes2\Isou\Announcement;
 
 $announcement = Announcement::get_record();
 
-$options_visible = array(
-    1 => 'Oui',
-    0 => 'Non',
-);
-
-if (isset($_POST['title'], $_POST['message'], $_POST['visible']) === true) {
+if (isset($_POST['title'], $_POST['message'], $_POST['startdate'], $_POST['starttime'], $_POST['enddate'], $_POST['endtime']) === true) {
     $announcement->title = $_POST['title'];
     $announcement->message = $_POST['message'];
-    $announcement->visible = $_POST['visible'];
+    $announcement->startdate = $announcement->get_datetime($_POST['startdate'], $_POST['starttime']);
+    $announcement->enddate = $announcement->get_datetime($_POST['enddate'], $_POST['endtime']);
     $announcement->author = sprintf('%s %s', $USER->firstname, $USER->lastname);
     $announcement->last_modification = new DateTime();
 
-    $_POST['errors'] = $announcement->check_data($options_visible);
+    $_POST['errors'] = $announcement->check_data();
     if (isset($_POST['errors'][0]) === false) {
         $_POST = array_merge($_POST, $announcement->save());
     }
+} elseif ($announcement->startdate === null) {
+    $announcement->startdate = new DateTime();
 }
-
-$smarty->assign('options_visible', $options_visible);
 
 $smarty->assign('announcement', $announcement);
 
