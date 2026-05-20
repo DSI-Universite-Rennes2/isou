@@ -629,7 +629,7 @@ class Event {
         if (is_numeric($idservice) === true) {
             $this->idservice = $idservice;
         } else {
-            $service_name = htmlentities(trim($idservice), ENT_NOQUOTES, 'UTF-8');
+            $service_name = htmlentities(trim($idservice), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
             $this->idservice = (string) array_search($service_name, $options_services);
         }
 

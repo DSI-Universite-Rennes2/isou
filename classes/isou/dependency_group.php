@@ -104,7 +104,7 @@ class Dependency_Group {
     public function check_data(array $redundants, array $states, array $services) {
         $errors = array();
 
-        $this->name = htmlentities(trim($this->name), ENT_NOQUOTES, 'UTF-8');
+        $this->name = htmlentities(trim($this->name), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
         if ($this->name === '') {
             $errors[] = 'Le nom du groupe ne peut pas être vide.';
         }

@@ -145,7 +145,7 @@ class Service {
     public function check_data() {
         $errors = array();
 
-        $this->name = htmlentities(trim($this->name), ENT_NOQUOTES, 'UTF-8');
+        $this->name = htmlentities(trim($this->name), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
         if ($this->name === '') {
             $errors[] = 'Le nom du service ne peut pas être vide.';
         }

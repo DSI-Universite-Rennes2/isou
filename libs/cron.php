@@ -492,7 +492,7 @@ function cron_notify() {
             continue;
         }
 
-        $messages[] = sprintf('%s %s', State::$UNICODE[$event->state], html_entity_decode($service->name, ENT_NOQUOTES, 'UTF-8'));
+        $messages[] = sprintf('%s %s', State::$UNICODE[$event->state], html_entity_decode($service->name, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'));
     }
 
     $count_services = count($messages);
