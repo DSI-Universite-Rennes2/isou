@@ -217,6 +217,7 @@ try {
             upgrade_to_4_4_0($environment);
             // Pas de break. On enchaine les mises à jour.
         case '4.4.0':
+        case '4.4.1':
         default:
             // Finally, upgrade plugins.
             echo PHP_EOL;
