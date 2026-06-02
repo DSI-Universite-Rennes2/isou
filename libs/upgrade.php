@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
 use UniversiteRennes2\Isou\Event_Description;
 use UniversiteRennes2\Isou\Plugin;
+use UniversiteRennes2\Isou\Service;
 
 /**
  * Met à jour la date de dernière mise à jour et le numéro de version d'isou.
@@ -43,6 +44,26 @@ function isou_update_version() {
     $sql = "VACUUM";
     $query = $DB->prepare($sql);
     $query->execute();
+}
+
+/**
+ * Procède à la migration vers la version 4.4.2.
+ *
+ * @param string $environment Indique l'environnement Phinx à utiliser. La valeur peut être "demo", "production" ou "tests".
+ *
+ * @throws Exception Lève une exception lorsqu'une erreur survient.
+ *
+ * @return void
+ */
+function upgrade_to_4_4_2(string $environment) {
+    echo '- Procédure de mise à jour du schéma de base de données vers la version 4.4.2.'.PHP_EOL;
+
+    // Force le réenregistrement des services pour appliquer le nouvel encodage des noms.
+    foreach (Service::get_records() as $service) {
+        $service->name = html_entity_decode($service->name, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
+        $service->name = htmlentities($service->name, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
+        $service->save();
+    }
 }
 
 /**
