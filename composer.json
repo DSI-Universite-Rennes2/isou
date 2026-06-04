@@ -30,7 +30,7 @@
         "apereo/phpcas": "1.6.*",
         "ezyang/htmlpurifier": "4.*",
         "league/commonmark": "2.*",
-        "minishlink/web-push": "8.*",
+        "minishlink/web-push": "10.*",
         "monolog/monolog": "3.*",
         "robmorgan/phinx": "0.15.*",
         "smarty/smarty": "4.5.*",
