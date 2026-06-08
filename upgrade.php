@@ -222,6 +222,7 @@ try {
             // Pas de break. On enchaine les mises à jour.
         case '4.4.2':
         case '4.4.3':
+        case '4.4.4':
         default:
             // Finally, upgrade plugins.
             echo PHP_EOL;
