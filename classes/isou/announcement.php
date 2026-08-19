@@ -12,6 +12,8 @@ namespace UniversiteRennes2\Isou;
 
 use DateTime;
 use Exception;
+use HTMLPurifier;
+use HTMLPurifier_Config;
 
 /**
  * Classe décrivant une annonce.
@@ -93,7 +95,15 @@ class Announcement {
 
         $this->title = htmlentities(trim($this->title), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
 
-        $HTMLPurifier = new \HTMLPurifier();
+        $config = HTMLPurifier_Config::createDefault();
+        // Interdit la balise <pre>.
+        $config->set('HTML.ForbiddenElements', 'pre');
+        // Autorise uniquement les attributs class, lang et src.
+        $config->set('HTML.AllowedAttributes', '*.class,*.lang,*.src');
+        // Autorise uniquement quelques classes bootstrap.
+        $config->set('Attr.AllowedClasses', 'text-primary,text-secondary,text-success,text-danger,text-warning,text-info');
+
+        $HTMLPurifier = new HTMLPurifier($config);
         $this->message = $HTMLPurifier->purify($this->message);
 
         if ($this->startdate === false || $this->enddate === false) {
