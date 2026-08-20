@@ -263,7 +263,7 @@ function cron_check_updates() {
     }
 
     $curl_options = array();
-    $curl_options[CURLOPT_URL] = 'https://raw.githubusercontent.com/DSI-Universite-Rennes2/isou/master/version.php';
+    $curl_options[CURLOPT_URL] = 'https://raw.githubusercontent.com/DSI-Universite-Rennes2/isou/main/version.php';
     $curl_options[CURLOPT_HEADER] = false;
     $curl_options[CURLOPT_HTTPGET] = true;
     $curl_options[CURLOPT_NOBODY] = false;
