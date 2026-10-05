@@ -229,8 +229,21 @@ function update_services_tree() {
             continue;
         }
 
-        $event->startdate->add(new DateInterval('PT'.$event->period.'S'));
-        $event->enddate->add(new DateInterval('PT'.$event->period.'S'));
+        $interval = null;
+        switch ($event->period) {
+            case Event::PERIOD_DAILY:
+                $interval = new DateInterval('P1D');
+                break;
+            case Event::PERIOD_WEEKLY:
+                $interval = new DateInterval('P7D');
+        }
+
+        if ($interval === null) {
+            continue;
+        }
+
+        $event->startdate->add($interval);
+        $event->enddate->add($interval);
         $event->save();
     }
 
