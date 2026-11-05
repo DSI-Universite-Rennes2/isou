@@ -1,5 +1,6 @@
 tinymce.init({
     selector: '#message',
+    license_key: 'gpl',
     menubar: false,
     plugins: 'code, emoticons, link',
     promotion: false,
