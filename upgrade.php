@@ -230,6 +230,7 @@ try {
         case '4.5.2':
         case '4.5.3':
         case '4.5.4':
+        case '4.5.5':
         default:
             // Finally, upgrade plugins.
             echo PHP_EOL;
